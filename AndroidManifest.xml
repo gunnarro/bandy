@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.gunnarro.android.bandy"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:maxSdkVersion="22"
+        android:minSdkVersion="15"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    <application
+        android:allowBackup="false"
+        android:description="@string/app_description"
+        android:icon="@drawable/black_list_agent"
+        android:label="@string/app_name"
+        android:logo="@drawable/black_list_agent"
+        android:theme="@style/MyCustomTheme" >
+       
+        <activity
+            android:name="com.gunnarro.android.bandy.view.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+      <!-- 
+      <activity android:name="com.gunnarro.android.bandy.view.dashboard.HomeActivity"
+                  android:label="@string/app_name">
+         <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+             <category android:name="android.intent.category.LAUNCHER" />
+         </intent-filter>
+      </activity>
+      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F1Activity"
+            android:theme="@style/Theme.D1"
+            android:label="@string/title_feature1"
+            />
+      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F2Activity"
+            android:theme="@style/Theme.D1"
+            android:label="@string/title_feature2"
+            />
+      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F3Activity"
+            android:theme="@style/Theme.D1"
+            android:label="@string/title_feature3"
+            />
+      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F4Activity"
+            android:theme="@style/Theme.D1"
+            android:label="@string/title_feature4"
+            />
+      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F5Activity"
+            android:theme="@style/Theme.D1"
+            android:label="@string/title_feature5"
+            />
+      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F6Activity"
+            android:theme="@style/Theme.D1"
+            android:label="@string/title_feature6"
+            />
+      <activity android:name="com.gunnarro.android.bandy.view.dashboard.AboutActivity"
+            android:theme="@style/Theme.D1"
+            android:label="@string/title_about"
+            />
+      <activity android:name="com.gunnarro.android.bandy.view.dashboard.SearchActivity"
+            android:theme="@style/Theme.D1"
+            android:label="@string/title_search"
+            />
+        -->
+	  <service android:name="com.gunnarro.android.bandy.service.impl.DownloadService" />
+	
+		<!-- 
+		<receiver
+            android:name="com.gunnarro.android.bandy.receiver.DBDataPopulator"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.gunnarro.android.bandy.service.download.FINISHED" />
+            </intent-filter>
+        </receiver>
+		 -->
+		 
+	    <uses-library android:name="android.test.runner" />
+    </application>
+
+     <instrumentation android:name="android.test.InstrumentationTestRunner" android:targetPackage="com.gunnarro.android.bandy" android:label="your tests label" />
+</manifest>

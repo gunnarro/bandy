@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <!-- text colors -->
+    <color name="txt_default">#000000</color>
+    <color name="txt_bg">#ffffff</color>
+    <color name="txt_list_view">#00ccff</color>
+    <color name="txt_radio_selected">#33b5e5</color>
+    <color name="txt_radio_disabled">#736F6E</color>
+    <color name="txt_radio">#ffffff</color>
+    <color name="txt_tab">#ffffff</color>
+    <!-- background colors -->
+    <color name="bg_default">#878787</color>
+    <color name="bg_list_view">#000000</color>
+    <!-- table colors -->
+    <color name="tbl_row_even">#ffffff</color>
+    <color name="tbl_row_odd">#D0D0DD</color> <!-- light gray -->
+    <color name="tbl_head_background">#000000</color> <!-- black -->
+    <color name="tbl_txt">#000000</color>
+    <color name="tbl_number">#0101FF</color> <!-- navy -->
+    <!-- specific colors -->
+    <color name="dark_green">#006400</color>
+    <color name="dark_blue">#0000ff</color>
+    <color name="blue_light">#00ccff</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    
+    
+    
+    <color name="title_background">#ff355689</color>
+    <color name="title_text">#ffffffff</color>
+    <color name="title_text_alt">#ff000000</color>
+    <color name="foreground1">#ff355689</color>
+    <color name="foreground2">#ff7081a3</color>
+    <color name="background1">#ffffffff</color>
+    <color name="background2">#ffd5ddeb</color>
+    <color name="background3">#ffe3e8f1</color>
+    <color name="title_separator">#40ffffff</color>
+
+</resources>

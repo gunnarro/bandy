@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:scrollbars="none" >
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:id="@+id/tablePeroidHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/tableHeaderPeriod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="4"
+                android:background="@color/tbl_head_background"
+                android:gravity="center"
+                android:text="UiL Teams and Players"
+                android:textColor="@color/white" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableSelectionHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_head_background"
+            android:gravity="center_horizontal" >
+
+           <Spinner
+                android:id="@+id/teams_spinner"
+                android:layout_width="fill_parent"
+                android:layout_gravity="left"
+                android:layout_span="4"
+                android:textSize="12sp" 
+                android:prompt="@string/spinner_teams" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRowHeaders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_head_background" >
+
+            <TextView
+                android:id="@+id/player_first_name"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="Firstname"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/player_last_name"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="Lastname"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
+            
+            <TextView
+                android:id="@+id/player_birth"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="player_birth"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
+            
+            <TextView
+                android:id="@+id/player_info"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="#"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
+        </TableRow>
+        <!-- Generated team activites rows here -->
+    </TableLayout>
+
+</ScrollView>
