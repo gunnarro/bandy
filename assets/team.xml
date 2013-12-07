@@ -10,7 +10,7 @@
     <contacts>
         <contact firstName="Gunnar" middleName="" lastName="Rønneberg"  mobile="+4745465500" email="gunnar_ronneberg@yahoo.no" >
         	<roles>
-            	 <role>teamleader</role>
+            	 <role>teamlead</role>
              	 <role>coach</role>
          	</roles>
         </contact>

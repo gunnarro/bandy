@@ -5,7 +5,7 @@ import java.util.List;
 public class Contact {
 	
 	public enum ContactRoleEnum {
-		DEFAULT, COACH, TEAM_LEAD, PARENT;
+		DEFAULT, COACH, TEAMLEAD, PARENT;
 	}
 
 	private Integer id = -1;

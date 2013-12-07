@@ -309,9 +309,22 @@ public class ActivitiesFragment extends Fragment {
 		 * {@inheritDoc}
 		 */
 		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pdialog = ProgressDialog.show(getActivity(), "", "Sending Email...", true);
+		}
+
+		@Override
+		protected void onProgressUpdate(Void... values) {
+			super.onProgressUpdate(values);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
 		protected Void doInBackground(Void... agrs) {
 			try {
-				pdialog = ProgressDialog.show(getActivity(), "", "Sending Email...", true);
 				sendMail();
 			} catch (Exception e) {
 				e.printStackTrace();

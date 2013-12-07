@@ -135,7 +135,9 @@ public class XmlDocumentParser {
 		NamedNodeMap attrMap = nodeList.item(0).getAttributes();
 		Club club = new Club(attrMap.getNamedItem("name").getNodeValue());
 		CustomLog.d(this.getClass(), club.toString());
-		bandyService.createClub(club);
+		if (bandyService.getClub(club.getName()) == null) {
+			bandyService.createClub(club);
+		}
 		return bandyService.getClub(club.getName());
 	}
 
@@ -143,7 +145,9 @@ public class XmlDocumentParser {
 		NamedNodeMap attrMap = nodeList.item(0).getAttributes();
 		Team team = new Team(attrMap.getNamedItem("name").getNodeValue(), club);
 		CustomLog.d(this.getClass(), team.toString());
-		bandyService.createTeam(team);
+		if (bandyService.getTeam(team.getName()) == null) {
+			bandyService.createTeam(team);
+		}
 		bandyService.updateDataFileVersion(attrMap.getNamedItem("version").getNodeValue());
 		return bandyService.getTeam(team.getName());
 	}
@@ -198,7 +202,7 @@ public class XmlDocumentParser {
 			List<ContactRoleEnum> roles = new ArrayList<ContactRoleEnum>();
 			for (int j = 0; j < roleNodes.getLength(); j++) {
 				Node roleNode = roleNodes.item(j);
-				roles.add(ContactRoleEnum.valueOf(roleNode.getNodeValue()));
+				roles.add(ContactRoleEnum.valueOf(roleNode.getNodeValue().toUpperCase()));
 			}
 			NamedNodeMap attrMap = contactNode.getAttributes();
 			Contact contact = new Contact(new Team(team.getId(), team.getName()), roles, attrMap.getNamedItem("firstName").getNodeValue(), attrMap

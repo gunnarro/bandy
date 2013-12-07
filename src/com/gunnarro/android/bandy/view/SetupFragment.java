@@ -2,10 +2,12 @@ package com.gunnarro.android.bandy.view;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,12 +36,7 @@ public class SetupFragment extends Fragment {
 				int resultCode = bundle.getInt(DownloadService.RESULT);
 				if (resultCode == Activity.RESULT_OK) {
 					CustomLog.d(this.getClass(), "Downloaded file:" + file);
-					bandyService.loadData(file);
-					bandyService.updateDataFileLastUpdated(System.currentTimeMillis());
-					TextView updatedDateTxtView = (TextView) getActivity().findViewById(R.id.data_file_last_updated_date_txt);
-					updatedDateTxtView.setText(Utility.getDateFormatter().format(bandyService.getDataFileLastUpdated()));
-					TextView versionTxtView = (TextView) getActivity().findViewById(R.id.data_file_version_txt);
-					versionTxtView.setText(bandyService.getDataFileVersion());
+					updateBandyDatabase(file);
 				} else {
 					CustomLog.d(this.getClass(), "Problem Downloading data file...");
 				}
@@ -56,16 +53,22 @@ public class SetupFragment extends Fragment {
 		View view = inflater.inflate(R.layout.setup_layout, container, false);
 		this.bandyService = new BandyServiceImpl(view.getContext());
 		setupEventHandlers(view);
-//		init();
+		// init();
 		return view;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
 		getActivity().registerReceiver(downloadReceiver, new IntentFilter(DownloadService.NOTIFICATION));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -90,4 +93,63 @@ public class SetupFragment extends Fragment {
 		TextView versionTxtView = (TextView) getActivity().findViewById(R.id.data_file_version_txt);
 		versionTxtView.setText(bandyService.getDataFileVersion());
 	}
+
+	private void updateBandyDatabase(String dataFile) {
+		bandyService.loadData(dataFile);
+		bandyService.updateDataFileLastUpdated(System.currentTimeMillis());
+		TextView updatedDateTxtView = (TextView) getActivity().findViewById(R.id.data_file_last_updated_date_txt);
+		updatedDateTxtView.setText(Utility.getDateFormatter().format(bandyService.getDataFileLastUpdated()));
+		TextView versionTxtView = (TextView) getActivity().findViewById(R.id.data_file_version_txt);
+		versionTxtView.setText(bandyService.getDataFileVersion());
+	}
+
+	/**
+	 * Asynch task for sending email
+	 * 
+	 * @author admin
+	 * 
+	 */
+	class DownloadDataFileTask extends AsyncTask<Void, Void, Void> {
+		private ProgressDialog pdialog;
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pdialog = ProgressDialog.show(getActivity(), "", "Sending Email...", true);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		protected void onProgressUpdate(Void... values) {
+			super.onProgressUpdate(values);
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		protected Void doInBackground(Void... agrs) {
+			try {
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		protected void onPostExecute(Void result) {
+			if (pdialog != null) {
+				pdialog.dismiss();
+			}
+		}
+	}
+
 }
