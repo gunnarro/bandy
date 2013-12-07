@@ -15,7 +15,7 @@ import com.gunnarro.android.bandy.domain.Cup;
 import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Player;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.Traning;
+import com.gunnarro.android.bandy.domain.Training;
 import com.gunnarro.android.bandy.repository.BandyRepository;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl;
 import com.gunnarro.android.bandy.service.BandyService;
@@ -95,8 +95,8 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createTraning(Traning traning) {
-		this.bandyRepository.createTraning(traning);
+	public void createTraining(Training training) {
+		this.bandyRepository.createTraining(training);
 	}
 
 	/**
@@ -164,7 +164,7 @@ public class BandyServiceImpl implements BandyService {
 			}
 		}
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.TRAINING.name())) {
-			for (Traning training : getTraningList(team.getId(), periode)) {
+			for (Training training : getTrainingList(team.getId(), periode)) {
 				list.add(new Activity(ActivityTypeEnum.TRAINING, training.getStartDate(), training.getVenue(), training.getTeam().getName()));
 			}
 		}
@@ -195,8 +195,8 @@ public class BandyServiceImpl implements BandyService {
 	 * @param periode
 	 */
 	@Override
-	public List<Traning> getTraningList(Integer teamId, String periode) {
-		return this.bandyRepository.getTraningList(teamId, periode);
+	public List<Training> getTrainingList(Integer teamId, String periode) {
+		return this.bandyRepository.getTrainingList(teamId, periode);
 	}
 
 	/**

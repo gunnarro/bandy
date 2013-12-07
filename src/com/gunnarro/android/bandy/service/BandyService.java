@@ -10,7 +10,7 @@ import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Player;
 import com.gunnarro.android.bandy.domain.Setting;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.Traning;
+import com.gunnarro.android.bandy.domain.Training;
 
 public interface BandyService {
 
@@ -24,7 +24,7 @@ public interface BandyService {
 
 	public void createCup(Cup cup);
 
-	public void createTraning(Traning traning);
+	public void createTraining(Training training);
 
 	public void createPlayer(Player player);
 
@@ -42,7 +42,7 @@ public interface BandyService {
 
 	public List<Match> getMatchList(Integer teamId, String periode);
 
-	public List<Traning> getTraningList(Integer teamId, String periode);
+	public List<Training> getTrainingList(Integer teamId, String periode);
 
 	public List<Cup> getCupList(Integer teamId, String periode);
 

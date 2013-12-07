@@ -13,7 +13,7 @@ public class Team {
 	private List<Player> players;
 	private List<Match> matches;
 	private List<Cup> cups;
-	private List<Traning> tranings;
+	private List<Training> trainings;
 
 	public Team(String name) {
 		this.name = name;
@@ -70,12 +70,12 @@ public class Team {
 		this.cups = cups;
 	}
 
-	public List<Traning> getTranings() {
-		return tranings;
+	public List<Training> getTrainings() {
+		return trainings;
 	}
 
-	public void setTranings(List<Traning> tranings) {
-		this.tranings = tranings;
+	public void setTrainings(List<Training> trainings) {
+		this.trainings = trainings;
 	}
 
 	public Integer getId() {

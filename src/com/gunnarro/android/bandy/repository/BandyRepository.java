@@ -10,7 +10,7 @@ import com.gunnarro.android.bandy.domain.Cup;
 import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Player;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.Traning;
+import com.gunnarro.android.bandy.domain.Training;
 
 public interface BandyRepository {
 
@@ -39,7 +39,7 @@ public interface BandyRepository {
 
 	public boolean createCup(Cup cup);
 
-	public boolean createTraning(Traning traning);
+	public boolean createTraining(Training training);
 
 	public void createPlayer(Player player);
 
@@ -55,7 +55,7 @@ public interface BandyRepository {
 
 	public List<Match> getMatchList(Integer teamId, String periode);
 
-	public List<Traning> getTraningList(Integer teamId, String periode);
+	public List<Training> getTrainingList(Integer teamId, String periode);
 
 	public List<Cup> getCupList(Integer teamId, String periode);
 

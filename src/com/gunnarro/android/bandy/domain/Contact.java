@@ -3,7 +3,7 @@ package com.gunnarro.android.bandy.domain;
 import java.util.List;
 
 public class Contact {
-	
+
 	public enum ContactRoleEnum {
 		DEFAULT, COACH, TEAMLEAD, PARENT;
 	}
@@ -90,4 +90,11 @@ public class Contact {
 	public String getFullName() {
 		return this.firstName + " " + this.lastName;
 	}
+
+	@Override
+	public String toString() {
+		return "Contact [id=" + id + ", team=" + team + ", roles=" + roles + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName="
+				+ lastName + ", mobileNumber=" + mobileNumber + ", emailAddress=" + emailAddress + ", address=" + address + "]";
+	}
+
 }

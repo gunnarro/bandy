@@ -14,7 +14,7 @@ import com.gunnarro.android.bandy.repository.table.RelationshipsTable;
 import com.gunnarro.android.bandy.repository.table.RolesTable;
 import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.repository.table.TeamsTable;
-import com.gunnarro.android.bandy.repository.table.TraningsTable;
+import com.gunnarro.android.bandy.repository.table.TrainingsTable;
 
 public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
@@ -67,7 +67,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		RolesTable.onCreate(database);
 		SettingsTable.onCreate(database);
 		TeamsTable.onCreate(database);
-		TraningsTable.onCreate(database);
+		TrainingsTable.onCreate(database);
 		// PlayersTable.onCreate(database);
 		insertDefaultData(database);
 		insertTestData(database);
@@ -87,7 +87,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		RolesTable.onUpgrade(database, oldVersion, newVersion);
 		SettingsTable.onUpgrade(database, oldVersion, newVersion);
 		TeamsTable.onUpgrade(database, oldVersion, newVersion);
-		TraningsTable.onUpgrade(database, oldVersion, newVersion);
+		TrainingsTable.onUpgrade(database, oldVersion, newVersion);
 		// PlayersTable.onUpgrade(database, oldVersion, newVersion);
 		insertDefaultData(database);
 		// for testing only

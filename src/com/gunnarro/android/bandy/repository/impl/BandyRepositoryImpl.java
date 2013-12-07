@@ -20,7 +20,7 @@ import com.gunnarro.android.bandy.domain.Player;
 import com.gunnarro.android.bandy.domain.Referee;
 import com.gunnarro.android.bandy.domain.Setting;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.Traning;
+import com.gunnarro.android.bandy.domain.Training;
 import com.gunnarro.android.bandy.repository.BandyDataBaseHjelper;
 import com.gunnarro.android.bandy.repository.BandyRepository;
 import com.gunnarro.android.bandy.repository.table.ClubsTable;
@@ -32,7 +32,7 @@ import com.gunnarro.android.bandy.repository.table.RelationshipsTable;
 import com.gunnarro.android.bandy.repository.table.RolesTable;
 import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.repository.table.TeamsTable;
-import com.gunnarro.android.bandy.repository.table.TraningsTable;
+import com.gunnarro.android.bandy.repository.table.TrainingsTable;
 
 public class BandyRepositoryImpl implements BandyRepository {
 
@@ -109,10 +109,10 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean createTraning(Traning traning) {
-		ContentValues values = TraningsTable.createContentValues(traning.getTeam().getId(), traning.getStartDate(), traning.getEndTime(), traning.getVenue());
+	public boolean createTraining(Training training) {
+		ContentValues values = TrainingsTable.createContentValues(training.getTeam().getId(), training.getStartDate(), training.getEndTime(), training.getVenue());
 		this.database = dbHelper.getWritableDatabase();
-		database.insert(TraningsTable.TABLE_NAME, null, values);
+		database.insert(TrainingsTable.TABLE_NAME, null, values);
 		return true;
 	}
 
@@ -261,7 +261,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public Team getTeam(String name) {
 		String selection = TeamsTable.COLUMN_TEAM_NAME + " LIKE ?";
 		String[] selectionArgs = { name };
-		CustomLog.d(this.getClass(), name);
+		CustomLog.d(this.getClass(), "team=" + name);
 		return getTeam(selection, selectionArgs);
 	}
 
@@ -308,29 +308,29 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Traning> getTraningList(Integer teamId, String periode) {
-		List<Traning> list = new ArrayList<Traning>();
+	public List<Training> getTrainingList(Integer teamId, String periode) {
+		List<Training> list = new ArrayList<Training>();
 		String periodeSelection = getPeriodeSelectionClause(periode);
 		StringBuffer query = new StringBuffer();
 		query.append("SELECT *");
-		query.append(" FROM ").append(TraningsTable.TABLE_NAME);
-		query.append(" WHERE ").append(TraningsTable.COLUMN_FK_TEAM_ID).append(" = ").append(teamId);
+		query.append(" FROM ").append(TrainingsTable.TABLE_NAME);
+		query.append(" WHERE ").append(TrainingsTable.COLUMN_FK_TEAM_ID).append(" = ").append(teamId);
 		query.append(" AND ").append(periodeSelection);
-		query.append(" ORDER BY ").append(TraningsTable.COLUMN_START_DATE).append(" COLLATE LOCALIZED ASC");
+		query.append(" ORDER BY ").append(TrainingsTable.COLUMN_START_DATE).append(" COLLATE LOCALIZED ASC");
 		this.database = dbHelper.getReadableDatabase();
 		Cursor cursor = this.database.rawQuery(query.toString(), null);
 		Team team = getTeam(teamId);
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
-				list.add(mapCursorToTraning(cursor, team));
+				list.add(mapCursorToTraining(cursor, team));
 				cursor.moveToNext();
 			}
 		}
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), "tranings=" + cursor.getCount());
+		CustomLog.d(this.getClass(), "trainings=" + cursor.getCount());
 		return list;
 	}
 
@@ -506,11 +506,11 @@ public class BandyRepositoryImpl implements BandyRepository {
 						.getColumnIndex(MatchesTable.COLUMN_REFEREE))));
 	}
 
-	private Traning mapCursorToTraning(Cursor cursor, Team team) {
-		long start_date_ms = ((long) cursor.getInt(cursor.getColumnIndex(TraningsTable.COLUMN_START_DATE))) * 1000L;
-		long end_time_ms = ((long) cursor.getInt(cursor.getColumnIndex(TraningsTable.COLUMN_END_TIME))) * 1000L;
-		return new Traning(cursor.getInt(cursor.getColumnIndex(TraningsTable.COLUMN_ID)), start_date_ms, end_time_ms, team, cursor.getString(cursor
-				.getColumnIndex(TraningsTable.COLUMN_PLACE)));
+	private Training mapCursorToTraining(Cursor cursor, Team team) {
+		long start_date_ms = ((long) cursor.getInt(cursor.getColumnIndex(TrainingsTable.COLUMN_START_DATE))) * 1000L;
+		long end_time_ms = ((long) cursor.getInt(cursor.getColumnIndex(TrainingsTable.COLUMN_END_TIME))) * 1000L;
+		return new Training(cursor.getInt(cursor.getColumnIndex(TrainingsTable.COLUMN_ID)), start_date_ms, end_time_ms, team, cursor.getString(cursor
+				.getColumnIndex(TrainingsTable.COLUMN_PLACE)));
 	}
 
 	private Club mapCursorToClub(Cursor cursor) {

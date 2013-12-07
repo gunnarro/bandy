@@ -35,7 +35,7 @@ import com.gunnarro.android.bandy.domain.Cup;
 import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Referee;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.Traning;
+import com.gunnarro.android.bandy.domain.Training;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.utility.Utility;
 
@@ -105,7 +105,7 @@ public class XmlDocumentParser {
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		Team team = mapAndSaveTeamNode(club, nodeList, bandyService);
 
-		expression = "/team/contacts";
+		expression = "/team/contacts/contact";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		mapAndSaveContacts(team, nodeList, bandyService);
 
@@ -113,9 +113,9 @@ public class XmlDocumentParser {
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		mapAndSaveMatchNodes(team, nodeList, bandyService);
 
-		expression = "/team/trainings/traning";
+		expression = "/team/trainings/training";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		mapAndSaveTraningNodes(team, nodeList, bandyService);
+		mapAndSaveTrainingNodes(team, nodeList, bandyService);
 
 		expression = "/team/cups/cup";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
@@ -131,7 +131,7 @@ public class XmlDocumentParser {
 	}
 
 	private Club mapAndSaveClubNode(NodeList nodeList, BandyService bandyService) {
-		CustomLog.d(this.getClass(), "NODE=" + nodeList.item(0).getNodeName());
+		CustomLog.d(this.getClass(), "node=" + nodeList.item(0).getNodeName());
 		NamedNodeMap attrMap = nodeList.item(0).getAttributes();
 		Club club = new Club(attrMap.getNamedItem("name").getNodeValue());
 		CustomLog.d(this.getClass(), club.toString());
@@ -171,15 +171,15 @@ public class XmlDocumentParser {
 		}
 	}
 
-	private void mapAndSaveTraningNodes(Team team, NodeList nodeList, BandyService bandyService) {
+	private void mapAndSaveTrainingNodes(Team team, NodeList nodeList, BandyService bandyService) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			NamedNodeMap attrMap = nodeList.item(i).getAttributes();
 			String dateTimeStr = attrMap.getNamedItem("date").getNodeValue() + " " + attrMap.getNamedItem("fromTime").getNodeValue();
 			String toTimeStr = attrMap.getNamedItem("toTime").getNodeValue();
-			Traning traning = new Traning(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), Utility.timeToDate(toTimeStr, "HH:mm").getTime(),
+			Training training = new Training(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), Utility.timeToDate(toTimeStr, "HH:mm").getTime(),
 					new Team(team.getId(), team.getName()), attrMap.getNamedItem("place").getNodeValue());
-			CustomLog.d(this.getClass(), traning.toString());
-			bandyService.createTraning(traning);
+			CustomLog.d(this.getClass(), training.toString());
+			bandyService.createTraining(training);
 		}
 	}
 
@@ -198,11 +198,18 @@ public class XmlDocumentParser {
 	private void mapAndSaveContacts(Team team, NodeList nodeList, BandyService bandyService) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node contactNode = nodeList.item(i);
-			NodeList roleNodes = contactNode.getChildNodes();
+			NodeList roleNodeList = contactNode.getChildNodes();
 			List<ContactRoleEnum> roles = new ArrayList<ContactRoleEnum>();
-			for (int j = 0; j < roleNodes.getLength(); j++) {
-				Node roleNode = roleNodes.item(j);
-				roles.add(ContactRoleEnum.valueOf(roleNode.getNodeValue().toUpperCase()));
+			if (roleNodeList != null && roleNodeList.getLength() > 0) {
+				for (int j = 0; j < roleNodeList.getLength(); j++) {
+					Node roleNode = roleNodeList.item(j);
+					try {
+						roles.add(ContactRoleEnum.valueOf(roleNode.getNodeValue().toUpperCase()));
+					} catch (Exception e) {
+						CustomLog.e(this.getClass(),
+								"contact=" + contactNode.toString() + ", Invalid status: " + roleNode.getNodeName() + "=" + roleNode.getNodeValue());
+					}
+				}
 			}
 			NamedNodeMap attrMap = contactNode.getAttributes();
 			Contact contact = new Contact(new Team(team.getId(), team.getName()), roles, attrMap.getNamedItem("firstName").getNodeValue(), attrMap

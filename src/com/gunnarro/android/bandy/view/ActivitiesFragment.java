@@ -191,7 +191,7 @@ public class ActivitiesFragment extends Fragment {
 		// "Frigg", "Frigg Cup", "Frogner Stadium",
 		// System.currentTimeMillis()));
 
-		// this.bandyService.createTraning(new Traning(102,
+		// this.bandyService.createTraining(new Training(102,
 		// System.currentTimeMillis(), new Team("Ready 2"), new Team("Ullevål"),
 		// "Gressbanen", new Referee(
 		// "Ukjent")));

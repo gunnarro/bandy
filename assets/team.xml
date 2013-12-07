@@ -99,8 +99,8 @@
     </cups>
     
     <trainings>
-        <traning date="25.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
-        <traning date="27.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
-        <traning date="30.11.2013" fromTime="14:30" toTime="16:00" place="Bergbanen" />
+        <training date="25.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+        <training date="27.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+        <training date="30.11.2013" fromTime="14:30" toTime="16:00" place="Bergbanen" />
     </trainings>
   </team>
