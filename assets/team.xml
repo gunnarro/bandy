@@ -14,27 +14,52 @@
              	 <role>coach</role>
          	</roles>
         </contact>
+        <contact firstName="Siri" middleName="Birgitte" lastName="Paulen" mobile="+4792671308" email="" />
+        <contact firstName="Trond" middleName="" lastName="Kiplesund" mobile="+4792045699" email="" />
+        <contact firstName="Heidi" middleName="" lastName="Kiplesund" mobile="" email="" />
+        <contact firstName="Vemund" middleName="" lastName="Hartberg" mobile="+4792668817" email="" />
+        <contact firstName="Cecilie" middleName="" lastName="Hartberg" mobile="+4792666231" email="" />
+        <contact firstName="Johan" middleName="" lastName="Braanen" mobile="" email="" />
+        <contact firstName="Frank" middleName="" lastName="Halse" mobile="" email="" />
+        <contact firstName="Anita" middleName="" lastName="Halse" mobile="+4798616194" email="" />
+        <contact firstName="Mats" middleName="" lastName="Håkansson" mobile="+4792031707" email="" />
+        <contact firstName="Atle" middleName="" lastName="Jensen" mobile="" email="" />
+        <contact firstName="Kristin" middleName="" lastName="Jensen" mobile="" email="" />
+        <contact firstName="David" middleName="" lastName="Dunlop" mobile="+4799106806" email="" />
+        <contact firstName="Torstein" middleName="" lastName="Harildstad" mobile="" email="" />
+        <contact firstName="Petter" middleName="" lastName="Karal" mobile="" email="" />
+        <contact firstName="Heidi" middleName="" lastName="Karal" mobile="" email="" />
+        <contact firstName="Otto" middleName="" lastName="Scharff" mobile="" email="" />
+        <contact firstName="Kristin" middleName="" lastName="Bjelland" mobile="" email="" />
     </contacts>
     
-    <teamlead firstName="Gunnar" middleName="" lastName="Rønneberg"  mobile="+4745465500" email="gunnar_ronneberg@yahoo.no"/>
-    <coach firstName="Gunnar" middleName="" lastName="Rønneberg"  mobile="+4745465500" email="gunnar_ronneberg@yahoo.no" />
-    
     <players>
-    	<player id="1" firstName="Emilie" middleName="" lastName="Paluen" birthDate="22.01.2002" mobile="" email="" parents="Gunnar Rønneberg;Siri Birgitte Paulen" />
-    	<player id="2" firstName="Andreas" middleName="" lastName="Paluen" birthDate="20.11.2003" mobile="" email="" parents="Gunnar Rønneberg;Siri Birgitte Paulen" />
-    	<player id="3" firstName="Marius" middleName="" lastName="Kiplesund" birthDate="17.11.2003" mobile="" email="" parents="Trond Kiplesund;Hedi Kiplesund" />
-    	<player id="4" firstName="August" middleName="" lastName="Hartberg" birthDate="" mobile="" email="" parents="Vemund Hartberg;Cecilie Hartberg" />
-    	<player id="5" firstName="Anton" middleName="" lastName="Braanen" birthDate="" mobile="" email="" parents="Johan Braanen" />
-    	<player id="6" firstName="Magnus" middleName="" lastName="Halse" birthDate="18.11.2013" mobile="" email="" parents="Frank Halse;Anita Halse" />
-    	<player id="7" firstName="Thomas" middleName="" lastName="Bergan Håkansson" birthDate="" mobile="" email="" parents="Mats Håkansson" />
-    	<player id="8" firstName="Linus" middleName="" lastName="Jensen" birthDate="" mobile="" email="" parents="Atle Jensen;Kristin Halvorsen" />
-    	<player id="9" firstName="Oscar" middleName="" lastName="Dunlop" birthDate="" mobile="" email="" parents="David Dunlop" />
-    	<player id="10" firstName="Mathias" middleName="" lastName="Harildstad" birthDate="" mobile="" email="" parents="Torstein Harildstad" />
-    	<player id="11" firstName="Martin" middleName="" lastName="Karal" birthDate="" mobile="" email="" parents="Petter Karal;Heidi Karal" />
-    	<player id="12" firstName="Trygve" middleName="" lastName="Scharff" birthDate="" mobile="" email="" parents="Otto Scharff" />
-    	<player id="13" firstName="Andreas" middleName="" lastName="Bjelland" birthDate="" mobile="" email="" parents="Kristin Bjelland" />
+    	<player id="1" status="active" firstName="Emilie" middleName="" lastName="Paluen" birthDate="22.01.2002" mobile="" email="" >
+    	 	<parents>
+    	 	    <parent firstName="Gunnar" lastName="Rønneberg" />
+        		<parent firstName="Siri" middleName="Birgitte" lastName="Paulen" />
+    	 	</parents>
+    	</player>   
+    	<player id="2" status="active" firstName="Andreas" middleName="" lastName="Paluen" birthDate="20.11.2003" mobile="" email="" >
+    	 	<parents>
+    	 	    <parent firstName="Gunnar" lastName="Rønneberg" />
+        		<parent firstName="Siri" middleName="Birgitte" lastName="Paulen" />
+    	 	</parents>
+    	</player>   
+    	<player id="3" status="active" firstName="Marius" middleName="" lastName="Kiplesund" birthDate="17.11.2003" mobile="" email="" parents="Trond Kiplesund;Hedi Kiplesund" />
+    	<player id="4" status="active" firstName="August" middleName="" lastName="Hartberg" birthDate="" mobile="" email="" parents="Vemund Hartberg;Cecilie Hartberg" />
+    	<player id="5" status="active" firstName="Anton" middleName="" lastName="Braanen" birthDate="" mobile="" email="" parents="Johan Braanen" />
+    	<player id="6" status="active" firstName="Magnus" middleName="" lastName="Halse" birthDate="18.11.2013" mobile="" email="" parents="Frank Halse;Anita Halse" />
+    	<player id="7" status="active" firstName="Thomas" middleName="" lastName="Bergan Håkansson" birthDate="" mobile="" email="" parents="Mats Håkansson" />
+    	<player id="8" status="active" firstName="Linus" middleName="" lastName="Jensen" birthDate="" mobile="" email="" parents="Atle Jensen;Kristin Halvorsen" />
+    	<player id="9" status="active" firstName="Oscar" middleName="" lastName="Dunlop" birthDate="" mobile="" email="" parents="David Dunlop" />
+    	<player id="10" status="active" firstName="Mathias" middleName="" lastName="Harildstad" birthDate="" mobile="" email="" parents="Torstein Harildstad" />
+    	<player id="11" status="active" firstName="Martin" middleName="" lastName="Karal" birthDate="" mobile="" email="" parents="Petter Karal;Heidi Karal" />
+    	<player id="12" status="active" firstName="Trygve" middleName="" lastName="Scharff" birthDate="" mobile="" email="" parents="Otto Scharff" />
+    	<player id="13" status="active" firstName="Andreas" middleName="" lastName="Bjelland" birthDate="" mobile="" email="" parents="Kristin Bjelland" />
     </players>
 	
+    <!-- 
     <parents>
         <parent firstName="Gunnar" middleName="" lastName="Rønneberg" mobile="+4745465500" email="gunnar_ronneberg@yahoo.no" />
         <parent firstName="Siri" middleName="Birgitte" lastName="Paulen" mobile="+47" email="" />
@@ -55,7 +80,8 @@
         <parent firstName="Otto" middleName="" lastName="Scharff" mobile="" email="" />
         <parent firstName="Kristin" middleName="" lastName="Bjelland" mobile="" email="" />
     </parents>
-    
+     -->
+     
     <matches>
         <match date="26.11.2013" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Røa 03 2" venue="Bergbanen" referee="dommer ukjent" />
         <match date="10.12.2013" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Ready 01 4" venue="Bergbanen" referee="dommer ukjent" />

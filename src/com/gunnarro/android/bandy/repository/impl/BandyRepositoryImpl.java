@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.Contact;
+import com.gunnarro.android.bandy.domain.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.Cup;
 import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Player;
@@ -27,6 +28,8 @@ import com.gunnarro.android.bandy.repository.table.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.CupsTable;
 import com.gunnarro.android.bandy.repository.table.MatchesTable;
 import com.gunnarro.android.bandy.repository.table.PlayersTable;
+import com.gunnarro.android.bandy.repository.table.RelationshipsTable;
+import com.gunnarro.android.bandy.repository.table.RolesTable;
 import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.TraningsTable;
@@ -115,9 +118,16 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	@Override
 	public void createPlayer(Player player) {
-		ContentValues values = PlayersTable.createContentValues(player.getFirstName(), player.getMiddleName(), player.getLastName(), Boolean.toString(true));
+		ContentValues playerValues = PlayersTable.createContentValues(player.getFirstName(), player.getMiddleName(), player.getLastName(),
+				Boolean.toString(true));
 		this.database = dbHelper.getWritableDatabase();
-		database.insert(PlayersTable.TABLE_NAME, null, values);
+		long playerId = database.insert(PlayersTable.TABLE_NAME, null, playerValues);
+		if (player.getParents() != null) {
+			for (Contact parent : player.getParents()) {
+				ContentValues relationshipsValues = RelationshipsTable.createContentValues(Long.valueOf(playerId).intValue(), parent.getId());
+				database.insert(RelationshipsTable.TABLE_NAME, null, relationshipsValues);
+			}
+		}
 	}
 
 	/**
@@ -125,10 +135,16 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public boolean createContact(Contact contact) {
-		ContentValues values = ContactsTable.createContentValues(contact.getTeam().getId(), contact.getRoles().get(0).name(), contact.getFirstName(),
-				contact.getMiddleName(), contact.getLastName(), contact.getMobileNumber(), contact.getEmailAddress());
+		ContentValues contactValues = ContactsTable.createContentValues(contact.getTeam().getId(), contact.getFirstName(), contact.getMiddleName(),
+				contact.getLastName(), contact.getMobileNumber(), contact.getEmailAddress());
 		this.database = dbHelper.getWritableDatabase();
-		database.insert(ContactsTable.TABLE_NAME, null, values);
+		long contactId = database.insert(ContactsTable.TABLE_NAME, null, contactValues);
+		if (contact.getRoles() != null) {
+			for (ContactRoleEnum role : contact.getRoles()) {
+				ContentValues roleValues = RolesTable.createContentValues(role.name(), Long.valueOf(contactId).intValue());
+				database.insert(RolesTable.TABLE_NAME, null, roleValues);
+			}
+		}
 		return true;
 	}
 

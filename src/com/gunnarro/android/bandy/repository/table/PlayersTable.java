@@ -13,7 +13,8 @@ public class PlayersTable {
 	// Database table
 	public static final String TABLE_NAME = "players";
 	public static final String COLUMN_ID = "_id";
-	public static final String COLUMN_TEAM_ID = "team_id";
+	public static final String COLUMN_FK_TEAM_ID = "fk_team_id";
+	public static final String COLUMN_STATUS = "status";
 	public static final String COLUMN_FIRST_NAME = "first_name";
 	public static final String COLUMN_MIDDLE_NAME = "middle_name";
 	public static final String COLUMN_LAST_NAME = "last_name";
@@ -21,8 +22,8 @@ public class PlayersTable {
 	public static final String COLUMN_EMAIL = "email";
 	public static final String COLUMN_MOBILE = "mobile";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_DATE_OF_BIRTH, COLUMN_EMAIL,
-			COLUMN_MOBILE };
+	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_STATUS, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME,
+			COLUMN_DATE_OF_BIRTH, COLUMN_EMAIL, COLUMN_MOBILE };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -30,9 +31,16 @@ public class PlayersTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
-		// DATABASE_CREATE_QUERY.append(",").append(COLUMN_FILTER_NAME).append(" TEXT NOT NULL");
-		// DATABASE_CREATE_QUERY.append(",").append(COLUMN_ACTIVATED).append(" TEXT NOT NULL);");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_TEAM_ID).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STATUS).append(" TEXT NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FIRST_NAME).append(" TEXT NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MIDDLE_NAME).append(" TEXT");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LAST_NAME).append(" TEXT NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DATE_OF_BIRTH).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_EMAIL).append(" TEXT");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MOBILE).append(" TEXT");
+		DATABASE_CREATE_QUERY.append(", PRIMARY KEY (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append("));");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {
@@ -57,12 +65,12 @@ public class PlayersTable {
 		}
 	}
 
-	public static ContentValues createContentValues(String fistName, String middleName, String lastName, String isActive) {
+	public static ContentValues createContentValues(String status, String fistName, String middleName, String lastName) {
 		ContentValues values = new ContentValues();
+		values.put(COLUMN_STATUS, status);
 		values.put(COLUMN_FIRST_NAME, fistName);
 		values.put(COLUMN_MIDDLE_NAME, middleName);
 		values.put(COLUMN_LAST_NAME, lastName);
-		values.put(COLUMN_ID, isActive);
 		return values;
 	}
 

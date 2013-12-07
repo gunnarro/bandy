@@ -14,14 +14,13 @@ public class ContactsTable {
 	public static final String TABLE_NAME = "contacts";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_FK_TEAM_ID = "fk_team_id";
-	public static final String COLUMN_ROLE = "role";
 	public static final String COLUMN_FIRST_NAME = "first_name";
 	public static final String COLUMN_MIDDLE_NAME = "middle_name";
 	public static final String COLUMN_LAST_NAME = "last_name";
 	public static final String COLUMN_MOBILE = "mobile";
 	public static final String COLUMN_EMAIL = "email";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_ROLE, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_MOBILE,
+	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_MOBILE,
 			COLUMN_EMAIL };
 
 	// Database creation SQL statement
@@ -30,14 +29,14 @@ public class ContactsTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_TEAM_ID).append(" INTEGER");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ROLE).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FIRST_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MIDDLE_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LAST_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MOBILE).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_EMAIL).append(" TEXT NOT NULL);");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_EMAIL).append(" TEXT NOT NULL");
+		DATABASE_CREATE_QUERY.append(", PRIMARY KEY (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append("));");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {
@@ -62,11 +61,10 @@ public class ContactsTable {
 		}
 	}
 
-	public static ContentValues createContentValues(Integer teamId, String role, String firstName, String middleName, String lastName, String mobile,
+	public static ContentValues createContentValues(Integer teamId, String firstName, String middleName, String lastName, String mobile,
 			String epostAddress) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_FK_TEAM_ID, teamId);
-		values.put(COLUMN_ROLE, role);
 		values.put(COLUMN_FIRST_NAME, firstName);
 		values.put(COLUMN_MIDDLE_NAME, middleName);
 		values.put(COLUMN_LAST_NAME, lastName);

@@ -3,6 +3,7 @@ package com.gunnarro.android.bandy.domain;
 import java.util.List;
 
 public class Contact {
+	
 	public enum ContactRoleEnum {
 		DEFAULT, COACH, TEAM_LEAD, PARENT;
 	}

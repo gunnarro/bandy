@@ -21,10 +21,11 @@ public class ClubsTable {
 	private static final StringBuffer DATABASE_CREATE_QUERY;
 	static {
 		DATABASE_CREATE_QUERY = new StringBuffer();
-		DATABASE_CREATE_QUERY.append("create table ");
+		DATABASE_CREATE_QUERY.append("CREATE TABLE ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME).append(" TEXT NOT NULL);");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME).append(" TEXT NOT NULL");
+		DATABASE_CREATE_QUERY.append(", PRIMARY KEY (").append(COLUMN_CLUB_NAME).append("));");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

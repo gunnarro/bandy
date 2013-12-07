@@ -9,6 +9,9 @@ import com.gunnarro.android.bandy.repository.table.ClubsTable;
 import com.gunnarro.android.bandy.repository.table.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.CupsTable;
 import com.gunnarro.android.bandy.repository.table.MatchesTable;
+import com.gunnarro.android.bandy.repository.table.PlayersTable;
+import com.gunnarro.android.bandy.repository.table.RelationshipsTable;
+import com.gunnarro.android.bandy.repository.table.RolesTable;
 import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.TraningsTable;
@@ -16,7 +19,7 @@ import com.gunnarro.android.bandy.repository.table.TraningsTable;
 public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "bandy.db";
-	private static final int DATABASE_VERSION = 9;
+	private static final int DATABASE_VERSION = 10;
 
 	private static BandyDataBaseHjelper instance = null;
 
@@ -56,12 +59,15 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			database.execSQL("PRAGMA foreign_keys=ON;");
 		}
 		ClubsTable.onCreate(database);
-		TeamsTable.onCreate(database);
-		MatchesTable.onCreate(database);
-		CupsTable.onCreate(database);
-		TraningsTable.onCreate(database);
-		SettingsTable.onCreate(database);
 		ContactsTable.onCreate(database);
+		CupsTable.onCreate(database);
+		MatchesTable.onCreate(database);
+		PlayersTable.onCreate(database);
+		RelationshipsTable.onCreate(database);
+		RolesTable.onCreate(database);
+		SettingsTable.onCreate(database);
+		TeamsTable.onCreate(database);
+		TraningsTable.onCreate(database);
 		// PlayersTable.onCreate(database);
 		insertDefaultData(database);
 		insertTestData(database);
@@ -73,12 +79,15 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 		ClubsTable.onUpgrade(database, oldVersion, newVersion);
-		TeamsTable.onUpgrade(database, oldVersion, newVersion);
-		MatchesTable.onUpgrade(database, oldVersion, newVersion);
-		CupsTable.onUpgrade(database, oldVersion, newVersion);
-		TraningsTable.onUpgrade(database, oldVersion, newVersion);
-		SettingsTable.onUpgrade(database, oldVersion, newVersion);
 		ContactsTable.onUpgrade(database, oldVersion, newVersion);
+		CupsTable.onUpgrade(database, oldVersion, newVersion);
+		MatchesTable.onUpgrade(database, oldVersion, newVersion);
+		PlayersTable.onUpgrade(database, oldVersion, newVersion);
+		RelationshipsTable.onUpgrade(database, oldVersion, newVersion);
+		RolesTable.onUpgrade(database, oldVersion, newVersion);
+		SettingsTable.onUpgrade(database, oldVersion, newVersion);
+		TeamsTable.onUpgrade(database, oldVersion, newVersion);
+		TraningsTable.onUpgrade(database, oldVersion, newVersion);
 		// PlayersTable.onUpgrade(database, oldVersion, newVersion);
 		insertDefaultData(database);
 		// for testing only

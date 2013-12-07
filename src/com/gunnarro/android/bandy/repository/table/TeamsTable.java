@@ -13,7 +13,7 @@ public class TeamsTable {
 	// Database table
 	public static final String TABLE_NAME = "teams";
 	public static final String COLUMN_ID = "_id";
-	public static final String COLUMN_FK_CLUB_ID = "club_id";
+	public static final String COLUMN_FK_CLUB_ID = "fk_club_id";
 	public static final String COLUMN_TEAM_NAME = "team_name";
 
 	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_CLUB_ID, COLUMN_TEAM_NAME };
@@ -24,11 +24,12 @@ public class TeamsTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_CLUB_ID).append(" INTEGER NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_CLUB_ID).append(") REFERENCES ").append(ClubsTable.TABLE_NAME).append("(")
-				.append(ClubsTable.COLUMN_ID).append("));");
+				.append(ClubsTable.COLUMN_ID).append(")");
+		DATABASE_CREATE_QUERY.append(", PRIMARY KEY (").append(COLUMN_TEAM_NAME).append("));");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {
