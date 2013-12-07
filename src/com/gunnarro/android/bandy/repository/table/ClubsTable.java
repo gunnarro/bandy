@@ -23,9 +23,8 @@ public class ClubsTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("CREATE TABLE ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(", PRIMARY KEY (").append(COLUMN_CLUB_NAME).append("));");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME).append(" TEXT NOT NULL UNIQUE);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

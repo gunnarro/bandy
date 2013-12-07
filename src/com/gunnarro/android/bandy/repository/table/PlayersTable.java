@@ -31,7 +31,7 @@ public class PlayersTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_TEAM_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STATUS).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FIRST_NAME).append(" TEXT NOT NULL");
@@ -40,7 +40,7 @@ public class PlayersTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DATE_OF_BIRTH).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_EMAIL).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MOBILE).append(" TEXT");
-		DATABASE_CREATE_QUERY.append(", PRIMARY KEY (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append("));");
+		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append(") ON CONFLICT REPLACE);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

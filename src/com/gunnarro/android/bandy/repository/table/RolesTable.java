@@ -24,10 +24,9 @@ public class RolesTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ROLE).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_CONTACT_ID).append(" INTEGER NOT NULL");
-		DATABASE_CREATE_QUERY.append(", PRIMARY KEY (").append(COLUMN_ROLE).append("));");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ROLE).append(" TEXT NOT NULL UNIQUE");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_CONTACT_ID).append(" INTEGER NOT NULL);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

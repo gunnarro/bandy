@@ -27,14 +27,12 @@ public class CupsTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_START_DATE).append(" INTEGER");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CUP_NAME).append(" TEXT NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CUP_NAME).append(" TEXT NOT NULL UNIQUE");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_VENUE).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DEADLINE_DATE).append(" INTEGER");
-		DATABASE_CREATE_QUERY.append(", PRIMARY KEY (").append(COLUMN_CUP_NAME).append("));");
-
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DEADLINE_DATE).append(" INTEGER);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

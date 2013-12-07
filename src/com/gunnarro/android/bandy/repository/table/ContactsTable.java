@@ -20,8 +20,7 @@ public class ContactsTable {
 	public static final String COLUMN_MOBILE = "mobile";
 	public static final String COLUMN_EMAIL = "email";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_MOBILE,
-			COLUMN_EMAIL };
+	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_MOBILE, COLUMN_EMAIL };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -29,14 +28,14 @@ public class ContactsTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_TEAM_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FIRST_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MIDDLE_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LAST_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MOBILE).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_EMAIL).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(", PRIMARY KEY (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append("));");
+		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append(") ON CONFLICT REPLACE);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {
@@ -61,8 +60,7 @@ public class ContactsTable {
 		}
 	}
 
-	public static ContentValues createContentValues(Integer teamId, String firstName, String middleName, String lastName, String mobile,
-			String epostAddress) {
+	public static ContentValues createContentValues(Integer teamId, String firstName, String middleName, String lastName, String mobile, String epostAddress) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_FK_TEAM_ID, teamId);
 		values.put(COLUMN_FIRST_NAME, firstName);
