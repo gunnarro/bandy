@@ -68,18 +68,9 @@ public interface BandyRepository {
 	// ---------------------------------------------------------------------------
 	// Settings table operations
 	// ---------------------------------------------------------------------------
-	public void updateDataFileUrl(String url);
 
-	public String getDataFileUrl();
+	public String getSetting(String type);
 
-	public void updateDataFileVersion(String version);
-
-	public String getDataFileVersion();
-
-	public void updateDataFileLastUpdated(long lastUpdatedTime);
-
-	public long getDataFileLastUpdated();
-
-
+	public void updateSetting(String type, String value);
 
 }

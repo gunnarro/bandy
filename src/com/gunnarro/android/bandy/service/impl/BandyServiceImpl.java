@@ -18,6 +18,7 @@ import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.Training;
 import com.gunnarro.android.bandy.repository.BandyRepository;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl;
+import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.service.BandyService;
 
 public class BandyServiceImpl implements BandyService {
@@ -226,7 +227,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public void updateDataFileUrl(String url) {
-		this.bandyRepository.updateDataFileUrl(url);
+		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_URL, url);
 	}
 
 	/**
@@ -234,7 +235,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public String getDataFileUrl() {
-		return this.bandyRepository.getDataFileUrl();
+		return this.bandyRepository.getSetting(SettingsTable.DATA_FILE_URL);
 	}
 
 	/**
@@ -242,7 +243,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public void updateDataFileVersion(String version) {
-		this.bandyRepository.updateDataFileVersion(version);
+		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_VERSION, version);
 	}
 
 	/**
@@ -250,7 +251,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public String getDataFileVersion() {
-		return this.bandyRepository.getDataFileVersion();
+		return this.bandyRepository.getSetting(SettingsTable.DATA_FILE_VERSION);
 	}
 
 	/**
@@ -258,7 +259,8 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public void updateDataFileLastUpdated(long lastUpdatedTime) {
-		this.bandyRepository.updateDataFileLastUpdated(lastUpdatedTime);
+		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_LAST_UPDATED, Long.toString(lastUpdatedTime));
+		;
 	}
 
 	/**
@@ -266,7 +268,38 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public long getDataFileLastUpdated() {
-		return this.bandyRepository.getDataFileLastUpdated();
+		return Long.parseLong(this.bandyRepository.getSetting(SettingsTable.DATA_FILE_LAST_UPDATED));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getEmailAccount() {
+		return this.bandyRepository.getSetting(SettingsTable.MAIL_ACCOUNT);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getEmailAccountPwd() {
+		return this.bandyRepository.getSetting(SettingsTable.MAIL_ACCOUNT_PWD);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateEmailAccount(String mailAccount) {
+		this.bandyRepository.updateSetting(SettingsTable.MAIL_ACCOUNT, mailAccount);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateEmailAccountPwd(String mailAccountPwd) {
+		this.bandyRepository.updateSetting(SettingsTable.MAIL_ACCOUNT_PWD, mailAccountPwd);
+	}
 }

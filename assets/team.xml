@@ -14,23 +14,23 @@
              	 <role>coach</role>
          	</roles>
         </contact>
-        <contact firstName="Siri" middleName="Birgitte" lastName="Paulen" mobile="+4792671308" email="" />
-        <contact firstName="Trond" middleName="" lastName="Kiplesund" mobile="+4792045699" email="" />
+        <contact firstName="Siri" middleName="Birgitte" lastName="Paulen" mobile="+4792671308" email="spaulen@ymail.com" />
+        <contact firstName="Trond" middleName="" lastName="Kiplesund" mobile="+4792045699" email="trond.kiplesund@sparebank1.no" />
         <contact firstName="Heidi" middleName="" lastName="Kiplesund" mobile="" email="" />
-        <contact firstName="Vemund" middleName="" lastName="Hartberg" mobile="+4792668817" email="" />
-        <contact firstName="Cecilie" middleName="" lastName="Hartberg" mobile="+4792666231" email="" />
-        <contact firstName="Johan" middleName="" lastName="Braanen" mobile="" email="" />
-        <contact firstName="Frank" middleName="" lastName="Halse" mobile="" email="" />
-        <contact firstName="Anita" middleName="" lastName="Halse" mobile="+4798616194" email="" />
-        <contact firstName="Mats" middleName="" lastName="Håkansson" mobile="+4792031707" email="" />
-        <contact firstName="Atle" middleName="" lastName="Jensen" mobile="" email="" />
-        <contact firstName="Kristin" middleName="" lastName="Jensen" mobile="" email="" />
-        <contact firstName="David" middleName="" lastName="Dunlop" mobile="+4799106806" email="" />
-        <contact firstName="Torstein" middleName="" lastName="Harildstad" mobile="" email="" />
-        <contact firstName="Petter" middleName="" lastName="Karal" mobile="" email="" />
-        <contact firstName="Heidi" middleName="" lastName="Karal" mobile="" email="" />
-        <contact firstName="Otto" middleName="" lastName="Scharff" mobile="" email="" />
-        <contact firstName="Kristin" middleName="" lastName="Bjelland" mobile="" email="" />
+        <contact firstName="Vemund" middleName="" lastName="Hartberg" mobile="+4792668817" email="vem-har@online.no" />
+        <contact firstName="Cecilie" middleName="" lastName="Hartberg" mobile="+4792666231" email="c.b.hartberg@medisin.uio.no" />
+        <contact firstName="Johan" middleName="" lastName="Braanen" mobile="" email="Johan@Braanen.com" />
+        <contact firstName="Frank" middleName="" lastName="Halse" mobile="" email="fhalse@gmail.com" />
+        <contact firstName="Anita" middleName="" lastName="Halse" mobile="+4798616194" email="halseanita@gmail.com" />
+        <contact firstName="Mats" middleName="" lastName="Håkansson" mobile="+4792031707" email="mats.hakansson@hotmail.no" />
+        <contact firstName="Atle" middleName="" lastName="Jensen" mobile="" email="atlej@math.uio.no" />
+        <contact firstName="Kristin" middleName="" lastName="Jensen" mobile="" email="kristinprivat@hotmail.com" />
+        <contact firstName="David" middleName="" lastName="Dunlop" mobile="+4799106806" email="david.dunlop@ude.oslo.kommune.no" />
+        <contact firstName="Torstein" middleName="" lastName="Harildstad" mobile="" email="torstein.harildstad@software-innovation.com" />
+        <contact firstName="Petter" middleName="" lastName="Karal" mobile="" email="petter@karal.no" />
+        <contact firstName="Heidi" middleName="" lastName="Karal" mobile="" email="heidi.karal@gmail.com" />
+        <contact firstName="Otto" middleName="" lastName="Scharff" mobile="" email="otto@scharff.net" />
+        <contact firstName="Kristin" middleName="" lastName="Bjelland" mobile="" email="kbjellan@gmail.com" />
     </contacts>
     
     <players>

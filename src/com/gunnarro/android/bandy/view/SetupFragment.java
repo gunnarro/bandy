@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
@@ -53,7 +54,7 @@ public class SetupFragment extends Fragment {
 		View view = inflater.inflate(R.layout.setup_layout, container, false);
 		this.bandyService = new BandyServiceImpl(view.getContext());
 		setupEventHandlers(view);
-		// init();
+		init();
 		return view;
 	}
 
@@ -85,6 +86,24 @@ public class SetupFragment extends Fragment {
 				getActivity().startService(intent);
 			}
 		});
+
+		view.findViewById(R.id.save_mail_account_btn).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				EditText mailAccount = (EditText) view.findViewById(R.id.gmail_account_txt);
+				updateMailAccount(mailAccount.getText().toString());
+				EditText mailAccountPwd = (EditText) view.findViewById(R.id.gmail_account_pwd_txt);
+				updateMailAccountPwd(mailAccountPwd.getText().toString());
+			}
+		});
+	}
+
+	protected void updateMailAccount(String mailAccount) {
+		this.bandyService.updateEmailAccount(mailAccount);
+	}
+
+	protected void updateMailAccountPwd(String mailAccountPwd) {
+		this.bandyService.updateEmailAccountPwd(mailAccountPwd);
 	}
 
 	private void init() {
@@ -92,6 +111,12 @@ public class SetupFragment extends Fragment {
 		updatedDateTxtView.setText(Utility.getDateFormatter().format(bandyService.getDataFileLastUpdated()));
 		TextView versionTxtView = (TextView) getActivity().findViewById(R.id.data_file_version_txt);
 		versionTxtView.setText(bandyService.getDataFileVersion());
+		// Read mail account settings
+		EditText mailAccount = (EditText) getActivity().findViewById(R.id.gmail_account_txt);
+		mailAccount.setText(this.bandyService.getEmailAccount());
+		EditText mailAccountPwd = (EditText) getActivity().findViewById(R.id.gmail_account_pwd_txt);
+		mailAccountPwd.setText(this.bandyService.getEmailAccountPwd());
+
 	}
 
 	private void updateBandyDatabase(String dataFile) {

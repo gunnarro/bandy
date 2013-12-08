@@ -14,6 +14,8 @@ public class SettingsTable {
 	public static String DATA_FILE_VERSION = "data_file_version";
 	public static String DATA_FILE_RELEASE_DATE = "data_file_release_date";
 	public static String DATA_FILE_LAST_UPDATED = "data_file_last_updated";
+	public static String MAIL_ACCOUNT = "change_me@gmail.com";
+	public static String MAIL_ACCOUNT_PWD = "change_me";
 
 	// Database table
 	public static final String TABLE_NAME = "settings";

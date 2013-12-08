@@ -225,7 +225,7 @@ public class ActivitiesFragment extends Fragment {
 
 	private void sendMail() {
 		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, viewBy, activityFilter);
-		MailSender mailSender = new MailSender("gunnar.ronneberg@gmail.com", "ABcd1986");
+		MailSender mailSender = new MailSender(this.bandyService.getEmailAccount(), this.bandyService.getEmailAccountPwd());
 		Team team = new Team(selectedTeamName);
 		String msg = Utility.createActivitiesHtmlTable(team, activityList);
 		String subject = team.getName() + " aktiviteter for " + viewBy;

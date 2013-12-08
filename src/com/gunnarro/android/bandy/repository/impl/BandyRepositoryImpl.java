@@ -110,7 +110,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public boolean createTraining(Training training) {
-		ContentValues values = TrainingsTable.createContentValues(training.getTeam().getId(), training.getStartDate(), training.getEndTime(), training.getVenue());
+		ContentValues values = TrainingsTable.createContentValues(training.getTeam().getId(), training.getStartDate(), training.getEndTime(),
+				training.getVenue());
 		this.database = dbHelper.getWritableDatabase();
 		database.insert(TrainingsTable.TABLE_NAME, null, values);
 		return true;
@@ -375,60 +376,12 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateDataFileUrl(String url) {
-		updateSetting(SettingsTable.DATA_FILE_URL, url);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDataFileUrl() {
-		String selection = SettingsTable.COLUMN_KEY + " LIKE ?";
-		String[] selectionArgs = { SettingsTable.DATA_FILE_URL };
-		return getSetting(selection, selectionArgs).getValue();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void updateDataFileVersion(String version) {
-		updateSetting(SettingsTable.DATA_FILE_VERSION, version);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDataFileVersion() {
-		String selection = SettingsTable.COLUMN_KEY + " LIKE ?";
-		String[] selectionArgs = { SettingsTable.DATA_FILE_VERSION };
-		return getSetting(selection, selectionArgs).getValue();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void updateDataFileLastUpdated(long lastUpdatedTime) {
-		updateSetting(SettingsTable.DATA_FILE_LAST_UPDATED, Long.toString(lastUpdatedTime));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public long getDataFileLastUpdated() {
-		String selection = SettingsTable.COLUMN_KEY + " LIKE ?";
-		String[] selectionArgs = { SettingsTable.DATA_FILE_LAST_UPDATED };
-		return Long.parseLong(getSetting(selection, selectionArgs).getValue());
-	}
-
-	private Setting getSetting(String selection, String[] selectionArgs) {
+	public String getSetting(String type) {
 		Setting setting = null;
 		String groupBy = null;
 		String orderBy = null;
+		String selection = SettingsTable.COLUMN_KEY + " LIKE ?";
+		String[] selectionArgs = { type };
 		this.database = dbHelper.getReadableDatabase();
 		Cursor cursor = database.query(SettingsTable.TABLE_NAME, SettingsTable.TABLE_COLUMNS, selection, selectionArgs, groupBy, null, orderBy);
 		if (cursor != null && cursor.getCount() > 0) {
@@ -441,17 +394,21 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (setting == null) {
 			throw new RuntimeException("DB not initialize! Please report bug!");
 		}
-		return setting;
+		return setting.getValue();
 	}
 
-	private void updateSetting(String selectionArg, String value) {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateSetting(String type, String value) {
 		StringBuffer where = new StringBuffer();
 		where.append(SettingsTable.COLUMN_KEY).append(" LIKE ?");
-		String[] selectionArgs = { selectionArg };
-		ContentValues values = SettingsTable.createContentValues(selectionArg, value);
+		String[] selectionArgs = { type };
+		ContentValues values = SettingsTable.createContentValues(type, value);
 		this.database = dbHelper.getWritableDatabase();
 		database.update(SettingsTable.TABLE_NAME, values, where.toString(), selectionArgs);
-		CustomLog.d(this.getClass(), "Updated " + selectionArg + ": " + value);
+		CustomLog.d(this.getClass(), "Updated " + type + " = " + value);
 	}
 
 	private String getPeriodeSelectClause(String periode) {
@@ -470,7 +427,9 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	private String getPeriodeSelectionClause(String periode) {
 		String selectClause = null;
-		if (periode.equalsIgnoreCase("year")) {
+		if (periode.equalsIgnoreCase("all")) {
+			selectClause = "start_date > 0";
+		} else if (periode.equalsIgnoreCase("year")) {
 			int year = Calendar.getInstance().get(Calendar.YEAR);
 			selectClause = "strftime('%Y', datetime(start_date, 'unixepoch')) LIKE " + year;
 		} else if (periode.equalsIgnoreCase("month")) {

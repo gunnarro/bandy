@@ -65,4 +65,12 @@ public interface BandyService {
 
 	public long getDataFileLastUpdated();
 
+	public String getEmailAccount();
+
+	public String getEmailAccountPwd();
+
+	public void updateEmailAccount(String mailAccount);
+
+	public void updateEmailAccountPwd(String mailAccountPwd);
+
 }

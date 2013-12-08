@@ -99,4 +99,85 @@
             android:src="@drawable/table_refresh" />
     </TableRow>
 
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="2dip" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:gravity="left"
+            android:padding="2dip"
+            android:text="Version" />
+
+        <TextView
+            android:id="@+id/data_file_version_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:gravity="left"
+            android:padding="2dip"
+            android:text="1.0" />
+    </TableRow>
+    
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="2dip" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:gravity="left"
+            android:padding="2dip"
+            android:text="Gmail account" />
+
+        <EditText
+            android:id="@+id/gmail_account_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:gravity="left"
+            android:padding="2dip"
+            android:inputType="textEmailAddress"
+            android:text="change_me" />
+    </TableRow>
+    
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="2dip" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:gravity="left"
+            android:padding="2dip"
+            android:text="Gmail account password" />
+
+        <EditText
+            android:id="@+id/gmail_account_pwd_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:gravity="left"
+            android:padding="2dip"
+            android:inputType="textPassword"
+            android:text="change_me" />
+        
+        <ImageButton
+            android:id="@+id/save_mail_account_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/na"
+            android:src="@drawable/save" />
+    </TableRow>
+    
 </TableLayout>

@@ -14,6 +14,7 @@
     <string name="spinner_teams">Teams</string>
 
     <string-array name="activities_view_by_options">
+        <item>All</item>
         <item>Year</item>
         <item>Month</item>
         <item>Week</item>
