@@ -17,6 +17,7 @@ import com.gunnarro.android.bandy.domain.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.Cup;
 import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Player;
+import com.gunnarro.android.bandy.domain.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.domain.Referee;
 import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.domain.Setting;
@@ -34,6 +35,7 @@ import com.gunnarro.android.bandy.repository.table.RolesTable;
 import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.TrainingsTable;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 
 public class BandyRepositoryImpl implements BandyRepository {
 
@@ -144,8 +146,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 		long playerId = database.insert(PlayersTable.TABLE_NAME, null, playerValues);
 		if (player.getParents() != null) {
 			for (Contact parent : player.getParents()) {
-				ContentValues relationshipsValues = RelationshipsTable.createContentValues(Long.valueOf(playerId).intValue(), parent.getId());
-				database.insert(RelationshipsTable.TABLE_NAME, null, relationshipsValues);
+				Contact contact = getContact(parent.getFirstName(), parent.getLastName());
+				if (contact != null) {
+					ContentValues relationshipsValues = RelationshipsTable.createContentValues(Long.valueOf(playerId).intValue(), contact.getId());
+					database.insert(RelationshipsTable.TABLE_NAME, null, relationshipsValues);
+				} else {
+					CustomLog.e(this.getClass(), "No contact found for: " + parent.getFirstName() + " " + parent.getLastName());
+				}
 			}
 		}
 	}
@@ -618,9 +625,34 @@ public class BandyRepositoryImpl implements BandyRepository {
 	}
 
 	private Player mapCursorToPlayer(Cursor cursor, Team team) {
+		List<Contact> relationsShips = getRelationsShips(cursor.getInt(cursor.getColumnIndex(PlayersTable.COLUMN_ID)));
 		return new Player(team, cursor.getString(cursor.getColumnIndex(PlayersTable.COLUMN_FIRST_NAME)), cursor.getString(cursor
-				.getColumnIndex(PlayersTable.COLUMN_MIDDLE_NAME)), cursor.getString(cursor.getColumnIndex(PlayersTable.COLUMN_LAST_NAME)), null, null,
-				cursor.getInt(cursor.getColumnIndex(PlayersTable.COLUMN_DATE_OF_BIRTH)));
+				.getColumnIndex(PlayersTable.COLUMN_MIDDLE_NAME)), cursor.getString(cursor.getColumnIndex(PlayersTable.COLUMN_LAST_NAME)),
+				PlayerStatusEnum.valueOf(cursor.getString(cursor.getColumnIndex(PlayersTable.COLUMN_STATUS))), relationsShips, cursor.getInt(cursor
+						.getColumnIndex(PlayersTable.COLUMN_DATE_OF_BIRTH)));
+	}
+
+	private List<Contact> getRelationsShips(Integer playerId) {
+		List<Contact> relationshipList = new ArrayList<Contact>();
+		String groupBy = null;
+		String orderBy = null;
+		String selection = RelationshipsTable.COLUMN_FK_PLAYER_ID + " = ?";
+		String[] selectionArgs = { playerId.toString() };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(RelationshipsTable.TABLE_NAME, RelationshipsTable.TABLE_COLUMNS, selection, selectionArgs, groupBy, null, orderBy);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				Contact contact = getContact(cursor.getColumnIndex(RelationshipsTable.COLUMN_FK_CONTACT_ID));
+				relationshipList.add(contact);
+				cursor.moveToNext();
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), relationshipList.toString());
+		return relationshipList;
 	}
 
 	private List<ContactRoleEnum> getRoles(Integer contactId) {

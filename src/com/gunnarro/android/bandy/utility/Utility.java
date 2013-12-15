@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Activity;
 import com.gunnarro.android.bandy.domain.Team;
 
@@ -80,7 +81,7 @@ public class Utility {
 		try {
 			return sdf.parse(time);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			CustomLog.e(Utility.class, "Return: " + new Date(0) + ", Exception: " + e.getMessage());
 			return new Date(0);
 		}
 	}

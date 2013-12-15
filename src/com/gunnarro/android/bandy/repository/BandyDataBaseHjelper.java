@@ -20,7 +20,7 @@ import com.gunnarro.android.bandy.repository.table.TrainingsTable;
 public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "bandy.db";
-	private static final int DATABASE_VERSION = 34;
+	private static final int DATABASE_VERSION = 35;
 
 	private static BandyDataBaseHjelper instance = null;
 

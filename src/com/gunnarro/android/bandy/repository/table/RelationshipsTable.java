@@ -14,9 +14,9 @@ public class RelationshipsTable {
 	public static final String TABLE_NAME = "relationships";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_FK_PLAYER_ID = "fk_player_id";
-	public static final String COLUMN_FK_PARENT_ID = "fk_parent_id";
+	public static final String COLUMN_FK_CONTACT_ID = "fk_contact_id";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_PLAYER_ID, COLUMN_FK_PARENT_ID };
+	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_PLAYER_ID, COLUMN_FK_CONTACT_ID };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -26,7 +26,7 @@ public class RelationshipsTable {
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
 		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_PLAYER_ID).append(" INTEGER NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_PARENT_ID).append(" INTEGER NOT NULL);");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_CONTACT_ID).append(" INTEGER NOT NULL);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {
@@ -51,10 +51,10 @@ public class RelationshipsTable {
 		}
 	}
 
-	public static ContentValues createContentValues(Integer playerId, Integer parentId) {
+	public static ContentValues createContentValues(Integer playerId, Integer contactId) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_FK_PLAYER_ID, playerId);
-		values.put(COLUMN_FK_PARENT_ID, parentId);
+		values.put(COLUMN_FK_CONTACT_ID, contactId);
 		return values;
 	}
 

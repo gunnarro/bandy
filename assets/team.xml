@@ -28,7 +28,7 @@
         <contact firstName="Anita" middleName="" lastName="Halse" mobile="+4798616194" email="halseanita@gmail.com" />
         <contact firstName="Mats" middleName="" lastName="Håkansson" mobile="+4792031707" email="mats.hakansson@hotmail.no" />
         <contact firstName="Atle" middleName="" lastName="Jensen" mobile="" email="atlej@math.uio.no" />
-        <contact firstName="Kristin" middleName="" lastName="Jensen" mobile="" email="kristinprivat@hotmail.com" />
+        <contact firstName="Kristin" middleName="" lastName="Halvorsen" mobile="" email="kristinprivat@hotmail.com" />
         <contact firstName="David" middleName="" lastName="Dunlop" mobile="+4799106806" email="david.dunlop@ude.oslo.kommune.no" />
         <contact firstName="Torstein" middleName="" lastName="Harildstad" mobile="" email="torstein.harildstad@software-innovation.com" />
         <contact firstName="Petter" middleName="" lastName="Karal" mobile="" email="petter@karal.no" />
@@ -52,8 +52,8 @@
     	</player>   
     	<player id="3" status="active" firstName="Marius" middleName="" lastName="Kiplesund" birthDate="17.11.2003" mobile="" email="" >
     		<parents>
-    	 	    <parent firstName="Trond" lastName="Kiplesund;Hedi" />
-        		<parent firstName="Heidi" lastName="Kiplesund;Hedi" />
+    	 	    <parent firstName="Trond" lastName="Kiplesund" />
+        		<parent firstName="Heidi" lastName="Kiplesund" />
     	 	</parents>
    	 	</player>
     	<player id="4" status="active" firstName="August" middleName="" lastName="Hartberg" birthDate="" mobile="" email="" >
