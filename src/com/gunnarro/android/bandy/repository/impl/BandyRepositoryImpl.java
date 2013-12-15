@@ -18,6 +18,7 @@ import com.gunnarro.android.bandy.domain.Cup;
 import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Player;
 import com.gunnarro.android.bandy.domain.Referee;
+import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.domain.Setting;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.Training;
@@ -58,6 +59,24 @@ public class BandyRepositoryImpl implements BandyRepository {
 	@Override
 	public void close() {
 		dbHelper.close();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteAllTableData() {
+		this.database = dbHelper.getWritableDatabase();
+		database.delete(ClubsTable.TABLE_NAME, null, null);
+		database.delete(ContactsTable.TABLE_NAME, null, null);
+		database.delete(CupsTable.TABLE_NAME, null, null);
+		database.delete(MatchesTable.TABLE_NAME, null, null);
+		database.delete(PlayersTable.TABLE_NAME, null, null);
+		database.delete(RelationshipsTable.TABLE_NAME, null, null);
+		database.delete(RolesTable.TABLE_NAME, null, null);
+		// database.delete(SettingsTable.TABLE_NAME, null, null);
+		database.delete(TeamsTable.TABLE_NAME, null, null);
+		database.delete(TrainingsTable.TABLE_NAME, null, null);
 	}
 
 	/**
@@ -119,8 +138,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	@Override
 	public void createPlayer(Player player) {
-		ContentValues playerValues = PlayersTable.createContentValues(player.getFirstName(), player.getMiddleName(), player.getLastName(),
-				Boolean.toString(true));
+		ContentValues playerValues = PlayersTable.createContentValues(player.getTeam().getId(), player.getStatus().name(), player.getFirstName(),
+				player.getMiddleName(), player.getLastName(), player.getDateOfBirth());
 		this.database = dbHelper.getWritableDatabase();
 		long playerId = database.insert(PlayersTable.TABLE_NAME, null, playerValues);
 		if (player.getParents() != null) {
@@ -160,7 +179,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		List<Contact> list = new ArrayList<Contact>();
 		String orderBy = ContactsTable.COLUMN_LAST_NAME + " COLLATE LOCALIZED ASC";
 		String selection = ContactsTable.COLUMN_FK_TEAM_ID + " = ?";
-		String[] selectionArgs = { teamId.toString(), role };
+		String[] selectionArgs = { teamId.toString() };
 		this.database = dbHelper.getReadableDatabase();
 		Cursor cursor = database.query(ContactsTable.TABLE_NAME, ContactsTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
 		if (cursor != null && cursor.getCount() > 0) {
@@ -286,6 +305,50 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public Contact getTeamContactPerson(int teamId, String role) {
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT c.").append(ContactsTable.COLUMN_ID);
+		query.append(" FROM ").append(ContactsTable.TABLE_NAME).append(" c,").append(RolesTable.TABLE_NAME).append(" r");
+		query.append(" WHERE c.").append(ContactsTable.COLUMN_FK_TEAM_ID).append(" = ").append(teamId);
+		query.append(" AND c.").append(ContactsTable.COLUMN_ID).append(" = r.").append(RolesTable.COLUMN_FK_CONTACT_ID);
+		query.append(" AND r.").append(RolesTable.COLUMN_ROLE).append(" LIKE '").append(role.toLowerCase()).append("'");
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = this.database.rawQuery(query.toString(), null);
+		int contactId = -1;
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			contactId = cursor.getInt(cursor.getColumnIndex(TeamsTable.COLUMN_ID));
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		Contact teamlead = getContact(contactId);
+		CustomLog.d(this.getClass(), "role=" + role + ", contact=" + teamlead);
+		return teamlead;
+	}
+
+	private Contact getContact(int contactId) {
+		Contact contact = null;
+		StringBuffer selection = new StringBuffer();
+		selection.append(ContactsTable.COLUMN_ID + " = ?");
+		String[] selectionArgs = { Integer.toString(contactId) };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(ContactsTable.TABLE_NAME, ContactsTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			contact = mapCursorToContact(cursor);
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), "contact=" + contact);
+		return contact;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Contact getContact(String firstName, String lastName) {
 		Contact contact = null;
 		StringBuffer selection = new StringBuffer();
@@ -363,9 +426,70 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return list;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public List<Player> getPlayerList(String teamName) {
-		return null;
+	public List<Role> getRoleList() {
+		List<Role> list = new ArrayList<Role>();
+		String selection = RolesTable.COLUMN_ID + " > ?";
+		String[] selectionArgs = { "-1" };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(RolesTable.TABLE_NAME, RolesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				list.add(mapCursorToRole(cursor));
+				cursor.moveToNext();
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.e(this.getClass(), "roles=" + list);
+		return list;
+	}
+
+	public Player getPlayer(Integer playerId) {
+		Player player = null;
+		StringBuffer selection = new StringBuffer();
+		selection.append(ContactsTable.COLUMN_ID + " = ?");
+		String[] selectionArgs = { playerId.toString() };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(PlayersTable.TABLE_NAME, PlayersTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			Team team = getTeam(cursor.getInt(cursor.getColumnIndex(PlayersTable.COLUMN_FK_TEAM_ID)));
+			player = mapCursorToPlayer(cursor, team);
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), "player=" + player);
+		return player;
+	}
+
+	@Override
+	public List<Player> getPlayerList(Integer teamId) {
+		List<Player> list = new ArrayList<Player>();
+		String orderBy = PlayersTable.COLUMN_LAST_NAME + " COLLATE LOCALIZED ASC";
+		String selection = PlayersTable.COLUMN_FK_TEAM_ID + " = ?";
+		String[] selectionArgs = { teamId.toString() };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(PlayersTable.TABLE_NAME, PlayersTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
+		if (cursor != null && cursor.getCount() > 0) {
+			Team team = getTeam(teamId);
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				list.add(mapCursorToPlayer(cursor, team));
+				cursor.moveToNext();
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), "players=" + cursor.getCount());
+		return list;
 	}
 
 	// -----------------------------------------------------------------------------------------------
@@ -394,6 +518,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (setting == null) {
 			throw new RuntimeException("DB not initialize! Please report bug!");
 		}
+		CustomLog.d(this.getClass(), setting.toString());
 		return setting.getValue();
 	}
 
@@ -411,36 +536,27 @@ public class BandyRepositoryImpl implements BandyRepository {
 		CustomLog.d(this.getClass(), "Updated " + type + " = " + value);
 	}
 
-	private String getPeriodeSelectClause(String periode) {
-		String selectClause = null;
-		if (periode.equalsIgnoreCase("year")) {
-			selectClause = "strftime('%Y', datetime(start_date, 'unixepoch'))";
-		} else if (periode.equalsIgnoreCase("month")) {
-			selectClause = "strftime('%m.%Y', datetime(start_date, 'unixepoch'))";
-		} else if (periode.equalsIgnoreCase("week")) {
-			selectClause = "strftime('%W', datetime(start_date, 'unixepoch'))";
-		} else if (periode.equalsIgnoreCase("day")) {
-			selectClause = "strftime('%d.%m', datetime(start_date, 'unixepoch'))";
-		}
-		return selectClause;
-	}
-
 	private String getPeriodeSelectionClause(String periode) {
 		String selectClause = null;
+		Calendar cal = Calendar.getInstance();
 		if (periode.equalsIgnoreCase("all")) {
-			selectClause = "start_date > 0";
+			cal.set(Calendar.HOUR, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			// only those newer than today
+			selectClause = "start_date > " + Long.toString(cal.getTimeInMillis());
 		} else if (periode.equalsIgnoreCase("year")) {
-			int year = Calendar.getInstance().get(Calendar.YEAR);
+			int year = cal.get(Calendar.YEAR);
 			selectClause = "strftime('%Y', datetime(start_date, 'unixepoch')) LIKE " + year;
 		} else if (periode.equalsIgnoreCase("month")) {
-			int mmonthNumber = Calendar.getInstance().get(Calendar.MONTH);
-			selectClause = "strftime('%m', datetime(start_date, 'unixepoch')) LIKE " + mmonthNumber;
+			int mmonthNumber = cal.get(Calendar.MONTH);
+			selectClause = "strftime('%m%Y', datetime(start_date, 'unixepoch')) LIKE " + (mmonthNumber + 1);
 		} else if (periode.equalsIgnoreCase("week")) {
-			int week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
+			int week = cal.get(Calendar.WEEK_OF_YEAR);
 			selectClause = "strftime('%W', datetime(start_date, 'unixepoch')) LIKE " + week;
 		} else if (periode.equalsIgnoreCase("day")) {
-			int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-			selectClause = "strftime('%d', datetime(start_date, 'unixepoch')) LIKE " + day;
+			int day = cal.get(Calendar.DAY_OF_MONTH);
+			selectClause = "strftime('%d%m%Y', datetime(start_date, 'unixepoch')) LIKE " + day;
 		}
 		return selectClause;
 	}
@@ -478,7 +594,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 	}
 
 	private Team mapCursorToTeam(Cursor cursor) {
-		return new Team(cursor.getInt(cursor.getColumnIndex(TeamsTable.COLUMN_ID)), cursor.getString(cursor.getColumnIndex(TeamsTable.COLUMN_TEAM_NAME)));
+		Club club = getClub(cursor.getInt(cursor.getColumnIndex(TeamsTable.COLUMN_FK_CLUB_ID)));
+		return new Team(cursor.getInt(cursor.getColumnIndex(TeamsTable.COLUMN_ID)), cursor.getString(cursor.getColumnIndex(TeamsTable.COLUMN_TEAM_NAME)), club);
 	}
 
 	private Setting mapCursorToSetting(Cursor cursor) {
@@ -487,7 +604,45 @@ public class BandyRepositoryImpl implements BandyRepository {
 	}
 
 	private Contact mapCursorToContact(Cursor cursor) {
-		return null;
+		Team team = getTeam(cursor.getInt(cursor.getColumnIndex(ContactsTable.COLUMN_FK_TEAM_ID)));
+		List<ContactRoleEnum> roles = getRoles(cursor.getInt(cursor.getColumnIndex(ContactsTable.COLUMN_ID)));
+		return new Contact(cursor.getInt(cursor.getColumnIndex(ContactsTable.COLUMN_ID)), team, roles, cursor.getString(cursor
+				.getColumnIndex(ContactsTable.COLUMN_FIRST_NAME)), cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_MIDDLE_NAME)),
+				cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_LAST_NAME)), cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_MOBILE)),
+				cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_EMAIL)));
 	}
 
+	private Role mapCursorToRole(Cursor cursor) {
+		return new Role(cursor.getInt(cursor.getColumnIndex(RolesTable.COLUMN_ID)), cursor.getInt(cursor.getColumnIndex(RolesTable.COLUMN_FK_CONTACT_ID)),
+				cursor.getString(cursor.getColumnIndex(RolesTable.COLUMN_ROLE)));
+	}
+
+	private Player mapCursorToPlayer(Cursor cursor, Team team) {
+		return new Player(team, cursor.getString(cursor.getColumnIndex(PlayersTable.COLUMN_FIRST_NAME)), cursor.getString(cursor
+				.getColumnIndex(PlayersTable.COLUMN_MIDDLE_NAME)), cursor.getString(cursor.getColumnIndex(PlayersTable.COLUMN_LAST_NAME)), null, null,
+				cursor.getInt(cursor.getColumnIndex(PlayersTable.COLUMN_DATE_OF_BIRTH)));
+	}
+
+	private List<ContactRoleEnum> getRoles(Integer contactId) {
+		List<ContactRoleEnum> roleList = new ArrayList<ContactRoleEnum>();
+		String groupBy = null;
+		String orderBy = null;
+		String selection = RolesTable.COLUMN_FK_CONTACT_ID + " = ?";
+		String[] selectionArgs = { contactId.toString() };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(RolesTable.TABLE_NAME, RolesTable.TABLE_COLUMNS, selection, selectionArgs, groupBy, null, orderBy);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				String role = cursor.getString(cursor.getColumnIndex(RolesTable.COLUMN_ROLE));
+				roleList.add(ContactRoleEnum.valueOf(role.toUpperCase()));
+				cursor.moveToNext();
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), roleList.toString());
+		return roleList;
+	}
 }

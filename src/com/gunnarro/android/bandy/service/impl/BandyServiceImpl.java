@@ -11,15 +11,18 @@ import com.gunnarro.android.bandy.domain.Activity;
 import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.Contact;
+import com.gunnarro.android.bandy.domain.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.Cup;
 import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Player;
+import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.Training;
 import com.gunnarro.android.bandy.repository.BandyRepository;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl;
 import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 
 public class BandyServiceImpl implements BandyService {
 
@@ -54,6 +57,7 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public void loadData(String filePath) {
 		try {
+			bandyRepository.deleteAllTableData();
 			this.xmlParser.testParseByXpath(filePath, this);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,8 +124,31 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public Contact getTeamLead(Integer teamId) {
+		return this.bandyRepository.getTeamContactPerson(teamId, ContactRoleEnum.TEAMLEAD.name());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Contact getCoach(Integer teamId) {
+		return this.bandyRepository.getTeamContactPerson(teamId, ContactRoleEnum.COACH.name());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Team getTeam(String name) {
-		return this.bandyRepository.getTeam(name);
+		Team team = this.bandyRepository.getTeam(name);
+		if (team == null) {
+			throw new ApplicationException("Team not found, team name=" + name);
+		}
+		team.setTeamLead(this.getTeamLead(team.getId()));
+		team.setConatctList(this.getContactList(team.getId()));
+		team.setPlayerList(getPlayerList(team.getId()));
+		return team;
 	}
 
 	/**
@@ -129,7 +156,14 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public Team getTeam(Integer id) {
-		return this.bandyRepository.getTeam(id);
+		Team team = this.bandyRepository.getTeam(id);
+		if (team == null) {
+			throw new ApplicationException("Team not found, team id=" + id);
+		}
+		team.setTeamLead(this.getTeamLead(team.getId()));
+		team.setConatctList(this.getContactList(team.getId()));
+		team.setPlayerList(getPlayerList(team.getId()));
+		return team;
 	}
 
 	/**
@@ -203,6 +237,16 @@ public class BandyServiceImpl implements BandyService {
 	/**
 	 * {@inheritDoc}
 	 * 
+	 * @param periode
+	 */
+	@Override
+	public List<Contact> getContactList(Integer teamId) {
+		return this.bandyRepository.getContactList(teamId, "%");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 * @param teamId
 	 */
 	@Override
@@ -214,8 +258,8 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Player> getPlayerList(String teamName) {
-		return this.bandyRepository.getPlayerList(teamName);
+	public List<Player> getPlayerList(Integer teamId) {
+		return this.bandyRepository.getPlayerList(teamId);
 	}
 
 	// ---------------------------------------------------------------------------
@@ -268,7 +312,9 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public long getDataFileLastUpdated() {
-		return Long.parseLong(this.bandyRepository.getSetting(SettingsTable.DATA_FILE_LAST_UPDATED));
+		String lastUpdatedTime = this.bandyRepository.getSetting(SettingsTable.DATA_FILE_LAST_UPDATED);
+		long time = lastUpdatedTime != null ? Long.parseLong(lastUpdatedTime) : 0;
+		return time;
 	}
 
 	/**
@@ -301,5 +347,13 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public void updateEmailAccountPwd(String mailAccountPwd) {
 		this.bandyRepository.updateSetting(SettingsTable.MAIL_ACCOUNT_PWD, mailAccountPwd);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Role> getRoleList() {
+		return this.bandyRepository.getRoleList();
 	}
 }

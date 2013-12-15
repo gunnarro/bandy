@@ -14,12 +14,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -33,10 +35,13 @@ import com.gunnarro.android.bandy.domain.Contact;
 import com.gunnarro.android.bandy.domain.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.Cup;
 import com.gunnarro.android.bandy.domain.Match;
+import com.gunnarro.android.bandy.domain.Player;
+import com.gunnarro.android.bandy.domain.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.domain.Referee;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.Training;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.utility.Utility;
 
 public class XmlDocumentParser {
@@ -88,6 +93,8 @@ public class XmlDocumentParser {
 		DocumentBuilder db = dbf.newDocumentBuilder();
 
 		// InputStream inputStream = getHttpsInput(url);
+		// System.out.println(inputStream);
+		// CustomLog.e(this.getClass(), "Downloaded data file...");
 		// Document doc = db.parse(inputStream);
 		Document doc = db.parse(new File(filePath));
 		XPathFactory factory = XPathFactory.newInstance();
@@ -106,8 +113,9 @@ public class XmlDocumentParser {
 		Team team = mapAndSaveTeamNode(club, nodeList, bandyService);
 
 		expression = "/team/contacts/contact";
+		// expression "/team/contacts/contact[@firstName='Gunnar']/roles/role"
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		mapAndSaveContacts(team, nodeList, bandyService);
+		mapAndSaveContacts(xpath, doc, team, nodeList, bandyService);
 
 		expression = "/team/matches/match";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
@@ -124,10 +132,6 @@ public class XmlDocumentParser {
 		expression = "/team/players/player";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		mapAndSavePlayerNodes(team, nodeList, bandyService);
-
-		expression = "/team/parents/parent";
-		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		mapAndSaveParentNodes(nodeList, bandyService);
 	}
 
 	private Club mapAndSaveClubNode(NodeList nodeList, BandyService bandyService) {
@@ -145,18 +149,25 @@ public class XmlDocumentParser {
 		NamedNodeMap attrMap = nodeList.item(0).getAttributes();
 		Team team = new Team(attrMap.getNamedItem("name").getNodeValue(), club);
 		CustomLog.d(this.getClass(), team.toString());
-		if (bandyService.getTeam(team.getName()) == null) {
+		try {
+			bandyService.getTeam(team.getName());
+		} catch (ApplicationException ae) {
 			bandyService.createTeam(team);
 		}
 		bandyService.updateDataFileVersion(attrMap.getNamedItem("version").getNodeValue());
 		return bandyService.getTeam(team.getName());
 	}
 
-	private void mapAndSaveParentNodes(NodeList nodeList, BandyService bandyService) {
-
-	}
-
 	private void mapAndSavePlayerNodes(Team team, NodeList nodeList, BandyService bandyService) {
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			NamedNodeMap attrMap = nodeList.item(i).getAttributes();
+			String status = attrMap.getNamedItem("status").getNodeValue();
+			Player player = new Player(team, attrMap.getNamedItem("firstName").getNodeValue(), attrMap.getNamedItem("middleName").getNodeValue(), attrMap
+					.getNamedItem("lastName").getNodeValue(), PlayerStatusEnum.valueOf(status.toUpperCase()), null, Utility.timeToDate(
+					attrMap.getNamedItem("birthDate").getNodeValue(), "dd.MM.yyyy").getTime());
+			CustomLog.d(this.getClass(), player.toString());
+			bandyService.createPlayer(player);
+		}
 	}
 
 	private void mapAndSaveCupNodes(NodeList nodeList, BandyService bandyService) {
@@ -195,30 +206,40 @@ public class XmlDocumentParser {
 		}
 	}
 
-	private void mapAndSaveContacts(Team team, NodeList nodeList, BandyService bandyService) {
+	private void mapAndSaveContacts(XPath xpath, Document doc, Team team, NodeList nodeList, BandyService bandyService) throws XPathExpressionException,
+			DOMException {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node contactNode = nodeList.item(i);
-			NodeList roleNodeList = contactNode.getChildNodes();
-			List<ContactRoleEnum> roles = new ArrayList<ContactRoleEnum>();
-			if (roleNodeList != null && roleNodeList.getLength() > 0) {
-				for (int j = 0; j < roleNodeList.getLength(); j++) {
-					Node roleNode = roleNodeList.item(j);
-					try {
-						roles.add(ContactRoleEnum.valueOf(roleNode.getNodeValue().toUpperCase()));
-					} catch (Exception e) {
-						CustomLog.e(this.getClass(),
-								"contact=" + contactNode.toString() + ", Invalid status: " + roleNode.getNodeName() + "=" + roleNode.getNodeValue());
-					}
-				}
-			}
 			NamedNodeMap attrMap = contactNode.getAttributes();
-			Contact contact = new Contact(new Team(team.getId(), team.getName()), roles, attrMap.getNamedItem("firstName").getNodeValue(), attrMap
+			// Get the contact node roles child node
+			List<ContactRoleEnum> roleList = getRoleList(xpath, doc, attrMap.getNamedItem("firstName").getNodeValue());
+			Contact contact = new Contact(new Team(team.getId(), team.getName()), roleList, attrMap.getNamedItem("firstName").getNodeValue(), attrMap
 					.getNamedItem("middleName").getNodeValue(), attrMap.getNamedItem("lastName").getNodeValue(), attrMap.getNamedItem("mobile").getNodeValue(),
 					attrMap.getNamedItem("email").getNodeValue(), null);
 
 			CustomLog.d(this.getClass(), contact.toString());
 			bandyService.createContact(contact);
 		}
+	}
 
+	private List<ContactRoleEnum> getRoleList(XPath xpath, Document doc, String contactNodeId) throws XPathExpressionException {
+		String xpathExprRoles = "/team/contacts/contact[@firstName='" + contactNodeId + "']/roles/role";
+		NodeList nodeList = (NodeList) xpath.evaluate(xpathExprRoles, doc, XPathConstants.NODESET);
+		List<ContactRoleEnum> roles = new ArrayList<ContactRoleEnum>();
+		for (int j = 0; j < nodeList.getLength(); j++) {
+			Node roleNode = nodeList.item(j);
+			// Read only text node
+			CustomLog.e(this.getClass(), "node=" + roleNode.getNodeName() + " " + roleNode.getNodeType() + " " + roleNode.getTextContent());
+			// if (roleNode.getNodeType() == Node.TEXT_NODE) {
+			CustomLog.e(this.getClass(), "node=" + roleNode.getNodeName());
+			try {
+				roles.add(ContactRoleEnum.valueOf(roleNode.getTextContent().toUpperCase()));
+			} catch (Exception e) {
+				CustomLog.e(this.getClass(), "contact=" + contactNodeId + ", Invalid status: " + roleNode.getNodeName() + "=" + roleNode.getTextContent());
+			}
+		}
+		// }
+		// }
+		return roles;
 	}
 }

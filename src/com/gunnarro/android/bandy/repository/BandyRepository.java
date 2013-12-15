@@ -9,6 +9,7 @@ import com.gunnarro.android.bandy.domain.Contact;
 import com.gunnarro.android.bandy.domain.Cup;
 import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Player;
+import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.Training;
 
@@ -31,6 +32,8 @@ public interface BandyRepository {
 	 */
 	public void close();
 
+	public void deleteAllTableData();
+
 	public boolean createClub(Club club);
 
 	public boolean createTeam(Team team);
@@ -49,6 +52,8 @@ public interface BandyRepository {
 
 	public Team getTeam(Integer id);
 
+	public Contact getTeamContactPerson(int teamId, String role);
+
 	public Club getClub(String name);
 
 	public Club getClub(Integer id);
@@ -59,11 +64,11 @@ public interface BandyRepository {
 
 	public List<Cup> getCupList(Integer teamId, String periode);
 
-	public List<Player> getPlayerList(String teamName);
+	public List<Player> getPlayerList(Integer teamId);
 
 	public List<Contact> getContactList(Integer teamId, String role);
 
-	Contact getContact(String firstName, String lastName);
+	public Contact getContact(String firstName, String lastName);
 
 	// ---------------------------------------------------------------------------
 	// Settings table operations
@@ -72,5 +77,7 @@ public interface BandyRepository {
 	public String getSetting(String type);
 
 	public void updateSetting(String type, String value);
+
+	public List<Role> getRoleList();
 
 }

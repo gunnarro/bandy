@@ -12,8 +12,8 @@ public class Player extends Contact {
 	private List<Contact> parents;
 	private long dateOfBirth;
 
-	public Player(String firstName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth) {
-		super(firstName, lastName);
+	public Player(Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth) {
+		super(team, firstName, lastName);
 		this.status = status;
 		this.parents = parents;
 		this.dateOfBirth = dateOfBirth;
@@ -31,4 +31,12 @@ public class Player extends Contact {
 		return dateOfBirth;
 	}
 
+	public boolean hasParents() {
+		return (parents != null && parents.size() > 0);
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + ", dateOfBirth=" + dateOfBirth;
+	}
 }

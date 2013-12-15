@@ -8,6 +8,7 @@ public class Club {
 	private String stadium;
 	private String address;
 	private List<Team> teams;
+	private String homepage;
 
 	public Club(String name) {
 		this.name = name;
@@ -24,6 +25,10 @@ public class Club {
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getHomepage() {
+		return homepage;
 	}
 
 	/**

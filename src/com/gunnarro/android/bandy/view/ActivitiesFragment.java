@@ -7,6 +7,7 @@ import java.util.Random;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -28,10 +29,14 @@ import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Activity;
 import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
+import com.gunnarro.android.bandy.domain.Contact;
+import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.mail.MailSender;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.service.impl.DataLoader;
+import com.gunnarro.android.bandy.service.impl.DownloadService;
 import com.gunnarro.android.bandy.utility.Utility;
 
 public class ActivitiesFragment extends Fragment {
@@ -88,8 +93,19 @@ public class ActivitiesFragment extends Fragment {
 		sendMailButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				SendEmailTask task = new SendEmailTask();
-				task.execute((Void[]) null);
+				// SendEmailTask task = new SendEmailTask();
+				// task.execute((Void[]) null);
+				Intent intent = new Intent(getActivity().getApplicationContext(), NotificationActivity.class);
+				Team team = bandyService.getTeam(selectedTeamName);
+				intent.putExtra("teamName", team.getName());
+				intent.putStringArrayListExtra("toEmail", new ArrayList<String>(team.getEmailAddresseForContacts()));
+				intent.putStringArrayListExtra("toMobile", new ArrayList<String>(team.getMobileNrForContacts()));
+				intent.putExtra("fromEmail", team.getTeamLead().getEmailAddress());
+				intent.putExtra("fromMobile", team.getTeamLead().getMobileNumber());
+				intent.putExtra("message", composeMessage(team));
+				intent.putExtra("periode", viewBy);
+				getActivity().startService(intent);
+				startActivity(intent);
 			}
 		});
 	}
@@ -124,7 +140,6 @@ public class ActivitiesFragment extends Fragment {
 		row.addView(createTextView(statView, Utility.getDateFormatter().format(new Date(activity.getStartDate())), rowBgColor, txtColor, Gravity.CENTER));
 		Utility.getDateFormatter().applyPattern("HH:mm");
 		row.addView(createTextView(statView, Utility.getDateFormatter().format(new Date(activity.getStartDate())), rowBgColor, txtColor, Gravity.CENTER));
-		row.addView(createTextView(statView, activity.getType().name(), rowBgColor, numberColor, Gravity.LEFT));
 		row.addView(createTextView(statView, activity.getDescription(), rowBgColor, numberColor, Gravity.LEFT));
 		row.addView(createTextView(statView, activity.getPlace(), rowBgColor, numberColor, Gravity.CENTER));
 
@@ -223,24 +238,54 @@ public class ActivitiesFragment extends Fragment {
 		}
 	}
 
+	private String composeMessage(Team team) {
+		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, viewBy, activityFilter);
+		String msg = Utility.createActivitiesHtmlTable(team, activityList);
+		StringBuffer regards = new StringBuffer();
+		regards.append(msg);
+		regards.append("\n\n\n");
+		regards.append("Vennlig hilsen").append("\n");
+		regards.append(team.getTeamLead().getFullName()).append("\n");
+		regards.append(team.getClub().getName()).append("\n");
+		regards.append("Trener/Lagleder\n");
+		regards.append(team.getName()).append("\n");
+		regards.append("Mobile: ").append(team.getTeamLead().getMobileNumber()).append("\n");
+		regards.append("Homepage: ").append(team.getClub().getHomepage()).append("\n");
+		return regards.toString();
+	}
+
 	private void sendMail() {
 		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, viewBy, activityFilter);
 		MailSender mailSender = new MailSender(this.bandyService.getEmailAccount(), this.bandyService.getEmailAccountPwd());
-		Team team = new Team(selectedTeamName);
+		Team team = this.bandyService.getTeam(selectedTeamName);
 		String msg = Utility.createActivitiesHtmlTable(team, activityList);
 		String subject = team.getName() + " aktiviteter for " + viewBy;
-		List<String> recipients = new ArrayList<String>();
-		recipients.add("gunnar.ronneberg@gmail.com");
-		recipients.add("gunnar_ronneberg@yahoo.no");
 		StringBuffer regards = new StringBuffer();
+		List<String> recipients = new ArrayList<String>();
+		List<Contact> contactList = this.bandyService.getContactList(team.getId());
+		for (Contact c : contactList) {
+			CustomLog.e(this.getClass(), c.toString());
+			recipients.add(c.getEmailAddress());
+		}
+		List<Role> roleList = this.bandyService.getRoleList();
+		for (Role r : roleList) {
+			CustomLog.e(this.getClass(), r.toString());
+		}
+		CustomLog.e(this.getClass(), recipients.toString());
+		Contact teamLead = this.bandyService.getTeamLead(team.getId());
 		regards.append("\n\n\n");
 		regards.append("Vennlig hilsen").append("\n");
-		regards.append("Gunnar Rønneberg").append("\n");
-		regards.append("Trener/Lagleder UiL Knøtt 2003").append("\n");
-		regards.append("Mobile: 45 46 55 00").append("\n");
-		regards.append("UiL: http://idrett.speaker.no/organisation.asp?OrgElementId=52653").append("\n");
+		regards.append(teamLead.getFullName()).append("\n");
+		regards.append(team.getClub().getName()).append("\n");
+		regards.append("Trener/Lagleder\n");
+		regards.append(team.getName()).append("\n");
+		regards.append("Mobile: ").append(teamLead.getMobileNumber()).append("\n");
+		regards.append("Homepage: ").append(team.getClub().getHomepage()).append("\n");
 		try {
-			mailSender.sendMail(subject, msg + regards.toString(), "gunnar.ronneberg@gmail.com", recipients);
+			CustomLog.d(this.getClass(), "email msg=" + msg);
+			CustomLog.d(this.getClass(), "email regards=" + regards.toString());
+			// mailSender.sendMail(subject, msg + regards.toString(),
+			// "gunnar.ronneberg@gmail.com", recipients);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

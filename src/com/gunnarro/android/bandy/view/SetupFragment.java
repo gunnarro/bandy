@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.service.impl.DataLoader;
@@ -54,7 +55,10 @@ public class SetupFragment extends Fragment {
 		View view = inflater.inflate(R.layout.setup_layout, container, false);
 		this.bandyService = new BandyServiceImpl(view.getContext());
 		setupEventHandlers(view);
-		init();
+		// init();
+		for (Role r : bandyService.getRoleList()) {
+			CustomLog.e(this.getClass(), r.toString());
+		}
 		return view;
 	}
 
@@ -80,10 +84,15 @@ public class SetupFragment extends Fragment {
 		view.findViewById(R.id.load_data_btn).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), DownloadService.class);
-				intent.putExtra(DownloadService.FILENAME, "team.xml");
-				intent.putExtra(DownloadService.URL, DataLoader.TEAM_XML_URL);
-				getActivity().startService(intent);
+				 Intent intent = new Intent(getActivity(),
+				 DownloadService.class);
+				 intent.putExtra(DownloadService.FILENAME, "team.xml");
+				 intent.putExtra(DownloadService.URL,
+				 DataLoader.TEAM_XML_URL);
+				 getActivity().startService(intent);
+
+//				UpdateDataTask task = new UpdateDataTask();
+//				task.execute((Void[]) null);
 			}
 		});
 
@@ -116,7 +125,6 @@ public class SetupFragment extends Fragment {
 		mailAccount.setText(this.bandyService.getEmailAccount());
 		EditText mailAccountPwd = (EditText) getActivity().findViewById(R.id.gmail_account_pwd_txt);
 		mailAccountPwd.setText(this.bandyService.getEmailAccountPwd());
-
 	}
 
 	private void updateBandyDatabase(String dataFile) {
@@ -129,12 +137,12 @@ public class SetupFragment extends Fragment {
 	}
 
 	/**
-	 * Asynch task for sending email
+	 * Asynch task for updating data
 	 * 
 	 * @author admin
 	 * 
 	 */
-	class DownloadDataFileTask extends AsyncTask<Void, Void, Void> {
+	class UpdateDataTask extends AsyncTask<Void, Void, Void> {
 		private ProgressDialog pdialog;
 
 		/**
@@ -143,7 +151,7 @@ public class SetupFragment extends Fragment {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			pdialog = ProgressDialog.show(getActivity(), "", "Sending Email...", true);
+			pdialog = ProgressDialog.show(getActivity(), "", "Updating data...", true);
 		}
 
 		/**
@@ -160,6 +168,7 @@ public class SetupFragment extends Fragment {
 		@Override
 		protected Void doInBackground(Void... agrs) {
 			try {
+				updateBandyDatabase(DataLoader.TEAM_XML_URL);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

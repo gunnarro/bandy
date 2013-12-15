@@ -92,13 +92,6 @@
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/type"
-                android:contentDescription="@string/na"
-                android:gravity="center_horizontal"
-                android:text="Type"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <TextView
                 android:id="@+id/description"
                 android:contentDescription="@string/na"
                 android:gravity="center_horizontal"

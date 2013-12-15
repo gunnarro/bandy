@@ -8,7 +8,7 @@ import com.gunnarro.android.bandy.domain.Contact;
 import com.gunnarro.android.bandy.domain.Cup;
 import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Player;
-import com.gunnarro.android.bandy.domain.Setting;
+import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.Training;
 
@@ -48,7 +48,7 @@ public interface BandyService {
 
 	public List<Activity> getActivityList(String teamName, String viewBy, String filterBy);
 
-	public List<Player> getPlayerList(String teamName);
+	public List<Player> getPlayerList(Integer teamId);
 
 	// ---------------------------------------------------------------------------
 	// Settings table operations
@@ -72,5 +72,13 @@ public interface BandyService {
 	public void updateEmailAccount(String mailAccount);
 
 	public void updateEmailAccountPwd(String mailAccountPwd);
+
+	public Contact getTeamLead(Integer id);
+
+	public Contact getCoach(Integer id);
+
+	public List<Contact> getContactList(Integer id);
+
+	public List<Role> getRoleList();
 
 }

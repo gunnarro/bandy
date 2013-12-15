@@ -65,12 +65,14 @@ public class PlayersTable {
 		}
 	}
 
-	public static ContentValues createContentValues(String status, String fistName, String middleName, String lastName) {
+	public static ContentValues createContentValues(Integer teamId, String status, String fistName, String middleName, String lastName, long dateOfBirth) {
 		ContentValues values = new ContentValues();
+		values.put(COLUMN_FK_TEAM_ID, teamId);
 		values.put(COLUMN_STATUS, status);
 		values.put(COLUMN_FIRST_NAME, fistName);
 		values.put(COLUMN_MIDDLE_NAME, middleName);
 		values.put(COLUMN_LAST_NAME, lastName);
+		values.put(COLUMN_DATE_OF_BIRTH, (int) (dateOfBirth / 1000));
 		return values;
 	}
 

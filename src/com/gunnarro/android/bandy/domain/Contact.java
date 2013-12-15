@@ -8,7 +8,7 @@ public class Contact {
 		DEFAULT, COACH, TEAMLEAD, PARENT;
 	}
 
-	private Integer id = -1;
+	private Integer id;
 	private Team team;
 	private List<ContactRoleEnum> roles;
 	private String firstName;
@@ -18,7 +18,21 @@ public class Contact {
 	private String emailAddress;
 	private Address address;
 
-	public Contact(String firstName, String lastName) {
+	public Contact(Integer id, Team team, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName, String mobileNumber,
+			String emailAddress) {
+		super();
+		this.id = id;
+		this.team = team;
+		this.roles = roles;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.mobileNumber = mobileNumber;
+		this.emailAddress = emailAddress;
+	}
+
+	public Contact(Team team, String firstName, String lastName) {
+		this.team = team;
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}

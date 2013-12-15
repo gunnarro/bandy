@@ -2,27 +2,27 @@ package com.gunnarro.android.bandy.domain;
 
 public class Setting {
 
-    private String name;
-    private String value;
+	private String name;
+	private String value;
 
-    public Setting(String name, String value) {
-        this.name = name;
-        this.value = value;
-    }
+	public Setting(String name, String value) {
+		this.name = name;
+		this.value = value;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getValue() {
-        return value;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return this.name + " " + this.value;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ": [type=" + this.name + ", value=" + this.value + "]";
+	}
 }

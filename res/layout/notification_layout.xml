@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:scrollbars="none" >
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <EditText
+                android:id="@+id/notification_msg_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top|left"
+                android:inputType="textMultiLine"
+                android:textSize="12sp"
+                android:scrollHorizontally="false" 
+                android:enabled="false"
+                android:textIsSelectable="true"
+                android:typeface="serif"
+                android:cursorVisible="false"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+               />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <ImageButton
+                android:id="@+id/home_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/na"
+                android:src="@drawable/contact" />
+
+            <ImageButton
+                android:id="@+id/send_sms_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/na"
+                android:src="@drawable/mms" />
+
+            <ImageButton
+                android:id="@+id/send_email_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/na"
+                android:src="@drawable/send_email" />
+        </TableRow>
+    </TableLayout>
+
+</ScrollView>

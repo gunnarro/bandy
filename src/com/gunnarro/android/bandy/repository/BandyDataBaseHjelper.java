@@ -9,6 +9,7 @@ import com.gunnarro.android.bandy.repository.table.ClubsTable;
 import com.gunnarro.android.bandy.repository.table.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.CupsTable;
 import com.gunnarro.android.bandy.repository.table.MatchesTable;
+import com.gunnarro.android.bandy.repository.table.NotificationsTable;
 import com.gunnarro.android.bandy.repository.table.PlayersTable;
 import com.gunnarro.android.bandy.repository.table.RelationshipsTable;
 import com.gunnarro.android.bandy.repository.table.RolesTable;
@@ -19,7 +20,7 @@ import com.gunnarro.android.bandy.repository.table.TrainingsTable;
 public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "bandy.db";
-	private static final int DATABASE_VERSION = 14;
+	private static final int DATABASE_VERSION = 34;
 
 	private static BandyDataBaseHjelper instance = null;
 
@@ -68,7 +69,8 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		SettingsTable.onCreate(database);
 		TeamsTable.onCreate(database);
 		TrainingsTable.onCreate(database);
-		// PlayersTable.onCreate(database);
+		NotificationsTable.onCreate(database);
+		// init data
 		insertDefaultData(database);
 		insertTestData(database);
 		CustomLog.i(this.getClass(), "created and initialized DB tables");
@@ -88,7 +90,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		SettingsTable.onUpgrade(database, oldVersion, newVersion);
 		TeamsTable.onUpgrade(database, oldVersion, newVersion);
 		TrainingsTable.onUpgrade(database, oldVersion, newVersion);
-		// PlayersTable.onUpgrade(database, oldVersion, newVersion);
+		NotificationsTable.onUpgrade(database, oldVersion, newVersion);
 		insertDefaultData(database);
 		// for testing only
 		insertTestData(database);
@@ -96,10 +98,12 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	}
 
-	private void insertDefaultData(SQLiteDatabase database) {
+	public void insertDefaultData(SQLiteDatabase database) {
 		// init settings
 		database.execSQL("insert into settings (_id, key, value) values(1,'" + SettingsTable.DATA_FILE_LAST_UPDATED + "','0')");
 		database.execSQL("insert into settings (_id, key, value) values(2,'" + SettingsTable.DATA_FILE_VERSION + "','na')");
+		database.execSQL("insert into settings (_id, key, value) values(3,'" + SettingsTable.MAIL_ACCOUNT + "','na')");
+		database.execSQL("insert into settings (_id, key, value) values(4,'" + SettingsTable.MAIL_ACCOUNT_PWD + "','na')");
 
 		// Init. available filter types, which are all deactivated as default.
 		// database.execSQL("insert into filters (_id, filter_name, activated) values(1,'"

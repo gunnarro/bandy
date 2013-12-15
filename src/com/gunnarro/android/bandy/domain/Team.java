@@ -1,9 +1,14 @@
 package com.gunnarro.android.bandy.domain;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Team {
+public class Team implements Serializable {
+
+	private static final long serialVersionUID = -7342682849751732634L;
+
 	private Integer id = -1;
 	private String version;
 	private Date releaseDate;
@@ -14,6 +19,9 @@ public class Team {
 	private List<Match> matches;
 	private List<Cup> cups;
 	private List<Training> trainings;
+	private List<Contact> conatctList;
+	private List<Player> playerList;
+	private Contact teamLead;
 
 	public Team(String name) {
 		this.name = name;
@@ -22,6 +30,11 @@ public class Team {
 	public Team(int id, String name) {
 		this(name);
 		this.id = id;
+	}
+
+	public Team(int id, String name, Club club) {
+		this(id, name);
+		this.club = club;
 	}
 
 	public Team(String name, String version) {
@@ -84,6 +97,46 @@ public class Team {
 
 	public String getName() {
 		return name;
+	}
+
+	public List<Contact> getConatctList() {
+		return conatctList;
+	}
+
+	public void setConatctList(List<Contact> conatctList) {
+		this.conatctList = conatctList;
+	}
+
+	public List<Player> getPlayerList() {
+		return playerList;
+	}
+
+	public void setPlayerList(List<Player> playerList) {
+		this.playerList = playerList;
+	}
+
+	public Contact getTeamLead() {
+		return teamLead;
+	}
+
+	public void setTeamLead(Contact teamLead) {
+		this.teamLead = teamLead;
+	}
+
+	public List<String> getMobileNrForContacts() {
+		List<String> mobileNumbers = new ArrayList<String>();
+		for (Contact contact : conatctList) {
+			mobileNumbers.add(contact.getMobileNumber());
+		}
+		return mobileNumbers;
+	}
+
+	public List<String> getEmailAddresseForContacts() {
+		List<String> emailsNumbers = new ArrayList<String>();
+		for (Contact contact : conatctList) {
+			emailsNumbers.add(contact.getEmailAddress());
+		}
+		return emailsNumbers;
 	}
 
 	/**
