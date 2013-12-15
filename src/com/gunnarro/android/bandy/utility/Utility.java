@@ -16,11 +16,11 @@ public class Utility {
 
 	public static SimpleDateFormat getDateFormatter() {
 		if (dateFormatter == null) {
-			dateFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.ENGLISH);
+			dateFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.UK);
 		}
 		return dateFormatter;
 	}
-	
+
 	public static String formatTime(int hour, int minute) {
 		StringBuffer time = new StringBuffer();
 		time.append(padTime(hour)).append(":").append(padTime(minute));
@@ -81,7 +81,7 @@ public class Utility {
 			return sdf.parse(time);
 		} catch (ParseException e) {
 			e.printStackTrace();
-			return null;
+			return new Date(0);
 		}
 	}
 

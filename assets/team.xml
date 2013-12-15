@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <team name="Knøtt 2003" version="0.1" releaseDate="26.11.2013">
-    <club name="Ullevål Idrettslag">
+    <club name="Ullevål IL - Bandy">
     	<abbrivation>UiL</abbrivation>
         <stadium>Bergbanen</stadium>
-        <address>Ullevål stadion, pb 4400, Oslo 0870</address>
-        <homepage>http://www.uil.no</homepage>
+        <address>Bergbanen</address>
+        <postbox>Pb 3901 Ullevål Hageby</postbox>
+        <postnumber>0805</postnumber>
+        <city>Oslo</city>
+        <country>Norge</country>
+        <homepage>http://idrett.speaker.no/organisation.asp?OrgElementId=52653</homepage>
     </club>
     
     <contacts>
@@ -46,17 +50,66 @@
         		<parent firstName="Siri" middleName="Birgitte" lastName="Paulen" />
     	 	</parents>
     	</player>   
-    	<player id="3" status="active" firstName="Marius" middleName="" lastName="Kiplesund" birthDate="17.11.2003" mobile="" email="" parents="Trond Kiplesund;Hedi Kiplesund" />
-    	<player id="4" status="active" firstName="August" middleName="" lastName="Hartberg" birthDate="" mobile="" email="" parents="Vemund Hartberg;Cecilie Hartberg" />
-    	<player id="5" status="active" firstName="Anton" middleName="" lastName="Braanen" birthDate="" mobile="" email="" parents="Johan Braanen" />
-    	<player id="6" status="active" firstName="Magnus" middleName="" lastName="Halse" birthDate="18.11.2013" mobile="" email="" parents="Frank Halse;Anita Halse" />
-    	<player id="7" status="active" firstName="Thomas" middleName="" lastName="Bergan Håkansson" birthDate="" mobile="" email="" parents="Mats Håkansson" />
-    	<player id="8" status="active" firstName="Linus" middleName="" lastName="Jensen" birthDate="" mobile="" email="" parents="Atle Jensen;Kristin Halvorsen" />
-    	<player id="9" status="active" firstName="Oscar" middleName="" lastName="Dunlop" birthDate="" mobile="" email="" parents="David Dunlop" />
-    	<player id="10" status="active" firstName="Mathias" middleName="" lastName="Harildstad" birthDate="" mobile="" email="" parents="Torstein Harildstad" />
-    	<player id="11" status="active" firstName="Martin" middleName="" lastName="Karal" birthDate="" mobile="" email="" parents="Petter Karal;Heidi Karal" />
-    	<player id="12" status="active" firstName="Trygve" middleName="" lastName="Scharff" birthDate="" mobile="" email="" parents="Otto Scharff" />
-    	<player id="13" status="active" firstName="Andreas" middleName="" lastName="Bjelland" birthDate="" mobile="" email="" parents="Kristin Bjelland" />
+    	<player id="3" status="active" firstName="Marius" middleName="" lastName="Kiplesund" birthDate="17.11.2003" mobile="" email="" >
+    		<parents>
+    	 	    <parent firstName="Trond" lastName="Kiplesund;Hedi" />
+        		<parent firstName="Heidi" lastName="Kiplesund;Hedi" />
+    	 	</parents>
+   	 	</player>
+    	<player id="4" status="active" firstName="August" middleName="" lastName="Hartberg" birthDate="" mobile="" email="" >
+    		<parents>
+    	 	    <parent firstName="Vemund" lastName="Hartberg" />
+        		<parent firstName="Cecilie" lastName="Hartberg" />
+    	 	</parents>
+   	 	</player>
+    	<player id="5" status="active" firstName="Anton" middleName="" lastName="Braanen" birthDate="" mobile="" email="" >
+    		<parents>
+    	 	    <parent firstName="Johan" lastName="Braanen" />
+    	 	</parents>
+   	 	</player>
+    	<player id="6" status="active" firstName="Magnus" middleName="" lastName="Halse" birthDate="18.11.2013" mobile="" email="" >
+    		<parents>
+    	 	    <parent firstName="Frank" lastName="Halse" />
+        		<parent firstName="Anita" lastName="Halse" />
+    	 	</parents>
+   	 	</player>
+    	<player id="7" status="active" firstName="Thomas" middleName="" lastName="Bergan Håkansson" birthDate="" mobile="" email="" >
+    		<parents>
+    	 	    <parent firstName="Mats" lastName="Håkansson" />
+    	 	</parents>
+   	 	</player>
+    	<player id="8" status="active" firstName="Linus" middleName="" lastName="Jensen" birthDate="" mobile="" email="" >
+    		<parents>
+    	 	    <parent firstName="Atle" lastName="Jensen" />
+        		<parent firstName="Kristin" lastName="Halvorsen" />
+    	 	</parents>
+   	 	</player>
+    	<player id="9" status="active" firstName="Oscar" middleName="" lastName="Dunlop" birthDate="" mobile="" email="" >
+    		<parents>
+    	 	    <parent firstName="David" lastName="Dunlop" />
+    	 	</parents>
+   	 	</player>
+    	<player id="10" status="active" firstName="Mathias" middleName="" lastName="Harildstad" birthDate="" mobile="" email="" >
+    		<parents>
+    	 	    <parent firstName="Torstein" lastName="Harildstad" />
+    	 	</parents>
+   	 	</player>
+    	<player id="11" status="active" firstName="Martin" middleName="" lastName="Karal" birthDate="" mobile="" email="" >
+    		<parents>
+    	 	    <parent firstName="Petter" lastName="Karal" />
+        		<parent firstName="Heidi"  lastName="Karal" />
+    	 	</parents>
+     	</player>
+    	<player id="12" status="active" firstName="Trygve" middleName="" lastName="Scharff" birthDate="" mobile="" email="" >
+    		<parents>
+    	 	    <parent firstName="Otto" lastName="Scharff" />
+    	 	</parents>
+    	</player>
+    	<player id="13" status="active" firstName="Andreas" middleName="" lastName="Bjelland" birthDate="" mobile="" email="" >
+	    	<parents>
+	    	 	    <parent firstName="Kristin" lastName="Bjelland" />
+	    	 </parents>
+    	</player>
     </players>
 	
     <!-- 

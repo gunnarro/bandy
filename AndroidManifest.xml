@@ -28,6 +28,7 @@
             </intent-filter>
         </activity>
         
+        <activity android:name="com.gunnarro.android.bandy.view.NotificationActivity" android:label="Notification" />
       <!-- 
       <activity android:name="com.gunnarro.android.bandy.view.dashboard.HomeActivity"
                   android:label="@string/app_name">
