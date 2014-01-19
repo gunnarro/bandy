@@ -17,35 +17,52 @@
 package com.gunnarro.android.bandy.view.dashboard;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.domain.SearchResult;
+import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 
 /**
- * This is the Search activity in the dashboard application.
- * It displays some text and provides a way to get back to the home activity.
- *
- */
-
-public class SearchActivity extends DashboardActivity 
-{
-
-/**
- * onCreate
- *
- * Called when the activity is first created. 
- * This is where you should do all of your normal static set up: create views, bind data to lists, etc. 
- * This method also provides you with a Bundle containing the activity's previously frozen state, if there was one.
+ * This is the Search activity in the dashboard application. It displays some
+ * text and provides a way to get back to the home activity.
  * 
- * Always followed by onStart().
- *
- * @param savedInstanceState Bundle
  */
 
-protected void onCreate(Bundle savedInstanceState) 
-{
-    super.onCreate(savedInstanceState);
-    setContentView (R.layout.activity_search);
-    setTitleFromActivityLabel (R.id.title_text);
-}
-    
+public class SearchActivity extends DashboardActivity {
+
+	private BandyService bandyService;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.search_layout);
+		setTitleFromActivityLabel(R.id.title_text);
+		this.bandyService = new BandyServiceImpl(getApplicationContext());
+		setupEventHandlers();
+	}
+
+	private void setupEventHandlers() {
+		findViewById(R.id.search_btn).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				searchDB();
+			}
+		});
+	}
+
+	private void searchDB() {
+		String sqlQuery = ((TextView) findViewById(R.id.search_input_txt)).getText().toString();
+		SearchResult search = bandyService.search(sqlQuery);
+		((TextView) findViewById(R.id.search_result_txt)).setText(search.getResult());
+		CustomLog.d(this.getClass(), search.getResult());
+		System.out.println(search.getResult());
+	}
 } // end class

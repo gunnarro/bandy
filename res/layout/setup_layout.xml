@@ -1,159 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:shrinkColumns="*"
-    android:stretchColumns="*" >
-	
-    <TableRow
-        android:layout_width="fill_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:id="@+id/dataLayoutId"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="2dip" >
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical" >
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:text="Data file url" />
-
-        <TextView
-            android:id="@+id/data_file_url_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:text="http://git.com/team.xml" />
-    </TableRow>
-    
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="2dip" >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:text="Last updated" />
-
-        <TextView
-            android:id="@+id/data_file_last_updated_date_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:text="01.01.1970 24:00:00" />
-    </TableRow>
-    
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="2dip" >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:text="Version" />
-
-        <TextView
-            android:id="@+id/data_file_version_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:text="1.0" />
-    </TableRow>
-    
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="2dip" >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:text="Upload data" />
-
-        <ImageButton
-            android:id="@+id/load_data_btn"
+            android:id="@+id/dataHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/na"
-            android:src="@drawable/table_refresh" />
-    </TableRow>
+            android:text="Data source"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TableRow
-        android:layout_width="fill_parent"
+        <View
+            android:id="@+id/dataSeparatorId"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="@drawable/line_separator" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/dataTableId"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/dataLayoutId"
+        android:layout_marginLeft="10dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        android:textSize="@dimen/text_size_medium" >
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|fill"
+                android:padding="2dip"
+                android:text="Data file url" />
+
+            <TextView
+                android:id="@+id/data_file_url_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="http://git.com/team.xml" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="Last updated" />
+
+            <TextView
+                android:id="@+id/data_file_last_updated_date_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="01.01.1970 24:00:00" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="Version" />
+
+            <TextView
+                android:id="@+id/data_file_version_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="1.0" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="Gmail account" />
+
+            <EditText
+                android:id="@+id/gmail_account_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:inputType="textEmailAddress"
+                android:padding="2dip"
+                android:text="change_me" >
+            </EditText>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="Gmail pwd" />
+
+            <EditText
+                android:id="@+id/gmail_account_pwd_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:inputType="textPassword"
+                android:padding="2dip"
+                android:text="change_me" >
+            </EditText>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <Button
+                android:id="@+id/load_data_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:contentDescription="@string/na"
+                android:text="Upload data" />
+
+            <Button
+                android:id="@+id/save_mail_account_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:contentDescription="@string/na"
+                android:text="Save mail settings" />
+        </TableRow>
+    </TableLayout>
+    <!--
+     <LinearLayout
+        android:id="@+id/accountLayoutId"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="2dip" >
+        android:layout_below="@+id/dataTableId"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical" >
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:text="Gmail account" />
-
-        <EditText
-            android:id="@+id/gmail_account_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:inputType="textEmailAddress"
-            android:text="change_me" />
-    </TableRow>
-    
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="2dip" >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:text="Gmail account password" />
-
-        <EditText
-            android:id="@+id/gmail_account_pwd_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_span="3"
-            android:gravity="left"
-            android:padding="2dip"
-            android:inputType="textPassword"
-            android:text="change_me" />
-        
-        <ImageButton
-            android:id="@+id/save_mail_account_btn"
+            android:id="@+id/accountHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/na"
-            android:src="@drawable/save" />
-    </TableRow>
-    
-</TableLayout>
+            android:text="Mail account"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <View
+            android:id="@+id/accountSeparatorId"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="@drawable/line_separator" />
+    </LinearLayout>   -->
+
+</RelativeLayout>

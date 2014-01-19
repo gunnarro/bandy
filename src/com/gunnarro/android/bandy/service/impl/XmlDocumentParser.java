@@ -23,28 +23,36 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.net.http.AndroidHttpClient;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.domain.Address;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.Contact;
 import com.gunnarro.android.bandy.domain.Contact.ContactRoleEnum;
-import com.gunnarro.android.bandy.domain.Cup;
-import com.gunnarro.android.bandy.domain.Match;
 import com.gunnarro.android.bandy.domain.Player;
 import com.gunnarro.android.bandy.domain.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.domain.Referee;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.Training;
+import com.gunnarro.android.bandy.domain.activity.Cup;
+import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.utility.Utility;
 
 public class XmlDocumentParser {
+
+	private final static String ATTR_DATE = "date";
+	private final static String ATTR_START_TIME = "startTime";
+	private final static String ATTR_BIRTH_DATE = "birthDate";
+
+	private final static String ATTR_FIRST_NAME = "firstName";
+	private final static String ATTR_MIDDLE_NAME = "middleName";
+	private final static String ATTR_LAST_NAME = "lastName";
 
 	private AndroidHttpClient mHttpClient;
 
@@ -108,9 +116,16 @@ public class XmlDocumentParser {
 		NodeList nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		Club club = mapAndSaveClubNode(nodeList, bandyService);
 
+		if (club == null) {
+			throw new ApplicationException("Invalid xml document, Club node is missing!");
+		}
+
 		expression = "/team";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		Team team = mapAndSaveTeamNode(club, nodeList, bandyService);
+		if (team == null) {
+			throw new ApplicationException("Invalid xml document, Tema node is missing!");
+		}
 
 		expression = "/team/contacts/contact";
 		// expression "/team/contacts/contact[@firstName='Gunnar']/roles/role"
@@ -136,8 +151,7 @@ public class XmlDocumentParser {
 
 	private Club mapAndSaveClubNode(NodeList nodeList, BandyService bandyService) {
 		CustomLog.d(this.getClass(), "node=" + nodeList.item(0).getNodeName());
-		NamedNodeMap attrMap = nodeList.item(0).getAttributes();
-		Club club = new Club(attrMap.getNamedItem("name").getNodeValue());
+		Club club = new Club(getAttributeValue(nodeList.item(0), "name"));
 		CustomLog.d(this.getClass(), club.toString());
 		if (bandyService.getClub(club.getName()) == null) {
 			bandyService.createClub(club);
@@ -146,28 +160,27 @@ public class XmlDocumentParser {
 	}
 
 	private Team mapAndSaveTeamNode(Club club, NodeList nodeList, BandyService bandyService) {
-		NamedNodeMap attrMap = nodeList.item(0).getAttributes();
-		Team team = new Team(attrMap.getNamedItem("name").getNodeValue(), club);
+		Team team = new Team(getAttributeValue(nodeList.item(0), "name"), club);
 		CustomLog.d(this.getClass(), team.toString());
+		System.out.print("mapAndSaveTeamNode: " + team.toString());
 		try {
-			bandyService.getTeam(team.getName());
+			bandyService.getTeam(team.getName(), false);
 		} catch (ApplicationException ae) {
 			bandyService.createTeam(team);
 		}
-		bandyService.updateDataFileVersion(attrMap.getNamedItem("version").getNodeValue());
-		return bandyService.getTeam(team.getName());
+		bandyService.updateDataFileVersion(getAttributeValue(nodeList.item(0), "version"));
+		return bandyService.getTeam(team.getName(), false);
 	}
 
 	private void mapAndSavePlayerNodes(XPath xpath, Document doc, Team team, NodeList nodeList, BandyService bandyService) throws XPathExpressionException,
 			DOMException {
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			Node playerNode = nodeList.item(i);
-			NamedNodeMap attrMap = playerNode.getAttributes();
-			List<Contact> parentList = getParentList(xpath, doc, attrMap.getNamedItem("firstName").getNodeValue());
-			String status = attrMap.getNamedItem("status").getNodeValue();
-			Player player = new Player(team, attrMap.getNamedItem("firstName").getNodeValue(), attrMap.getNamedItem("middleName").getNodeValue(), attrMap
-					.getNamedItem("lastName").getNodeValue(), PlayerStatusEnum.valueOf(status.toUpperCase()), parentList, Utility.timeToDate(
-					attrMap.getNamedItem("birthDate").getNodeValue(), "dd.MM.yyyy").getTime());
+			List<Contact> parentList = getParentList(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
+					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
+			String status = getAttributeValue(nodeList.item(i), "status");
+			Player player = new Player(-1, team, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(i), ATTR_MIDDLE_NAME),
+					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), PlayerStatusEnum.valueOf(status.toUpperCase()), parentList, Utility.timeToDate(
+							getAttributeValue(nodeList.item(i), ATTR_BIRTH_DATE), "dd.MM.yyyy").getTime());
 			CustomLog.e(this.getClass(), player.toString());
 			bandyService.createPlayer(player);
 		}
@@ -175,11 +188,10 @@ public class XmlDocumentParser {
 
 	private void mapAndSaveCupNodes(NodeList nodeList, BandyService bandyService) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			NamedNodeMap attrMap = nodeList.item(i).getAttributes();
-			String dateTimeStr = attrMap.getNamedItem("date").getNodeValue() + " " + attrMap.getNamedItem("startTime").getNodeValue();
-			Cup cup = new Cup(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), attrMap.getNamedItem("clubName").getNodeValue(), attrMap
-					.getNamedItem("cupName").getNodeValue(), attrMap.getNamedItem("venue").getNodeValue(), Utility.timeToDate(
-					attrMap.getNamedItem("deadlineDate").getNodeValue(), "dd.MM.yyyy").getTime());
+			String dateTimeStr = getAttributeValue(nodeList.item(i), ATTR_DATE) + " " + getAttributeValue(nodeList.item(i), ATTR_START_TIME);
+			Cup cup = new Cup(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), getAttributeValue(nodeList.item(i), "clubName"),
+					getAttributeValue(nodeList.item(i), "cupName"), getAttributeValue(nodeList.item(i), "venue"), Utility.timeToDate(
+							getAttributeValue(nodeList.item(i), "deadlineDate"), "dd.MM.yyyy").getTime());
 			CustomLog.d(this.getClass(), cup.toString());
 			bandyService.createCup(cup);
 		}
@@ -187,11 +199,10 @@ public class XmlDocumentParser {
 
 	private void mapAndSaveTrainingNodes(Team team, NodeList nodeList, BandyService bandyService) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			NamedNodeMap attrMap = nodeList.item(i).getAttributes();
-			String dateTimeStr = attrMap.getNamedItem("date").getNodeValue() + " " + attrMap.getNamedItem("fromTime").getNodeValue();
-			String toTimeStr = attrMap.getNamedItem("toTime").getNodeValue();
+			String dateTimeStr = getAttributeValue(nodeList.item(i), ATTR_DATE) + " " + getAttributeValue(nodeList.item(i), "fromTime");
+			String toTimeStr = getAttributeValue(nodeList.item(i), "toTime");
 			Training training = new Training(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), Utility.timeToDate(toTimeStr, "HH:mm").getTime(),
-					new Team(team.getId(), team.getName()), attrMap.getNamedItem("place").getNodeValue());
+					new Team(team.getId(), team.getName()), getAttributeValue(nodeList.item(i), "place"));
 			CustomLog.d(this.getClass(), training.toString());
 			bandyService.createTraining(training);
 		}
@@ -199,11 +210,10 @@ public class XmlDocumentParser {
 
 	private void mapAndSaveMatchNodes(Team team, NodeList nodeList, BandyService bandyService) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			NamedNodeMap attrMap = nodeList.item(i).getAttributes();
-			String dateTimeStr = attrMap.getNamedItem("date").getNodeValue() + " " + attrMap.getNamedItem("startTime").getNodeValue();
-			Match match = new Match(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), new Team(team.getId(), team.getName()), new Team(attrMap
-					.getNamedItem("homeTeam").getNodeValue()), new Team(attrMap.getNamedItem("awayTeam").getNodeValue()), attrMap.getNamedItem("venue")
-					.getNodeValue(), new Referee(attrMap.getNamedItem("referee").getNodeValue()));
+			String dateTimeStr = getAttributeValue(nodeList.item(i), ATTR_DATE) + " " + getAttributeValue(nodeList.item(i), ATTR_START_TIME);
+			Match match = new Match(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), new Team(team.getId(), team.getName()), new Team(
+					getAttributeValue(nodeList.item(i), "homeTeam")), new Team(getAttributeValue(nodeList.item(i), "awayTeam")), getAttributeValue(
+					nodeList.item(i), "venue"), new Referee(getAttributeValue(nodeList.item(i), "referee")));
 			CustomLog.d(this.getClass(), match.toString());
 			bandyService.createMatch(match);
 		}
@@ -212,29 +222,36 @@ public class XmlDocumentParser {
 	private void mapAndSaveContacts(XPath xpath, Document doc, Team team, NodeList nodeList, BandyService bandyService) throws XPathExpressionException,
 			DOMException {
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			Node contactNode = nodeList.item(i);
-			NamedNodeMap attrMap = contactNode.getAttributes();
 			// Get the contact node roles child node
-			List<ContactRoleEnum> roleList = getRoleList(xpath, doc, attrMap.getNamedItem("firstName").getNodeValue());
-			Contact contact = new Contact(new Team(team.getId(), team.getName()), roleList, attrMap.getNamedItem("firstName").getNodeValue(), attrMap
-					.getNamedItem("middleName").getNodeValue(), attrMap.getNamedItem("lastName").getNodeValue(), attrMap.getNamedItem("mobile").getNodeValue(),
-					attrMap.getNamedItem("email").getNodeValue(), null);
+			List<ContactRoleEnum> roleList = getRoleList(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
+					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
 
+			Address address = mapAddress(nodeList.item(i));
+			Contact contact = new Contact(new Team(team.getId(), team.getName()), roleList, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
+					getAttributeValue(nodeList.item(i), ATTR_MIDDLE_NAME), getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), getAttributeValue(
+							nodeList.item(i), "mobile"), getAttributeValue(nodeList.item(i), "email"), address);
 			CustomLog.d(this.getClass(), contact.toString());
 			bandyService.createContact(contact);
 		}
 	}
 
-	private List<ContactRoleEnum> getRoleList(XPath xpath, Document doc, String firstName) throws XPathExpressionException {
-		String xpathExprRoles = "/team/contacts/contact[@firstName='" + firstName + "']/roles/role";
+	private Address mapAddress(Node addressNode) throws XPathExpressionException, DOMException {
+		Address address = new Address(getAttributeValue(addressNode, "streetName"), getAttributeValue(addressNode, "streetNumber"), getAttributeValue(
+				addressNode, "streetNumberPrefix"), getAttributeValue(addressNode, "zipCode"), getAttributeValue(addressNode, "city"), getAttributeValue(
+				addressNode, "country"));
+		CustomLog.d(this.getClass(), address.toString());
+		return address;
+	}
+
+	private List<ContactRoleEnum> getRoleList(XPath xpath, Document doc, String firstName, String lastName) throws XPathExpressionException {
+		String xpathExprRoles = "/team/contacts/contact[@" + ATTR_FIRST_NAME + "='" + firstName + "' and @" + ATTR_LAST_NAME + "='" + lastName
+				+ "']/roles/role";
 		NodeList nodeList = (NodeList) xpath.evaluate(xpathExprRoles, doc, XPathConstants.NODESET);
 		List<ContactRoleEnum> roles = new ArrayList<ContactRoleEnum>();
 		for (int j = 0; j < nodeList.getLength(); j++) {
 			Node roleNode = nodeList.item(j);
 			// Read only text node
 			CustomLog.e(this.getClass(), "node=" + roleNode.getNodeName() + " " + roleNode.getNodeType() + " " + roleNode.getTextContent());
-			// if (roleNode.getNodeType() == Node.TEXT_NODE) {
-			CustomLog.e(this.getClass(), "node=" + roleNode.getNodeName());
 			try {
 				roles.add(ContactRoleEnum.valueOf(roleNode.getTextContent().toUpperCase()));
 			} catch (Exception e) {
@@ -246,19 +263,35 @@ public class XmlDocumentParser {
 		return roles;
 	}
 
-	private List<Contact> getParentList(XPath xpath, Document doc, String firstName) throws XPathExpressionException {
-		String xpathExprRoles = "/team/players/player[@firstName='" + firstName + "']/parents/parent";
-		NodeList nodeList = (NodeList) xpath.evaluate(xpathExprRoles, doc, XPathConstants.NODESET);
+	private List<Contact> getParentList(XPath xpath, Document doc, String firstName, String lastName) throws XPathExpressionException {
+		String xpathExprParents = "/team/players/player[@" + ATTR_FIRST_NAME + "='" + firstName + "' and @" + ATTR_LAST_NAME + "='" + lastName
+				+ "']/parents/parent";
+		CustomLog.e(this.getClass(), "xpath expr=" + xpathExprParents);
+		NodeList nodeList = (NodeList) xpath.evaluate(xpathExprParents, doc, XPathConstants.NODESET);
 		List<Contact> parentList = new ArrayList<Contact>();
 		for (int j = 0; j < nodeList.getLength(); j++) {
 			Node parentNode = nodeList.item(j);
 			try {
-				parentList.add(new Contact(null, parentNode.getAttributes().getNamedItem("firstName").getNodeValue(), parentNode.getAttributes()
-						.getNamedItem("lastName").getNodeValue()));
+				parentList.add(new Contact(null, null, getAttributeValue(parentNode, ATTR_FIRST_NAME), getAttributeValue(parentNode, ATTR_MIDDLE_NAME),
+						getAttributeValue(parentNode, ATTR_LAST_NAME)));
 			} catch (Exception e) {
 				CustomLog.e(this.getClass(), "contact=" + firstName + ", Invalid status: " + parentNode.getNodeName() + "=" + parentNode.getTextContent());
+				CustomLog.e(this.getClass(), e.toString());
 			}
 		}
 		return parentList;
+	}
+
+	private String getAttributeValue(Node node, String name) {
+		String value = null;
+		if (node == null) {
+			throw new RuntimeException("Error node is null!");
+		}
+		if (node.hasAttributes() && node.getAttributes().getNamedItem(name) != null) {
+			value = node.getAttributes().getNamedItem(name).getNodeValue();
+		} else {
+			CustomLog.e(this.getClass(), "node=" + node.getNodeName() + ", attribute=" + name + ", is missing!");
+		}
+		return value;
 	}
 }

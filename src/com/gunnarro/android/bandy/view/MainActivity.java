@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
 
 public class MainActivity extends Activity {
 
@@ -28,13 +29,15 @@ public class MainActivity extends Activity {
 		// ActionBar
 		ActionBar actionbar = getActionBar();
 		actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		
+
 		actionbar.addTab(actionbar.newTab().setText(R.string.tab_setup)
 				.setTabListener(new TabListener<SetupFragment>(this, SetupFragment.class.getSimpleName(), SetupFragment.class)));
 		actionbar.addTab(actionbar.newTab().setText(R.string.tab_activities)
 				.setTabListener(new TabListener<ActivitiesFragment>(this, ActivitiesFragment.class.getSimpleName(), ActivitiesFragment.class)));
 		actionbar.addTab(actionbar.newTab().setText(R.string.tab_players)
 				.setTabListener(new TabListener<PlayersFragment>(this, PlayersFragment.class.getSimpleName(), PlayersFragment.class)));
+		actionbar.addTab(actionbar.newTab().setText(R.string.tab_search)
+				.setTabListener(new TabListener<SearchFragment>(this, SearchFragment.class.getSimpleName(), SearchFragment.class)));
 
 		if (savedInstanceState != null) {
 			actionbar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
@@ -47,7 +50,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
+		inflater.inflate(R.menu.activity_main_actions, menu);
 		return true;
 	}
 
@@ -57,13 +60,10 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		// case R.id.menuitem_help:
-		// Toast.makeText(appContext, "help", Toast.LENGTH_SHORT).show();
-		// return true;
-		case R.id.menuitem_about:
+		case R.id.menu_item_about:
 			Toast.makeText(appContext, R.string.app_about, Toast.LENGTH_SHORT).show();
 			return true;
-		case R.id.menuitem_quit:
+		case R.id.menu_item_quit:
 			finish();
 			return true;
 		}

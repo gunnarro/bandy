@@ -113,18 +113,18 @@ public class Utility {
 	}
 
 	public static String createActivitiesHtmlTable(Team team, List<Activity> activityList) {
-		StringBuffer html = new StringBuffer();
-		html.append("<table><tr>Date</th><th>Time</th><th>Type</th><th>Description</th><th>Location</th></tr>");
-		for (Activity activity : activityList) {
-			html.append("<tr>");
-			html.append("<td>").append(activity.getStartDate()).append("</td>");
-			html.append("<td>").append(activity.getStartDate()).append("</td>");
-			html.append("<td>").append(activity.getType()).append("</td>");
-			html.append("<td>").append(activity.getDescription()).append("</td>");
-			html.append("<td>").append(activity.getPlace()).append("</td>");
-			html.append("</tr>");
-		}
-		html.append("</table>");
+//		StringBuffer html = new StringBuffer();
+//		html.append("<table><tr>Date</th><th>Time</th><th>Type</th><th>Description</th><th>Location</th></tr>");
+//		for (Activity activity : activityList) {
+//			html.append("<tr>");
+//			html.append("<td>").append(activity.getStartDate()).append("</td>");
+//			html.append("<td>").append(activity.getStartDate()).append("</td>");
+//			html.append("<td>").append(activity.getType()).append("</td>");
+//			html.append("<td>").append(activity.getDescription()).append("</td>");
+//			html.append("<td>").append(activity.getPlace()).append("</td>");
+//			html.append("</tr>");
+//		}
+//		html.append("</table>");
 		// return html.toString();
 
 		StringBuffer plain = new StringBuffer();

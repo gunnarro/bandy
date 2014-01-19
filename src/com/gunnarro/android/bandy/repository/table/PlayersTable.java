@@ -40,7 +40,9 @@ public class PlayersTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DATE_OF_BIRTH).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_EMAIL).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MOBILE).append(" TEXT");
-		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append(") ON CONFLICT REPLACE);");
+		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append(") ON CONFLICT REPLACE");
+		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_TEAM_ID).append(") REFERENCES ").append(TeamsTable.TABLE_NAME).append("(")
+				.append(TeamsTable.COLUMN_ID).append("));");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

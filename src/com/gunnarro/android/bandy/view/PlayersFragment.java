@@ -3,15 +3,18 @@ package com.gunnarro.android.bandy.view;
 import java.util.Date;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -24,6 +27,7 @@ import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
+import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
 
 public class PlayersFragment extends Fragment {
 
@@ -69,23 +73,24 @@ public class PlayersFragment extends Fragment {
 		// Remove all rows before updating the table, except for the table
 		// header rows.
 		clearTableData(statView);
-		Team team = this.bandyService.getTeam(selectedTeamName);
+		Team team = this.bandyService.getTeam(selectedTeamName, true);
 		for (Player player : team.getPlayerList()) {
+			CustomLog.d(this.getClass(), player.toString());
 			table.addView(createTableRow(statView, player, table.getChildCount()));
 		}
 		Utility.getDateFormatter().applyPattern("dd.MM.yyyy");
 		TextView tableHeaderTxt = (TextView) statView.findViewById(R.id.tableHeaderPeriod);
 		tableHeaderTxt.setText(getResources().getString(R.string.activities_period) + ": ");
-
 	}
 
-	private TableRow createTableRow(View statView, Player player, int rowNumber) {
-		TableRow row = new TableRow(statView.getContext());
+	private TableRow createTableRow(View view, Player player, int rowNumber) {
+		TableRow row = new TableRow(view.getContext());
 		int rowBgColor = getResources().getColor(R.color.white);
 		int txtColor = getResources().getColor(R.color.black);
-		row.addView(createTextView(statView, player.getFullName(), rowBgColor, txtColor, Gravity.LEFT));
+		row.addView(createTextView(view, player.getFullName(), rowBgColor, txtColor, Gravity.LEFT));
 		Utility.getDateFormatter().applyPattern("dd.MM.yyyy");
-		row.addView(createTextView(statView, Utility.getDateFormatter().format(new Date(player.getDateOfBirth())), rowBgColor, txtColor, Gravity.CENTER));
+		row.addView(createTextView(view, Utility.getDateFormatter().format(new Date(player.getDateOfBirth())), rowBgColor, txtColor, Gravity.CENTER));
+		row.addView(createInfoButton(view, player.getId()));
 		row.setBackgroundColor(rowBgColor);
 		row.setPadding(1, 1, 1, 1);
 		return row;
@@ -99,6 +104,30 @@ public class PlayersFragment extends Fragment {
 		txtView.setTextColor(txtColor);
 		txtView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
 		return txtView;
+	}
+
+	private ImageButton createInfoButton(View view, final int playerId) {
+		ImageButton button = new ImageButton(view.getContext());
+		// button.setText(playerId);
+		// button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
+		button.setMaxHeight(24);
+		button.setMaxWidth(24);
+		button.setImageResource(R.drawable.bandy);
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+//				Intent intent = new Intent(getActivity(), PlayerInfoActivity.class);
+//				intent.putExtra("playerId", playerId);
+//				getActivity().startService(intent);
+//				startActivity(intent);
+				
+				Intent intent = new Intent(getActivity(), PlayerListActivity.class);
+				intent.putExtra("playerId", playerId);
+				getActivity().startService(intent);
+				startActivity(intent);
+			}
+		});
+		return button;
 	}
 
 	private void clearTableData(View statView) {

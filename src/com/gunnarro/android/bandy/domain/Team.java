@@ -2,23 +2,18 @@ package com.gunnarro.android.bandy.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import com.gunnarro.android.bandy.domain.view.list.Item;
 
 public class Team implements Serializable {
 
 	private static final long serialVersionUID = -7342682849751732634L;
 
 	private Integer id = -1;
-	private String version;
-	private Date releaseDate;
 	private String name;
 	private Coach coach;
 	private Club club;
-	private List<Player> players;
-	private List<Match> matches;
-	private List<Cup> cups;
-	private List<Training> trainings;
 	private List<Contact> conatctList;
 	private List<Player> playerList;
 	private Contact teamLead;
@@ -37,11 +32,6 @@ public class Team implements Serializable {
 		this.club = club;
 	}
 
-	public Team(String name, String version) {
-		this(name);
-		this.version = version;
-	}
-
 	public Team(String name, Club club) {
 		this(name);
 		this.club = club;
@@ -57,38 +47,6 @@ public class Team implements Serializable {
 
 	public void setCoach(Coach coach) {
 		this.coach = coach;
-	}
-
-	public List<Player> getPlayers() {
-		return players;
-	}
-
-	public void setPlayers(List<Player> players) {
-		this.players = players;
-	}
-
-	public List<Match> getMatches() {
-		return matches;
-	}
-
-	public void setMatches(List<Match> matches) {
-		this.matches = matches;
-	}
-
-	public List<Cup> getCups() {
-		return cups;
-	}
-
-	public void setCups(List<Cup> cups) {
-		this.cups = cups;
-	}
-
-	public List<Training> getTrainings() {
-		return trainings;
-	}
-
-	public void setTrainings(List<Training> trainings) {
-		this.trainings = trainings;
 	}
 
 	public Integer getId() {
@@ -109,6 +67,14 @@ public class Team implements Serializable {
 
 	public List<Player> getPlayerList() {
 		return playerList;
+	}
+
+	public List<Item> getPlayerItemList() {
+		List<Item> playerItemList = new ArrayList<Item>();
+		for (Player player : playerList) {
+			playerItemList.add(new Item(player.getId(), player.getFullName(), false));
+		}
+		return playerItemList;
 	}
 
 	public void setPlayerList(List<Player> playerList) {

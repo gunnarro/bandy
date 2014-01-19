@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/personaliaHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="@string/personalia"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <View
+        android:id="@+id/personaliaSeparator"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/personaliaHeader"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/line_separator" />
+
+    <TableLayout
+        android:id="@+id/personaliaTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/personaliaSeparator"
+        android:layout_marginLeft="10dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/nameLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/nameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Emilie Paulen"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/dateOfBirthLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/birth"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/dateOfBirthTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="22.01.2002"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/streetLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/street"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/streetTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bergslia 39"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/cityLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/city"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/cityTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0467 Oslo"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/countryLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/country"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/countryTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Norway"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/mobileLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mobile"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/mobileTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+47 55 22 00 00"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/emailLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/emailTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="emilie.paulen@yahoo.no"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/statisticHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/personaliaTable"
+        android:layout_marginLeft="10dp"
+        android:text="@string/statestics"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <View
+        android:id="@+id/statesticSeparator"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/statisticHeader"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/line_separator" />
+
+    <TableLayout
+        android:id="@+id/statisticTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statesticSeparator"
+        android:layout_marginLeft="10dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/teamLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/team"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/teamTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Knøtt 2003"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/trainingsLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/trainings"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/trainingsTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="participated=0, total=0"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/matchesLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/matches"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/matchesTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="played=0, total=0"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/cupsLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cups"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/cupsTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="played=0, total=0"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/parentsHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statisticTable"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/parents"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <View
+        android:id="@+id/parentsSeparator"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/parentsHeader"
+        android:background="@drawable/line_separator" />
+
+    <ListView
+        android:id="@+id/player_parent_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/parentsSeparator"
+        android:choiceMode="none"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#aabbddcc" >
+    </ListView>
+
+</RelativeLayout>

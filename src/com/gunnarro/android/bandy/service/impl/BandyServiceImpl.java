@@ -9,20 +9,26 @@ import android.content.Context;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Activity;
 import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
+import com.gunnarro.android.bandy.domain.Address;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.Contact;
 import com.gunnarro.android.bandy.domain.Contact.ContactRoleEnum;
-import com.gunnarro.android.bandy.domain.Cup;
-import com.gunnarro.android.bandy.domain.Match;
+import com.gunnarro.android.bandy.domain.activity.Cup;
+import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Training;
+import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.domain.Player;
 import com.gunnarro.android.bandy.domain.Role;
+import com.gunnarro.android.bandy.domain.SearchResult;
+import com.gunnarro.android.bandy.domain.Statistic;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.Training;
 import com.gunnarro.android.bandy.repository.BandyRepository;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl;
+import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl.PlayerLinkTableTypeEnum;
 import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
+import com.gunnarro.android.bandy.service.exception.ValidationException;
 
 public class BandyServiceImpl implements BandyService {
 
@@ -34,6 +40,7 @@ public class BandyServiceImpl implements BandyService {
 	 * default constructor, used for unit testing only.
 	 */
 	public BandyServiceImpl() {
+		this.xmlParser = new XmlDocumentParser();
 	}
 
 	/**
@@ -41,10 +48,10 @@ public class BandyServiceImpl implements BandyService {
 	 * @param context
 	 */
 	public BandyServiceImpl(Context context) {
+		this();
 		this.context = context;
 		this.bandyRepository = new BandyRepositoryImpl(this.context);
 		this.bandyRepository.open();
-		this.xmlParser = new XmlDocumentParser();
 	}
 
 	public Context getContext() {
@@ -57,11 +64,22 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public void loadData(String filePath) {
 		try {
+			CustomLog.d(this.getClass(), "Start loading data into DB: " + filePath);
 			bandyRepository.deleteAllTableData();
+			CustomLog.d(this.getClass(), "Deleted all current stored DB data...");
 			this.xmlParser.testParseByXpath(filePath, this);
+			CustomLog.d(this.getClass(), "Finished loading data into DB");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void listRelationsShips() {
+		this.bandyRepository.listRelationsShips();
 	}
 
 	/**
@@ -100,8 +118,8 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createTraining(Training training) {
-		this.bandyRepository.createTraining(training);
+	public int createTraining(Training training) {
+		return this.bandyRepository.createTraining(training);
 	}
 
 	/**
@@ -124,6 +142,22 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public long createAddress(Address address) {
+		return this.bandyRepository.createAddress(address);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getTeamNames(String clubName) {
+		return bandyRepository.getTeamNames(clubName);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Contact getTeamLead(Integer teamId) {
 		return this.bandyRepository.getTeamContactPerson(teamId, ContactRoleEnum.TEAMLEAD.name());
 	}
@@ -140,15 +174,22 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Team getTeam(String name) {
-		Team team = this.bandyRepository.getTeam(name);
-		if (team == null) {
-			throw new ApplicationException("Team not found, team name=" + name);
+	public Team getTeam(String name, boolean isIncludeAll) {
+		try {
+			Team team = this.bandyRepository.getTeam(name);
+			if (team == null) {
+				throw new ApplicationException("Team not found, team name=" + name);
+			}
+			if (isIncludeAll) {
+				team.setTeamLead(this.getTeamLead(team.getId()));
+				team.setConatctList(this.getContactList(team.getId()));
+				team.setPlayerList(this.getPlayerList(team.getId()));
+			}
+			return team;
+		} catch (ValidationException ve) {
+			CustomLog.e(this.getClass(), ve.getMessage());
+			return null;
 		}
-		team.setTeamLead(this.getTeamLead(team.getId()));
-		team.setConatctList(this.getContactList(team.getId()));
-		team.setPlayerList(getPlayerList(team.getId()));
-		return team;
 	}
 
 	/**
@@ -187,10 +228,16 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public List<Activity> getActivityList(String teamName, String periode, String filterBy) {
-		Team team = getTeam(teamName);
 		List<Activity> list = new ArrayList<Activity>();
-		if (team == null) {
-			CustomLog.e(this.getClass(), "No team found for: " + teamName);
+		Team team = null;
+		try {
+			team = this.bandyRepository.getTeam(teamName);
+			if (team == null) {
+				CustomLog.e(this.getClass(), "No team found for: " + teamName);
+				return list;
+			}
+		} catch (ApplicationException ae) {
+			// Simply ignore, no data found
 			return list;
 		}
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.MATCH.name())) {
@@ -215,9 +262,6 @@ public class BandyServiceImpl implements BandyService {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @param teamId
-	 * 
-	 * @param periode
 	 */
 	@Override
 	public List<Match> getMatchList(Integer teamId, String periode) {
@@ -227,7 +271,15 @@ public class BandyServiceImpl implements BandyService {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @param periode
+	 */
+	@Override
+	public List<Item> getMatchSignedPlayerList(int teamId, int matchId) {
+		return this.bandyRepository.getMatchPlayerList(teamId, matchId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
 	 */
 	@Override
 	public List<Training> getTrainingList(Integer teamId, String periode) {
@@ -237,7 +289,6 @@ public class BandyServiceImpl implements BandyService {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @param periode
 	 */
 	@Override
 	public List<Contact> getContactList(Integer teamId) {
@@ -247,7 +298,6 @@ public class BandyServiceImpl implements BandyService {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @param teamId
 	 */
 	@Override
 	public List<Cup> getCupList(Integer teamId, String periode) {
@@ -258,8 +308,104 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public Player lookupPlayer(String mobileNr) {
+		Player player = bandyRepository.lookupPlayer(mobileNr);
+		if (player == null) {
+			player = bandyRepository.lookupPlayerThroughContact(mobileNr);
+			// No player with this mobile number was found, so
+			// try to lookup player through contacts, i.e. registered parents
+		}
+		return player;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean signupForMatch(int playerId, int matchId) {
+		bandyRepository.createPlayerLink(PlayerLinkTableTypeEnum.MATCH, playerId, matchId);
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean unsignForMatch(int playerId, int matchId) {
+		bandyRepository.deletePlayerLink(PlayerLinkTableTypeEnum.MATCH, playerId, matchId);
+		return true;
+	}
+
+	public boolean registrerOnTraining(Integer playerId, Integer trainingId) {
+		if (trainingId == null) {
+			Player player = this.getPlayer(playerId);
+			Training training = bandyRepository.getTrainingByDate(player.getTeam().getId(), System.currentTimeMillis());
+			if (training == null) {
+				trainingId = createTraining(Training.createTraining(player.getTeam()));
+			}
+		}
+		this.bandyRepository.createPlayerLink(PlayerLinkTableTypeEnum.TRAINING, playerId, trainingId);
+		return true;
+	}
+
+	public boolean unRegistrerTraining(Integer playerId, Integer trainingId) {
+		this.bandyRepository.createPlayerLink(PlayerLinkTableTypeEnum.TRAINING, playerId, trainingId);
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean signupForMatch(String mobileNr, String startDate) {
+		Player player = lookupPlayer(mobileNr);
+		int matchId = bandyRepository.lookupMatchId(player.getTeam().getId(), startDate);
+		if (matchId != -1) {
+			bandyRepository.createPlayerLink(PlayerLinkTableTypeEnum.MATCH, player.getId(), matchId);
+		} else {
+			throw new ApplicationException("No match found for: date=" + startDate + ", teamId=" + player.getTeam().getId());
+		}
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	public boolean unsignForMatch(String mobileNr, String startDate) {
+		Player player = lookupPlayer(mobileNr);
+		int matchId = bandyRepository.lookupMatchId(player.getTeam().getId(), startDate);
+		if (matchId != -1) {
+			bandyRepository.deletePlayerLink(PlayerLinkTableTypeEnum.MATCH, player.getId(), matchId);
+		} else {
+			throw new ApplicationException("No match found for: date=" + startDate + ", teamId=" + player.getTeam().getId());
+		}
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public List<Player> getPlayerList(Integer teamId) {
 		return this.bandyRepository.getPlayerList(teamId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Item> getPlayersAsItemList(int teamId) {
+		return bandyRepository.getPlayersAsItemList(teamId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Player getPlayer(int playerId) {
+		return this.bandyRepository.getPlayer(playerId);
 	}
 
 	// ---------------------------------------------------------------------------
@@ -356,4 +502,51 @@ public class BandyServiceImpl implements BandyService {
 	public List<Role> getRoleList() {
 		return this.bandyRepository.getRoleList();
 	}
+
+	public SearchResult search(String sqlQuery) {
+		CustomLog.e(this.getClass(), "sql=" + sqlQuery);
+		try {
+			return this.bandyRepository.search(sqlQuery);
+		} catch (Exception e) {
+			CustomLog.e(this.getClass(), e.getMessage());
+			return new SearchResult(e.getMessage());
+		}
+	}
+
+	// TODO
+	public List<Item> getItemList(String type) {
+		List<Item> list = new ArrayList<Item>();
+		list.add(new Item(0, type + " test item 1", true));
+		list.add(new Item(0, type + " test item 2", true));
+		return list;
+	}
+
+	// TODO
+	public void updateItem(Item item) {
+
+	}
+
+	// TODO
+	public void createItem(String type, Item newItem) {
+
+	}
+
+	// TODO
+	public void deleteItem(Item item) {
+
+	}
+
+	// ---------------------------------------------------------------------------
+	// Statistic table operations
+	// ---------------------------------------------------------------------------
+	@Override
+	public Statistic getPlayerStatistic(int teamId, int playerId) {
+		return bandyRepository.getPlayerStatistic(teamId, playerId);
+	}
+
+	@Override
+	public Statistic getTeamStatistic(int teamId) {
+		return bandyRepository.getTeamStatistic(teamId);
+	}
+
 }

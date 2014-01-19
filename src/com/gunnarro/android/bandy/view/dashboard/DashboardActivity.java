@@ -16,16 +16,17 @@
 
 package com.gunnarro.android.bandy.view.dashboard;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
 
 /**
  * This is the base class for activities in the dashboard application. It
@@ -35,8 +36,10 @@ import com.gunnarro.android.bandy.R;
  * method for displaying a message to the screen via the Toast class.
  * 
  */
+public abstract class DashboardActivity extends FragmentActivity {
 
-public abstract class DashboardActivity extends Activity {
+	public static final String ARG_TEAM_NAME = "team_name";
+	private final static String DEFAULT_TEAM_NAME = "Kn%tt 2003";
 
 	/**
 	 * onCreate - called when the activity is first created.
@@ -49,7 +52,7 @@ public abstract class DashboardActivity extends Activity {
 	 * Always followed by onStart().
 	 * 
 	 */
-
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.activity_default);
@@ -63,7 +66,7 @@ public abstract class DashboardActivity extends Activity {
 	 * two scenarios with the isFinishing() method.
 	 * 
 	 */
-
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 	}
@@ -78,7 +81,7 @@ public abstract class DashboardActivity extends Activity {
 	 * if it becomes invisible to the user.
 	 * 
 	 */
-
+	@Override
 	protected void onPause() {
 		super.onPause();
 	}
@@ -88,7 +91,7 @@ public abstract class DashboardActivity extends Activity {
 	 * started again. Always followed by onStart().
 	 * 
 	 */
-
+	@Override
 	protected void onRestart() {
 		super.onRestart();
 	}
@@ -99,7 +102,7 @@ public abstract class DashboardActivity extends Activity {
 	 * user input going to it. Always followed by onPause().
 	 * 
 	 */
-
+	@Override
 	protected void onResume() {
 		super.onResume();
 	}
@@ -110,7 +113,7 @@ public abstract class DashboardActivity extends Activity {
 	 * onStop() if it becomes hidden.
 	 * 
 	 */
-
+	@Override
 	protected void onStart() {
 		super.onStart();
 	}
@@ -124,7 +127,7 @@ public abstract class DashboardActivity extends Activity {
 	 * Followed by either onRestart() if this activity is coming back to
 	 * interact with the user, or onDestroy() if this activity is going away.
 	 */
-
+	@Override
 	protected void onStop() {
 		super.onStop();
 	}
@@ -140,7 +143,6 @@ public abstract class DashboardActivity extends Activity {
 	 *            View
 	 * @return void
 	 */
-
 	public void onClickHome(View v) {
 		goHome(this);
 	}
@@ -152,51 +154,61 @@ public abstract class DashboardActivity extends Activity {
 	 *            View
 	 * @return void
 	 */
-
 	public void onClickSearch(View v) {
 		startActivity(new Intent(getApplicationContext(), SearchActivity.class));
 	}
 
 	/**
-	 * Handle the click on the About button.
 	 * 
 	 * @param v
-	 *            View
-	 * @return void
 	 */
-
 	public void onClickAbout(View v) {
 		startActivity(new Intent(getApplicationContext(), AboutActivity.class));
 	}
 
 	/**
-	 * Handle the click of a Feature button.
 	 * 
 	 * @param v
-	 *            View
-	 * @return void
 	 */
-
 	public void onClickFeature(View v) {
 		int id = v.getId();
 		switch (id) {
-		case R.id.home_btn_feature1:
-			startActivity(new Intent(getApplicationContext(), F1Activity.class));
+		case 12:// R.id.trainings_btn;
+			Toast.makeText(this, "Trainings view Not implements", Toast.LENGTH_SHORT).show();
 			break;
-		case R.id.home_btn_feature2:
-			startActivity(new Intent(getApplicationContext(), F2Activity.class));
+		case 13:// R.id.matches_btn;
+			Toast.makeText(this, "Matches view Not implements", Toast.LENGTH_SHORT).show();
 			break;
-		case R.id.home_btn_feature3:
-			startActivity(new Intent(getApplicationContext(), F3Activity.class));
+		case 14:// R.id.cups_btn;
+			Toast.makeText(this, "Cups view Not implements", Toast.LENGTH_SHORT).show();
 			break;
-		case R.id.home_btn_feature4:
-			startActivity(new Intent(getApplicationContext(), F4Activity.class));
+		case 15:// R.id.clubs_btn:
+			Toast.makeText(this, "Clubs view Not implements", Toast.LENGTH_SHORT).show();
 			break;
-		case R.id.home_btn_feature5:
-			startActivity(new Intent(getApplicationContext(), F5Activity.class));
+		case R.id.teams_btn:
+			Intent matchesIntent = new Intent(getApplicationContext(), MatchesActivity.class);
+			matchesIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
+			startActivity(matchesIntent);
 			break;
-		case R.id.home_btn_feature6:
-			startActivity(new Intent(getApplicationContext(), F6Activity.class));
+		case R.id.players_btn:
+			Intent playerListIntent = new Intent(getApplicationContext(), PlayerListActivity.class);
+			playerListIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
+			startActivity(playerListIntent);
+			break;
+		case R.id.contacts_btn:
+			Toast.makeText(this, "Contacts view Not implements", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.referee_btn:
+			Toast.makeText(this, "Referee view Not implements", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.settings_btn:
+			startActivity(new Intent(getApplicationContext(), SetupActivity.class));
+			break;
+		case R.id.search_btn:
+			startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+			break;
+		case R.id.team_activities_btn:
+			startActivity(new Intent(getApplicationContext(), TeamActivitiesActivity.class));
 			break;
 		default:
 			break;
@@ -214,7 +226,6 @@ public abstract class DashboardActivity extends Activity {
 	 *            Context
 	 * @return void
 	 */
-
 	public void goHome(Context context) {
 		final Intent intent = new Intent(context, HomeActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -236,9 +247,10 @@ public abstract class DashboardActivity extends Activity {
 
 	public void setTitleFromActivityLabel(int textViewId) {
 		TextView tv = (TextView) findViewById(textViewId);
-		if (tv != null)
+		if (tv != null) {
 			tv.setText(getTitle());
-	} // end setTitleText
+		}
+	}
 
 	/**
 	 * Show a string on the screen via Toast.
@@ -250,13 +262,13 @@ public abstract class DashboardActivity extends Activity {
 
 	public void toast(String msg) {
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-	} // end toast
+	}
 
 	/**
 	 * Send a message to the debug log and display it using Toast.
 	 */
 	public void trace(String msg) {
-		Log.d("Demo", msg);
+		Log.d("BandyApp", msg);
 		toast(msg);
 	}
 

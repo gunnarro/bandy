@@ -3,14 +3,18 @@ package com.gunnarro.android.bandy.service;
 import java.util.List;
 
 import com.gunnarro.android.bandy.domain.Activity;
+import com.gunnarro.android.bandy.domain.Address;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.Contact;
-import com.gunnarro.android.bandy.domain.Cup;
-import com.gunnarro.android.bandy.domain.Match;
+import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Player;
 import com.gunnarro.android.bandy.domain.Role;
+import com.gunnarro.android.bandy.domain.Statistic;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.Training;
+import com.gunnarro.android.bandy.domain.activity.Cup;
+import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Training;
+import com.gunnarro.android.bandy.domain.view.list.Item;
 
 public interface BandyService {
 
@@ -24,15 +28,19 @@ public interface BandyService {
 
 	public void createCup(Cup cup);
 
-	public void createTraining(Training training);
+	public int createTraining(Training training);
 
 	public void createPlayer(Player player);
 
 	public void createContact(Contact contact);
 
+	public long createAddress(Address address);
+
 	// -------------------------------------------------------------------
 
-	public Team getTeam(String name);
+	public String[] getTeamNames(String clubName);
+
+	public Team getTeam(String name, boolean isIncludeAll);
 
 	public Team getTeam(Integer id);
 
@@ -42,6 +50,8 @@ public interface BandyService {
 
 	public List<Match> getMatchList(Integer teamId, String periode);
 
+	public List<Item> getMatchSignedPlayerList(int teamId, int matchId);
+
 	public List<Training> getTrainingList(Integer teamId, String periode);
 
 	public List<Cup> getCupList(Integer teamId, String periode);
@@ -49,6 +59,10 @@ public interface BandyService {
 	public List<Activity> getActivityList(String teamName, String viewBy, String filterBy);
 
 	public List<Player> getPlayerList(Integer teamId);
+
+	public List<Item> getPlayersAsItemList(int teamId);
+
+	public Player lookupPlayer(String mobileNr);
 
 	// ---------------------------------------------------------------------------
 	// Settings table operations
@@ -80,5 +94,53 @@ public interface BandyService {
 	public List<Contact> getContactList(Integer id);
 
 	public List<Role> getRoleList();
+
+	public Player getPlayer(int playerId);
+
+	void listRelationsShips();
+
+	public SearchResult search(String sqlQuery);
+
+	// Methods for list operations
+	public List<Item> getItemList(String type);
+
+	public void updateItem(Item item);
+
+	public void createItem(String type, Item newItem);
+
+	public void deleteItem(Item item);
+
+	boolean signupForMatch(int playerId, int matchId);
+
+	boolean unsignForMatch(int playerId, int matchId);
+
+	/**
+	 * Method used from SMS service
+	 * 
+	 * @param mobileNr
+	 *            players mobile number
+	 * @param matchDate
+	 *            start date of the match to sign up
+	 * @return
+	 */
+	boolean signupForMatch(String mobileNr, String matchDate);
+
+	/**
+	 * Method used from SMS service
+	 * 
+	 * @param mobileNr
+	 *            players mobile number
+	 * @param matchDate
+	 *            start date of the match to unsign
+	 * @return
+	 */
+	boolean unsignForMatch(String mobileNr, String matchDate);
+
+	// ---------------------------------------------------------------------------
+	// Statistic table operations
+	// ---------------------------------------------------------------------------
+	public Statistic getPlayerStatistic(int teamId, int playerId);
+
+	public Statistic getTeamStatistic(int teamId);
 
 }

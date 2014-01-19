@@ -1,6 +1,9 @@
 package com.gunnarro.android.bandy.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.gunnarro.android.bandy.domain.view.list.Item;
 
 public class Player extends Contact {
 
@@ -10,10 +13,11 @@ public class Player extends Contact {
 
 	private PlayerStatusEnum status = PlayerStatusEnum.ACTIVE;
 	private List<Contact> parents;
+	private List<Item> parentItemList;
 	private long dateOfBirth;
 
-	public Player(Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth) {
-		super(team, firstName, lastName);
+	public Player(int id, Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth) {
+		super(id, team, firstName, middleName, lastName);
 		this.status = status;
 		this.parents = parents;
 		this.dateOfBirth = dateOfBirth;
@@ -27,6 +31,18 @@ public class Player extends Contact {
 		return parents;
 	}
 
+	public void setParentItemList(List<Item> parentItemList) {
+		this.parentItemList = parentItemList;
+	}
+
+	public List<Item> getParentItemList() {
+		parentItemList = new ArrayList<Item>();
+		for (Contact parent : parents) {
+			parentItemList.add(new Item(parent.getId(), parent.getFullName(), false));
+		}
+		return parentItemList;
+	}
+
 	public long getDateOfBirth() {
 		return dateOfBirth;
 	}
@@ -37,6 +53,6 @@ public class Player extends Contact {
 
 	@Override
 	public String toString() {
-		return super.toString() + ", dateOfBirth=" + dateOfBirth;
+		return super.toString() + ", dateOfBirth=" + dateOfBirth + ", parents=" + parents.toString();
 	}
 }

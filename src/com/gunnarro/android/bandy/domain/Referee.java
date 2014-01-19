@@ -5,7 +5,7 @@ public class Referee extends Contact {
 	private Integer id;
 
 	public Referee(String fullName) {
-		super(null, fullName, "");
+		super(null, null, null, fullName, "");
 	}
 
 }

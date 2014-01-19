@@ -26,7 +26,11 @@ public class Club {
 	public String getName() {
 		return name;
 	}
-	
+
+	public String getStadium() {
+		return stadium;
+	}
+
 	public String getHomepage() {
 		return homepage;
 	}

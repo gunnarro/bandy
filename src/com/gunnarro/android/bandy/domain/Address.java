@@ -2,28 +2,37 @@ package com.gunnarro.android.bandy.domain;
 
 public class Address {
 
-	private String streetAddess;
+	private long id;
+	private String streetName;
 	private String streetNumber;
+	private String streetNumberPrefix;
 	private String postalCode;
 	private String city;
-	private String state;
 	private String country;
 
-	public Address(String streetAddess, String streetNumber, String postalCode, String city, String state, String country) {
-		this.streetAddess = streetAddess;
+	public Address(String streetName, String streetNumber, String streetNumberPrefix, String postalCode, String city, String country) {
+		this.streetName = streetName;
 		this.streetNumber = streetNumber;
+		this.streetNumberPrefix = streetNumberPrefix;
 		this.postalCode = postalCode;
 		this.city = city;
-		this.state = state;
 		this.country = country;
 	}
 
-	public String getStreetAddess() {
-		return streetAddess;
+	public long getId() {
+		return id;
+	}
+
+	public String getStreetName() {
+		return streetName;
 	}
 
 	public String getStreetNumber() {
 		return streetNumber;
+	}
+
+	public String getStreetNumberPrefix() {
+		return streetNumberPrefix;
 	}
 
 	public String getPostalCode() {
@@ -34,18 +43,14 @@ public class Address {
 		return city;
 	}
 
-	public String getState() {
-		return state;
-	}
-
 	public String getCountry() {
 		return country;
 	}
 
 	@Override
 	public String toString() {
-		return "streetAddess=" + streetAddess + ", streetNumber=" + streetNumber + ", postalCode=" + postalCode + ", city=" + city + ", state=" + state
-				+ ", country=" + country;
+		return "Address [streetAddess=" + streetName + ", streetNumber=" + streetNumber + ", streetNumberPrefix=" + streetNumberPrefix + ", postalCode="
+				+ postalCode + ", city=" + city + ", country=" + country + "]";
 	}
 
 }

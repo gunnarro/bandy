@@ -5,7 +5,7 @@ public class Coach extends Contact {
 	private Integer id;
 
 	public Coach(String firstName, String lastName) {
-		super(null, firstName, lastName);
+		super(-1, null, firstName, null, lastName);
 	}
 
 }

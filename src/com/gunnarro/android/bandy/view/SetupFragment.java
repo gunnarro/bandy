@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
-import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.service.impl.DataLoader;
@@ -56,9 +55,6 @@ public class SetupFragment extends Fragment {
 		this.bandyService = new BandyServiceImpl(view.getContext());
 		setupEventHandlers(view);
 		// init();
-		for (Role r : bandyService.getRoleList()) {
-			CustomLog.e(this.getClass(), r.toString());
-		}
 		return view;
 	}
 

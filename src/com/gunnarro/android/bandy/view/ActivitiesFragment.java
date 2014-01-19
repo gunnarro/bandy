@@ -34,9 +34,8 @@ import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.mail.MailSender;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
-import com.gunnarro.android.bandy.service.impl.DataLoader;
-import com.gunnarro.android.bandy.service.impl.DownloadService;
 import com.gunnarro.android.bandy.utility.Utility;
 
 public class ActivitiesFragment extends Fragment {
@@ -96,7 +95,7 @@ public class ActivitiesFragment extends Fragment {
 				// SendEmailTask task = new SendEmailTask();
 				// task.execute((Void[]) null);
 				Intent intent = new Intent(getActivity().getApplicationContext(), NotificationActivity.class);
-				Team team = bandyService.getTeam(selectedTeamName);
+				Team team = bandyService.getTeam(selectedTeamName, true);
 				intent.putExtra("teamName", team.getName());
 				intent.putStringArrayListExtra("toEmail", new ArrayList<String>(team.getEmailAddresseForContacts()));
 				intent.putStringArrayListExtra("toMobile", new ArrayList<String>(team.getMobileNrForContacts()));
@@ -118,8 +117,8 @@ public class ActivitiesFragment extends Fragment {
 		// Remove all rows before updating the table, except for the table
 		// header rows.
 		clearTableData(statView);
-
 		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, viewBy, activityFilter);
+
 		Date startDate = activityList.isEmpty() ? new Date() : new Date(activityList.get(0).getStartDate());
 		Date endDate = activityList.isEmpty() ? new Date() : new Date(activityList.get(activityList.size() - 1).getStartDate());
 		for (Activity activity : activityList) {
@@ -190,16 +189,16 @@ public class ActivitiesFragment extends Fragment {
 	private void addTestData() {
 		int nextInt = new Random().nextInt(100);
 		// this.bandyService.createMatch(new Match(100,
-		// System.currentTimeMillis(), new Team("Ullevål"), new Team("Ullevål"),
-		// new Team("Røa 03"), "Bergbanen",
+		// System.currentTimeMillis(), new Team("Ullevï¿½l"), new Team("Ullevï¿½l"),
+		// new Team("Rï¿½a 03"), "Bergbanen",
 		// new Referee("Ukjent")));
 		// this.bandyService.createMatch(new Match(101,
-		// System.currentTimeMillis(), new Team("Ullevål"), new Team("Ullevål"),
+		// System.currentTimeMillis(), new Team("Ullevï¿½l"), new Team("Ullevï¿½l"),
 		// new Team("Ready 03"), "Bergbanen",
 		// new Referee("Ukjent")));
 		// this.bandyService.createMatch(new Match(102,
-		// System.currentTimeMillis(), new Team("Ullevål"), new Team("Ready 2"),
-		// new Team("Ullevål"), "Gressbanen",
+		// System.currentTimeMillis(), new Team("Ullevï¿½l"), new Team("Ready 2"),
+		// new Team("Ullevï¿½l"), "Gressbanen",
 		// new Referee("Ukjent")));
 		//
 		// this.bandyService.createCup(new Cup(System.currentTimeMillis(),
@@ -207,7 +206,7 @@ public class ActivitiesFragment extends Fragment {
 		// System.currentTimeMillis()));
 
 		// this.bandyService.createTraining(new Training(102,
-		// System.currentTimeMillis(), new Team("Ready 2"), new Team("Ullevål"),
+		// System.currentTimeMillis(), new Team("Ready 2"), new Team("Ullevï¿½l"),
 		// "Gressbanen", new Referee(
 		// "Ukjent")));
 
@@ -257,7 +256,7 @@ public class ActivitiesFragment extends Fragment {
 	private void sendMail() {
 		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, viewBy, activityFilter);
 		MailSender mailSender = new MailSender(this.bandyService.getEmailAccount(), this.bandyService.getEmailAccountPwd());
-		Team team = this.bandyService.getTeam(selectedTeamName);
+		Team team = this.bandyService.getTeam(selectedTeamName, true);
 		String msg = Utility.createActivitiesHtmlTable(team, activityList);
 		String subject = team.getName() + " aktiviteter for " + viewBy;
 		StringBuffer regards = new StringBuffer();

@@ -18,23 +18,20 @@ public class Contact {
 	private String emailAddress;
 	private Address address;
 
-	public Contact(Integer id, Team team, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName, String mobileNumber,
-			String emailAddress) {
-		super();
+	public Contact(Integer id, Team team, String firstName, String middleName, String lastName) {
 		this.id = id;
 		this.team = team;
-		this.roles = roles;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
-		this.mobileNumber = mobileNumber;
-		this.emailAddress = emailAddress;
 	}
 
-	public Contact(Team team, String firstName, String lastName) {
-		this.team = team;
-		this.firstName = firstName;
-		this.lastName = lastName;
+	public Contact(Integer id, Team team, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName, String mobileNumber,
+			String emailAddress) {
+		this(id, team, firstName, middleName, lastName);
+		this.roles = roles;
+		this.mobileNumber = mobileNumber;
+		this.emailAddress = emailAddress;
 	}
 
 	public Contact(Team team, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName, String mobileNumber, String emailAddress,
@@ -51,6 +48,10 @@ public class Contact {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public Address getAddress() {
+		return address;
 	}
 
 	public Team getTeam() {
@@ -102,7 +103,7 @@ public class Contact {
 	}
 
 	public String getFullName() {
-		return this.firstName + " " + this.lastName;
+		return firstName + " " + lastName;
 	}
 
 	@Override

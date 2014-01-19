@@ -11,9 +11,24 @@
         android:layout_height="wrap_content"
         android:shrinkColumns="*"
         android:stretchColumns="*" >
+		
+         <TableRow
+            android:id="@+id/tableSelectionHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_head_background"
+            android:gravity="center_horizontal" >
 
+            <Spinner
+                android:id="@+id/teams_spinner"
+                android:layout_width="fill_parent"
+                android:layout_gravity="left"
+                android:layout_span="3"
+                android:prompt="@string/spinner_view_by" />
+        </TableRow>
+        
         <TableRow
-            android:id="@+id/tablePeroidHeader"
+            android:id="@+id/tableHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/black"
@@ -23,27 +38,11 @@
                 android:id="@+id/tableHeaderPeriod"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_span="4"
+                android:layout_span="3"
                 android:background="@color/tbl_head_background"
                 android:gravity="center"
-                android:text="Players"
+                android:text="Uil Knott 2003"
                 android:textColor="@color/white" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableSelectionHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/tbl_head_background"
-            android:gravity="center_horizontal" >
-
-           <Spinner
-                android:id="@+id/teams_spinner"
-                android:layout_width="fill_parent"
-                android:layout_gravity="left"
-                android:layout_span="4"
-                android:textSize="12sp" 
-                android:prompt="@string/spinner_teams" />
         </TableRow>
 
         <TableRow
@@ -64,7 +63,7 @@
                 android:id="@+id/player_birth"
                 android:contentDescription="@string/na"
                 android:gravity="center_horizontal"
-                android:text="player_birth"
+                android:text="Birthday"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="12sp" />
             
@@ -76,7 +75,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="12sp" />
         </TableRow>
-        <!-- Generated team activites rows here -->
+        <!-- Generated team activity rows here -->
     </TableLayout>
 
 </ScrollView>

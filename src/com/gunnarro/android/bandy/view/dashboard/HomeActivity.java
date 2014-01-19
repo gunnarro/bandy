@@ -25,7 +25,6 @@ import com.gunnarro.android.bandy.R;
  * pattern.
  * 
  */
-
 public class HomeActivity extends DashboardActivity {
 
 	/**
@@ -38,10 +37,10 @@ public class HomeActivity extends DashboardActivity {
 	 * Always followed by onStart().
 	 * 
 	 */
-
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home);
+		setContentView(R.layout.dashboard_layout);
 	}
 
 	/**
@@ -52,7 +51,7 @@ public class HomeActivity extends DashboardActivity {
 	 * two scenarios with the isFinishing() method.
 	 * 
 	 */
-
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 	}
@@ -67,7 +66,7 @@ public class HomeActivity extends DashboardActivity {
 	 * if it becomes invisible to the user.
 	 * 
 	 */
-
+	@Override
 	protected void onPause() {
 		super.onPause();
 	}
@@ -77,7 +76,7 @@ public class HomeActivity extends DashboardActivity {
 	 * started again. Always followed by onStart().
 	 * 
 	 */
-
+	@Override
 	protected void onRestart() {
 		super.onRestart();
 	}
@@ -88,7 +87,7 @@ public class HomeActivity extends DashboardActivity {
 	 * user input going to it. Always followed by onPause().
 	 * 
 	 */
-
+	@Override
 	protected void onResume() {
 		super.onResume();
 	}
@@ -99,7 +98,7 @@ public class HomeActivity extends DashboardActivity {
 	 * onStop() if it becomes hidden.
 	 * 
 	 */
-
+	@Override
 	protected void onStart() {
 		super.onStart();
 	}
@@ -113,7 +112,7 @@ public class HomeActivity extends DashboardActivity {
 	 * Followed by either onRestart() if this activity is coming back to
 	 * interact with the user, or onDestroy() if this activity is going away.
 	 */
-
+	@Override
 	protected void onStop() {
 		super.onStop();
 	}
