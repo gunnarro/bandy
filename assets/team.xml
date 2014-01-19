@@ -185,7 +185,7 @@
     
     <cups>
         <cup date="08.11.2013" startTime="09:00" deadlineDate="20.10.2013" signed="true" clubName="Frigg" cupName="Frigg Cup" venue="Frogner Stadion" />
-        <cup date="02.02.2014" startTime="09:00" deadlineDate=07.01.2014" signed="true" clubName="Snarøya" cupName="Snarøya Cup" venue="Snarøya" />
+        <cup date="02.02.2014" startTime="09:00" deadlineDate="07.01.2014" signed="true" clubName="Snarøya" cupName="Snarøya Cup" venue="Snarøya" />
     </cups>
     
     <trainings>
