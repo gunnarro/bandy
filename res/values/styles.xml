@@ -6,7 +6,6 @@
         <item name="android:tabWidgetStyle">@style/CustomTabWidget</item>
         <item name="android:windowTitleSize">35dip</item>
         <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
-        <item name="android:radioButtonStyle">@style/CustomRadioButton</item>
         <item name="android:listViewStyle">@style/CustomListView</item>
         <item name="android:checkboxStyle">@style/CustomCheckbox</item>
         <!-- <item name="android:editTextStyle">@style/CustomEditText</item> -->
@@ -35,13 +34,6 @@
 
     <style name="CustomWindowTitleBackground">
         <item name="android:background">@color/bg_default</item>
-    </style>
-
-    <style name="CustomRadioButton" parent="@android:style/Widget.Holo.CompoundButton.RadioButton">
-        <item name="android:button">@drawable/radio</item>
-        <item name="android:textSize">11sp</item>
-        <item name="android:textColor">@color/txt_radio</item>
-        <item name="android:typeface">monospace</item>
     </style>
 
     <style name="CustomCheckbox" parent="@android:style/Widget.CompoundButton.CheckBox">
@@ -83,7 +75,6 @@
         <item name="android:shadowRadius">0.2</item>
         <item name="android:textSize">11sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:background">@drawable/button</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
     </style>
@@ -150,7 +141,6 @@
         <item name="android:layout_width">@dimen/title_height</item>
         <item name="android:layout_height">fill_parent</item>
         <!--- <item name="android:background">@null</item> -->
-        <item name="android:background">@drawable/title_button</item>
     </style>
 
     <style name="TitleBarProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">

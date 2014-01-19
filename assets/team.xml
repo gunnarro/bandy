@@ -13,28 +13,72 @@
     
     <contacts>
         <contact firstName="Gunnar" middleName="" lastName="Rønneberg"  mobile="+4745465500" email="gunnar_ronneberg@yahoo.no" >
+        	<address street="Stavangergata" streetNumber="35" zipCode="0467" city="Oslo" country="Norway" />
         	<roles>
             	 <role>teamlead</role>
              	 <role>coach</role>
          	</roles>
         </contact>
-        <contact firstName="Siri" middleName="Birgitte" lastName="Paulen" mobile="+4792671308" email="spaulen@ymail.com" />
-        <contact firstName="Trond" middleName="" lastName="Kiplesund" mobile="+4792045699" email="trond.kiplesund@sparebank1.no" />
-        <contact firstName="Heidi" middleName="" lastName="Kiplesund" mobile="" email="" />
-        <contact firstName="Vemund" middleName="" lastName="Hartberg" mobile="+4792668817" email="vem-har@online.no" />
-        <contact firstName="Cecilie" middleName="" lastName="Hartberg" mobile="+4792666231" email="c.b.hartberg@medisin.uio.no" />
-        <contact firstName="Johan" middleName="" lastName="Braanen" mobile="" email="Johan@Braanen.com" />
-        <contact firstName="Frank" middleName="" lastName="Halse" mobile="" email="fhalse@gmail.com" />
-        <contact firstName="Anita" middleName="" lastName="Halse" mobile="+4798616194" email="halseanita@gmail.com" />
-        <contact firstName="Mats" middleName="" lastName="Håkansson" mobile="+4792031707" email="mats.hakansson@hotmail.no" />
-        <contact firstName="Atle" middleName="" lastName="Jensen" mobile="" email="atlej@math.uio.no" />
-        <contact firstName="Kristin" middleName="" lastName="Halvorsen" mobile="" email="kristinprivat@hotmail.com" />
-        <contact firstName="David" middleName="" lastName="Dunlop" mobile="+4799106806" email="david.dunlop@ude.oslo.kommune.no" />
-        <contact firstName="Torstein" middleName="" lastName="Harildstad" mobile="" email="torstein.harildstad@software-innovation.com" />
-        <contact firstName="Petter" middleName="" lastName="Karal" mobile="" email="petter@karal.no" />
-        <contact firstName="Heidi" middleName="" lastName="Karal" mobile="" email="heidi.karal@gmail.com" />
-        <contact firstName="Otto" middleName="" lastName="Scharff" mobile="" email="otto@scharff.net" />
-        <contact firstName="Kristin" middleName="" lastName="Bjelland" mobile="" email="kbjellan@gmail.com" />
+        <contact firstName="Siri" middleName="Birgitte" lastName="Paulen" mobile="+4792671308" email="spaulen@ymail.com" >
+        	<address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Trond" middleName="" lastName="Kiplesund" mobile="+4792045699" email="trond.kiplesund@sparebank1.no" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Heidi" middleName="" lastName="Kiplesund" mobile="" email="" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Vemund" middleName="" lastName="Hartberg" mobile="+4792668817" email="vem-har@online.no" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Cecilie" middleName="" lastName="Hartberg" mobile="+4792666231" email="c.b.hartberg@medisin.uio.no" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Johan" middleName="" lastName="Braanen" mobile="" email="Johan@Braanen.com" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Frank" middleName="" lastName="Halse" mobile="" email="fhalse@gmail.com" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Anita" middleName="" lastName="Halse" mobile="+4798616194" email="halseanita@gmail.com" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Mats" middleName="" lastName="Håkansson" mobile="+4792031707" email="mats.hakansson@hotmail.no" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Atle" middleName="" lastName="Jensen" mobile="" email="atlej@math.uio.no" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Kristin" middleName="" lastName="Halvorsen" mobile="" email="kristinprivat@hotmail.com" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="David" middleName="" lastName="Dunlop" mobile="+4799106806" email="david.dunlop@ude.oslo.kommune.no" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Torstein" middleName="" lastName="Harildstad" mobile="" email="torstein.harildstad@software-innovation.com" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Petter" middleName="" lastName="Karal" mobile="" email="petter@karal.no" >
+            <address street="Blåsbortveien" streetNumber="19" streetNumberPrefix="b" zipCode="0873" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Heidi" middleName="" lastName="Karal" mobile="" email="heidi.karal@gmail.com" >
+            <address street="Blåsbortveien" streetNumber="19" streetNumberPrefix="b" zipCode="0873" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Otto" middleName="" lastName="Scharff" mobile="" email="otto@scharff.net" >
+            <address street="Kongleveien" streetNumber="11" zipCode="0875" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Kristin" middleName="" lastName="Bjelland" mobile="" email="kbjellan@gmail.com" >
+           <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Anne Jorun" middleName="" lastName="Aas" mobile="" email="annejorunaas@gmail.com" >
+            <address street="Tåsen Terrasse" streetNumber="9" streetNumberPrefix="b" zipCode="0873" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Karen" middleName="" lastName="Frivik" mobile="" email="karen@dyrevern.no" >
+            <address street="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        </contact>
+        <contact firstName="Nini" middleName="" lastName="Ring" mobile="" email="nini.ring@domstol.no" >
+            <address street="Bregneveien" streetNumber="27" streetNumberPrefix="b" zipCode="0875" city="Oslo" country="Norway" />
+        </contact> 
     </contacts>
     
     <players>
@@ -94,13 +138,13 @@
     	 	    <parent firstName="Torstein" lastName="Harildstad" />
     	 	</parents>
    	 	</player>
-    	<player id="11" status="active" firstName="Martin" middleName="" lastName="Karal" birthDate="" mobile="" email="" >
+    	<player id="11" status="active" firstName="Martin André" middleName="" lastName="Karal" birthDate="27.10.2003" mobile="" email="" >
     		<parents>
     	 	    <parent firstName="Petter" lastName="Karal" />
         		<parent firstName="Heidi"  lastName="Karal" />
     	 	</parents>
      	</player>
-    	<player id="12" status="active" firstName="Trygve" middleName="" lastName="Scharff" birthDate="" mobile="" email="" >
+    	<player id="12" status="active" firstName="Trygve" middleName="" lastName="Scharff" birthDate="04.08.2003" mobile="" email="" >
     		<parents>
     	 	    <parent firstName="Otto" lastName="Scharff" />
     	 	</parents>
@@ -110,31 +154,23 @@
 	    	 	    <parent firstName="Kristin" lastName="Bjelland" />
 	    	 </parents>
     	</player>
+    	<player id="14" status="active" firstName="Paul" middleName="Ring" lastName="Sørensen" birthDate="27.11.2003" mobile="" email="" >
+	    	<parents>
+	    	 	    <parent firstName="Nini" lastName="Ring" />
+	    	 </parents>
+    	</player>
+    	<player id="15" status="active" firstName="Brage" middleName="" lastName="Frivik" birthDate="" mobile="" email="" >
+	    	<parents>
+	    	 	    <parent firstName="Karen" lastName="Frivik" />
+	    	 </parents>
+    	</player>
+    	<player id="16" status="active" firstName="Ole Martin" middleName="" lastName="Skedsmo" birthDate="06.05.2003" mobile="" email="" >
+	    	<parents>
+	    	 	    <parent firstName="Anne Jorun" lastName="Aas" />
+	    	 </parents>
+    	</player>
     </players>
 	
-    <!-- 
-    <parents>
-        <parent firstName="Gunnar" middleName="" lastName="Rønneberg" mobile="+4745465500" email="gunnar_ronneberg@yahoo.no" />
-        <parent firstName="Siri" middleName="Birgitte" lastName="Paulen" mobile="+47" email="" />
-        <parent firstName="Trond" middleName="" lastName="Kiplesund" mobile="+4792045699" email="" />
-        <parent firstName="Heidi" middleName="" lastName="Kiplesund" mobile="" email="" />
-        <parent firstName="Vemund" middleName="" lastName="Hartberg" mobile="+4792668817" email="" />
-        <parent firstName="Cecilie" middleName="" lastName="Hartberg" mobile="+4792666231" email="" />
-        <parent firstName="Johan" middleName="" lastName="Braanen" mobile="" email="" />
-        <parent firstName="Frank" middleName="" lastName="Halse" mobile="" email="" />
-        <parent firstName="Anita" middleName="" lastName="Halse" mobile="+4798616194" email="" />
-        <parent firstName="Mats" middleName="" lastName="Håkansson" mobile="+4792031707" email="" />
-        <parent firstName="Atle" middleName="" lastName="Jensen" mobile="" email="" />
-        <parent firstName="Kristin" middleName="" lastName="Jensen" mobile="" email="" />
-        <parent firstName="David" middleName="" lastName="Dunlop" mobile="+4799106806" email="" />
-        <parent firstName="Torstein" middleName="" lastName="Harildstad" mobile="" email="" />
-        <parent firstName="Petter" middleName="" lastName="Karal" mobile="" email="" />
-        <parent firstName="Heidi" middleName="" lastName="Karal" mobile="" email="" />
-        <parent firstName="Otto" middleName="" lastName="Scharff" mobile="" email="" />
-        <parent firstName="Kristin" middleName="" lastName="Bjelland" mobile="" email="" />
-    </parents>
-     -->
-     
     <matches>
         <match date="26.11.2013" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Røa 03 2" venue="Bergbanen" referee="dommer ukjent" />
         <match date="10.12.2013" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Ready 01 4" venue="Bergbanen" referee="dommer ukjent" />
@@ -149,6 +185,7 @@
     
     <cups>
         <cup date="08.11.2013" startTime="09:00" deadlineDate="20.10.2013" signed="true" clubName="Frigg" cupName="Frigg Cup" venue="Frogner Stadion" />
+        <cup date="02.02.2014" startTime="09:00" deadlineDate=07.01.2014" signed="true" clubName="Snarøya" cupName="Snarøya Cup" venue="Snarøya" />
     </cups>
     
     <trainings>

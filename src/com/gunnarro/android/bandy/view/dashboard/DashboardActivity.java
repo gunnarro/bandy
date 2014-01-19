@@ -173,22 +173,22 @@ public abstract class DashboardActivity extends FragmentActivity {
 	public void onClickFeature(View v) {
 		int id = v.getId();
 		switch (id) {
-		case 12:// R.id.trainings_btn;
+		case R.id.trainings_btn:
 			Toast.makeText(this, "Trainings view Not implements", Toast.LENGTH_SHORT).show();
 			break;
-		case 13:// R.id.matches_btn;
-			Toast.makeText(this, "Matches view Not implements", Toast.LENGTH_SHORT).show();
-			break;
-		case 14:// R.id.cups_btn;
-			Toast.makeText(this, "Cups view Not implements", Toast.LENGTH_SHORT).show();
-			break;
-		case 15:// R.id.clubs_btn:
-			Toast.makeText(this, "Clubs view Not implements", Toast.LENGTH_SHORT).show();
-			break;
-		case R.id.teams_btn:
+		case R.id.matches_btn:
 			Intent matchesIntent = new Intent(getApplicationContext(), MatchesActivity.class);
 			matchesIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
 			startActivity(matchesIntent);
+			break;
+		case R.id.cups_btn:
+			Toast.makeText(this, "Cups view Not implements", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.clubs_btn:
+			Toast.makeText(this, "Clubs view Not implements", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.teams_btn:
+			startActivity(new Intent(getApplicationContext(), TeamActivitiesActivity.class));
 			break;
 		case R.id.players_btn:
 			Intent playerListIntent = new Intent(getApplicationContext(), PlayerListActivity.class);
@@ -206,9 +206,6 @@ public abstract class DashboardActivity extends FragmentActivity {
 			break;
 		case R.id.search_btn:
 			startActivity(new Intent(getApplicationContext(), SearchActivity.class));
-			break;
-		case R.id.team_activities_btn:
-			startActivity(new Intent(getApplicationContext(), TeamActivitiesActivity.class));
 			break;
 		default:
 			break;

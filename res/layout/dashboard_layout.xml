@@ -5,7 +5,7 @@
     android:rowCount="4" >
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_column="0"
@@ -21,7 +21,7 @@
     <!-- row 1 -->
 
     <Button
-        android:id="@+id/team_training_btn"
+        android:id="@+id/trainings_btn"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_column="0"
@@ -33,7 +33,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
-        android:id="@+id/team_activities_btn"
+        android:id="@+id/matches_btn"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_column="1"
@@ -45,7 +45,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
-        android:id="@+id/team_activities_btn2"
+        android:id="@+id/cups_btn"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_column="2"
@@ -59,7 +59,7 @@
     <!-- Row 2 -->
 
     <Button
-        android:id="@+id/clubs_btn0"
+        android:id="@+id/clubs_btn"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_column="0"
@@ -97,7 +97,7 @@
     <!-- Row 3 -->
 
     <Button
-        android:id="@+id/teams_btn0"
+        android:id="@+id/contacts_btn"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_column="0"
