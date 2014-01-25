@@ -49,6 +49,7 @@ public class SetupActivity extends DashboardActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setup_layout);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
 		setupEventHandlers();
 	}
@@ -80,8 +81,8 @@ public class SetupActivity extends DashboardActivity {
 				intent.putExtra(DownloadService.URL, DataLoader.TEAM_XML_URL);
 				startService(intent);
 
-				// UpdateDataTask task = new UpdateDataTask();
-				// task.execute((Void[]) null);
+				//UpdateDataTask task = new UpdateDataTask();
+				//task.execute(new String[] { DataLoader.TEAM_XML_URL });
 			}
 		});
 
@@ -131,7 +132,7 @@ public class SetupActivity extends DashboardActivity {
 	 * @author admin
 	 * 
 	 */
-	class UpdateDataTask extends AsyncTask<Void, Void, Void> {
+	class UpdateDataTask extends AsyncTask<String, Void, String> {
 		private ProgressDialog pdialog;
 
 		/**
@@ -140,7 +141,7 @@ public class SetupActivity extends DashboardActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			pdialog = ProgressDialog.show(getApplicationContext(), "", "Updating data...", true);
+			pdialog = ProgressDialog.show(getApplication(), "Loading data...", "Updating data...", true);
 		}
 
 		/**
@@ -155,9 +156,9 @@ public class SetupActivity extends DashboardActivity {
 		 * {@inheritDoc}
 		 */
 		@Override
-		protected Void doInBackground(Void... agrs) {
+		protected String doInBackground(String... args) {
 			try {
-				updateBandyDatabase(DataLoader.TEAM_XML_URL);
+				updateBandyDatabase(args[0]);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -168,7 +169,7 @@ public class SetupActivity extends DashboardActivity {
 		 * {@inheritDoc}
 		 */
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(String result) {
 			if (pdialog != null) {
 				pdialog.dismiss();
 			}

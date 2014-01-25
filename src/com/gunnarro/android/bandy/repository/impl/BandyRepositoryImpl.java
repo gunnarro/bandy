@@ -160,8 +160,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	@Override
 	public void createPlayer(Player player) {
-		ContentValues playerValues = PlayersTable.createContentValues(player.getTeam().getId(), player.getStatus().name(), player.getFirstName(),
-				player.getMiddleName(), player.getLastName(), player.getDateOfBirth());
+		ContentValues playerValues = PlayersTable.createContentValues(player.getAddress().getId(), player.getTeam().getId(), player.getStatus().name(),
+				player.getFirstName(), player.getMiddleName(), player.getLastName(), player.getDateOfBirth());
 		this.database = dbHelper.getWritableDatabase();
 		long playerId = database.insert(PlayersTable.TABLE_NAME, null, playerValues);
 		if (player.getParents() != null) {
@@ -196,6 +196,11 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return true;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 */
+	@Override
 	public long createAddress(Address address) {
 		ContentValues contactValues = AddressTable.createContentValues(address.getStreetName(), address.getStreetNumber(), address.getStreetNumberPrefix(),
 				address.getPostalCode(), address.getCity(), address.getCountry());
@@ -463,6 +468,25 @@ public class BandyRepositoryImpl implements BandyRepository {
 		}
 		CustomLog.d(this.getClass(), "contactId=" + contactId + ", contact=" + contact);
 		return contact;
+	}
+
+	private Address getAddress(int addressId) {
+		Address address = null;
+		StringBuffer selection = new StringBuffer();
+		selection.append(ContactsTable.COLUMN_ID + " = ?");
+		String[] selectionArgs = { Integer.toString(addressId) };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(AddressTable.TABLE_NAME, AddressTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			Team team = getTeam(cursor.getInt(cursor.getColumnIndex(ContactsTable.COLUMN_FK_TEAM_ID)));
+			address = mapCursorToAddress(cursor);
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), "addressId=" + addressId + ", address=" + address);
+		return address;
 	}
 
 	/**
@@ -852,9 +876,18 @@ public class BandyRepositoryImpl implements BandyRepository {
 				.getColumnIndex(SettingsTable.COLUMN_VALUE)));
 	}
 
+	private Address mapCursorToAddress(Cursor cursor) {
+		return new Address(cursor.getInt(cursor.getColumnIndex(AddressTable.COLUMN_ID)), cursor.getString(cursor
+				.getColumnIndex(AddressTable.COLUMN_STREET_NAME)), cursor.getString(cursor.getColumnIndex(AddressTable.COLUMN_STREET_NUMBER)),
+				cursor.getString(cursor.getColumnIndex(AddressTable.COLUMN_STREET_NUMBER_POSTFIX)), cursor.getString(cursor
+						.getColumnIndex(AddressTable.COLUMN_ZIP_CODE)), cursor.getString(cursor.getColumnIndex(AddressTable.COLUMN_CITY)),
+				cursor.getString(cursor.getColumnIndex(AddressTable.COLUMN_COUNTRY)));
+	}
+
 	private Contact mapCursorToContact(Cursor cursor, Team team) {
+		Address address = getAddress(cursor.getInt(cursor.getColumnIndex(ContactsTable.COLUMN_FK_ADDRESS_ID)));
 		List<ContactRoleEnum> roles = getRoles(cursor.getInt(cursor.getColumnIndex(ContactsTable.COLUMN_ID)));
-		return new Contact(cursor.getInt(cursor.getColumnIndex(ContactsTable.COLUMN_ID)), team, roles, cursor.getString(cursor
+		return new Contact(cursor.getInt(cursor.getColumnIndex(ContactsTable.COLUMN_ID)), team, address, roles, cursor.getString(cursor
 				.getColumnIndex(ContactsTable.COLUMN_FIRST_NAME)), cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_MIDDLE_NAME)),
 				cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_LAST_NAME)), cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_MOBILE)),
 				cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_EMAIL)));
@@ -866,11 +899,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 	}
 
 	private Player mapCursorToPlayer(Cursor cursor, Team team) {
+		Address address = getAddress(cursor.getInt(cursor.getColumnIndex(PlayersTable.COLUMN_FK_ADDRESS_ID)));
 		List<Contact> relationsShips = getRelationsShips(cursor.getInt(cursor.getColumnIndex(PlayersTable.COLUMN_ID)), team);
 		return new Player(cursor.getInt(cursor.getColumnIndex(PlayersTable.COLUMN_ID)), team, cursor.getString(cursor
 				.getColumnIndex(PlayersTable.COLUMN_FIRST_NAME)), cursor.getString(cursor.getColumnIndex(PlayersTable.COLUMN_MIDDLE_NAME)),
 				cursor.getString(cursor.getColumnIndex(PlayersTable.COLUMN_LAST_NAME)), PlayerStatusEnum.valueOf(cursor.getString(cursor
-						.getColumnIndex(PlayersTable.COLUMN_STATUS))), relationsShips, cursor.getInt(cursor.getColumnIndex(PlayersTable.COLUMN_DATE_OF_BIRTH)));
+						.getColumnIndex(PlayersTable.COLUMN_STATUS))), relationsShips, cursor.getInt(cursor.getColumnIndex(PlayersTable.COLUMN_DATE_OF_BIRTH)),
+				null);
 	}
 
 	// **********************************************************************************************

@@ -23,79 +23,49 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity
+        <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.MatchesActivity"
-            android:label="Matches" />
-          <activity
+            android:label="Matches"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
+        <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.SearchActivity"
-            android:label="Search" 
-            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity"/>
-           <activity
+            android:label="Search"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
+        <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.SetupActivity"
-            android:label="Setup" />
-            <activity
+            android:label="Setup"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
+        </activity>
+        <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.TeamActivity"
-            android:label="Team" />
+            android:label="Team"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
         <activity
             android:name="com.gunnarro.android.bandy.view.NotificationActivity"
             android:label="Notification" />
         <activity
             android:name="com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity"
-            android:label="Players" >
+            android:label="Players"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" >
         </activity>
         <activity
             android:name="com.gunnarro.android.bandy.view.masterdetailflow.PlayerDetailActivity"
             android:label="Player details"
             android:parentActivityName="com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ItemListActivity" />
+                android:value="com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity" />
         </activity>
 
-        <!--
-      <activity android:name="com.gunnarro.android.bandy.view.dashboard.HomeActivity"
-                  android:label="@string/app_name">
-         <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-             <category android:name="android.intent.category.LAUNCHER" />
-         </intent-filter>
-      </activity>
-      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F1Activity"
-            android:theme="@style/Theme.D1"
-            android:label="@string/title_feature1"
-            />
-      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F2Activity"
-            android:theme="@style/Theme.D1"
-            android:label="@string/title_feature2"
-            />
-      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F3Activity"
-            android:theme="@style/Theme.D1"
-            android:label="@string/title_feature3"
-            />
-      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F4Activity"
-            android:theme="@style/Theme.D1"
-            android:label="@string/title_feature4"
-            />
-      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F5Activity"
-            android:theme="@style/Theme.D1"
-            android:label="@string/title_feature5"
-            />
-      <activity android:name="com.gunnarro.android.bandy.view.dashboard.F6Activity"
-            android:theme="@style/Theme.D1"
-            android:label="@string/title_feature6"
-            />
-      <activity android:name="com.gunnarro.android.bandy.view.dashboard.AboutActivity"
-            android:theme="@style/Theme.D1"
-            android:label="@string/title_about"
-            />
-      <activity android:name="com.gunnarro.android.bandy.view.dashboard.SearchActivity"
-            android:theme="@style/Theme.D1"
-            android:label="@string/title_search"
-            />
-        -->
         <service android:name="com.gunnarro.android.bandy.service.impl.DownloadService" />
 
         <!--
@@ -106,7 +76,7 @@
             <intent-filter>
                 <action android:name="com.gunnarro.android.bandy.service.download.FINISHED" />
             </intent-filter>
-        </receiver>
+        </receiver>
         -->
 
         <uses-library android:name="android.test.runner" />

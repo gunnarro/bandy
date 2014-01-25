@@ -15,8 +15,6 @@ import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
-import com.gunnarro.android.bandy.view.playerdetailflow.PlayerDetailActivity;
-import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
 
 /**
  * A fragment representing a single Item detail screen. This fragment is either

@@ -16,7 +16,7 @@ public class Player extends Contact {
 	private List<Item> parentItemList;
 	private long dateOfBirth;
 
-	public Player(int id, Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth) {
+	public Player(int id, Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth, Address address) {
 		super(id, team, firstName, middleName, lastName);
 		this.status = status;
 		this.parents = parents;

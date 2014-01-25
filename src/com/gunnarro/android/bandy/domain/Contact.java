@@ -26,9 +26,14 @@ public class Contact {
 		this.lastName = lastName;
 	}
 
-	public Contact(Integer id, Team team, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName, String mobileNumber,
-			String emailAddress) {
+	public Contact(Integer id, Team team, String firstName, String middleName, String lastName, Address address) {
 		this(id, team, firstName, middleName, lastName);
+		this.address = address;
+	}
+
+	public Contact(Integer id, Team team, Address address, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName,
+			String mobileNumber, String emailAddress) {
+		this(id, team, firstName, middleName, lastName, address);
 		this.roles = roles;
 		this.mobileNumber = mobileNumber;
 		this.emailAddress = emailAddress;

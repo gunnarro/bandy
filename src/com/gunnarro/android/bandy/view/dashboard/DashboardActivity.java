@@ -199,7 +199,8 @@ public abstract class DashboardActivity extends FragmentActivity {
 			Toast.makeText(this, "Contacts view Not implements", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.referee_btn:
-			Toast.makeText(this, "Referee view Not implements", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(this, "Referee view Not implements", Toast.LENGTH_SHORT).show();
+			startActivity(new Intent(getApplicationContext(), SearchActivity.class));
 			break;
 		case R.id.settings_btn:
 			startActivity(new Intent(getApplicationContext(), SetupActivity.class));

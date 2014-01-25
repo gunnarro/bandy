@@ -175,12 +175,13 @@ public class XmlDocumentParser {
 	private void mapAndSavePlayerNodes(XPath xpath, Document doc, Team team, NodeList nodeList, BandyService bandyService) throws XPathExpressionException,
 			DOMException {
 		for (int i = 0; i < nodeList.getLength(); i++) {
+			Address address = mapAddress(nodeList.item(i).getFirstChild());
 			List<Contact> parentList = getParentList(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
 			String status = getAttributeValue(nodeList.item(i), "status");
 			Player player = new Player(-1, team, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(i), ATTR_MIDDLE_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), PlayerStatusEnum.valueOf(status.toUpperCase()), parentList, Utility.timeToDate(
-							getAttributeValue(nodeList.item(i), ATTR_BIRTH_DATE), "dd.MM.yyyy").getTime());
+							getAttributeValue(nodeList.item(i), ATTR_BIRTH_DATE), "dd.MM.yyyy").getTime(), address);
 			CustomLog.e(this.getClass(), player.toString());
 			bandyService.createPlayer(player);
 		}
@@ -226,7 +227,7 @@ public class XmlDocumentParser {
 			List<ContactRoleEnum> roleList = getRoleList(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
 
-			Address address = mapAddress(nodeList.item(i));
+			Address address = mapAddress(nodeList.item(i).getFirstChild());
 			Contact contact = new Contact(new Team(team.getId(), team.getName()), roleList, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_MIDDLE_NAME), getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), getAttributeValue(
 							nodeList.item(i), "mobile"), getAttributeValue(nodeList.item(i), "email"), address);
@@ -258,8 +259,6 @@ public class XmlDocumentParser {
 				CustomLog.e(this.getClass(), "contact=" + firstName + ", Invalid status: " + roleNode.getNodeName() + "=" + roleNode.getTextContent());
 			}
 		}
-		// }
-		// }
 		return roles;
 	}
 

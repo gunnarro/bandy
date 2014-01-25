@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.repository.table.AddressTable;
 import com.gunnarro.android.bandy.repository.table.ClubsTable;
 import com.gunnarro.android.bandy.repository.table.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.NotificationsTable;
@@ -21,6 +22,7 @@ import com.gunnarro.android.bandy.repository.table.link.PlayerContactLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerCupLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerTrainingLnkTable;
+import com.gunnarro.android.bandy.service.impl.DataLoader;
 
 /**
  * Sqlite: PRAGMA table_info(table_name); PRAGMA integrity_check; PRAGMA
@@ -34,7 +36,7 @@ import com.gunnarro.android.bandy.repository.table.link.PlayerTrainingLnkTable;
 public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "uilbandy3.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 4;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
 
@@ -79,6 +81,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		}
 		// Set encoding
 		database.execSQL("PRAGMA encoding=\"UTF-8\";");
+		AddressTable.onCreate(database);
 		ClubsTable.onCreate(database);
 		ContactsTable.onCreate(database);
 		CupsTable.onCreate(database);
@@ -103,6 +106,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	// e.g. if you increase the database version
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+		AddressTable.onUpgrade(database, oldVersion, newVersion);
 		ClubsTable.onUpgrade(database, oldVersion, newVersion);
 		ContactsTable.onUpgrade(database, oldVersion, newVersion);
 		CupsTable.onUpgrade(database, oldVersion, newVersion);
@@ -126,10 +130,11 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	public void insertDefaultData(SQLiteDatabase database) {
 		// init settings
-		database.execSQL("insert into settings (_id, key, value) values(1,'" + SettingsTable.DATA_FILE_LAST_UPDATED + "','0')");
-		database.execSQL("insert into settings (_id, key, value) values(2,'" + SettingsTable.DATA_FILE_VERSION + "','na')");
-		database.execSQL("insert into settings (_id, key, value) values(3,'" + SettingsTable.MAIL_ACCOUNT + "','na')");
-		database.execSQL("insert into settings (_id, key, value) values(4,'" + SettingsTable.MAIL_ACCOUNT_PWD + "','na')");
+		database.execSQL("insert into settings (_id, key, value) values(1,'" + SettingsTable.DATA_FILE_URL + "','" + DataLoader.TEAM_XML_URL + "')");
+		database.execSQL("insert into settings (_id, key, value) values(2,'" + SettingsTable.DATA_FILE_LAST_UPDATED + "','0')");
+		database.execSQL("insert into settings (_id, key, value) values(3,'" + SettingsTable.DATA_FILE_VERSION + "','na')");
+		database.execSQL("insert into settings (_id, key, value) values(4,'" + SettingsTable.MAIL_ACCOUNT + "','na')");
+		database.execSQL("insert into settings (_id, key, value) values(5,'" + SettingsTable.MAIL_ACCOUNT_PWD + "','na')");
 		CustomLog.i(this.getClass(), "inserted default test data");
 	}
 
