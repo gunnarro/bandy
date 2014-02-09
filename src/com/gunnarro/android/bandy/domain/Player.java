@@ -15,9 +15,11 @@ public class Player extends Contact {
 	private List<Contact> parents;
 	private List<Item> parentItemList;
 	private long dateOfBirth;
+	private String schoolName;
 
-	public Player(int id, Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth, Address address) {
-		super(id, team, firstName, middleName, lastName);
+	public Player(int id, Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth,
+			Address address) {
+		super(id, team, firstName, middleName, lastName, address);
 		this.status = status;
 		this.parents = parents;
 		this.dateOfBirth = dateOfBirth;
@@ -45,6 +47,10 @@ public class Player extends Contact {
 
 	public long getDateOfBirth() {
 		return dateOfBirth;
+	}
+
+	public String getSchoolName() {
+		return schoolName;
 	}
 
 	public boolean hasParents() {

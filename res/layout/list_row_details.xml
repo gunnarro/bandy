@@ -16,16 +16,20 @@
             android:id="@+id/rowDetailsChkBoxId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:gravity="left"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/holo_green_light" />
 
         <TextView
             android:id="@+id/rowDetailsTxtId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="list details"
-            android:textAppearance="?android:attr/textAppearanceSmall" >
+            android:gravity="left"
+            android:text="Row Header"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/holo_green_light" >
         </TextView>
     </TableRow>
 
@@ -34,37 +38,4 @@
         android:layout_height="1dp"
         android:background="@android:color/black" />
 
-</TableLayout><!--
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:clickable="true"
-    android:orientation="vertical"
-    android:paddingLeft="40dp"
-    tools:context=".MainActivity" >
-
-    <TextView
-        android:id="@+id/rowDetailsTxtId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/black_list_agent"
-        android:drawablePadding="5dp"
-        android:gravity="center_vertical"
-        android:text="list details"
-        android:textSize="14sp"
-        android:textStyle="bold" >
-    </TextView>
-
-     <CheckBox
-        android:id="@+id/rowDetailsChkBoxId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
-</LinearLayout> 
--->
+</TableLayout>

@@ -37,7 +37,7 @@ public class ContactsTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LAST_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MOBILE).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_EMAIL).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append(") ON CONFLICT REPLACE);");
+		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append(") ON CONFLICT ABORT);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

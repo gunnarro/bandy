@@ -3,11 +3,10 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-  
     tools:context=".HomeActivity" >
 
     <ExpandableListView
-        android:id="@+id/matches_expandable_listView"
+        android:id="@+id/training_expandable_listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ExpandableListView>

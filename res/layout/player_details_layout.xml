@@ -35,14 +35,14 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/nameLbl"
+                android:id="@+id/playerFullNameLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/name"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/nameTxt"
+                android:id="@+id/playerFullNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Emilie Paulen"
@@ -55,14 +55,14 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/dateOfBirthLbl"
+                android:id="@+id/playerDateOfBirthLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/birth"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/dateOfBirthTxt"
+                android:id="@+id/playerDateOfBirthTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="22.01.2002"
@@ -75,14 +75,14 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/streetLbl"
+                android:id="@+id/playerStreetLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/street"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/streetTxt"
+                android:id="@+id/playerStreetTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bergslia 39"
@@ -95,14 +95,14 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/cityLbl"
+                android:id="@+id/playerCityLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/city"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/cityTxt"
+                android:id="@+id/playerCityTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0467 Oslo"
@@ -115,14 +115,14 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/countryLbl"
+                android:id="@+id/playerCountryLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/country"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/countryTxt"
+                android:id="@+id/playerCountryTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Norway"
@@ -135,14 +135,14 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/mobileLbl"
+                android:id="@+id/playerMobileLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mobile"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/mobileTxt"
+                android:id="@+id/playerMobileTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+47 55 22 00 00"
@@ -155,19 +155,56 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/emailLbl"
+                android:id="@+id/playerEmailLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/email"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/emailTxt"
+                android:id="@+id/playerEmailTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="emilie.paulen@yahoo.no"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
+        
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/playerSchoolLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/school"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/playerSchoolTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tåsen skole"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+        
+        <TableRow>
+         <TextView
+                android:id="@+id/playerStatusLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/playerStatusTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Active"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+        
     </TableLayout>
 
     <TextView

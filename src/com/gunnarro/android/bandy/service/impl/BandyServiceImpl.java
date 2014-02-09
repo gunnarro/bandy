@@ -145,7 +145,7 @@ public class BandyServiceImpl implements BandyService {
 	public long createAddress(Address address) {
 		return this.bandyRepository.createAddress(address);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -227,7 +227,7 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Activity> getActivityList(String teamName, String periode, String filterBy) {
+	public List<Activity> getActivityList(String teamName, String selectedPeriode, String filterBy) {
 		List<Activity> list = new ArrayList<Activity>();
 		Team team = null;
 		try {
@@ -240,9 +240,10 @@ public class BandyServiceImpl implements BandyService {
 			// Simply ignore, no data found
 			return list;
 		}
+		Integer periode = 9;
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.MATCH.name())) {
 			for (Match match : getMatchList(team.getId(), periode)) {
-				list.add(new Activity(ActivityTypeEnum.MATCH, match.getStartDate(), match.getVenue(), match.getTeamVersus()));
+				list.add(new Activity(ActivityTypeEnum.MATCH, match.getStartTime(), match.getVenue(), match.getTeamVersus()));
 			}
 		}
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.TRAINING.name())) {
@@ -259,12 +260,17 @@ public class BandyServiceImpl implements BandyService {
 		return list;
 	}
 
+	@Override
+	public Match getMatch(int matchId) {
+		return this.bandyRepository.getMatch(matchId);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
 	 */
 	@Override
-	public List<Match> getMatchList(Integer teamId, String periode) {
+	public List<Match> getMatchList(Integer teamId, Integer periode) {
 		return this.bandyRepository.getMatchList(teamId, periode);
 	}
 
@@ -282,7 +288,7 @@ public class BandyServiceImpl implements BandyService {
 	 * 
 	 */
 	@Override
-	public List<Training> getTrainingList(Integer teamId, String periode) {
+	public List<Training> getTrainingList(Integer teamId, Integer periode) {
 		return this.bandyRepository.getTrainingList(teamId, periode);
 	}
 
@@ -300,7 +306,7 @@ public class BandyServiceImpl implements BandyService {
 	 * 
 	 */
 	@Override
-	public List<Cup> getCupList(Integer teamId, String periode) {
+	public List<Cup> getCupList(Integer teamId, Integer periode) {
 		return this.bandyRepository.getCupList(teamId, periode);
 	}
 
@@ -322,35 +328,18 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean signupForMatch(int playerId, int matchId) {
+	public int signupForMatch(int playerId, int matchId) {
 		bandyRepository.createPlayerLink(PlayerLinkTableTypeEnum.MATCH, playerId, matchId);
-		return true;
+		return bandyRepository.getNumberOfSignedPlayers(PlayerLinkTableTypeEnum.MATCH, matchId);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean unsignForMatch(int playerId, int matchId) {
+	public int unsignForMatch(int playerId, int matchId) {
 		bandyRepository.deletePlayerLink(PlayerLinkTableTypeEnum.MATCH, playerId, matchId);
-		return true;
-	}
-
-	public boolean registrerOnTraining(Integer playerId, Integer trainingId) {
-		if (trainingId == null) {
-			Player player = this.getPlayer(playerId);
-			Training training = bandyRepository.getTrainingByDate(player.getTeam().getId(), System.currentTimeMillis());
-			if (training == null) {
-				trainingId = createTraining(Training.createTraining(player.getTeam()));
-			}
-		}
-		this.bandyRepository.createPlayerLink(PlayerLinkTableTypeEnum.TRAINING, playerId, trainingId);
-		return true;
-	}
-
-	public boolean unRegistrerTraining(Integer playerId, Integer trainingId) {
-		this.bandyRepository.createPlayerLink(PlayerLinkTableTypeEnum.TRAINING, playerId, trainingId);
-		return true;
+		return bandyRepository.getNumberOfSignedPlayers(PlayerLinkTableTypeEnum.MATCH, matchId);
 	}
 
 	/**
@@ -381,6 +370,32 @@ public class BandyServiceImpl implements BandyService {
 		} else {
 			throw new ApplicationException("No match found for: date=" + startDate + ", teamId=" + player.getTeam().getId());
 		}
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean registrerOnTraining(Integer playerId, Integer trainingId) {
+		Integer id = trainingId;
+		if (id == null) {
+			Player player = this.getPlayer(playerId);
+			Training training = bandyRepository.getTrainingByDate(player.getTeam().getId(), System.currentTimeMillis());
+			if (training == null) {
+				id = createTraining(Training.createTraining(player.getTeam()));
+			}
+		}
+		this.bandyRepository.createPlayerLink(PlayerLinkTableTypeEnum.TRAINING, playerId, id);
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean unRegistrerTraining(Integer playerId, Integer trainingId) {
+		this.bandyRepository.createPlayerLink(PlayerLinkTableTypeEnum.TRAINING, playerId, trainingId);
 		return true;
 	}
 

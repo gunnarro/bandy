@@ -77,11 +77,11 @@ public class CommonListFragment extends ListFragment {
 		boolean checked = false;
 		if (checkedItemPositions.get(pos)) {
 			checked = true;
-			CustomLog.i(this.getClass(), " value=" + item.toValuePair() + " checked=" + checked);
+			CustomLog.i(this.getClass(), " value=" + item.toString() + " checked=" + checked);
 		}
 		item.setEnabled(checked);
 		bandyService.updateItem(item);
-		CustomLog.d(this.getClass(), "onclick local:" + item.toValuePair());
+		CustomLog.d(this.getClass(), "onclick local:" + item.toString());
 		reloadDataSet();
 		// Toast.makeText(l.getContext(), "saved list: " + item.toString(),
 		// Toast.LENGTH_LONG).show();
@@ -101,7 +101,7 @@ public class CommonListFragment extends ListFragment {
 				EditText inputField = (EditText) view.findViewById(inputFieldId);
 				String value = inputField.getText().toString();
 				if (!value.isEmpty()) {
-					Item newItem = new Item(-1,value, false);
+					Item newItem = new Item(-1, value, false);
 					if (addLocalList(newItem)) {
 						// Save the newly added item
 						bandyService.createItem(type, newItem);

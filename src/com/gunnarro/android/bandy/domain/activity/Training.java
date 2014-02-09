@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.gunnarro.android.bandy.domain.Team;
 
-public class Training {
+public class Training extends Activity {
 	private Integer id;
 	private long startDate;
 	private long endTime;
@@ -22,6 +22,22 @@ public class Training {
 	public Training(int id, long startDate, long endTime, Team team, String venue) {
 		this(startDate, endTime, team, venue);
 		this.id = id;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getName() {
+		return ActivityTypesEnum.Training.name();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getType() {
+		return ActivityTypesEnum.Training.name();
 	}
 
 	public Integer getId() {

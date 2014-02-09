@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/matchHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="@string/match"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <View
+        android:id="@+id/matchSeparator"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/matchHeader"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/line_separator" />
+
+    <TableLayout
+        android:id="@+id/matchTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/matchSeparator"
+        android:layout_marginLeft="10dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/matchStartTimeLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/matchStartTimeTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/matchNameLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Match"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/matchNameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="22.01.2002"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+        
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/matchVenueLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Venue"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/matchVenueTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/matchRefereeLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Referee"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/matchRefereeTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+        
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/matchRegisteredPlayersLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registered players"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/matchRegisteredPlayersTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
+
+    </TableLayout>
+
+
+    <TextView
+        android:id="@+id/matchPlayersHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/matchTable"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/players"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <View
+        android:id="@+id/matchPlayersSeparator"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/matchPlayersHeader"
+        android:background="@drawable/line_separator" />
+
+    <ListView
+        android:id="@+id/matchPlayerList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/matchPlayersSeparator"
+        android:choiceMode="none"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#aabbddcc" >
+    </ListView>
+
+</RelativeLayout>

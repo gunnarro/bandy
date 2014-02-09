@@ -18,8 +18,8 @@ import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 
 /**
  * A fragment representing a single Item detail screen. This fragment is either
- * contained in a {@link PlayerListActivity} in two-pane mode (on tablets) or a
- * {@link PlayerDetailActivity} on handsets.
+ * contained in a {@link } in two-pane mode (on tablets) or a
+ * {@link } on handsets.
  */
 public class TeamDetailFragment extends Fragment {
 

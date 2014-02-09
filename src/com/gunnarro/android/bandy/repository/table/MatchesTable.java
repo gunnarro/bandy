@@ -38,7 +38,7 @@ public class MatchesTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_REFEREE).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_TEAM_ID).append(") REFERENCES ").append(TeamsTable.TABLE_NAME).append("(")
 				.append(TeamsTable.COLUMN_ID).append(")");
-		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_HOME_TEAM).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT REPLACE);");
+		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_HOME_TEAM).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT ABORT);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

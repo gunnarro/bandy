@@ -15,6 +15,7 @@ import com.gunnarro.android.bandy.domain.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.utility.Utility;
 
 /**
  * A fragment representing a single Item detail screen. This fragment is either
@@ -48,6 +49,7 @@ public class PlayerDetailFragment extends Fragment {
 			this.bandyService = new BandyServiceImpl(rootView.getContext());
 		}
 		Player player = this.bandyService.getPlayer(playerId);
+		getActivity().setTitle(player.getFullName());
 		updatePlayerDetails(rootView, player);
 		Statistic playerStatistic = bandyService.getPlayerStatistic(player.getTeam().getId(), player.getId());
 		updatePlayerStatistic(rootView, playerStatistic);
@@ -56,13 +58,17 @@ public class PlayerDetailFragment extends Fragment {
 
 	private void updatePlayerDetails(View rootView, Player player) {
 		if (player != null) {
-			((TextView) rootView.findViewById(R.id.nameTxt)).setText(player.getFullName());
-			((TextView) rootView.findViewById(R.id.streetTxt)).setText("");
-			((TextView) rootView.findViewById(R.id.cityTxt)).setText("");
-			((TextView) rootView.findViewById(R.id.countryTxt)).setText("");
-			((TextView) rootView.findViewById(R.id.mobileTxt)).setText(player.getMobileNumber());
-			((TextView) rootView.findViewById(R.id.emailTxt)).setText(player.getEmailAddress());
-
+			((TextView) rootView.findViewById(R.id.playerFullNameTxt)).setText(player.getFullName());
+			((TextView) rootView.findViewById(R.id.playerDateOfBirthTxt)).setText(Utility.formatTime(player.getDateOfBirth(), Utility.DATE_PATTERN));
+			((TextView) rootView.findViewById(R.id.playerMobileTxt)).setText(player.getMobileNumber());
+			((TextView) rootView.findViewById(R.id.playerEmailTxt)).setText(player.getEmailAddress());
+			((TextView) rootView.findViewById(R.id.playerStatusTxt)).setText(player.getStatus().toString());
+			((TextView) rootView.findViewById(R.id.playerSchoolTxt)).setText(player.getSchoolName());
+			if (player.getAddress() != null) {
+				((TextView) rootView.findViewById(R.id.playerStreetTxt)).setText(player.getAddress().getFullStreetName());
+				((TextView) rootView.findViewById(R.id.playerCityTxt)).setText(player.getAddress().getPostalCode() + " " + player.getAddress().getCity());
+				((TextView) rootView.findViewById(R.id.playerCountryTxt)).setText(player.getAddress().getCountry());
+			}
 			ListView parentListView = (ListView) rootView.findViewById(R.id.player_parent_list);
 			ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(getActivity(), R.layout.custom_simple_list_item, player.getParentItemList());
 			parentListView.setAdapter(adapter);

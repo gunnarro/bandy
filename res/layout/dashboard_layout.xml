@@ -5,7 +5,7 @@
     android:rowCount="4" >
 
     <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/uil_logo"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_column="0"
@@ -16,7 +16,7 @@
         android:layout_row="0"
         android:layout_rowSpan="1"
         android:contentDescription="@string/activities_period"
-        android:src="@drawable/uil_logo" />
+        android:src="@drawable/uil_logo_top" />
 
     <!-- row 1 -->
 

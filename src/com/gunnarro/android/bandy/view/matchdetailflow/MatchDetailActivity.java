@@ -1,4 +1,4 @@
-package com.gunnarro.android.bandy.view.playerdetailflow;
+package com.gunnarro.android.bandy.view.matchdetailflow;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,21 +12,21 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 /**
  * An activity representing a single Item detail screen. This activity is only
  * used on handset devices. On tablet-size devices, item details are presented
- * side-by-side with a list of items in a {@link PlayerListActivity}.
+ * side-by-side with a list of items in a {@link MatchListActivity}.
  * <p>
  * This activity is mostly just a 'shell' activity containing nothing more than
- * a {@link PlayerDetailFragment}.
+ * a {@link MatchDetailFragment}.
  */
-public class PlayerDetailActivity extends FragmentActivity {
+public class MatchDetailActivity extends FragmentActivity {
 
-	public static final String ARG_PLAYER_ID = "player_id";
+	public static final String ARG_MATCH_ID = "match_id";
 	private String teamName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_item_detail);
-		setTitle("Player Details");
+		setTitle("Match Details");
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -44,8 +44,8 @@ public class PlayerDetailActivity extends FragmentActivity {
 			// using a fragment transaction.
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			Bundle arguments = new Bundle();
-			arguments.putInt(ARG_PLAYER_ID, getIntent().getIntExtra(ARG_PLAYER_ID, -1));
-			PlayerDetailFragment fragment = new PlayerDetailFragment();
+			arguments.putInt(ARG_MATCH_ID, getIntent().getIntExtra(ARG_MATCH_ID, -1));
+			MatchDetailFragment fragment = new MatchDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.item_detail_container, fragment).commit();
 		}
@@ -62,7 +62,7 @@ public class PlayerDetailActivity extends FragmentActivity {
 			//
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 			//
-			Intent playerListIntent = new Intent(getApplicationContext(), PlayerListActivity.class);
+			Intent playerListIntent = new Intent(getApplicationContext(), MatchListActivity.class);
 			playerListIntent.putExtra(DashboardActivity.ARG_TEAM_NAME, teamName);
 			NavUtils.navigateUpTo(this, playerListIntent);
 			return true;

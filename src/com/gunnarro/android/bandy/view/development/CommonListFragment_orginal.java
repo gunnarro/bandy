@@ -77,11 +77,11 @@ public class CommonListFragment_orginal extends ListFragment {
 		boolean checked = false;
 		if (checkedItemPositions.get(pos)) {
 			checked = true;
-			CustomLog.i(this.getClass(), " value=" + item.toValuePair() + " checked=" + checked);
+			CustomLog.i(this.getClass(), " value=" + item.toString() + " checked=" + checked);
 		}
 		item.setEnabled(checked);
 		bandyService.updateItem(item);
-		CustomLog.d(this.getClass(), "onclick local:" + item.toValuePair());
+		CustomLog.d(this.getClass(), "onclick local:" + item.toString());
 		reloadDataSet();
 		// Toast.makeText(l.getContext(), "saved list: " + item.toString(),
 		// Toast.LENGTH_LONG).show();

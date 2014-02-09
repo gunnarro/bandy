@@ -48,13 +48,13 @@ public interface BandyService {
 
 	public Club getClub(Integer id);
 
-	public List<Match> getMatchList(Integer teamId, String periode);
+	public List<Match> getMatchList(Integer teamId, Integer periode);
 
 	public List<Item> getMatchSignedPlayerList(int teamId, int matchId);
 
-	public List<Training> getTrainingList(Integer teamId, String periode);
+	public List<Training> getTrainingList(Integer teamId, Integer periode);
 
-	public List<Cup> getCupList(Integer teamId, String periode);
+	public List<Cup> getCupList(Integer teamId, Integer periode);
 
 	public List<Activity> getActivityList(String teamName, String viewBy, String filterBy);
 
@@ -63,6 +63,10 @@ public interface BandyService {
 	public List<Item> getPlayersAsItemList(int teamId);
 
 	public Player lookupPlayer(String mobileNr);
+
+	public boolean registrerOnTraining(Integer playerId, Integer trainingId);
+
+	public boolean unRegistrerTraining(Integer playerId, Integer trainingId);
 
 	// ---------------------------------------------------------------------------
 	// Settings table operations
@@ -110,9 +114,9 @@ public interface BandyService {
 
 	public void deleteItem(Item item);
 
-	boolean signupForMatch(int playerId, int matchId);
+	public int signupForMatch(int playerId, int matchId);
 
-	boolean unsignForMatch(int playerId, int matchId);
+	public int unsignForMatch(int playerId, int matchId);
 
 	/**
 	 * Method used from SMS service
@@ -135,6 +139,13 @@ public interface BandyService {
 	 * @return
 	 */
 	boolean unsignForMatch(String mobileNr, String matchDate);
+
+	/**
+	 * 
+	 * @param matchId
+	 * @return
+	 */
+	public Match getMatch(int matchId);
 
 	// ---------------------------------------------------------------------------
 	// Statistic table operations

@@ -18,17 +18,19 @@ import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 
-public class MyExpandableListAdapter extends BaseExpandableListAdapter {
-	private final SparseArray<Group> groups;
+public class CommonExpandableListAdapter extends BaseExpandableListAdapter {
 	public LayoutInflater inflater;
 	public Activity activity;
-	private BandyService bandyService;
+	protected final SparseArray<Group> groups;
+	protected BandyService bandyService;
+	private int minNumberOfSelectedChildren = 0;
 
-	public MyExpandableListAdapter(Activity activity, SparseArray<Group> groups, BandyService bandyService) {
+	public CommonExpandableListAdapter(Activity activity, SparseArray<Group> groups, BandyService bandyService, int minNumberOfSelectedChildren) {
 		this.activity = activity;
 		this.groups = groups;
 		this.bandyService = bandyService;
 		this.inflater = activity.getLayoutInflater();
+		this.minNumberOfSelectedChildren = minNumberOfSelectedChildren;
 	}
 
 	@Override
@@ -42,43 +44,25 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, final ViewGroup parentView) {
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.list_row_details, null);
 		}
-		final int groupId = groups.get(groupPosition).getId();
-		final Item children = (Item) getChild(groupPosition, childPosition);
-		if (children == null) {
+		final Group group = groups.get(groupPosition);
+		if (group.isEnabled()) {
+			CustomLog.d(this.getClass(), "Group not active: " + group.toString());
+			// return convertView;
+		}
+		final Item childItem = (Item) getChild(groupPosition, childPosition);
+		if (childItem == null) {
 			throw new ApplicationException("Error getting children: groupPosition=" + groupPosition + ", childPosition=" + childPosition);
 		}
-		TextView text = (TextView) convertView.findViewById(R.id.rowDetailsTxtId);
-		text.setText(children.getValue());
-		CheckBox chkBox = (CheckBox) convertView.findViewById(R.id.rowDetailsChkBoxId);
-		chkBox.setChecked(children.isEnabled());
-		chkBox.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				try {
-					CheckBox chkBox = (CheckBox) v.findViewById(R.id.rowDetailsChkBoxId);
-					CustomLog.d(this.getClass(), "chkbox cheched=" + chkBox.isChecked() + ", item=" + children.toString() + ", groupId=" + groupId);
-					if (chkBox.isChecked()) {
-						bandyService.signupForMatch(children.getId(), groupId);
-					} else {
-						bandyService.unsignForMatch(children.getId(), groupId);
-					}
-					// notifyDataSetChanged();
-				} catch (ApplicationException ae) {
-					CustomLog.e(this.getClass(), "exception=" + ae.getMessage());
-				}
-			}
-		});
-		convertView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				CustomLog.d(this.getClass(), "view selected=" + children.toString());
-			}
-		});
 		return convertView;
+	}
+
+	protected void updateGroupInfo(int groupPosition, int numberOfSelectedChildren) {
+		Group group = groups.get(groupPosition);
+		group.setNumberOfSelectedChildren(numberOfSelectedChildren);
 	}
 
 	@Override
@@ -114,12 +98,29 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_row_group, null);
+			convertView = inflater.inflate(R.layout.list_row_group_extended, null);
 		}
 		Group group = (Group) getGroup(groupPosition);
-		((CheckedTextView) convertView).setText(group.getName() + " " + group.getInformation());
-		((CheckedTextView) convertView).setChecked(isExpanded);
+		setGroupInfo(group, convertView);
+		// ((CheckedTextView) convertView).setText(group.getHeader());
+		// ((CheckedTextView) convertView).setChecked(isExpanded);
+		// ((CheckedTextView) convertView).setActivated(group.isEnabled());
+		// ((CheckedTextView) convertView).setEnabled(group.isEnabled());
+		// if (group.isEnabled()) {
+		// if (group.getNumberOfSelectedChildren() <
+		// minNumberOfSelectedChildren) {
+		// ((CheckedTextView) convertView).setTextColor(Color.RED);
+		// } else {
+		// ((CheckedTextView) convertView).setTextColor(Color.WHITE);
+		// }
+		// }
 		return convertView;
+	}
+
+	private void setGroupInfo(Group group, View convertView) {
+		((CheckedTextView) convertView.findViewById(R.id.rowGroupId)).setText(group.getHeader());
+		((TextView) convertView.findViewById(R.id.groupSubHeader1TxtId)).setText(group.getSubHeader1());
+		((TextView) convertView.findViewById(R.id.groupSubHeader2TxtId)).setText(group.getSubHeader2());
 	}
 
 	@Override

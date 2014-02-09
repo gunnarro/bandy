@@ -43,7 +43,9 @@
     <string name="country">Country</string>
     <string name="mobile">Mobile</string>
     <string name="name">Name</string>
-    <string name="birth">birth</string>
+    <string name="birth">Birth</string>
+    <string name="school">School</string>
+    <string name="status">Status</string>
     <string name="parents">Parents</string>
     <string name="coach">Coach</string>
     <string name="players">Players</string>

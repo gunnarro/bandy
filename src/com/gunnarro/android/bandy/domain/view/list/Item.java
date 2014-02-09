@@ -34,10 +34,6 @@ public class Item implements Comparable<Item> {
 		return value;
 	}
 
-	public String toValuePair() {
-		return value + ":" + isEnabled;
-	}
-
 	@Override
 	public int hashCode() {
 		final int multiplier = 23;
@@ -80,4 +76,5 @@ public class Item implements Comparable<Item> {
 		// return getClass().getSimpleName() + ": [id=" + this.id + ", value=" +
 		// this.value + "enabled=" + this.isEnabled + "]";
 	}
+
 }

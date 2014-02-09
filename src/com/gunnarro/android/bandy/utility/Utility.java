@@ -13,11 +13,14 @@ import com.gunnarro.android.bandy.domain.Team;
 
 public class Utility {
 
+	public static final String DATE_DEFAULT_PATTERN = "dd.MM.yyyy HH:mm";
+	public static final String DATE_PATTERN = "dd.MM.yyyy";
+	
 	public static SimpleDateFormat dateFormatter;
 
 	public static SimpleDateFormat getDateFormatter() {
 		if (dateFormatter == null) {
-			dateFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.UK);
+			dateFormatter = new SimpleDateFormat(DATE_DEFAULT_PATTERN, Locale.UK);
 		}
 		return dateFormatter;
 	}
@@ -76,6 +79,20 @@ public class Utility {
 		return filter;
 	}
 
+	public static String formatTime(long time, String pattern) {
+		String p = pattern;
+		if (p == null) {
+			p = DATE_DEFAULT_PATTERN;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat(p, Locale.UK);
+		try {
+			return sdf.format(new Date(time));
+		} catch (Exception e) {
+			CustomLog.e(Utility.class, "Return: " + new Date(0) + ", Exception: " + e.getMessage());
+			return "";
+		}
+	}
+
 	public static Date timeToDate(String time, String pattern) {
 		SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.UK);
 		try {
@@ -113,18 +130,18 @@ public class Utility {
 	}
 
 	public static String createActivitiesHtmlTable(Team team, List<Activity> activityList) {
-//		StringBuffer html = new StringBuffer();
-//		html.append("<table><tr>Date</th><th>Time</th><th>Type</th><th>Description</th><th>Location</th></tr>");
-//		for (Activity activity : activityList) {
-//			html.append("<tr>");
-//			html.append("<td>").append(activity.getStartDate()).append("</td>");
-//			html.append("<td>").append(activity.getStartDate()).append("</td>");
-//			html.append("<td>").append(activity.getType()).append("</td>");
-//			html.append("<td>").append(activity.getDescription()).append("</td>");
-//			html.append("<td>").append(activity.getPlace()).append("</td>");
-//			html.append("</tr>");
-//		}
-//		html.append("</table>");
+		// StringBuffer html = new StringBuffer();
+		// html.append("<table><tr>Date</th><th>Time</th><th>Type</th><th>Description</th><th>Location</th></tr>");
+		// for (Activity activity : activityList) {
+		// html.append("<tr>");
+		// html.append("<td>").append(activity.getStartDate()).append("</td>");
+		// html.append("<td>").append(activity.getStartDate()).append("</td>");
+		// html.append("<td>").append(activity.getType()).append("</td>");
+		// html.append("<td>").append(activity.getDescription()).append("</td>");
+		// html.append("<td>").append(activity.getPlace()).append("</td>");
+		// html.append("</tr>");
+		// }
+		// html.append("</table>");
 		// return html.toString();
 
 		StringBuffer plain = new StringBuffer();
@@ -138,5 +155,9 @@ public class Utility {
 			plain.append(activity.getPlace()).append("\n");
 		}
 		return plain.toString();
+	}
+
+	public static boolean isEmpty(String str) {
+		return str == null || str.length() == 0 || str.equals(" ");
 	}
 }

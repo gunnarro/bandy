@@ -2,6 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="MyCustomTheme" parent="android:Theme.Holo">
+        <item name="android:icon">@drawable/app_icon</item>
         <item name="android:textAppearance">@style/MyDefaultTextAppearance</item>
         <item name="android:tabWidgetStyle">@style/CustomTabWidget</item>
         <item name="android:windowTitleSize">35dip</item>
@@ -14,6 +15,7 @@
         <!-- <item name="android:textViewStyle">@style/CustomTextView</item> -->
         <!-- <item name="actionBarTabBarStyle">@style/Widget.Holo.ActionBar.TabBar</item> -->
         <item name="android:actionBarTabTextStyle">@style/CustomActionBarTabTextStyle</item>
+        <item name="android:actionBarStyle">@style/CustomActionBar</item>
     </style>
 
     <style name="MyDefaultTextAppearance" parent="@android:style/TextAppearance">
@@ -82,7 +84,7 @@
     <!--
     <style name="CustomTheme" parent="android:Theme">
         <item name="android:radioButtonStyle">@style/RadioButton</item>
-    </style>
+    </style>
     -->
 
     <style name="CustomHoloActionBarTab" parent="@android:style/Widget.Holo.ActionBar.TabView">
@@ -91,30 +93,32 @@
         <!-- <item name="android:background">@drawable/tab_bg</item> -->
         <!-- <item name="android:textColor">@drawable/tab_txt</item> -->
     </style>
-    
+
     <style name="CustomActionBarTabTextStyle" parent="@android:style/Widget.Holo.ActionBar.TabText">
         <item name="android:textColor">@drawable/tab_txt</item>
     </style>
-    
+
     <style name="dashboard">
         <item name="android:numColumns">4</item>
     </style>
-    
-    
+
     <!-- DASHBOARD EXAMLE STYLES -->
     <!-- Variation on the Light theme that turns off the title -->
     <style name="Theme.D1t" parent="android:style/Theme.Light">
         <item name="android:windowNoTitle">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
     <style name="Theme.D1" parent="android:style/Theme.Light">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
     <style name="Theme.D1dialog" parent="android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
     <style name="Theme.D1tranlucent" parent="android:style/Theme.Translucent">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -140,7 +144,7 @@
     <style name="TitleBarAction">
         <item name="android:layout_width">@dimen/title_height</item>
         <item name="android:layout_height">fill_parent</item>
-        <!--- <item name="android:background">@null</item> -->
+        <!-- - <item name="android:background">@null</item> -->
     </style>
 
     <style name="TitleBarProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
@@ -149,7 +153,7 @@
         <item name="android:layout_marginLeft">14dip</item>
         <item name="android:layout_marginRight">15dip</item>
         <item name="android:layout_marginTop">14dip</item>
-        <item name="android:indeterminate">true</item> 
+        <item name="android:indeterminate">true</item>
     </style>
 
     <style name="TitleBarSeparator">
@@ -191,5 +195,25 @@
         <item name="android:lineSpacingMultiplier">1.1</item>
         <item name="android:textColor">@android:color/secondary_text_light</item>
     </style>
-    
+
+    <!-- general styles for the action bar -->
+    <style name="CustomActionBar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:titleTextStyle">@style/ActionBarTitleTextStyle</item>
+        <item name="android:subtitleTextStyle">@style/ActionBarSubTitleTextStyle</item>
+        <!--
+        <item name="android:background">@drawable/actionbar_background</item>
+        <item name="android:backgroundStacked">@drawable/actionbar_background</item>
+        <item name="android:backgroundSplit">@drawable/actionbar_background</item>
+        -->
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="ActionBarTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/dark_blue</item>
+    </style>
+
+    <style name="ActionBarSubTitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">@color/dark_green</item>
+    </style>
+
 </resources>

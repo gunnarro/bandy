@@ -1,6 +1,7 @@
-package com.gunnarro.android.bandy.view.playerdetailflow;
+package com.gunnarro.android.bandy.view.matchdetailflow;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
@@ -13,9 +14,9 @@ import android.widget.ListView;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Team;
+import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
-import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
@@ -23,12 +24,12 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  * A list fragment representing a list of Items. This fragment also supports
  * tablet devices by allowing list items to be given an 'activated' state upon
  * selection. This helps indicate which item is currently being viewed in a
- * {@link PlayerDetailFragment}.
+ * {@link MatchDetailFragment}.
  * <p>
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class PlayerListFragment extends ListFragment {
+public class MatchListFragment extends ListFragment {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -76,7 +77,7 @@ public class PlayerListFragment extends ListFragment {
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
 	 */
-	public PlayerListFragment() {
+	public MatchListFragment() {
 		CustomLog.d(this.getClass(), "default constructor");
 	}
 
@@ -98,12 +99,12 @@ public class PlayerListFragment extends ListFragment {
 		} else {
 			CustomLog.d(this.getClass(), "No team id argument found! use teamName=" + teamName);
 		}
-		this.itemList = getTeamItemList(teamName);
+		this.itemList = getMatchesItemList(teamName);
 		CustomLog.d(this.getClass(), "items:" + this.itemList.size());
 		setListAdapter(new ArrayAdapter<Item>(getActivity(), R.layout.custom_checked_list_item, android.R.id.text1, this.itemList));
 		// finally, update the action bar sub title with number of players for
 		// selected team
-		getActivity().getActionBar().setSubtitle("Number of players: " + itemList.size());
+		getActivity().getActionBar().setSubtitle("Number of matches: " + itemList.size());
 	}
 
 	/**
@@ -196,18 +197,15 @@ public class PlayerListFragment extends ListFragment {
 		getListView().setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
 
-	private List<Item> getTeamItemList(String teamName) {
-		if (teamName != null) {
-			try {
-				Team team = this.bandyService.getTeam(teamName, false);
-				return this.bandyService.getPlayersAsItemList(team.getId());
-			} catch (ApplicationException ae) {
-				CustomLog.e(this.getClass(), ae.getMessage());
-			}
-		} else {
-			CustomLog.d(this.getClass(), "Team name is null!");
+	private List<Item> getMatchesItemList(String teamName) {
+		Team team = bandyService.getTeam(teamName, true);
+		List<Match> matchList = this.bandyService.getMatchList(team.getId(), Calendar.YEAR);
+		List<Item> matches = new ArrayList<Item>();
+		for (Match match : matchList) {
+			Item item = new Item(match.getId(), match.getTeamVersus(), match.isPlayed());
+			matches.add(item);
 		}
-		return new ArrayList<Item>();
+		return matches;
 	}
 
 	private void setActivatedPosition(int position) {

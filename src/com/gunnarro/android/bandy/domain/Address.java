@@ -1,5 +1,7 @@
 package com.gunnarro.android.bandy.domain;
 
+import com.gunnarro.android.bandy.utility.Utility;
+
 public class Address {
 
 	private long id;
@@ -32,6 +34,10 @@ public class Address {
 		return streetName;
 	}
 
+	public String getFullStreetName() {
+		return streetName + " " + streetNumber + (streetNumberPrefix != null ? streetNumberPrefix : "");
+	}
+
 	public String getStreetNumber() {
 		return streetNumber;
 	}
@@ -52,10 +58,18 @@ public class Address {
 		return country;
 	}
 
+	public boolean isAddressValid() {
+		return !Utility.isEmpty(streetName) && !Utility.isEmpty(streetNumber) && !Utility.isEmpty(postalCode) && !Utility.isEmpty(country);
+	}
+
+	public static Address createEmptyAddress() {
+		return new Address("na", "na", "na", "na", "na", "na");
+	}
+
 	@Override
 	public String toString() {
-		return "Address [streetAddess=" + streetName + ", streetNumber=" + streetNumber + ", streetNumberPrefix=" + streetNumberPrefix + ", postalCode="
-				+ postalCode + ", city=" + city + ", country=" + country + "]";
+		return "Address [isEmpty=" + this.isAddressValid() + ", streetName=" + streetName + ", streetNumber=" + streetNumber + ", streetNumberPrefix="
+				+ streetNumberPrefix + ", postalCode=" + postalCode + ", city=" + city + ", country=" + country + "]";
 	}
 
 }

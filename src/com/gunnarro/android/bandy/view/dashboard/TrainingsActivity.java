@@ -17,7 +17,6 @@
 package com.gunnarro.android.bandy.view.dashboard;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +29,7 @@ import android.widget.ExpandableListView;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Activity.ActivityTypesEnum;
-import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.view.list.Group;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
@@ -41,9 +40,9 @@ import com.gunnarro.android.bandy.view.expandablelist.MatchExpandableListAdapter
 /**
  * 
  */
-public class MatchesActivity extends DashboardActivity {
+public class TrainingsActivity extends DashboardActivity {
 
-	private final static int MIN_NUMBER_OF_SIGNED_PLAYERS = 7;
+	private final static int MIN_NUMBER_OF_SIGNED_PLAYERS = -1;
 	// More efficient than HashMap for mapping integers to objects
 	SparseArray<Group> groups = new SparseArray<Group>();
 	private BandyService bandyService;
@@ -54,36 +53,34 @@ public class MatchesActivity extends DashboardActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.match_list_layout);
+		setContentView(R.layout.training_list_layout);
 		String teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
-		this.setTitle(ActivityTypesEnum.Match.name() + " " + teamName);
+		this.setTitle(ActivityTypesEnum.Training.name() + " " + teamName);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
 		populateList(teamName);
-		ExpandableListView listView = (ExpandableListView) findViewById(R.id.match_expandable_listView);
+		ExpandableListView listView = (ExpandableListView) findViewById(R.id.training_expandable_listView);
 		MatchExpandableListAdapter adapter = new MatchExpandableListAdapter(this, groups, bandyService, MIN_NUMBER_OF_SIGNED_PLAYERS);
 		listView.setAdapter(adapter);
-		setupEventHandlers();
-	}
-
-	private void setupEventHandlers() {
 	}
 
 	private void populateList(String teamName) {
 		Team team = bandyService.getTeam(teamName, true);
-		List<Match> matchList = this.bandyService.getMatchList(team.getId(), Calendar.YEAR);
+		List<Training> trainingList = this.bandyService.getTrainingList(team.getId(), null);
 		List<Item> playerList = this.bandyService.getPlayersAsItemList(team.getId());
 		int i = 0;
-		for (Match match : matchList) {
-			List<Item> playerSignedList = bandyService.getMatchSignedPlayerList(team.getId(), match.getId());
+		for (Training training : trainingList) {
+			// List<Item> playerSignedList =
+			// bandyService.getTrainingRegistreredPlayerList(team.getId(),
+			// training.getId());
 			Set<Item> itemSet = new HashSet<Item>();
-			itemSet.addAll(playerSignedList);
+			// itemSet.addAll(playerSignedList);
 			itemSet.addAll(playerList);
 			ArrayList<Item> players = new ArrayList<Item>(itemSet);
 			Collections.sort(players);
-			String header = Utility.formatTime(match.getStartTime(), Utility.DATE_DEFAULT_PATTERN);
-			Group group = new Group(match.getId(), header, match.isPlayed(), players);
-			group.setSubHeader1(match.getTeamVersus());
-			group.setSubHeader2("Signed players: " + playerSignedList.size());
+			String header = Utility.formatTime(training.getStartDate(), Utility.DATE_DEFAULT_PATTERN);
+			Group group = new Group(training.getId(), header, training.isFinished(), players);
+			group.setSubHeader1(training.getName());
+			group.setSubHeader2(training.getVenue());
 			groups.append(i, group);
 			i++;
 		}

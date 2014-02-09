@@ -52,7 +52,7 @@ public interface BandyRepository {
 	public void createPlayer(Player player);
 
 	public boolean createContact(Contact contact);
-	
+
 	public long createAddress(Address address);
 
 	public String[] getTeamNames(String clubName);
@@ -67,13 +67,19 @@ public interface BandyRepository {
 
 	public Club getClub(Integer id);
 
-	public List<Match> getMatchList(Integer teamId, String periode);
+	// ---------------------------------------------------------------------------
+	// Match table operations
+	// ---------------------------------------------------------------------------
+
+	public Match getMatch(int matchId);
+
+	public List<Match> getMatchList(Integer teamId, Integer periode);
 
 	public List<Item> getMatchPlayerList(int teamId, int matchId);
 
-	public List<Training> getTrainingList(Integer teamId, String periode);
+	public List<Training> getTrainingList(Integer teamId, Integer periode);
 
-	public List<Cup> getCupList(Integer teamId, String periode);
+	public List<Cup> getCupList(Integer teamId, Integer periode);
 
 	public List<Player> getPlayerList(Integer teamId);
 
@@ -120,8 +126,8 @@ public interface BandyRepository {
 
 	public Statistic getTeamStatistic(int teamId);
 
-	public Training getTrainingByDate(int teamId, long currentTimeMillis);
+	public Training getTrainingByDate(int teamId, long startTime);
 
-	
+	public int getNumberOfSignedPlayers(PlayerLinkTableTypeEnum type, int id);
 
 }

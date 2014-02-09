@@ -18,6 +18,7 @@ package com.gunnarro.android.bandy.view.dashboard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.view.matchdetailflow.MatchListActivity;
 import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
 
 /**
@@ -39,7 +41,7 @@ import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
 public abstract class DashboardActivity extends FragmentActivity {
 
 	public static final String ARG_TEAM_NAME = "team_name";
-	private final static String DEFAULT_TEAM_NAME = "Kn%tt 2003";
+	public final static String DEFAULT_TEAM_NAME = "Kn%tt 2003";
 
 	/**
 	 * onCreate - called when the activity is first created.
@@ -55,6 +57,15 @@ public abstract class DashboardActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		// getActionBar().setHomeButtonEnabled(true);
+		// getActionBar().setDisplayShowHomeEnabled(true);
+		getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+		// getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		getActionBar().setDisplayShowTitleEnabled(true);
+		getActionBar().setDisplayUseLogoEnabled(true);
+		getActionBar().setSubtitle("SubTitle");
+		getActionBar().show();
 		// setContentView(R.layout.activity_default);
 	}
 
@@ -174,10 +185,14 @@ public abstract class DashboardActivity extends FragmentActivity {
 		int id = v.getId();
 		switch (id) {
 		case R.id.trainings_btn:
-			Toast.makeText(this, "Trainings view Not implements", Toast.LENGTH_SHORT).show();
+			Intent trainingsIntent = new Intent(getApplicationContext(), TrainingsActivity.class);
+			trainingsIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
+			startActivity(trainingsIntent);
 			break;
 		case R.id.matches_btn:
-			Intent matchesIntent = new Intent(getApplicationContext(), MatchesActivity.class);
+			Intent matchesIntent = new Intent(getApplicationContext(), MatchListActivity.class);
+			// Intent matchesIntent = new Intent(getApplicationContext(),
+			// MatchesActivity.class);
 			matchesIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
 			startActivity(matchesIntent);
 			break;
@@ -199,7 +214,8 @@ public abstract class DashboardActivity extends FragmentActivity {
 			Toast.makeText(this, "Contacts view Not implements", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.referee_btn:
-//			Toast.makeText(this, "Referee view Not implements", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(this, "Referee view Not implements",
+			// Toast.LENGTH_SHORT).show();
 			startActivity(new Intent(getApplicationContext(), SearchActivity.class));
 			break;
 		case R.id.settings_btn:

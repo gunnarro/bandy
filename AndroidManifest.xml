@@ -23,13 +23,18 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- 
         <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.MatchesActivity"
             android:label="Matches"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
+         -->
+         <activity
+            android:name="com.gunnarro.android.bandy.view.dashboard.TrainingsActivity"
+            android:label="Trainings"
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
         <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.SearchActivity"
@@ -51,13 +56,19 @@
         <activity
             android:name="com.gunnarro.android.bandy.view.NotificationActivity"
             android:label="Notification" />
+         <activity
+            android:name="com.gunnarro.android.bandy.view.dashboard.TeamActivitiesActivity"
+            android:label="Team Activities"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" >
+        </activity>
+        <!-- Player detail configuration -->
         <activity
             android:name="com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity"
             android:label="Players"
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" >
         </activity>
         <activity
-            android:name="com.gunnarro.android.bandy.view.masterdetailflow.PlayerDetailActivity"
+            android:name="com.gunnarro.android.bandy.view.playerdetailflow.PlayerDetailActivity"
             android:label="Player details"
             android:parentActivityName="com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -65,9 +76,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity" />
         </activity>
+        <!-- Match detail configuration -->
+        <activity
+            android:name="com.gunnarro.android.bandy.view.matchdetailflow.MatchListActivity"
+            android:label="Matches"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" >
+        </activity>
+        <activity
+            android:name="com.gunnarro.android.bandy.view.matchdetailflow.MatchDetailActivity"
+            android:label="Match details"
+            android:parentActivityName="com.gunnarro.android.bandy.view.matchdetailflow.MatchListActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gunnarro.android.bandy.view.matchdetailflow.MatchListActivity" />
+        </activity>
+        
 
         <service android:name="com.gunnarro.android.bandy.service.impl.DownloadService" />
-
         <!--
 		<receiver
             android:name="com.gunnarro.android.bandy.receiver.DBDataPopulator"

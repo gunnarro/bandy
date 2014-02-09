@@ -18,11 +18,17 @@ public class MatchesTable {
 	public static final String COLUMN_START_DATE = "start_date";
 	public static final String COLUMN_HOME_TEAM = "home_team";
 	public static final String COLUMN_AWAY_TEAM = "away_team";
+	public static final String COLUMN_NUMBER_OF_GOALS_HOME_TEAM = "number_of_goals_home_team";
+	public static final String COLUMN_NUMBER_OF_GOALS_AWAY_TEAM = "number_of_goals_away_team";
 	public static final String COLUMN_VENUE = "venue";
 	public static final String COLUMN_REFEREE = "referee";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_START_DATE, COLUMN_HOME_TEAM, COLUMN_AWAY_TEAM,
-			COLUMN_VENUE, COLUMN_REFEREE };
+	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_START_DATE, COLUMN_HOME_TEAM, COLUMN_AWAY_TEAM, COLUMN_VENUE, COLUMN_REFEREE };
+
+	// public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID,
+	// COLUMN_START_DATE, COLUMN_HOME_TEAM, COLUMN_AWAY_TEAM,
+	// COLUMN_NUMBER_OF_GOALS_HOME_TEAM, COLUMN_NUMBER_OF_GOALS_AWAY_TEAM,
+	// COLUMN_VENUE, COLUMN_REFEREE };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -35,11 +41,13 @@ public class MatchesTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_START_DATE).append(" INTEGER NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_HOME_TEAM).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_AWAY_TEAM).append(" TEXT NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_NUMBER_OF_GOALS_HOME_TEAM).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_NUMBER_OF_GOALS_AWAY_TEAM).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_VENUE).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_REFEREE).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_TEAM_ID).append(") REFERENCES ").append(TeamsTable.TABLE_NAME).append("(")
 				.append(TeamsTable.COLUMN_ID).append(")");
-		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_HOME_TEAM).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT REPLACE);");
+		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_HOME_TEAM).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT ABORT);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

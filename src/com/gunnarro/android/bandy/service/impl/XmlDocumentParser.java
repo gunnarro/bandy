@@ -175,13 +175,13 @@ public class XmlDocumentParser {
 	private void mapAndSavePlayerNodes(XPath xpath, Document doc, Team team, NodeList nodeList, BandyService bandyService) throws XPathExpressionException,
 			DOMException {
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			Address address = mapAddress(nodeList.item(i).getFirstChild());
+			Address address = mapAddress(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
 			List<Contact> parentList = getParentList(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
 			String status = getAttributeValue(nodeList.item(i), "status");
 			Player player = new Player(-1, team, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(i), ATTR_MIDDLE_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), PlayerStatusEnum.valueOf(status.toUpperCase()), parentList, Utility.timeToDate(
-							getAttributeValue(nodeList.item(i), ATTR_BIRTH_DATE), "dd.MM.yyyy").getTime(), address);
+							getAttributeValue(nodeList.item(i), ATTR_BIRTH_DATE), Utility.DATE_PATTERN).getTime(), address);
 			CustomLog.e(this.getClass(), player.toString());
 			bandyService.createPlayer(player);
 		}
@@ -226,8 +226,10 @@ public class XmlDocumentParser {
 			// Get the contact node roles child node
 			List<ContactRoleEnum> roleList = getRoleList(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
-
-			Address address = mapAddress(nodeList.item(i).getFirstChild());
+			Address address = Address.createEmptyAddress();
+			if (nodeList.item(i).hasChildNodes()) {
+				address = mapAddress(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
+			}
 			Contact contact = new Contact(new Team(team.getId(), team.getName()), roleList, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_MIDDLE_NAME), getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), getAttributeValue(
 							nodeList.item(i), "mobile"), getAttributeValue(nodeList.item(i), "email"), address);
@@ -236,12 +238,17 @@ public class XmlDocumentParser {
 		}
 	}
 
-	private Address mapAddress(Node addressNode) throws XPathExpressionException, DOMException {
-		Address address = new Address(getAttributeValue(addressNode, "streetName"), getAttributeValue(addressNode, "streetNumber"), getAttributeValue(
-				addressNode, "streetNumberPrefix"), getAttributeValue(addressNode, "zipCode"), getAttributeValue(addressNode, "city"), getAttributeValue(
-				addressNode, "country"));
-		CustomLog.d(this.getClass(), address.toString());
-		return address;
+	private Address mapAddress(XPath xpath, Document doc, String firstName, String lastName) throws XPathExpressionException, DOMException {
+		String xpathExprAddress = "/team/players/player[@" + ATTR_FIRST_NAME + "='" + firstName + "' and @" + ATTR_LAST_NAME + "='" + lastName + "']/address";
+		Node addressNode = (Node) xpath.evaluate(xpathExprAddress, doc, XPathConstants.NODE);
+		if (addressNode != null) {
+			Address address = new Address(getAttributeValue(addressNode, "streetName"), getAttributeValue(addressNode, "streetNumber"), getAttributeValue(
+					addressNode, "streetNumberPrefix"), getAttributeValue(addressNode, "zipCode"), getAttributeValue(addressNode, "city"), getAttributeValue(
+					addressNode, "country"));
+			CustomLog.d(this.getClass(), "mappedXmlAddress=" + address.toString());
+			return address;
+		}
+		return Address.createEmptyAddress();
 	}
 
 	private List<ContactRoleEnum> getRoleList(XPath xpath, Document doc, String firstName, String lastName) throws XPathExpressionException {
@@ -284,12 +291,13 @@ public class XmlDocumentParser {
 	private String getAttributeValue(Node node, String name) {
 		String value = null;
 		if (node == null) {
-			throw new RuntimeException("Error node is null!");
+			throw new RuntimeException("Error node is null! name=" + name);
 		}
 		if (node.hasAttributes() && node.getAttributes().getNamedItem(name) != null) {
 			value = node.getAttributes().getNamedItem(name).getNodeValue();
 		} else {
-			CustomLog.e(this.getClass(), "node=" + node.getNodeName() + ", attribute=" + name + ", is missing!");
+			CustomLog.e(this.getClass(), "node=" + node.getNodeName() + "," + node.getNodeValue() + ", " + node.getTextContent() + ", attribute=" + name
+					+ ", is missing!");
 		}
 		return value;
 	}

@@ -49,7 +49,7 @@ public class SetupActivity extends DashboardActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setup_layout);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setTitle(R.string.settings);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
 		setupEventHandlers();
 	}
@@ -81,8 +81,8 @@ public class SetupActivity extends DashboardActivity {
 				intent.putExtra(DownloadService.URL, DataLoader.TEAM_XML_URL);
 				startService(intent);
 
-				//UpdateDataTask task = new UpdateDataTask();
-				//task.execute(new String[] { DataLoader.TEAM_XML_URL });
+				// UpdateDataTask task = new UpdateDataTask();
+				// task.execute(new String[] { DataLoader.TEAM_XML_URL });
 			}
 		});
 

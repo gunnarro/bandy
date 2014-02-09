@@ -31,7 +31,7 @@ public class TrainingsTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_START_DATE).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_END_TIME).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_PLACE).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FK_TEAM_ID).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT REPLACE);");
+		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FK_TEAM_ID).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT ABORT);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tableLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:shrinkColumns="*"
+    android:stretchColumns="*" >
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <CheckBox
+            android:id="@+id/rowDetailsChkBoxId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text=""
+            android:textColor="@android:color/holo_green_light" 
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <TextView
+            android:id="@+id/rowDetailsHeaderTxtId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:gravity="left"
+            android:text="Header"
+            android:textColor="@android:color/holo_green_light"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
+        </TextView>
+    </TableRow>
+    
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/rowDetailsInfoTxt11Id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="" 
+            android:textColor="@android:color/holo_blue_light"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+            </TextView>
+
+        <TextView
+            android:id="@+id/rowDetailsInfoTxt12Id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:gravity="left"
+            android:text="info line 12"
+            android:textColor="@android:color/holo_blue_light"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+    </TableRow>
+    
+     <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/rowDetailsInfoTxt21Id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="" 
+            android:textColor="@android:color/holo_blue_light"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+            </TextView>
+
+        <TextView
+            android:id="@+id/rowDetailsInfoTxt22Id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:gravity="left"
+            android:text="info line 22"
+            android:textColor="@android:color/holo_blue_light"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+    </TableRow>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
+
+</TableLayout>
