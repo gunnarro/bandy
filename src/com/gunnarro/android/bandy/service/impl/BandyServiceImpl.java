@@ -119,7 +119,11 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public int createTraining(Training training) {
-		return this.bandyRepository.createTraining(training);
+		Training existingTraning = this.bandyRepository.getTrainingByDate(training.getTeam().getId(), training.getStartDate());
+		if (existingTraning == null) {
+			return this.bandyRepository.createTraining(training);
+		}
+		return 0;
 	}
 
 	/**
@@ -395,7 +399,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public boolean unRegistrerTraining(Integer playerId, Integer trainingId) {
-		this.bandyRepository.createPlayerLink(PlayerLinkTableTypeEnum.TRAINING, playerId, trainingId);
+		this.bandyRepository.deletePlayerLink(PlayerLinkTableTypeEnum.TRAINING, playerId, trainingId);
 		return true;
 	}
 

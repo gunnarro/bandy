@@ -155,6 +155,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 				training.getVenue());
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(TrainingsTable.TABLE_NAME, null, values);
+		CustomLog.d(this.getClass(), training.toString());
 		return Long.valueOf(id).intValue();
 	}
 
@@ -631,7 +632,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		StringBuffer selection = new StringBuffer();
 		selection.append(TrainingsTable.COLUMN_FK_TEAM_ID + " = ?");
 		selection.append(" AND ").append(getPeriodeSelectionClause(Calendar.DAY_OF_YEAR, startTime));
-		String[] selectionArgs = { Integer.toString(teamId), Long.toString(startTime) };
+		String[] selectionArgs = { Integer.toString(teamId) };
 		this.database = dbHelper.getReadableDatabase();
 		Cursor cursor = database.query(TrainingsTable.TABLE_NAME, TrainingsTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
 		if (cursor != null && cursor.getCount() > 0) {

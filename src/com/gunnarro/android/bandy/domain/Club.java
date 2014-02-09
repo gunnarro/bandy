@@ -35,15 +35,9 @@ public class Club {
 		return homepage;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(this.getClass().getSimpleName());
-		sb.append(" [id=").append(id);
-		sb.append(", name=").append(name).append("]");
-		return sb.toString();
+		return "Club [id=" + id + ", name=" + name + ", stadium=" + stadium + ", address=" + address + ", homepage=" + homepage + "]";
 	}
+
 }

@@ -52,7 +52,7 @@ public class LinkTableHelper {
 		databaseCreateQuery.append(",").append(COLUMN_CREATED_TIME).append(" INTEGER NOT NULL");
 		databaseCreateQuery.append(",").append(fkColumnNameId1).append(" INTEGER NOT NULL");
 		databaseCreateQuery.append(",").append(fkColumnNameId2).append(" INTEGER NOT NULL");
-		databaseCreateQuery.append(",").append("UNIQUE (").append(fkColumnNameId1).append(",").append(fkColumnNameId2).append(") ON CONFLICT REPLACE");
+		databaseCreateQuery.append(",").append("UNIQUE (").append(fkColumnNameId1).append(",").append(fkColumnNameId2).append(") ON CONFLICT ABORT");
 		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId1).append(") REFERENCES ").append(fkTableName1).append("(").append(COLUMN_ID)
 				.append(")");
 		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId2).append(") REFERENCES ").append(fkTableName2).append("(").append(COLUMN_ID)

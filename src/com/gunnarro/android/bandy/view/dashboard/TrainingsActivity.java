@@ -17,6 +17,7 @@
 package com.gunnarro.android.bandy.view.dashboard;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +25,12 @@ import java.util.Set;
 
 import android.os.Bundle;
 import android.util.SparseArray;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.domain.Team;
@@ -35,7 +41,7 @@ import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
-import com.gunnarro.android.bandy.view.expandablelist.MatchExpandableListAdapter;
+import com.gunnarro.android.bandy.view.expandablelist.TrainingExpandableListAdapter;
 
 /**
  * 
@@ -46,6 +52,8 @@ public class TrainingsActivity extends DashboardActivity {
 	// More efficient than HashMap for mapping integers to objects
 	SparseArray<Group> groups = new SparseArray<Group>();
 	private BandyService bandyService;
+	private String teamName;
+	private TrainingExpandableListAdapter adapter;
 
 	/**
 	 * {@inheritDoc}
@@ -54,13 +62,65 @@ public class TrainingsActivity extends DashboardActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.training_list_layout);
-		String teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+		teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 		this.setTitle(ActivityTypesEnum.Training.name() + " " + teamName);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
 		populateList(teamName);
 		ExpandableListView listView = (ExpandableListView) findViewById(R.id.training_expandable_listView);
-		MatchExpandableListAdapter adapter = new MatchExpandableListAdapter(this, groups, bandyService, MIN_NUMBER_OF_SIGNED_PLAYERS);
+		adapter = new TrainingExpandableListAdapter(this, groups, bandyService, MIN_NUMBER_OF_SIGNED_PLAYERS);
 		listView.setAdapter(adapter);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.actionbar_menu, menu);
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_create_training:
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.set(Calendar.MILLISECOND, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			int hours = 2;
+			Team team = bandyService.getTeam(teamName, false);
+			Training training = new Training(calendar.getTimeInMillis(), hours, team, "Bergbanen");
+			int createTraining = bandyService.createTraining(training);
+			// adapter.notifyDataSetChanged();
+			if (createTraining != 0) {
+				Toast.makeText(this, "Created new training:\n" + training.toString() + "\nid=" + createTraining, Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(this, "Training already exist:\n" + training.toString() + "\nid=" + createTraining, Toast.LENGTH_LONG).show();
+			}
+			break;
+		default:
+			break;
+		}
+		return true;
+	}
+
+	/**
+	 * 
+	 * @param v
+	 */
+	public void onClickCreate(View v) {
+		int id = v.getId();
+		switch (id) {
+		case R.id.create_training_btn:
+			Toast.makeText(this, "Create training view Not implements", Toast.LENGTH_SHORT).show();
+			break;
+		}
 	}
 
 	private void populateList(String teamName) {
@@ -77,7 +137,8 @@ public class TrainingsActivity extends DashboardActivity {
 			itemSet.addAll(playerList);
 			ArrayList<Item> players = new ArrayList<Item>(itemSet);
 			Collections.sort(players);
-			String header = Utility.formatTime(training.getStartDate(), Utility.DATE_DEFAULT_PATTERN);
+			String header = Utility.formatTime(training.getStartDate(), Utility.DATE_TIME_PATTERN) + " - "
+					+ Utility.formatTime(training.getEndTime(), Utility.TIME_PATTERN);
 			Group group = new Group(training.getId(), header, training.isFinished(), players);
 			group.setSubHeader1(training.getName());
 			group.setSubHeader2(training.getVenue());

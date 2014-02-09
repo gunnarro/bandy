@@ -24,9 +24,18 @@ public class TrainingExpandableListAdapter extends CommonExpandableListAdapter {
 
 	@Override
 	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, final ViewGroup parentView) {
-		super.getChildView(groupPosition, childPosition, isLastChild, convertView, parentView);
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.list_row_details, null);
+		}
 		final Group group = groups.get(groupPosition);
+		if (group.isEnabled()) {
+			CustomLog.d(this.getClass(), "Group not active: " + group.toString());
+			// return convertView;
+		}
 		final Item childItem = (Item) getChild(groupPosition, childPosition);
+		if (childItem == null) {
+			throw new ApplicationException("Error getting children: groupPosition=" + groupPosition + ", childPosition=" + childPosition);
+		}
 		((TextView) convertView.findViewById(R.id.rowDetailsTxtId)).setText(childItem.getValue());
 		CheckBox chkBox = (CheckBox) convertView.findViewById(R.id.rowDetailsChkBoxId);
 		chkBox.setChecked(childItem.isEnabled());
@@ -40,7 +49,7 @@ public class TrainingExpandableListAdapter extends CommonExpandableListAdapter {
 						boolean registreredPlayer = bandyService.registrerOnTraining(childItem.getId(), group.getId());
 						// updateGroupInfo(groupPosition, registreredPlayer);
 					} else {
-						boolean registreredPlayer = bandyService.registrerOnTraining(childItem.getId(), group.getId());
+						boolean registreredPlayer = bandyService.unRegistrerTraining(childItem.getId(), group.getId());
 						// updateGroupInfo(groupPosition, registreredPlayer);
 					}
 					// notifyDataSetChanged();

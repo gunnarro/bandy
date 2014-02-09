@@ -3,13 +3,22 @@ package com.gunnarro.android.bandy.domain.activity;
 import java.util.Date;
 
 import com.gunnarro.android.bandy.domain.Team;
+import com.gunnarro.android.bandy.utility.Utility;
 
 public class Training extends Activity {
+
 	private Integer id;
 	private long startDate;
 	private long endTime;
 	private Team team;
 	private String venue;
+
+	public Training(long startTime, long length, Team team) {
+		this.startDate = startTime;
+		this.endTime = this.startDate + length * 60 * 60 * 1000;
+		this.team = team;
+		this.venue = team.getClub().getStadium();
+	}
 
 	public Training(long startDate, long endTime, Team team, String venue) {
 		this.startDate = startDate;
@@ -72,8 +81,8 @@ public class Training extends Activity {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getClass().getSimpleName());
 		sb.append(" [id=").append(id);
-		sb.append(", startDate=").append(new Date(startDate).toString());
-		sb.append(", endTime=").append(new Date(endTime).toString());
+		sb.append(", startDate=").append(Utility.formatTime(startDate, Utility.DATE_PATTERN));
+		sb.append(", endTime=").append(Utility.formatTime(endTime, Utility.TIME_PATTERN));
 		sb.append(", team=").append(getTeam().getName());
 		sb.append(", venue=").append(venue).append("]");
 		return sb.toString();

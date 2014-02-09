@@ -14,6 +14,7 @@ public class ClubsTable {
 	public static final String TABLE_NAME = "clubs";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_CLUB_NAME = "club_name";
+	public static final String COLUMN_STADIUM = "club_stadium";
 
 	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_CLUB_NAME };
 

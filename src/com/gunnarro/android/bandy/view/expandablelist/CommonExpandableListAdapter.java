@@ -45,18 +45,6 @@ public class CommonExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, final ViewGroup parentView) {
-		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_row_details, null);
-		}
-		final Group group = groups.get(groupPosition);
-		if (group.isEnabled()) {
-			CustomLog.d(this.getClass(), "Group not active: " + group.toString());
-			// return convertView;
-		}
-		final Item childItem = (Item) getChild(groupPosition, childPosition);
-		if (childItem == null) {
-			throw new ApplicationException("Error getting children: groupPosition=" + groupPosition + ", childPosition=" + childPosition);
-		}
 		return convertView;
 	}
 
