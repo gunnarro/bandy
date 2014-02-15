@@ -188,20 +188,40 @@
     </players>
 	
     <matches>
-        <match date="26.11.2013" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Røa 03 2" venue="Bergbanen" referee="dommer ukjent" />
-        <match date="10.12.2013" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Ready 01 4" venue="Bergbanen" referee="dommer ukjent" />
-        <match date="17.12.2013" startTime="17:00" homeTeam="Ready 01 3 Jenter" awayTeam="Ullevål 1" venue="Gressbanen" referee="dommer ukjent" />
-        <match date="07.01.2014" startTime="18:00" homeTeam="Ullevål 1" awayTeam="Sarpsborg" venue="Bergbanen" referee="dommer ukjent" />
-        <match date="14.01.2014" startTime="18:00" homeTeam="Ullern" awayTeam="Ullevål 1" venue="Ullernbanen" referee="dommer ukjent" />
-        <match date="21.01.2014" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Røa 03 1" venue="Bergbanen" referee="dommer ukjent" />
-        <match date="04.02.2014" startTime="17:00" homeTeam="Ready 01 2" awayTeam="Ullevål 1" venue="Gressbanen" referee="dommer ukjent" />
-        <match date="11.02.2014" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Ready 01" venue="Bergbanen" referee="dommer ukjent" />
-        <match date="25.02.2014" startTime="18:00" homeTeam="Sagene 03" awayTeam="Ullevål 1" venue="Voldsløkka" referee="dommer ukjent" />
+        <match typeId="1" date="26.11.2013" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Røa 03 2" goalsHomeTeam="4" goalsAwayTeam="4" venue="Bergbanen" referee="dommer ukjent" />
+        <match typeId="1" date="10.12.2013" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Ready 01 4" goalsHomeTeam="5" goalsAwayTeam="2" venue="Bergbanen" referee="dommer ukjent" />
+        <match typeId="1" date="17.12.2013" startTime="17:00" homeTeam="Ready 01 3 Jenter" awayTeam="Ullevål 1" goalsHomeTeam="5" goalsAwayTeam="3" venue="Gressbanen" referee="dommer ukjent" />
+        <match typeId="1" date="07.01.2014" startTime="18:00" homeTeam="Ullevål 1" awayTeam="Sarpsborg" goalsHomeTeam="5" goalsAwayTeam="9" venue="Bergbanen" referee="dommer ukjent" />
+        <match typeId="1" date="14.01.2014" startTime="18:00" homeTeam="Ullern" awayTeam="Ullevål 1" goalsHomeTeam="0" goalsAwayTeam="9" venue="Ullernbanen" referee="dommer ukjent" />
+        <match typeId="1" date="21.01.2014" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Røa 03 1" goalsHomeTeam="7" goalsAwayTeam="7" venue="Bergbanen" referee="dommer ukjent" />
+        <match typeId="1" date="04.02.2014" startTime="17:00" homeTeam="Ready 01 2" awayTeam="Ullevål 1" goalsHomeTeam="10" goalsAwayTeam="1" venue="Gressbanen" referee="dommer ukjent" />
+        <match typeId="1" date="11.02.2014" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Ready 01" goalsHomeTeam="5" goalsAwayTeam="3" venue="Bergbanen" referee="dommer ukjent" />
+        <match typeId="1" date="25.02.2014" startTime="18:00" homeTeam="Sagene 03" awayTeam="Ullevål 1" goalsHomeTeam="-1" goalsAwayTeam="-1" venue="Voldsløkka" referee="dommer ukjent" />
+        <match typeId="2" date="12.02.2014" startTime="17:00" homeTeam="Ullevål" awayTeam="Ullevål 2004" goalsHomeTeam="12" goalsAwayTeam="2" venue="Bergbanen" referee="dommer ukjent" />
     </matches>
-    
+   
     <cups>
-        <cup date="08.11.2013" startTime="09:00" deadlineDate="20.10.2013" signed="true" clubName="Frigg" cupName="Frigg Cup" venue="Frogner Stadion" />
-        <cup date="02.02.2014" startTime="09:00" deadlineDate="07.01.2014" signed="true" clubName="Snarøya" cupName="Snarøya Cup" venue="Snarøya" />
+        <cup date="10.11.2013" startTime="09:00" deadlineDate="10.11.2013" signed="true" clubName="Stabekk" cupName="Kosa Cup" venue="Hauger kunstis" >
+            <matches>
+                <match typeId="3" date="10.11.2013" startTime="09:00" homeTeam="Konnerud" awayTeam="Ullevål" goalsHomeTeam="5" goalsAwayTeam="2" venue="" referee="dommer ukjent" />
+        		<match typeId="3" date="10.11.2013" startTime="10:00" homeTeam="Ullevål" awayTeam="Snarøya 2" goalsHomeTeam="6" goalsAwayTeam="3" venue="" referee="dommer ukjent" />
+        		<match typeId="3" date="10.11.2013" startTime="11:00" homeTeam="Stabekk 1" awayTeam="Ullevål" goalsHomeTeam="4" goalsAwayTeam="3" venue="" referee="dommer ukjent" />
+            </matches>
+        </cup>
+        <cup date="08.12.2013" startTime="09:00" deadlineDate="08.12.2013" signed="true" clubName="Frigg" cupName="Frigg Cup" venue="Frogner Stadion" >
+            <matches>
+                <match typeId="3" date="08.12.2013" startTime="09:00" homeTeam="Ullevål" awayTeam="Ready Tigers" goalsHomeTeam="3" goalsAwayTeam="5" venue="" referee="dommer ukjent" />
+        		<match typeId="3" date="08.12.2013" startTime="10:00" homeTeam="Stabekk 2" awayTeam="Ullevål" goalsHomeTeam="6" goalsAwayTeam="3" venue="" referee="dommer ukjent" />
+        		<match typeId="3" date="08.12.2013" startTime="11:00" homeTeam="Øv/Holse løvene" awayTeam="Ullevål" goalsHomeTeam="4" goalsAwayTeam="4" venue="" referee="dommer ukjent" />
+            </matches>
+        </cup>
+        <cup date="02.02.2014" startTime="09:00" deadlineDate="11.01.2014" signed="true" clubName="Snarøya" cupName="Snarøya Cup" venue="Snarøya" >
+            <matches>
+                <match typeId="3" date="02.02.2014" startTime="09:00" homeTeam="Ready Champions" awayTeam="Ullevål" goalsHomeTeam="4" goalsAwayTeam="0"  venue="" referee="dommer ukjent" />
+        		<match typeId="3" date="02.02.2014" startTime="10:00" homeTeam="Ullevål" awayTeam="Stabekk 2" goalsHomeTeam="0" goalsAwayTeam="2"  venue="" referee="dommer ukjent" />
+        		<match typeId="3" date="02.02.2014" startTime="11:00" homeTeam="Snarøya 2" awayTeam="Ullevål" goalsHomeTeam="2" goalsAwayTeam="5" venue="" referee="dommer ukjent" />
+            </matches>
+        </cup>
     </cups>
     
     <trainings>
