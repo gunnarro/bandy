@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class CustomLog {
 
-	private static final boolean IS_TRACE_ON = true;
+	private static final boolean IS_TRACE_ON = false;
 
 	public static void i(Class<?> clazz, String msg) {
 		if (IS_TRACE_ON) {

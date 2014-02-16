@@ -22,13 +22,10 @@ public class MatchesTable {
 	public static final String COLUMN_NUMBER_OF_GOALS_AWAY_TEAM = "number_of_goals_away_team";
 	public static final String COLUMN_VENUE = "venue";
 	public static final String COLUMN_REFEREE = "referee";
+	public static final String COLUMN_MATCH_TYPE_ID = "match_type_id";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_START_DATE, COLUMN_HOME_TEAM, COLUMN_AWAY_TEAM, COLUMN_VENUE, COLUMN_REFEREE };
-
-	// public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID,
-	// COLUMN_START_DATE, COLUMN_HOME_TEAM, COLUMN_AWAY_TEAM,
-	// COLUMN_NUMBER_OF_GOALS_HOME_TEAM, COLUMN_NUMBER_OF_GOALS_AWAY_TEAM,
-	// COLUMN_VENUE, COLUMN_REFEREE };
+	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_START_DATE, COLUMN_HOME_TEAM, COLUMN_AWAY_TEAM, COLUMN_NUMBER_OF_GOALS_HOME_TEAM,
+			COLUMN_NUMBER_OF_GOALS_AWAY_TEAM, COLUMN_VENUE, COLUMN_REFEREE, COLUMN_MATCH_TYPE_ID };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -42,9 +39,10 @@ public class MatchesTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_HOME_TEAM).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_AWAY_TEAM).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_NUMBER_OF_GOALS_HOME_TEAM).append(" INTEGER");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_NUMBER_OF_GOALS_AWAY_TEAM).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_NUMBER_OF_GOALS_AWAY_TEAM).append(" INETGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_VENUE).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_REFEREE).append(" TEXT");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MATCH_TYPE_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_TEAM_ID).append(") REFERENCES ").append(TeamsTable.TABLE_NAME).append("(")
 				.append(TeamsTable.COLUMN_ID).append(")");
 		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_HOME_TEAM).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT ABORT);");
@@ -72,14 +70,18 @@ public class MatchesTable {
 		}
 	}
 
-	public static ContentValues createContentValues(int fkTeamId, long startDate, String homeTeam, String awayTeam, String venue, String referee) {
+	public static ContentValues createContentValues(int fkTeamId, long startDate, String homeTeam, String awayTeam, int goalsHomeTeam, int goalsAwayTeam,
+			String venue, String referee, int matchTypeId) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_FK_TEAM_ID, fkTeamId);
 		values.put(COLUMN_START_DATE, (int) (startDate / 1000));
 		values.put(COLUMN_HOME_TEAM, homeTeam);
 		values.put(COLUMN_AWAY_TEAM, awayTeam);
+		values.put(COLUMN_NUMBER_OF_GOALS_HOME_TEAM, goalsHomeTeam);
+		values.put(COLUMN_NUMBER_OF_GOALS_AWAY_TEAM, goalsAwayTeam);
 		values.put(COLUMN_VENUE, venue);
 		values.put(COLUMN_REFEREE, referee);
+		values.put(COLUMN_MATCH_TYPE_ID, matchTypeId);
 		return values;
 	}
 

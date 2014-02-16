@@ -4,17 +4,17 @@ import java.util.List;
 
 import android.database.SQLException;
 
-import com.gunnarro.android.bandy.domain.Address;
 import com.gunnarro.android.bandy.domain.Club;
-import com.gunnarro.android.bandy.domain.Contact;
-import com.gunnarro.android.bandy.domain.Player;
-import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Statistic;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.activity.Training;
+import com.gunnarro.android.bandy.domain.party.Address;
+import com.gunnarro.android.bandy.domain.party.Contact;
+import com.gunnarro.android.bandy.domain.party.Player;
+import com.gunnarro.android.bandy.domain.party.Role;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl.PlayerLinkTableTypeEnum;
 
@@ -39,19 +39,21 @@ public interface BandyRepository {
 
 	public void deleteAllTableData();
 
-	public boolean createClub(Club club);
+	public int createClub(Club club);
 
-	public boolean createTeam(Team team);
+	public int createTeam(Team team);
 
-	public boolean createMatch(Match match);
+	public int createMatch(Match match);
 
-	public boolean createCup(Cup cup);
+	public int createCupMatchLnk(int cupId, int matchId);
+
+	public int createCup(Cup cup);
 
 	public int createTraining(Training training);
 
-	public void createPlayer(Player player);
+	public int createPlayer(Player player);
 
-	public boolean createContact(Contact contact);
+	public int createContact(Contact contact);
 
 	public long createAddress(Address address);
 

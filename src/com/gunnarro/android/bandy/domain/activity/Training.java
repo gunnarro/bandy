@@ -1,7 +1,5 @@
 package com.gunnarro.android.bandy.domain.activity;
 
-import java.util.Date;
-
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.utility.Utility;
 

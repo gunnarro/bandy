@@ -2,7 +2,7 @@ package com.gunnarro.android.bandy.domain.activity;
 
 import java.util.Date;
 
-public class Cup {
+public class Cup extends Activity {
 	private Integer id;
 	private long startDate;
 	private String cupName;
@@ -61,5 +61,15 @@ public class Cup {
 		sb.append(", clubName=").append(clubName);
 		sb.append(", venue=").append(venue).append("]");
 		return sb.toString();
+	}
+
+	@Override
+	public String getName() {
+		return getType();
+	}
+
+	@Override
+	public String getType() {
+		return ActivityTypesEnum.Cup.name();
 	}
 }

@@ -1,6 +1,8 @@
-package com.gunnarro.android.bandy.domain;
+package com.gunnarro.android.bandy.domain.party;
 
 import java.util.List;
+
+import com.gunnarro.android.bandy.domain.Team;
 
 public class Contact {
 

@@ -4,19 +4,14 @@ import android.app.Activity;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
-import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.view.list.Group;
-import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
-import com.gunnarro.android.bandy.service.exception.ApplicationException;
 
 public class CommonExpandableListAdapter extends BaseExpandableListAdapter {
 	public LayoutInflater inflater;
@@ -85,27 +80,10 @@ public class CommonExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_row_group_extended, null);
-		}
-		Group group = (Group) getGroup(groupPosition);
-		setGroupInfo(group, convertView);
-		// ((CheckedTextView) convertView).setText(group.getHeader());
-		// ((CheckedTextView) convertView).setChecked(isExpanded);
-		// ((CheckedTextView) convertView).setActivated(group.isEnabled());
-		// ((CheckedTextView) convertView).setEnabled(group.isEnabled());
-		// if (group.isEnabled()) {
-		// if (group.getNumberOfSelectedChildren() <
-		// minNumberOfSelectedChildren) {
-		// ((CheckedTextView) convertView).setTextColor(Color.RED);
-		// } else {
-		// ((CheckedTextView) convertView).setTextColor(Color.WHITE);
-		// }
-		// }
 		return convertView;
 	}
 
-	private void setGroupInfo(Group group, View convertView) {
+	protected void setGroupInfo(Group group, View convertView) {
 		((CheckedTextView) convertView.findViewById(R.id.rowGroupId)).setText(group.getHeader());
 		((TextView) convertView.findViewById(R.id.groupSubHeader1TxtId)).setText(group.getSubHeader1());
 		((TextView) convertView.findViewById(R.id.groupSubHeader2TxtId)).setText(group.getSubHeader2());

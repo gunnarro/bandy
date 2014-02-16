@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
@@ -58,12 +57,6 @@ public class TrainingExpandableListAdapter extends CommonExpandableListAdapter {
 				}
 			}
 		});
-		convertView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				CustomLog.d(this.getClass(), "view selected=" + childItem.toString());
-			}
-		});
 		return convertView;
 	}
 
@@ -77,9 +70,4 @@ public class TrainingExpandableListAdapter extends CommonExpandableListAdapter {
 		return convertView;
 	}
 
-	private void setGroupInfo(Group group, View convertView) {
-		((CheckedTextView) convertView.findViewById(R.id.rowGroupId)).setText(group.getHeader());
-		((TextView) convertView.findViewById(R.id.groupSubHeader1TxtId)).setText(group.getSubHeader1());
-		((TextView) convertView.findViewById(R.id.groupSubHeader2TxtId)).setText(group.getSubHeader2());
-	}
 }

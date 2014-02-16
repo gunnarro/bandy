@@ -1,4 +1,4 @@
-package com.gunnarro.android.bandy.mail;
+package com.gunnarro.android.mail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

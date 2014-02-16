@@ -1,4 +1,4 @@
-package com.gunnarro.android.bandy.domain;
+package com.gunnarro.android.bandy.domain.party;
 
 import com.gunnarro.android.bandy.utility.Utility;
 

@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gunnarro.android.bandy.domain.party.Coach;
+import com.gunnarro.android.bandy.domain.party.Contact;
+import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 
 public class Team implements Serializable {

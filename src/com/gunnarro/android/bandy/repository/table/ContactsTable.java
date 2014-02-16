@@ -20,6 +20,7 @@ public class ContactsTable {
 	public static final String COLUMN_LAST_NAME = "last_name";
 	public static final String COLUMN_MOBILE = "mobile";
 	public static final String COLUMN_EMAIL = "email";
+	public static final String COLUMN_CONTACT_TYPE = "contact_type";
 
 	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_ADDRESS_ID, COLUMN_FK_TEAM_ID, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_MOBILE, COLUMN_EMAIL };
 

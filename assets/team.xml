@@ -202,21 +202,21 @@
    
     <cups>
         <cup date="10.11.2013" startTime="09:00" deadlineDate="10.11.2013" signed="true" clubName="Stabekk" cupName="Kosa Cup" venue="Hauger kunstis" >
-            <matches>
+            <matches clubName="" teamName="">
                 <match typeId="3" date="10.11.2013" startTime="09:00" homeTeam="Konnerud" awayTeam="Ullevål" goalsHomeTeam="5" goalsAwayTeam="2" venue="" referee="dommer ukjent" />
         		<match typeId="3" date="10.11.2013" startTime="10:00" homeTeam="Ullevål" awayTeam="Snarøya 2" goalsHomeTeam="6" goalsAwayTeam="3" venue="" referee="dommer ukjent" />
         		<match typeId="3" date="10.11.2013" startTime="11:00" homeTeam="Stabekk 1" awayTeam="Ullevål" goalsHomeTeam="4" goalsAwayTeam="3" venue="" referee="dommer ukjent" />
             </matches>
         </cup>
         <cup date="08.12.2013" startTime="09:00" deadlineDate="08.12.2013" signed="true" clubName="Frigg" cupName="Frigg Cup" venue="Frogner Stadion" >
-            <matches>
+            <matches clubName="" teamName="">
                 <match typeId="3" date="08.12.2013" startTime="09:00" homeTeam="Ullevål" awayTeam="Ready Tigers" goalsHomeTeam="3" goalsAwayTeam="5" venue="" referee="dommer ukjent" />
         		<match typeId="3" date="08.12.2013" startTime="10:00" homeTeam="Stabekk 2" awayTeam="Ullevål" goalsHomeTeam="6" goalsAwayTeam="3" venue="" referee="dommer ukjent" />
         		<match typeId="3" date="08.12.2013" startTime="11:00" homeTeam="Øv/Holse løvene" awayTeam="Ullevål" goalsHomeTeam="4" goalsAwayTeam="4" venue="" referee="dommer ukjent" />
             </matches>
         </cup>
         <cup date="02.02.2014" startTime="09:00" deadlineDate="11.01.2014" signed="true" clubName="Snarøya" cupName="Snarøya Cup" venue="Snarøya" >
-            <matches>
+            <matches clubName="" teamName="">
                 <match typeId="3" date="02.02.2014" startTime="09:00" homeTeam="Ready Champions" awayTeam="Ullevål" goalsHomeTeam="4" goalsAwayTeam="0"  venue="" referee="dommer ukjent" />
         		<match typeId="3" date="02.02.2014" startTime="10:00" homeTeam="Ullevål" awayTeam="Stabekk 2" goalsHomeTeam="0" goalsAwayTeam="2"  venue="" referee="dommer ukjent" />
         		<match typeId="3" date="02.02.2014" startTime="11:00" homeTeam="Snarøya 2" awayTeam="Ullevål" goalsHomeTeam="2" goalsAwayTeam="5" venue="" referee="dommer ukjent" />

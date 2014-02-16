@@ -1,4 +1,5 @@
-package com.gunnarro.android.bandy.domain;
+package com.gunnarro.android.bandy.domain.party;
+
 
 public class Coach extends Contact {
 

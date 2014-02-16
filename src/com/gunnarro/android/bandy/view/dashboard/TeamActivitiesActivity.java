@@ -26,13 +26,13 @@ import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Activity;
 import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
-import com.gunnarro.android.bandy.domain.Contact;
-import com.gunnarro.android.bandy.domain.Role;
+import com.gunnarro.android.bandy.domain.party.Contact;
+import com.gunnarro.android.bandy.domain.party.Role;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.mail.MailSender;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
+import com.gunnarro.android.mail.MailSender;
 
 public class TeamActivitiesActivity extends DashboardActivity {
 

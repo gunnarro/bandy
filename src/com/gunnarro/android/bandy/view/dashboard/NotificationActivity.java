@@ -12,9 +12,9 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
-import com.gunnarro.android.bandy.mail.MailSender;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.mail.MailSender;
 
 public class NotificationActivity extends Activity {
 

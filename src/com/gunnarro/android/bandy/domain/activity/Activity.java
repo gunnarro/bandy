@@ -2,10 +2,10 @@ package com.gunnarro.android.bandy.domain.activity;
 
 public abstract class Activity {
 
-	private ActivityStatusEnum status;
+	private ActivityStatusEnum status = ActivityStatusEnum.BEGIN;
 
 	public static enum ActivityStatusEnum {
-		COMPLETED, CANCELLED;
+		COMPLETED, CANCELLED, BEGIN;
 	}
 
 	public static enum ActivityTypesEnum {

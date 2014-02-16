@@ -1,8 +1,9 @@
-package com.gunnarro.android.bandy.domain;
+package com.gunnarro.android.bandy.domain.party;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 
 public class Player extends Contact {

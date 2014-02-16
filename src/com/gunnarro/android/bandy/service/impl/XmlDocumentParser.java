@@ -29,17 +29,17 @@ import org.w3c.dom.NodeList;
 import android.net.http.AndroidHttpClient;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
-import com.gunnarro.android.bandy.domain.Address;
 import com.gunnarro.android.bandy.domain.Club;
-import com.gunnarro.android.bandy.domain.Contact;
-import com.gunnarro.android.bandy.domain.Contact.ContactRoleEnum;
-import com.gunnarro.android.bandy.domain.Player;
-import com.gunnarro.android.bandy.domain.Player.PlayerStatusEnum;
-import com.gunnarro.android.bandy.domain.Referee;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.activity.Training;
+import com.gunnarro.android.bandy.domain.party.Address;
+import com.gunnarro.android.bandy.domain.party.Contact;
+import com.gunnarro.android.bandy.domain.party.Player;
+import com.gunnarro.android.bandy.domain.party.Referee;
+import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
+import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.utility.Utility;
@@ -53,6 +53,8 @@ public class XmlDocumentParser {
 	private final static String ATTR_FIRST_NAME = "firstName";
 	private final static String ATTR_MIDDLE_NAME = "middleName";
 	private final static String ATTR_LAST_NAME = "lastName";
+
+	private final static String ATTR_CUP_NAME = "cupName";
 
 	private AndroidHttpClient mHttpClient;
 
@@ -142,7 +144,7 @@ public class XmlDocumentParser {
 
 		expression = "/team/cups/cup";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		mapAndSaveCupNodes(nodeList, bandyService);
+		mapAndSaveCupNodes(xpath, doc, team, nodeList, bandyService);
 
 		expression = "/team/players/player";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
@@ -187,14 +189,20 @@ public class XmlDocumentParser {
 		}
 	}
 
-	private void mapAndSaveCupNodes(NodeList nodeList, BandyService bandyService) {
+	private void mapAndSaveCupNodes(XPath xpath, Document doc, Team team, NodeList nodeList, BandyService bandyService) throws XPathExpressionException {
 		for (int i = 0; i < nodeList.getLength(); i++) {
+			String cupName = getAttributeValue(nodeList.item(i), "cupName");
 			String dateTimeStr = getAttributeValue(nodeList.item(i), ATTR_DATE) + " " + getAttributeValue(nodeList.item(i), ATTR_START_TIME);
-			Cup cup = new Cup(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), getAttributeValue(nodeList.item(i), "clubName"),
-					getAttributeValue(nodeList.item(i), "cupName"), getAttributeValue(nodeList.item(i), "venue"), Utility.timeToDate(
-							getAttributeValue(nodeList.item(i), "deadlineDate"), "dd.MM.yyyy").getTime());
+			Cup cup = new Cup(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), getAttributeValue(nodeList.item(i), "clubName"), cupName,
+					getAttributeValue(nodeList.item(i), "venue"), Utility.timeToDate(getAttributeValue(nodeList.item(i), "deadlineDate"), "dd.MM.yyyy")
+							.getTime());
 			CustomLog.d(this.getClass(), cup.toString());
-			bandyService.createCup(cup);
+			int cupId = bandyService.createCup(cup);
+			// Add matches for this cup, if any...
+			List<Match> cupMatchList = this.getCupMatchList(team, xpath, doc, cupName);
+			for (Match match : cupMatchList) {
+				bandyService.createMatchForCup(match, cupId);
+			}
 		}
 	}
 
@@ -211,10 +219,7 @@ public class XmlDocumentParser {
 
 	private void mapAndSaveMatchNodes(Team team, NodeList nodeList, BandyService bandyService) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			String dateTimeStr = getAttributeValue(nodeList.item(i), ATTR_DATE) + " " + getAttributeValue(nodeList.item(i), ATTR_START_TIME);
-			Match match = new Match(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), new Team(team.getId(), team.getName()), new Team(
-					getAttributeValue(nodeList.item(i), "homeTeam")), new Team(getAttributeValue(nodeList.item(i), "awayTeam")), getAttributeValue(
-					nodeList.item(i), "venue"), new Referee(getAttributeValue(nodeList.item(i), "referee")));
+			Match match = mapNodeToMatch(team, nodeList.item(i));
 			CustomLog.d(this.getClass(), match.toString());
 			bandyService.createMatch(match);
 		}
@@ -269,6 +274,36 @@ public class XmlDocumentParser {
 		return roles;
 	}
 
+	private Match mapNodeToMatch(Team team, Node matchNode) {
+		String dateTimeStr = getAttributeValue(matchNode, ATTR_DATE) + " " + getAttributeValue(matchNode, ATTR_START_TIME);
+		return new Match(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), 
+				new Team(team.getId(), team.getName()), 
+				new Team(getAttributeValue(matchNode, "homeTeam")), 
+				new Team(getAttributeValue(matchNode, "awayTeam")), 
+				Integer.parseInt(getAttributeValue(matchNode, "goalsHomeTeam")),
+				Integer.parseInt(getAttributeValue(matchNode, "goalsAwayTeam")), 
+				getAttributeValue(matchNode, "venue"), 
+				new Referee(getAttributeValue(matchNode, "referee"), getAttributeValue(matchNode, "referee")), 
+				Integer.parseInt(getAttributeValue(matchNode, "typeId")));
+	}
+
+	private List<Match> getCupMatchList(Team team, XPath xpath, Document doc, String cupName) throws XPathExpressionException {
+		String xpathExprParents = "/team/cups/cup[@" + ATTR_CUP_NAME + "='" + cupName + "']/matches/match";
+		CustomLog.e(this.getClass(), "xpath expr=" + xpathExprParents);
+		NodeList nodeList = (NodeList) xpath.evaluate(xpathExprParents, doc, XPathConstants.NODESET);
+		List<Match> matchList = new ArrayList<Match>();
+		for (int j = 0; j < nodeList.getLength(); j++) {
+			Node parentNode = nodeList.item(j);
+			try {
+				mapNodeToMatch(team, parentNode);
+			} catch (Exception e) {
+				CustomLog.e(this.getClass(), "cup=" + cupName + ", Invalid status: " + parentNode.getNodeName() + "=" + parentNode.getTextContent());
+				CustomLog.e(this.getClass(), e.toString());
+			}
+		}
+		return matchList;
+	}
+
 	private List<Contact> getParentList(XPath xpath, Document doc, String firstName, String lastName) throws XPathExpressionException {
 		String xpathExprParents = "/team/players/player[@" + ATTR_FIRST_NAME + "='" + firstName + "' and @" + ATTR_LAST_NAME + "='" + lastName
 				+ "']/parents/parent";
@@ -294,7 +329,7 @@ public class XmlDocumentParser {
 			throw new RuntimeException("Error node is null! name=" + name);
 		}
 		if (node.hasAttributes() && node.getAttributes().getNamedItem(name) != null) {
-			value = node.getAttributes().getNamedItem(name).getNodeValue();
+			value = node.getAttributes().getNamedItem(name).getNodeValue().trim();
 		} else {
 			CustomLog.e(this.getClass(), "node=" + node.getNodeName() + "," + node.getNodeValue() + ", " + node.getTextContent() + ", attribute=" + name
 					+ ", is missing!");

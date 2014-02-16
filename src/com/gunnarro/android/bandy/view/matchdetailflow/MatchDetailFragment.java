@@ -63,7 +63,7 @@ public class MatchDetailFragment extends Fragment {
 		if (match != null) {
 			String matchInfo = match.getTeamVersus();
 			if (match.getResult() != null) {
-				matchInfo = matchInfo + " - " + match.getResult();
+				matchInfo = matchInfo + " " + match.getResult();
 			}
 			((TextView) rootView.findViewById(R.id.matchNameTxt)).setText(matchInfo);
 			((TextView) rootView.findViewById(R.id.matchVenueTxt)).setText(match.getVenue());

@@ -9,16 +9,16 @@ import android.content.Context;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Activity;
 import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
-import com.gunnarro.android.bandy.domain.Address;
 import com.gunnarro.android.bandy.domain.Club;
-import com.gunnarro.android.bandy.domain.Contact;
-import com.gunnarro.android.bandy.domain.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.activity.Training;
+import com.gunnarro.android.bandy.domain.party.Address;
+import com.gunnarro.android.bandy.domain.party.Contact;
+import com.gunnarro.android.bandy.domain.party.Player;
+import com.gunnarro.android.bandy.domain.party.Role;
+import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.view.list.Item;
-import com.gunnarro.android.bandy.domain.Player;
-import com.gunnarro.android.bandy.domain.Role;
 import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Statistic;
 import com.gunnarro.android.bandy.domain.Team;
@@ -86,32 +86,43 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createClub(Club club) {
-		this.bandyRepository.createClub(club);
+	public int createClub(Club club) {
+		return this.bandyRepository.createClub(club);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createTeam(Team team) {
-		this.bandyRepository.createTeam(team);
+	public int createTeam(Team team) {
+		return this.bandyRepository.createTeam(team);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createMatch(Match match) {
-		this.bandyRepository.createMatch(match);
+	public int createMatch(Match match) {
+		return this.bandyRepository.createMatch(match);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createCup(Cup cup) {
-		this.bandyRepository.createCup(cup);
+	public int createMatchForCup(Match match, int cupId) {
+		// first, create the match
+		int matchId = createMatch(match);
+		// then link this cup to the newly created match
+		return this.bandyRepository.createCupMatchLnk(cupId, matchId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int createCup(Cup cup) {
+		return this.bandyRepository.createCup(cup);
 	}
 
 	/**
@@ -130,16 +141,16 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createPlayer(Player player) {
-		this.bandyRepository.createPlayer(player);
+	public int createPlayer(Player player) {
+		return this.bandyRepository.createPlayer(player);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createContact(Contact contact) {
-		this.bandyRepository.createContact(contact);
+	public int createContact(Contact contact) {
+		return this.bandyRepository.createContact(contact);
 	}
 
 	/**

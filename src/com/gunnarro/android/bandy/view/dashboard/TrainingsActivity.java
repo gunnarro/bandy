@@ -23,16 +23,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Activity.ActivityTypesEnum;
 import com.gunnarro.android.bandy.domain.activity.Training;
@@ -97,7 +98,7 @@ public class TrainingsActivity extends DashboardActivity {
 			Team team = bandyService.getTeam(teamName, false);
 			Training training = new Training(calendar.getTimeInMillis(), hours, team, "Bergbanen");
 			int createTraining = bandyService.createTraining(training);
-			// adapter.notifyDataSetChanged();
+			adapter.notifyDataSetChanged();
 			if (createTraining != 0) {
 				Toast.makeText(this, "Created new training:\n" + training.toString() + "\nid=" + createTraining, Toast.LENGTH_LONG).show();
 			} else {
@@ -105,23 +106,28 @@ public class TrainingsActivity extends DashboardActivity {
 			}
 			break;
 		default:
+			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
 			break;
 		}
+
+		CustomLog.d(this.getClass(), "clikced on: " + item.getItemId());
 		return true;
 	}
 
-	/**
-	 * 
-	 * @param v
-	 */
-	public void onClickCreate(View v) {
-		int id = v.getId();
-		switch (id) {
-		case R.id.create_training_btn:
-			Toast.makeText(this, "Create training view Not implements", Toast.LENGTH_SHORT).show();
-			break;
-		}
-	}
+	// /**
+	// *
+	// * @param v
+	// */
+	// public void onClickCreate(View v) {
+	// int id = v.getId();
+	// switch (id) {
+	// case R.id.create_training_btn:
+	// Toast.makeText(this, "Create training view Not implements",
+	// Toast.LENGTH_SHORT).show();
+	// break;
+	// }
+	// CustomLog.d(this.getClass(), "clikced on: " + id);
+	// }
 
 	private void populateList(String teamName) {
 		Team team = bandyService.getTeam(teamName, true);

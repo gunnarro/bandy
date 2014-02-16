@@ -2,10 +2,11 @@ package com.gunnarro.android.bandy.domain.activity;
 
 import java.util.Date;
 
-import com.gunnarro.android.bandy.domain.Referee;
 import com.gunnarro.android.bandy.domain.Team;
+import com.gunnarro.android.bandy.domain.party.Referee;
 
-public class Match {
+public class Match extends Activity {
+
 	private Integer id;
 	private long startTime;
 	private Team team;
@@ -15,6 +16,7 @@ public class Match {
 	private Referee referee;
 	private Integer numberOfGoalsHome;
 	private Integer numberOfGoalsAway;
+	private Integer matchTypeId;
 
 	public Match(long startTime, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee) {
 		this.startTime = startTime;
@@ -27,6 +29,20 @@ public class Match {
 
 	public Match(Integer id, long startDate, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee) {
 		this(startDate, team, homeTeam, awayTeam, venue, referee);
+		this.id = id;
+	}
+
+	public Match(long startDate, Team team, Team homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer numberOfGoalsAway, String venue, Referee referee,
+			Integer matchTypeId) {
+		this(startDate, team, homeTeam, awayTeam, venue, referee);
+		this.numberOfGoalsHome = numberOfGoalsHome;
+		this.numberOfGoalsAway = numberOfGoalsAway;
+		this.matchTypeId = matchTypeId;
+	}
+
+	public Match(Integer id, long startDate, Team team, Team homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer numberOfGoalsAway, String venue,
+			Referee referee, Integer matchTypeId) {
+		this(startDate, team, homeTeam, awayTeam, numberOfGoalsHome, numberOfGoalsAway, venue, referee, matchTypeId);
 		this.id = id;
 	}
 
@@ -63,7 +79,7 @@ public class Match {
 	}
 
 	public boolean isPlayed() {
-		return System.currentTimeMillis() > startTime;
+		return System.currentTimeMillis() > startTime && numberOfGoalsHome != null && numberOfGoalsAway != null;
 	}
 
 	public Integer getNumberOfGoalsHome() {
@@ -82,6 +98,10 @@ public class Match {
 		}
 	}
 
+	public Integer getMatchTypeId() {
+		return matchTypeId;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -94,5 +114,15 @@ public class Match {
 		sb.append(", versus=").append(getTeamVersus());
 		sb.append(", venue=").append(venue).append("]");
 		return sb.toString();
+	}
+
+	@Override
+	public String getName() {
+		return getType();
+	}
+
+	@Override
+	public String getType() {
+		return ActivityTypesEnum.Match.name();
 	}
 }
