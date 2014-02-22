@@ -224,6 +224,14 @@ public abstract class DashboardActivity extends FragmentActivity {
 		case R.id.search_btn:
 			startActivity(new Intent(getApplicationContext(), SearchActivity.class));
 			break;
+		case R.id.statistic_btn:
+			Intent statisticIntent = new Intent(getApplicationContext(), StatisticActivity.class);
+			statisticIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
+			startActivity(statisticIntent);
+			break;
+		case R.id.about_btn:
+			startActivity(new Intent(getApplicationContext(), AboutActivity.class));
+			break;
 		default:
 			break;
 		}

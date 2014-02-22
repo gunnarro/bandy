@@ -1,6 +1,7 @@
 package com.gunnarro.android.bandy.view.expandablelist;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,13 +46,11 @@ public class TrainingExpandableListAdapter extends CommonExpandableListAdapter {
 					CheckBox chkBox = (CheckBox) view.findViewById(R.id.rowDetailsChkBoxId);
 					CustomLog.d(this.getClass(), "chkbox cheched=" + chkBox.isChecked() + ", item=" + childItem.toString() + ", groupId=" + group.getId());
 					if (chkBox.isChecked()) {
-						boolean registreredPlayer = bandyService.registrerOnTraining(childItem.getId(), group.getId());
-						// updateGroupInfo(groupPosition, registreredPlayer);
+						bandyService.registrerOnTraining(childItem.getId(), group.getId());
 					} else {
-						boolean registreredPlayer = bandyService.unRegistrerTraining(childItem.getId(), group.getId());
-						// updateGroupInfo(groupPosition, registreredPlayer);
+						bandyService.unRegistrerTraining(childItem.getId(), group.getId());
 					}
-					// notifyDataSetChanged();
+					notifyDataSetChanged();
 				} catch (ApplicationException ae) {
 					CustomLog.e(this.getClass(), "exception=" + ae.getMessage());
 				}
@@ -67,6 +66,9 @@ public class TrainingExpandableListAdapter extends CommonExpandableListAdapter {
 		}
 		Group group = (Group) getGroup(groupPosition);
 		setGroupInfo(group, convertView);
+		if (group.isEnabled()) {
+//			parent.setBackgroundColor(Color.YELLOW);
+		}
 		return convertView;
 	}
 

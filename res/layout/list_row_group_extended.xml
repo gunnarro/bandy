@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tableLayout"
+    android:id="@+id/expandableTableLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:gravity="left"
     android:paddingLeft="32dp"
     android:shrinkColumns="*"
-    android:stretchColumns="*" >
+    android:stretchColumns="*" 
+    android:background="@android:color/black">
 
     <TableRow
         android:layout_width="match_parent"
@@ -20,6 +21,17 @@
             android:text="list group"
             android:textAlignment="textEnd"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        <TextView
+            android:id="@+id/activityCompletedId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top|right"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/holo_red_dark" >
+        </TextView>
+        
     </TableRow>
 
     <TableRow
@@ -55,5 +67,4 @@
             android:textColor="@android:color/holo_blue_light" >
         </TextView>
     </TableRow>
-
 </TableLayout>

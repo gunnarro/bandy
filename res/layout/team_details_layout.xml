@@ -96,7 +96,8 @@
                 android:text="Gunnar Rønneberg"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
-        <TableRow
+
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal" >
@@ -243,7 +244,7 @@
                 android:text="Gunnar Rønneberg"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
-        
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

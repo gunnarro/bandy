@@ -8,6 +8,7 @@ import com.gunnarro.android.bandy.domain.party.Referee;
 public class Match extends Activity {
 
 	private Integer id;
+	private int seasonId;
 	private long startTime;
 	private Team team;
 	private Team homeTeam;
@@ -40,14 +41,18 @@ public class Match extends Activity {
 		this.matchTypeId = matchTypeId;
 	}
 
-	public Match(Integer id, long startDate, Team team, Team homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer numberOfGoalsAway, String venue,
-			Referee referee, Integer matchTypeId) {
+	public Match(Integer id, long seasonId, long startDate, Team team, Team homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer numberOfGoalsAway,
+			String venue, Referee referee, Integer matchTypeId) {
 		this(startDate, team, homeTeam, awayTeam, numberOfGoalsHome, numberOfGoalsAway, venue, referee, matchTypeId);
 		this.id = id;
 	}
 
 	public Integer getId() {
 		return id;
+	}
+
+	public int getSeasonId() {
+		return seasonId;
 	}
 
 	public Team getTeam() {
@@ -79,7 +84,7 @@ public class Match extends Activity {
 	}
 
 	public boolean isPlayed() {
-		return System.currentTimeMillis() > startTime && numberOfGoalsHome != null && numberOfGoalsAway != null;
+		return isFinished() && numberOfGoalsHome != null && numberOfGoalsAway != null;
 	}
 
 	public Integer getNumberOfGoalsHome() {
@@ -114,6 +119,11 @@ public class Match extends Activity {
 		sb.append(", versus=").append(getTeamVersus());
 		sb.append(", venue=").append(venue).append("]");
 		return sb.toString();
+	}
+
+	@Override
+	public boolean isFinished() {
+		return new Date(startTime).before(new Date(System.currentTimeMillis()));
 	}
 
 	@Override

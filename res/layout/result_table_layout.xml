@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:scrollbars="none" >
+
+    <TableLayout
+        android:id="@+id/statTableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:id="@+id/tablePeroidHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_background"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/tableHeaderPeriod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="6"
+                android:background="@color/tbl_background_header"
+                android:gravity="center"
+                android:text="Result for Ullevål 2003 Team"
+                android:textColor="@color/tbl_header_txt" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRowHeaders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_background_header"
+            android:textSize="12sp" >
+
+            <TextView
+                android:id="@+id/nameId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="Name"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/playedId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="Pld"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/wonId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="W"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/drawId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="D"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/lossId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="L"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/goalsId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="Goals"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+        </TableRow>
+        <!-- Generated team activites rows here -->
+    </TableLayout>
+
+</ScrollView>

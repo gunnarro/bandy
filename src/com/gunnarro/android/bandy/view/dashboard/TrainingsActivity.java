@@ -17,7 +17,6 @@
 package com.gunnarro.android.bandy.view.dashboard;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -51,7 +49,7 @@ public class TrainingsActivity extends DashboardActivity {
 
 	private final static int MIN_NUMBER_OF_SIGNED_PLAYERS = -1;
 	// More efficient than HashMap for mapping integers to objects
-	SparseArray<Group> groups = new SparseArray<Group>();
+	private SparseArray<Group> groups = new SparseArray<Group>();
 	private BandyService bandyService;
 	private String teamName;
 	private TrainingExpandableListAdapter adapter;
@@ -89,45 +87,20 @@ public class TrainingsActivity extends DashboardActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_create_training:
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(System.currentTimeMillis());
-			calendar.set(Calendar.MILLISECOND, 0);
-			calendar.set(Calendar.SECOND, 0);
-			calendar.set(Calendar.MINUTE, 0);
-			int hours = 2;
-			Team team = bandyService.getTeam(teamName, false);
-			Training training = new Training(calendar.getTimeInMillis(), hours, team, "Bergbanen");
-			int createTraining = bandyService.createTraining(training);
-			adapter.notifyDataSetChanged();
-			if (createTraining != 0) {
-				Toast.makeText(this, "Created new training:\n" + training.toString() + "\nid=" + createTraining, Toast.LENGTH_LONG).show();
-			} else {
-				Toast.makeText(this, "Training already exist:\n" + training.toString() + "\nid=" + createTraining, Toast.LENGTH_LONG).show();
-			}
+			startActivity(new Intent(getApplicationContext(), CreateTrainingActivity.class));
 			break;
 		default:
 			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
 			break;
 		}
 
-		CustomLog.d(this.getClass(), "clikced on: " + item.getItemId());
+		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
 		return true;
 	}
 
-	// /**
-	// *
-	// * @param v
-	// */
-	// public void onClickCreate(View v) {
-	// int id = v.getId();
-	// switch (id) {
-	// case R.id.create_training_btn:
-	// Toast.makeText(this, "Create training view Not implements",
-	// Toast.LENGTH_SHORT).show();
-	// break;
-	// }
-	// CustomLog.d(this.getClass(), "clikced on: " + id);
-	// }
+	protected int createTraining() {
+		return -1;
+	}
 
 	private void populateList(String teamName) {
 		Team team = bandyService.getTeam(teamName, true);
@@ -145,7 +118,7 @@ public class TrainingsActivity extends DashboardActivity {
 			Collections.sort(players);
 			String header = Utility.formatTime(training.getStartDate(), Utility.DATE_TIME_PATTERN) + " - "
 					+ Utility.formatTime(training.getEndTime(), Utility.TIME_PATTERN);
-			Group group = new Group(training.getId(), header, training.isFinished(), players);
+			Group group = new Group(training.getId(), header, !training.isFinished(), players);
 			group.setSubHeader1(training.getName());
 			group.setSubHeader2(training.getVenue());
 			groups.append(i, group);
@@ -153,6 +126,7 @@ public class TrainingsActivity extends DashboardActivity {
 		}
 		// finally, update the action bar sub title with number of players for
 		// selected team
-		getActionBar().setSubtitle("Number of players: " + playerList.size());
+		getActionBar().setSubtitle("Number of trainings: " + trainingList.size());
 	}
+
 } // end class

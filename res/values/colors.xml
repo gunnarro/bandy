@@ -3,6 +3,7 @@
 
     <!-- text colors -->
     <color name="txt_default">#000000</color>
+    <color name="txt_disabled">#736F6E</color>
     <color name="txt_bg">#ffffff</color>
     <color name="txt_list_view">#00ccff</color>
     <color name="txt_radio_selected">#33b5e5</color>
@@ -13,10 +14,11 @@
     <color name="bg_default">#878787</color>
     <color name="bg_list_view">#000000</color>
     <!-- table colors -->
-    <color name="tbl_row_even">#ffffff</color>
+    <color name="tbl_background">#000000</color> <!-- black -->
+    <color name="tbl_background_header">#000000</color> <!-- black -->
     <color name="tbl_row_odd">#D0D0DD</color> <!-- light gray -->
-    <color name="tbl_head_background">#000000</color> <!-- black -->
-    <color name="tbl_txt">#000000</color>
+    <color name="tbl_row_even">#ffffff</color>
+    <color name="tbl_header_txt">#ffffff</color>
     <color name="tbl_number">#0101FF</color> <!-- navy -->
     <!-- specific colors -->
     <color name="dark_green">#006400</color>

@@ -33,6 +33,14 @@
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
          -->
          <activity
+            android:name="com.gunnarro.android.bandy.view.dashboard.StatisticActivity"
+            android:label="New Activity"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
+         <activity
+            android:name="com.gunnarro.android.bandy.view.dashboard.CreateTrainingActivity"
+            android:label="New Activity"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.TrainingsActivity" />
+         <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.TrainingsActivity"
             android:label="Trainings"
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />

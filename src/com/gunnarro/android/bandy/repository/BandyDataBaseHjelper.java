@@ -7,23 +7,24 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
-import com.gunnarro.android.bandy.repository.table.AddressTable;
 import com.gunnarro.android.bandy.repository.table.ClubsTable;
-import com.gunnarro.android.bandy.repository.table.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.NotificationsTable;
-import com.gunnarro.android.bandy.repository.table.PlayersTable;
-import com.gunnarro.android.bandy.repository.table.RolesTable;
 import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
+import com.gunnarro.android.bandy.repository.table.activity.SeasonsTable;
 import com.gunnarro.android.bandy.repository.table.activity.TrainingsTable;
 import com.gunnarro.android.bandy.repository.table.link.CupMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerContactLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerCupLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerTrainingLnkTable;
+import com.gunnarro.android.bandy.repository.table.party.AddressTable;
+import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
+import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
+import com.gunnarro.android.bandy.repository.table.party.RolesTable;
 import com.gunnarro.android.bandy.service.impl.DataLoader;
 
 /**
@@ -38,7 +39,7 @@ import com.gunnarro.android.bandy.service.impl.DataLoader;
 public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "uilbandy6.db";
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 8;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
 
@@ -96,6 +97,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		PlayerMatchLnkTable.onCreate(database);
 		PlayerTrainingLnkTable.onCreate(database);
 		RolesTable.onCreate(database);
+		SeasonsTable.onCreate(database);
 		SettingsTable.onCreate(database);
 		TeamsTable.onCreate(database);
 		TrainingsTable.onCreate(database);
@@ -123,6 +125,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		PlayerMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
 		PlayerTrainingLnkTable.onUpgrade(database, oldVersion, newVersion);
 		RolesTable.onUpgrade(database, oldVersion, newVersion);
+		SeasonsTable.onUpgrade(database, oldVersion, newVersion);
 		SettingsTable.onUpgrade(database, oldVersion, newVersion);
 		TeamsTable.onUpgrade(database, oldVersion, newVersion);
 		TrainingsTable.onUpgrade(database, oldVersion, newVersion);
@@ -142,7 +145,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL("insert into settings (_id, key, value) values(4,'" + SettingsTable.MAIL_ACCOUNT + "','na')");
 		database.execSQL("insert into settings (_id, key, value) values(5,'" + SettingsTable.MAIL_ACCOUNT_PWD + "','na')");
 		// init match types
-		database.execSQL("insert into match_types (_id, match_type_id, match_type_name) values(1, 1, 'MATCH')");
+		database.execSQL("insert into match_types (_id, match_type_id, match_type_name) values(1, 1, 'LEAGUE')");
 		database.execSQL("insert into match_types (_id, match_type_id, match_type_name) values(2, 2, 'TRAINING')");
 		database.execSQL("insert into match_types (_id, match_type_id, match_type_name) values(3, 3, 'CUP')");
 		CustomLog.i(this.getClass(), "inserted default test data");

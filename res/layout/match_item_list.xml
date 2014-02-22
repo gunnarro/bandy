@@ -7,5 +7,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     tools:context=".MatchListActivity"
-    tools:layout="@android:layout/list_content" />
+    tools:layout="@android:layout/two_line_list_item" />
 

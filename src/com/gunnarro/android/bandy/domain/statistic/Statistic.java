@@ -1,7 +1,11 @@
-package com.gunnarro.android.bandy.domain;
+package com.gunnarro.android.bandy.domain.statistic;
+
+import java.util.List;
 
 public class Statistic {
 
+	private long startTime;
+	private long endTime;
 	private String clubName;
 	private String teamName;
 	private int playerId;
@@ -11,6 +15,13 @@ public class Statistic {
 	private int numberOfTeamMatches;
 	private int numberOfTeamCups;
 	private int numberOfTeamTrainings;
+	private List<ActivityStatistic> playerStatisticList;
+	private List<ActivityStatistic> teamStatisticList;
+	private List<MatchStatistic> matchStatisticList;
+
+	public Statistic(List<MatchStatistic> matchStatisticList) {
+		this.matchStatisticList = matchStatisticList;
+	}
 
 	public Statistic(String clubName, String teamName, int playerId, int numberOfPlayerMatches, int numberOfPlayerCups, int numberOfPlayerTrainings,
 			int numberOfTeamMatches, int numberOfTeamCups, int numberOfTeamTrainings) {
@@ -23,6 +34,14 @@ public class Statistic {
 		this.numberOfTeamMatches = numberOfTeamMatches;
 		this.numberOfTeamCups = numberOfTeamCups;
 		this.numberOfTeamTrainings = numberOfTeamTrainings;
+	}
+
+	public long getStartTime() {
+		return startTime;
+	}
+
+	public long getEndTime() {
+		return endTime;
 	}
 
 	public String getClubName() {
@@ -59,6 +78,14 @@ public class Statistic {
 
 	public int getNumberOfPlayerTrainings() {
 		return numberOfPlayerTrainings;
+	}
+
+	public List<MatchStatistic> getMatchStatisticList() {
+		return matchStatisticList;
+	}
+
+	public void setMatchStatisticList(List<MatchStatistic> matchStatisticList) {
+		this.matchStatisticList = matchStatisticList;
 	}
 
 	@Override

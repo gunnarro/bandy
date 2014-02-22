@@ -9,8 +9,10 @@ public class MatchTest extends TestCase {
 
 	// @Test
 	public void testConstructor() {
-		Match match = new Match(1, System.currentTimeMillis(), new Team(""), new Team("homeTeam"), new Team("awayTeam"), 4, 5, "venue", new Referee(
+		Match match = new Match(1, 1, System.currentTimeMillis(), new Team(""), new Team("homeTeam"), new Team("awayTeam"), 4, 5, "venue", new Referee(
 				"firstname", "lastname"), 33);
+		assertEquals(1, match.getId().intValue());
+		assertEquals(1, match.getSeasonId());
 		assertEquals("homeTeam", match.getHomeTeam().getName());
 		assertEquals("awayTeam", match.getAwayTeam().getName());
 		assertEquals("homeTeam - awayTeam", match.getTeamVersus());

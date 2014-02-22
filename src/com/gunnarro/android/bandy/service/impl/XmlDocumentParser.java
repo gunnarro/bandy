@@ -276,15 +276,10 @@ public class XmlDocumentParser {
 
 	private Match mapNodeToMatch(Team team, Node matchNode) {
 		String dateTimeStr = getAttributeValue(matchNode, ATTR_DATE) + " " + getAttributeValue(matchNode, ATTR_START_TIME);
-		return new Match(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), 
-				new Team(team.getId(), team.getName()), 
-				new Team(getAttributeValue(matchNode, "homeTeam")), 
-				new Team(getAttributeValue(matchNode, "awayTeam")), 
-				Integer.parseInt(getAttributeValue(matchNode, "goalsHomeTeam")),
-				Integer.parseInt(getAttributeValue(matchNode, "goalsAwayTeam")), 
-				getAttributeValue(matchNode, "venue"), 
-				new Referee(getAttributeValue(matchNode, "referee"), getAttributeValue(matchNode, "referee")), 
-				Integer.parseInt(getAttributeValue(matchNode, "typeId")));
+		return new Match(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), new Team(team.getId(), team.getName()), new Team(getAttributeValue(
+				matchNode, "homeTeam")), new Team(getAttributeValue(matchNode, "awayTeam")), Integer.parseInt(getAttributeValue(matchNode, "goalsHomeTeam")),
+				Integer.parseInt(getAttributeValue(matchNode, "goalsAwayTeam")), getAttributeValue(matchNode, "venue"), new Referee(getAttributeValue(
+						matchNode, "referee"), getAttributeValue(matchNode, "referee")), Integer.parseInt(getAttributeValue(matchNode, "typeId")));
 	}
 
 	private List<Match> getCupMatchList(Team team, XPath xpath, Document doc, String cupName) throws XPathExpressionException {
@@ -295,7 +290,7 @@ public class XmlDocumentParser {
 		for (int j = 0; j < nodeList.getLength(); j++) {
 			Node parentNode = nodeList.item(j);
 			try {
-				mapNodeToMatch(team, parentNode);
+				matchList.add(mapNodeToMatch(team, parentNode));
 			} catch (Exception e) {
 				CustomLog.e(this.getClass(), "cup=" + cupName + ", Invalid status: " + parentNode.getNodeName() + "=" + parentNode.getTextContent());
 				CustomLog.e(this.getClass(), e.toString());

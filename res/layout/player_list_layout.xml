@@ -16,7 +16,7 @@
             android:id="@+id/tableSelectionHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/tbl_head_background"
+            android:background="@color/tbl_background_header"
             android:gravity="center_horizontal" >
 
             <Spinner
@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_span="3"
-                android:background="@color/tbl_head_background"
+                android:background="@color/tbl_background_header"
                 android:gravity="center"
                 android:text="Uil Knott 2003"
                 android:textColor="@color/white" />
@@ -49,7 +49,7 @@
             android:id="@+id/tableRowHeaders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/tbl_head_background" >
+            android:background="@color/tbl_background_header" >
 
             <TextView
                 android:id="@+id/player_full_name"

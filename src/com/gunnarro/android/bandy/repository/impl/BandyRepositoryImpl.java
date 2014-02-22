@@ -16,37 +16,41 @@ import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Setting;
-import com.gunnarro.android.bandy.domain.Statistic;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
+import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.party.Player;
+import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.domain.party.Role;
-import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
-import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
+import com.gunnarro.android.bandy.domain.statistic.ActivityStatistic;
+import com.gunnarro.android.bandy.domain.statistic.MatchStatistic;
+import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.repository.BandyDataBaseHjelper;
 import com.gunnarro.android.bandy.repository.BandyRepository;
-import com.gunnarro.android.bandy.repository.table.AddressTable;
 import com.gunnarro.android.bandy.repository.table.ClubsTable;
-import com.gunnarro.android.bandy.repository.table.ContactsTable;
-import com.gunnarro.android.bandy.repository.table.PlayersTable;
-import com.gunnarro.android.bandy.repository.table.RolesTable;
 import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
+import com.gunnarro.android.bandy.repository.table.activity.SeasonsTable;
 import com.gunnarro.android.bandy.repository.table.activity.TrainingsTable;
 import com.gunnarro.android.bandy.repository.table.link.CupMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerContactLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerCupLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerTrainingLnkTable;
+import com.gunnarro.android.bandy.repository.table.party.AddressTable;
+import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
+import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
+import com.gunnarro.android.bandy.repository.table.party.RolesTable;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.exception.ValidationException;
 
@@ -99,6 +103,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		database.delete(PlayerMatchLnkTable.TABLE_NAME, null, null);
 		database.delete(PlayerTrainingLnkTable.TABLE_NAME, null, null);
 		database.delete(RolesTable.TABLE_NAME, null, null);
+		database.delete(SeasonsTable.TABLE_NAME, null, null);
 		// database.delete(SettingsTable.TABLE_NAME, null, null);
 		database.delete(TeamsTable.TABLE_NAME, null, null);
 		database.delete(TrainingsTable.TABLE_NAME, null, null);
@@ -132,9 +137,9 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int createMatch(Match match) {
-		ContentValues values = MatchesTable.createContentValues(match.getTeam().getId(), match.getStartTime(), match.getHomeTeam().getName(), match
-				.getAwayTeam().getName(), match.getNumberOfGoalsHome(), match.getNumberOfGoalsAway(), match.getVenue(), match.getReferee().getFullName(), match
-				.getMatchTypeId());
+		ContentValues values = MatchesTable.createContentValues(match.getSeasonId(), match.getTeam().getId(), match.getStartTime(), match.getHomeTeam()
+				.getName(), match.getAwayTeam().getName(), match.getNumberOfGoalsHome(), match.getNumberOfGoalsAway(), match.getVenue(), match.getReferee()
+				.getFullName(), match.getMatchTypeId());
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(MatchesTable.TABLE_NAME, null, values);
 		return Long.valueOf(id).intValue();
@@ -148,6 +153,17 @@ public class BandyRepositoryImpl implements BandyRepository {
 		ContentValues values = CupsTable.createContentValues(cup.getStartDate(), cup.getCupName(), cup.getClubName(), cup.getVenue(), cup.getDeadlineDate());
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(CupsTable.TABLE_NAME, null, values);
+		return Long.valueOf(id).intValue();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int createSeason(Season season) {
+		ContentValues values = SeasonsTable.createContentValues(season.getPeriod(), season.getStartTime(), season.getEndTime());
+		this.database = dbHelper.getWritableDatabase();
+		long id = database.insert(SeasonsTable.TABLE_NAME, null, values);
 		return Long.valueOf(id).intValue();
 	}
 
@@ -873,9 +889,9 @@ public class BandyRepositoryImpl implements BandyRepository {
 			while (!cursor.isAfterLast()) {
 				for (String columnName : cursor.getColumnNames()) {
 					if (cursor.getType(cursor.getColumnIndex(columnName)) == Cursor.FIELD_TYPE_INTEGER)
-						value.append(cursor.getInt(cursor.getColumnIndex(columnName)));
+						value.append(columnName).append("=").append(cursor.getInt(cursor.getColumnIndex(columnName)));
 					else {
-						value.append(cursor.getString(cursor.getColumnIndex(columnName)));
+						value.append(columnName).append("=").append(cursor.getString(cursor.getColumnIndex(columnName)));
 					}
 					value.append("\t");
 				}
@@ -934,12 +950,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	private Match mapCursorToMatch(Cursor cursor, Team team) {
 		long start_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(MatchesTable.COLUMN_START_DATE))) * 1000L;
-		return new Match(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_ID)), start_date_ms, team, new Team(cursor.getString(cursor
-				.getColumnIndex(MatchesTable.COLUMN_HOME_TEAM))), new Team(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_AWAY_TEAM))),
-				cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_HOME_TEAM)), cursor.getInt(cursor
-						.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_AWAY_TEAM)), cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_VENUE)),
-				new Referee(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_REFEREE)), cursor.getString(cursor
-						.getColumnIndex(MatchesTable.COLUMN_REFEREE))), cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_MATCH_TYPE_ID)));
+		return new Match(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_ID)), cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_SEASON_ID)),
+				start_date_ms, team, new Team(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_HOME_TEAM))), new Team(cursor.getString(cursor
+						.getColumnIndex(MatchesTable.COLUMN_AWAY_TEAM))), cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_HOME_TEAM)),
+				cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_AWAY_TEAM)), cursor.getString(cursor
+						.getColumnIndex(MatchesTable.COLUMN_VENUE)), new Referee(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_REFEREE)),
+						cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_REFEREE))), cursor.getInt(cursor
+						.getColumnIndex(MatchesTable.COLUMN_MATCH_TYPE_ID)));
 	}
 
 	private Training mapCursorToTraining(Cursor cursor, Team team) {
@@ -1185,11 +1202,18 @@ public class BandyRepositoryImpl implements BandyRepository {
 		Cursor cursor = database.rawQuery(sqlQuery.toString(), selectionArgs);
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
-			statistic = new Statistic(cursor.getString(cursor.getColumnIndex("clubName")), cursor.getString(cursor.getColumnIndex("teamName")), playerId,
-					cursor.getInt(cursor.getColumnIndex("numberOfPlayerMatches")), cursor.getInt(cursor.getColumnIndex("numberOfPlayerCups")),
-					cursor.getInt(cursor.getColumnIndex("numberOfPlayerTrainings")), cursor.getInt(cursor.getColumnIndex("numberOfTeamMatches")),
-					cursor.getInt(cursor.getColumnIndex("numberOfTeamCups")), cursor.getInt(cursor.getColumnIndex("numberOfTeamTrainings")));
+			while (!cursor.isAfterLast()) {
+				statistic = new Statistic(cursor.getString(cursor.getColumnIndex("clubName")), cursor.getString(cursor.getColumnIndex("teamName")), playerId,
+						cursor.getInt(cursor.getColumnIndex("numberOfPlayerMatches")), cursor.getInt(cursor.getColumnIndex("numberOfPlayerCups")),
+						cursor.getInt(cursor.getColumnIndex("numberOfPlayerTrainings")), cursor.getInt(cursor.getColumnIndex("numberOfTeamMatches")),
+						cursor.getInt(cursor.getColumnIndex("numberOfTeamCups")), cursor.getInt(cursor.getColumnIndex("numberOfTeamTrainings")));
+
+				ActivityStatistic playerMatchStatistic = new ActivityStatistic(cursor.getInt(cursor.getColumnIndex("numberOfLeagueMatches")),
+						cursor.getInt(cursor.getColumnIndex("numberOfCupMatches")), cursor.getInt(cursor.getColumnIndex("numberOfTrainingMatches")));
+				cursor.moveToNext();
+			}
 		}
+
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
@@ -1202,46 +1226,49 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public Statistic getTeamStatistic(int teamId) {
-		Statistic statistic = null;
-//		 CustomLog.d(this.getClass(), "teamId=" + teamId);
-//		 StringBuffer sqlQuery = new StringBuffer();
-//		 sqlQuery.append("SELECT");
-//		 sqlQuery.append(" (SELECT c.club_name FROM clubs c, teams t WHERE t._id = ? AND t.fk_club_id = c._id) AS clubName,");
-//		 sqlQuery.append(" (SELECT t.team_name FROM teams t WHERE t._id = ?) AS teamName,");
-//		 
-//		 sqlQuery.append(" (SELECT count(fk_team_id) FROM matches WHERE fk_team_id = ?) AS numberOfTeamMatches,");
-//		 sqlQuery.append(" (SELECT count(fk_team_id) FROM team_cup_lnk WHERE fk_team_id = ?) AS numberOfTeamCups,");
-//		 sqlQuery.append(" (SELECT count(fk_team_id) FROM trainings WHERE fk_team_id = ?) AS numberOfTeamTrainings,");
-//		 
-//		 sqlQuery.append(" (SELECT count(fk_team_id) FROM matches WHERE fk_team_id = ?) AS numberOfTeamMatches,");
-//		 sqlQuery.append(" (SELECT count(_id) FROM cups WHERE _id = ?) AS numberOfTeamCups,");
-//		 sqlQuery.append(" (SELECT count(fk_team_id) FROM trainings WHERE fk_team_id = ?) AS numberOfTeamTrainings");
-//		 String[] selectionArgs = { Integer.toString(teamId),
-//		 Integer.toString(teamId), Integer.toString(playerId),
-//		 Integer.toString(playerId),
-//		 Integer.toString(playerId), Integer.toString(teamId),
-//		 Integer.toString(teamId), Integer.toString(teamId) };
-//		 CustomLog.d(this.getClass(), "sqlQuery=" + sqlQuery.toString());
-//		 this.database = dbHelper.getReadableDatabase();
-//		 Cursor cursor = database.rawQuery(sqlQuery.toString(),
-//		 selectionArgs);
-//		 if (cursor != null && cursor.getCount() > 0) {
-//		 cursor.moveToFirst();
-//		 statistic = new
-//		 Statistic(cursor.getString(cursor.getColumnIndex("clubName")),
-//		 cursor.getString(cursor.getColumnIndex("teamName")), playerId,
-//		 cursor.getInt(cursor.getColumnIndex("numberOfPlayerMatches")),
-//		 cursor.getInt(cursor.getColumnIndex("numberOfPlayerCups")),
-//		 cursor.getInt(cursor.getColumnIndex("numberOfPlayerTrainings")),
-//		 cursor.getInt(cursor.getColumnIndex("numberOfTeamMatches")),
-//		 cursor.getInt(cursor.getColumnIndex("numberOfTeamCups")),
-//		 cursor.getInt(cursor.getColumnIndex("numberOfTeamTrainings")));
-//		 }
-//		 if (cursor != null && !cursor.isClosed()) {
-//		 cursor.close();
-//		 }
-//		 CustomLog.d(this.getClass(), statistic.toString());
+		List<MatchStatistic> matchStatisticList = new ArrayList<MatchStatistic>();
+		CustomLog.d(this.getClass(), "teamId=" + teamId);
+		String sqlQuery = createTeamMatchStatisticQuery();
+		String matchTypeId = "1";
+		String[] selectionArgs = { Integer.toString(teamId) };
+		CustomLog.d(this.getClass(), "sqlQuery=" + sqlQuery);
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.rawQuery(sqlQuery, selectionArgs);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				MatchStatistic matchStatistic = new MatchStatistic(Integer.parseInt(matchTypeId), cursor.getInt(cursor.getColumnIndex("numberOfMatches")),
+						cursor.getInt(cursor.getColumnIndex("numberOfWonMatches")), cursor.getInt(cursor.getColumnIndex("numberOfDrawMatches")),
+						cursor.getInt(cursor.getColumnIndex("numberOfLossMatches")), cursor.getInt(cursor.getColumnIndex("numberOfGoalsScored")),
+						cursor.getInt(cursor.getColumnIndex("numberOfGoalsAgainst")));
+				matchStatisticList.add(matchStatistic);
+				cursor.moveToNext();
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+
+		Statistic statistic = new Statistic(matchStatisticList);
+		CustomLog.d(this.getClass(), statistic.toString());
 		return statistic;
 	}
 
+	private String createTeamMatchStatisticQuery() {
+		StringBuffer sqlQuery = new StringBuffer();
+		sqlQuery.append("SELECT count(fk_team_id) AS numberOfMatches,");
+		sqlQuery.append(" sum(goals_home_team > goals_away_team) AS numberOfWonMatches,");
+		sqlQuery.append(" sum(goals_home_team = goals_away_team) AS numberOfDrawMatches,");
+		sqlQuery.append(" sum(goals_home_team < goals_away_team) AS numberOfLossMatches,");
+		sqlQuery.append(" sum(goals_home_team) AS numberOfGoalsScored,");
+		sqlQuery.append(" sum(goals_away_team) AS numberOfGoalsAgainst");
+		sqlQuery.append(" FROM matches WHERE fk_team_id = ?");
+		sqlQuery.append(" GROUP BY match_type_id");
+		return sqlQuery.toString();
+	}
+
+	@Override
+	public String getSqlQuery(String id, String type) {
+		return createTeamMatchStatisticQuery();
+	}
 }

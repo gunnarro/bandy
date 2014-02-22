@@ -2,7 +2,7 @@
 
     <item
         android:id="@+id/action_create_training"
-        android:icon="@drawable/mms"
+        android:icon="@drawable/table_add"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:title="Create training"/>

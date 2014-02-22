@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".TrainingsActivity" >
+
+    <LinearLayout
+        android:id="@+id/createTrainingLayoutId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/personaliaHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New training"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <View
+            android:id="@+id/personaliaSeparatorId"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginBottom="3dp"
+            android:background="@drawable/line_separator" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/createTrainingLayoutId"
+        android:layout_marginLeft="10dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/activityTypelbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/activity_type_spinner"
+                android:layout_width="fill_parent"
+                android:layout_gravity="left"
+                android:prompt="@array/activitiy_type_options"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/nameLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Club"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/club_spinner"
+                android:layout_width="fill_parent"
+                android:layout_gravity="left"
+                android:prompt="@array/club_options"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/teamLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Team"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/team_spinner"
+                android:layout_width="fill_parent"
+                android:layout_gravity="left"
+                android:prompt="@array/team_options"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/venuelbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Venue"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                android:id="@+id/venue_spinner"
+                android:layout_width="fill_parent"
+                android:layout_gravity="left"
+                android:prompt="@array/venue_options"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+         <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:padding="2dip" >
+
+            <TextView
+                android:id="@+id/trainingDatelbl"
+                android:layout_weight="1"
+                android:maxWidth="25dip"
+                android:padding="2dip"
+                android:text="Date"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/trainingDateId"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:padding="2dip"
+                android:inputType="date"
+                android:text="18.02.2014"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        
+         
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:padding="2dip" >
+
+            <TextView
+                android:id="@+id/msg_filter_from_time_lbl"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="2dip"
+                android:text="From"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/trainingFromTimeId"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:onClick="showTimePickerDlg"
+                android:padding="2dip"
+                android:text="1630"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:padding="2dip" >
+
+            <TextView
+                android:id="@+id/msg_filter_to_time_lbl"
+                android:layout_weight="1"
+                android:maxWidth="25dip"
+                android:padding="2dip"
+                android:text="To"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/trainingToTimeId"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:onClick="showTimePickerDlg"
+                android:padding="2dip"
+                android:text="18:00"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:padding="2dip" >
+
+            <ImageButton
+                android:id="@+id/cancel_create_activity_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/na"
+                android:src="@drawable/table_delete" />
+
+            <ImageButton
+                android:id="@+id/create_activity_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/na"
+                android:src="@drawable/table_add" />
+        </TableRow>
+    </TableLayout>
+
+</RelativeLayout>

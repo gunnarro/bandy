@@ -46,6 +46,9 @@ public class SearchActivity extends DashboardActivity {
 		setContentView(R.layout.search_layout);
 		setTitleFromActivityLabel(R.id.title_text);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
+		String sqlQuery = this.bandyService.getSqlQuery("", "");
+		TextView input = ((TextView) findViewById(R.id.search_input_txt));
+		input.setText(sqlQuery.replace(",", ",\n"));
 		setupEventHandlers();
 	}
 
@@ -54,6 +57,14 @@ public class SearchActivity extends DashboardActivity {
 			@Override
 			public void onClick(View v) {
 				searchDB();
+			}
+		});
+
+		findViewById(R.id.clear_btn).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				((TextView) findViewById(R.id.search_input_txt)).setText("");
+				((TextView) findViewById(R.id.search_result_txt)).setText("");
 			}
 		});
 	}

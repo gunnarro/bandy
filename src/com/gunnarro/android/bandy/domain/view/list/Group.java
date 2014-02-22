@@ -15,7 +15,7 @@ public class Group {
 	private String subHeader2;
 	private boolean isEnabled;
 	private int numberOfSelectedChildren;
-	private final List<Item> children;;
+	private final List<Item> children;
 
 	public Group(Integer id, String header, boolean isEnabled, final List<Item> children) {
 		this.id = id;

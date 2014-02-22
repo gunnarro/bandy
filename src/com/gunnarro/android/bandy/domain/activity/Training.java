@@ -1,5 +1,7 @@
 package com.gunnarro.android.bandy.domain.activity;
 
+import java.util.Date;
+
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.utility.Utility;
 
@@ -20,7 +22,6 @@ public class Training extends Activity {
 
 	public Training(long startDate, long endTime, Team team, String venue) {
 		this.startDate = startDate;
-		this.endTime = endTime;
 		this.endTime = endTime;
 		this.team = team;
 		this.venue = venue;
@@ -69,6 +70,11 @@ public class Training extends Activity {
 
 	public static Training createTraining(Team team) {
 		return new Training(System.currentTimeMillis(), System.currentTimeMillis(), team, team.getClub().getStadium());
+	}
+
+	@Override
+	public boolean isFinished() {
+		return new Date(startDate).before(new Date(System.currentTimeMillis()));
 	}
 
 	/**

@@ -8,12 +8,14 @@
     android:stretchColumns="*" >
 
     <TableRow
+        android:id="@+id/extendedRowId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal" >
+        android:gravity="center_horizontal" 
+        android:background="@android:color/holo_blue_dark">
 
         <CheckBox
-            android:id="@+id/rowDetailsChkBoxId"
+            android:id="@+id/exrowDetailsChkBoxId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -90,6 +92,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/black" />
+        android:background="@android:color/holo_orange_light" />
 
 </TableLayout>

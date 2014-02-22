@@ -6,15 +6,16 @@ import android.database.SQLException;
 
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.SearchResult;
-import com.gunnarro.android.bandy.domain.Statistic;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Role;
+import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl.PlayerLinkTableTypeEnum;
 
@@ -40,6 +41,8 @@ public interface BandyRepository {
 	public void deleteAllTableData();
 
 	public int createClub(Club club);
+
+	public int createSeason(Season season);
 
 	public int createTeam(Team team);
 
@@ -131,5 +134,7 @@ public interface BandyRepository {
 	public Training getTrainingByDate(int teamId, long startTime);
 
 	public int getNumberOfSignedPlayers(PlayerLinkTableTypeEnum type, int id);
+
+	public String getSqlQuery(String id, String type);
 
 }

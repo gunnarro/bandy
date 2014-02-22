@@ -72,7 +72,7 @@ public class Item implements Comparable<Item> {
 	 */
 	@Override
 	public String toString() {
-		return id + " " + this.value;
+		return this.value;
 		// return getClass().getSimpleName() + ": [id=" + this.id + ", value=" +
 		// this.value + "enabled=" + this.isEnabled + "]";
 	}

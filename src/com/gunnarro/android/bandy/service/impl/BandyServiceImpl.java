@@ -18,9 +18,9 @@ import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Role;
 import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
+import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.domain.SearchResult;
-import com.gunnarro.android.bandy.domain.Statistic;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.repository.BandyRepository;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl;
@@ -579,4 +579,8 @@ public class BandyServiceImpl implements BandyService {
 		return bandyRepository.getTeamStatistic(teamId);
 	}
 
+	@Override
+	public String getSqlQuery(String id, String type) {
+		return this.bandyRepository.getSqlQuery(id, type);
+	}
 }

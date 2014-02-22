@@ -8,16 +8,16 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Match;
-import com.gunnarro.android.bandy.domain.view.list.Item;
+import com.gunnarro.android.bandy.domain.view.list.MultiLineItem;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.utility.Utility;
+import com.gunnarro.android.bandy.view.adapter.MultiLineArrayAdapter;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
@@ -38,7 +38,7 @@ public class MatchListFragment extends ListFragment {
 	private static final String STATE_ACTIVATED_POSITION = "activated_position";
 
 	private BandyService bandyService;
-	private List<Item> itemList;
+	private List<MultiLineItem> itemList;
 
 	/**
 	 * The fragment's current callback object, which is notified of list item
@@ -99,9 +99,9 @@ public class MatchListFragment extends ListFragment {
 		} else {
 			CustomLog.d(this.getClass(), "No team id argument found! use teamName=" + teamName);
 		}
-		this.itemList = getMatchesItemList(teamName);
+		this.itemList = getMatchItemList(teamName);
 		CustomLog.d(this.getClass(), "items:" + this.itemList.size());
-		setListAdapter(new ArrayAdapter<Item>(getActivity(), R.layout.custom_checked_list_item, android.R.id.text1, this.itemList));
+		setListAdapter(new MultiLineArrayAdapter(getActivity(), this.itemList));
 		// finally, update the action bar sub title with number of players for
 		// selected team
 		getActivity().getActionBar().setSubtitle("Number of matches: " + itemList.size());
@@ -197,12 +197,13 @@ public class MatchListFragment extends ListFragment {
 		getListView().setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
 
-	private List<Item> getMatchesItemList(String teamName) {
+	private List<MultiLineItem> getMatchItemList(String teamName) {
 		Team team = bandyService.getTeam(teamName, true);
 		List<Match> matchList = this.bandyService.getMatchList(team.getId(), Calendar.YEAR);
-		List<Item> matches = new ArrayList<Item>();
+		List<MultiLineItem> matches = new ArrayList<MultiLineItem>();
 		for (Match match : matchList) {
-			Item item = new Item(match.getId(), match.getTeamVersus(), match.isPlayed());
+			MultiLineItem item = new MultiLineItem(match.getId(), Utility.formatTime(match.getStartTime(), Utility.DATE_TIME_PATTERN), match.getTeamVersus(),
+					match.getResult(), match.isPlayed());
 			matches.add(item);
 		}
 		return matches;
@@ -216,4 +217,5 @@ public class MatchListFragment extends ListFragment {
 		}
 		mActivatedPosition = position;
 	}
+
 }

@@ -1,4 +1,4 @@
-package com.gunnarro.android.bandy.repository.table;
+package com.gunnarro.android.bandy.repository.table.party;
 
 import java.util.Arrays;
 import java.util.HashSet;

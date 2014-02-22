@@ -12,6 +12,7 @@
     <string name="spinner_activity_filter">Activity filter</string>
     <string name="activities_period">Activities period</string>
     <string name="spinner_teams">Teams</string>
+    <string name="statistic">Statistic</string>
 
     <string-array name="activities_view_by_options">
         <item>All</item>
@@ -20,18 +21,31 @@
         <item>Week</item>
         <item>Day</item>
     </string-array>
-    <string-array name="activitiy_filter_options">
-        <item>All</item>
-        <item>Cup</item>
-        <item>Match</item>
-        <item>Training</item>
+    <string-array name="club_options">
+        <item>Ullevål Bandy IL</item>
     </string-array>
     <string-array name="team_options">
         <item>%2003</item>
         <item>%2004</item>
         <item>%2005</item>
     </string-array>
+	<string-array name="activitiy_type_options">
+	    <item>Cup</item>
+        <item>Match</item>
+        <item>Training</item>
+    </string-array>
+    <string-array name="venue_options">
+        <item>Bergbanen</item>
+        <item>NIH</item>
+    </string-array>
 
+    
+    <string-array name="activitiy_filter_options">
+		<item>All</item>
+	    <item>Cup</item>
+        <item>Match</item>
+        <item>Training</item>
+    </string-array>
     <string name="statestics">Statestics</string>
     <string name="team">Team</string>
     <string name="trainings">Trainings</string>

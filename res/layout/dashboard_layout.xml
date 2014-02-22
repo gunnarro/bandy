@@ -1,135 +1,177 @@
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:columnCount="3"
-    android:rowCount="4" >
+    android:layout_gravity="center"
+    android:orientation="vertical" >
 
     <ImageView
         android:id="@+id/uil_logo"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_column="0"
-        android:layout_columnSpan="3"
+        android:layout_height="80dp"
         android:layout_gravity="fill_horizontal"
         android:layout_margin="0dp"
         android:layout_marginTop="0dp"
-        android:layout_row="0"
-        android:layout_rowSpan="1"
         android:contentDescription="@string/activities_period"
         android:src="@drawable/uil_logo_top" />
 
-    <!-- row 1 -->
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:columnCount="3"
+        android:rowCount="4" >
 
-    <Button
-        android:id="@+id/trainings_btn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_column="0"
-        android:layout_gravity="center_horizontal"
-        android:layout_row="1"
-        android:drawableTop="@drawable/icon_bandy"
-        android:onClick="onClickFeature"
-        android:text="@string/training"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <!-- row 0 -->
 
-    <Button
-        android:id="@+id/matches_btn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_column="1"
-        android:layout_gravity="center_horizontal"
-        android:layout_row="1"
-        android:drawableTop="@drawable/icon_bandy"
-        android:onClick="onClickFeature"
-        android:text="@string/match"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <Button
+            android:id="@+id/trainings_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_row="0"
+            android:drawableTop="@drawable/icon_bandy"
+            android:onClick="onClickFeature"
+            android:text="@string/training"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <Button
-        android:id="@+id/cups_btn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_column="2"
-        android:layout_gravity="center_horizontal"
-        android:layout_row="1"
-        android:drawableTop="@drawable/icon_bandy"
-        android:onClick="onClickFeature"
-        android:text="@string/cup"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <Button
+            android:id="@+id/matches_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_row="0"
+            android:drawableTop="@drawable/icon_bandy"
+            android:onClick="onClickFeature"
+            android:text="@string/match"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <!-- Row 2 -->
+        <Button
+            android:id="@+id/cups_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="2"
+            android:layout_gravity="left|top"
+            android:layout_row="0"
+            android:drawableTop="@drawable/icon_bandy"
+            android:onClick="onClickFeature"
+            android:text="@string/cup"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <Button
-        android:id="@+id/clubs_btn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_column="0"
-        android:layout_gravity="center_horizontal"
-        android:layout_row="2"
-        android:drawableTop="@drawable/teams"
-        android:onClick="onClickFeature"
-        android:text="@string/clubs"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <!-- Row 1 -->
 
-    <Button
-        android:id="@+id/teams_btn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_column="1"
-        android:layout_gravity="center_horizontal"
-        android:layout_row="2"
-        android:drawableTop="@drawable/teams"
-        android:onClick="onClickFeature"
-        android:text="@string/teams"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <Button
+            android:id="@+id/clubs_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_row="1"
+            android:drawableTop="@drawable/teamsx"
+            android:onClick="onClickFeature"
+            android:text="@string/clubs"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <Button
-        android:id="@+id/players_btn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_column="2"
-        android:layout_gravity="center_horizontal"
-        android:layout_row="2"
-        android:drawableTop="@drawable/players"
-        android:onClick="onClickFeature"
-        android:text="@string/players"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <Button
+            android:id="@+id/teams_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_row="1"
+            android:drawableTop="@drawable/teams_48"
+            android:onClick="onClickFeature"
+            android:text="@string/teams"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+        
+          <Button
+            android:id="@+id/players_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="2"
+            android:layout_gravity="right|top"
+            android:layout_row="1"
+            android:drawableTop="@drawable/players"
+            android:onClick="onClickFeature"
+            android:text="@string/players"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <!-- Row 3 -->
+        <!-- Row 2 -->
 
-    <Button
-        android:id="@+id/contacts_btn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_column="0"
-        android:layout_gravity="center_horizontal"
-        android:layout_row="3"
-        android:drawableTop="@drawable/contacts_icon"
-        android:onClick="onClickFeature"
-        android:text="@string/contacts"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <Button
+            android:id="@+id/contacts_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_row="2"
+            android:drawableTop="@drawable/contacts_icon"
+            android:onClick="onClickFeature"
+            android:text="@string/contacts"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <Button
-        android:id="@+id/referee_btn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_column="1"
-        android:layout_gravity="center_horizontal"
-        android:layout_row="3"
-        android:drawableTop="@drawable/referee"
-        android:onClick="onClickFeature"
-        android:text="@string/referees"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <Button
+            android:id="@+id/referee_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_row="2"
+            android:drawableTop="@drawable/referee"
+            android:onClick="onClickFeature"
+            android:text="@string/referees"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <Button
-        android:id="@+id/settings_btn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_column="2"
-        android:layout_gravity="center_horizontal"
-        android:layout_row="3"
-        android:drawableTop="@drawable/preferences_icon"
-        android:onClick="onClickFeature"
-        android:text="@string/settings"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        <Button
+            android:id="@+id/settings_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="2"
+            android:layout_gravity="right|top"
+            android:layout_row="2"
+            android:drawableTop="@drawable/settings_48"
+            android:onClick="onClickFeature"
+            android:text="@string/settings"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+        
+         <!-- Row 3 -->
 
-</GridLayout>
+        <Button
+            android:id="@+id/statistic_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_row="3"
+            android:drawableTop="@drawable/statistic"
+            android:onClick="onClickFeature"
+            android:text="@string/statistic"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <Button
+            android:id="@+id/search_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="1"
+            android:layout_gravity="center_horizontal"
+            android:layout_row="3"
+            android:drawableTop="@drawable/search"
+            android:onClick="onClickFeature"
+            android:text="@string/search"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <Button
+            android:id="@+id/about_btn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_column="2"
+            android:layout_gravity="right|top"
+            android:layout_row="3"
+            android:drawableTop="@drawable/information"
+            android:onClick="onClickFeature"
+            android:text="@string/about"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </GridLayout>
+
+</LinearLayout>
