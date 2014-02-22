@@ -18,7 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New training"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/holo_blue_dark" />
 
         <View
             android:id="@+id/personaliaSeparatorId"
@@ -43,11 +44,33 @@
             android:gravity="center_horizontal" >
 
             <TextView
+                android:id="@+id/activitySeasonlbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Season"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/holo_blue_light" />
+
+            <Spinner
+                android:id="@+id/activity_season_spinner"
+                android:layout_width="fill_parent"
+                android:layout_gravity="left"
+                android:prompt="@array/activitiy_season_options"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
                 android:id="@+id/activityTypelbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Type"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/holo_blue_light" />
 
             <Spinner
                 android:id="@+id/activity_type_spinner"
@@ -67,7 +90,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Club"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/holo_blue_light" />
 
             <Spinner
                 android:id="@+id/club_spinner"
@@ -87,7 +111,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Team"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/holo_blue_light" />
 
             <Spinner
                 android:id="@+id/team_spinner"
@@ -107,7 +132,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Venue"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/holo_blue_light" />
 
             <Spinner
                 android:id="@+id/venue_spinner"
@@ -117,7 +143,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 
-         <TableRow
+        <TableRow
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -129,19 +155,19 @@
                 android:maxWidth="25dip"
                 android:padding="2dip"
                 android:text="Date"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/holo_blue_light" />
 
             <EditText
                 android:id="@+id/trainingDateId"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:padding="2dip"
                 android:inputType="date"
+                android:padding="2dip"
                 android:text="18.02.2014"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
-        
-         
+
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -155,7 +181,8 @@
                 android:layout_weight="1"
                 android:padding="2dip"
                 android:text="From"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/holo_blue_light" />
 
             <TextView
                 android:id="@+id/trainingFromTimeId"
@@ -181,7 +208,8 @@
                 android:maxWidth="25dip"
                 android:padding="2dip"
                 android:text="To"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/holo_blue_light" />
 
             <TextView
                 android:id="@+id/trainingToTimeId"

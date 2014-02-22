@@ -12,6 +12,7 @@ import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
@@ -161,6 +162,23 @@ public class BandyServiceImpl implements BandyService {
 		return this.bandyRepository.createAddress(address);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int createSeason(Season season) {
+		return this.bandyRepository.createSeason(season);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Season getSeason(Integer seasonId) {
+		return this.bandyRepository.getSeason(seasonId);
+	}
+
+	// ------------------------------------------------------------------------------------------
 	/**
 	 * {@inheritDoc}
 	 */

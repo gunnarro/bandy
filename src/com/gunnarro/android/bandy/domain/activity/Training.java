@@ -13,22 +13,16 @@ public class Training extends Activity {
 	private Team team;
 	private String venue;
 
-	public Training(long startTime, long length, Team team) {
-		this.startDate = startTime;
-		this.endTime = this.startDate + length * 60 * 60 * 1000;
-		this.team = team;
-		this.venue = team.getClub().getStadium();
-	}
-
-	public Training(long startDate, long endTime, Team team, String venue) {
+	public Training(Season season, long startDate, long endTime, Team team, String venue) {
+		super(season);
 		this.startDate = startDate;
 		this.endTime = endTime;
 		this.team = team;
 		this.venue = venue;
 	}
 
-	public Training(int id, long startDate, long endTime, Team team, String venue) {
-		this(startDate, endTime, team, venue);
+	public Training(int id, Season season, long startDate, long endTime, Team team, String venue) {
+		this(season, startDate, endTime, team, venue);
 		this.id = id;
 	}
 
@@ -69,7 +63,7 @@ public class Training extends Activity {
 	}
 
 	public static Training createTraining(Team team) {
-		return new Training(System.currentTimeMillis(), System.currentTimeMillis(), team, team.getClub().getStadium());
+		return new Training(null, System.currentTimeMillis(), System.currentTimeMillis(), team, team.getClub().getStadium());
 	}
 
 	@Override

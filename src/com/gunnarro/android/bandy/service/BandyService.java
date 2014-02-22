@@ -8,6 +8,7 @@ import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
@@ -38,7 +39,11 @@ public interface BandyService {
 
 	public long createAddress(Address address);
 
+	public int createSeason(Season season);
+
 	// -------------------------------------------------------------------
+
+	public Season getSeason(Integer seasonId);
 
 	public String[] getTeamNames(String clubName);
 

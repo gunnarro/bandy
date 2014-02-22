@@ -86,6 +86,10 @@ public interface BandyRepository {
 
 	public List<Cup> getCupList(Integer teamId, Integer periode);
 
+	public Season getSeason(Integer seasonId);
+
+	public List<Season> getSeasonList();
+
 	public List<Player> getPlayerList(Integer teamId);
 
 	public List<Item> getPlayersAsItemList(int teamId);

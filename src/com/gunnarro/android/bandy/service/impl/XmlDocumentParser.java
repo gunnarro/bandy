@@ -33,13 +33,14 @@ import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
-import com.gunnarro.android.bandy.domain.party.Player;
-import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
+import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
+import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.utility.Utility;
@@ -134,21 +135,38 @@ public class XmlDocumentParser {
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		mapAndSaveContacts(xpath, doc, team, nodeList, bandyService);
 
-		expression = "/team/matches/match";
+		// get seasons
+		expression = "/team/seasons/season";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		mapAndSaveMatchNodes(team, nodeList, bandyService);
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Season season = mapAndSaveSeasonNode(nodeList.item(i), bandyService);
 
-		expression = "/team/trainings/training";
-		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		mapAndSaveTrainingNodes(team, nodeList, bandyService);
+			expression = "/team/seasons/season[@period='" + season.getPeriod() + "']/matches/match";
+			nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+			mapAndSaveMatchNodes(team, season, nodeList, bandyService);
 
-		expression = "/team/cups/cup";
-		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		mapAndSaveCupNodes(xpath, doc, team, nodeList, bandyService);
+			expression = "/team/seasons/season[@period='" + season.getPeriod() + "']/trainings/training";
+			nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+			mapAndSaveTrainingNodes(team, season, nodeList, bandyService);
 
+			expression = "/team/seasons/season[@period='" + season.getPeriod() + "']/cups/cup";
+			nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+			mapAndSaveCupNodes(xpath, doc, team, season, nodeList, bandyService);
+		}
 		expression = "/team/players/player";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		mapAndSavePlayerNodes(xpath, doc, team, nodeList, bandyService);
+	}
+
+	private Season mapAndSaveSeasonNode(Node node, BandyService bandyService) {
+		CustomLog.d(this.getClass(), "node=" + node.getNodeName());
+		Season season = new Season(getAttributeValue(node, "period"), 0, 0);
+		CustomLog.d(this.getClass(), season.toString());
+		int seasonId = -1;
+		if (bandyService.getSeason(season.getId()) == null) {
+			seasonId = bandyService.createSeason(season);
+		}
+		return bandyService.getSeason(seasonId);
 	}
 
 	private Club mapAndSaveClubNode(NodeList nodeList, BandyService bandyService) {
@@ -189,37 +207,38 @@ public class XmlDocumentParser {
 		}
 	}
 
-	private void mapAndSaveCupNodes(XPath xpath, Document doc, Team team, NodeList nodeList, BandyService bandyService) throws XPathExpressionException {
+	private void mapAndSaveCupNodes(XPath xpath, Document doc, Team team, Season season, NodeList nodeList, BandyService bandyService)
+			throws XPathExpressionException {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			String cupName = getAttributeValue(nodeList.item(i), "cupName");
 			String dateTimeStr = getAttributeValue(nodeList.item(i), ATTR_DATE) + " " + getAttributeValue(nodeList.item(i), ATTR_START_TIME);
-			Cup cup = new Cup(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), getAttributeValue(nodeList.item(i), "clubName"), cupName,
+			Cup cup = new Cup(season, Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), getAttributeValue(nodeList.item(i), "clubName"), cupName,
 					getAttributeValue(nodeList.item(i), "venue"), Utility.timeToDate(getAttributeValue(nodeList.item(i), "deadlineDate"), "dd.MM.yyyy")
 							.getTime());
 			CustomLog.d(this.getClass(), cup.toString());
 			int cupId = bandyService.createCup(cup);
 			// Add matches for this cup, if any...
-			List<Match> cupMatchList = this.getCupMatchList(team, xpath, doc, cupName);
+			List<Match> cupMatchList = this.getCupMatchList(team, xpath, doc, season, cupName);
 			for (Match match : cupMatchList) {
 				bandyService.createMatchForCup(match, cupId);
 			}
 		}
 	}
 
-	private void mapAndSaveTrainingNodes(Team team, NodeList nodeList, BandyService bandyService) {
+	private void mapAndSaveTrainingNodes(Team team, Season season, NodeList nodeList, BandyService bandyService) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			String dateTimeStr = getAttributeValue(nodeList.item(i), ATTR_DATE) + " " + getAttributeValue(nodeList.item(i), "fromTime");
 			String toTimeStr = getAttributeValue(nodeList.item(i), "toTime");
-			Training training = new Training(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), Utility.timeToDate(toTimeStr, "HH:mm").getTime(),
-					new Team(team.getId(), team.getName()), getAttributeValue(nodeList.item(i), "place"));
+			Training training = new Training(season, Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), Utility.timeToDate(toTimeStr, "HH:mm")
+					.getTime(), new Team(team.getId(), team.getName()), getAttributeValue(nodeList.item(i), "place"));
 			CustomLog.d(this.getClass(), training.toString());
 			bandyService.createTraining(training);
 		}
 	}
 
-	private void mapAndSaveMatchNodes(Team team, NodeList nodeList, BandyService bandyService) {
+	private void mapAndSaveMatchNodes(Team team, Season season, NodeList nodeList, BandyService bandyService) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			Match match = mapNodeToMatch(team, nodeList.item(i));
+			Match match = mapNodeToMatch(team, season, nodeList.item(i));
 			CustomLog.d(this.getClass(), match.toString());
 			bandyService.createMatch(match);
 		}
@@ -274,23 +293,23 @@ public class XmlDocumentParser {
 		return roles;
 	}
 
-	private Match mapNodeToMatch(Team team, Node matchNode) {
+	private Match mapNodeToMatch(Team team, Season season, Node matchNode) {
 		String dateTimeStr = getAttributeValue(matchNode, ATTR_DATE) + " " + getAttributeValue(matchNode, ATTR_START_TIME);
-		return new Match(Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), new Team(team.getId(), team.getName()), new Team(getAttributeValue(
-				matchNode, "homeTeam")), new Team(getAttributeValue(matchNode, "awayTeam")), Integer.parseInt(getAttributeValue(matchNode, "goalsHomeTeam")),
-				Integer.parseInt(getAttributeValue(matchNode, "goalsAwayTeam")), getAttributeValue(matchNode, "venue"), new Referee(getAttributeValue(
-						matchNode, "referee"), getAttributeValue(matchNode, "referee")), Integer.parseInt(getAttributeValue(matchNode, "typeId")));
+		return new Match(null, season, Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), new Team(team.getId(), team.getName()), new Team(
+				getAttributeValue(matchNode, "homeTeam")), new Team(getAttributeValue(matchNode, "awayTeam")), Integer.parseInt(getAttributeValue(matchNode,
+				"goalsHomeTeam")), Integer.parseInt(getAttributeValue(matchNode, "goalsAwayTeam")), getAttributeValue(matchNode, "venue"), new Referee(
+				getAttributeValue(matchNode, "referee"), getAttributeValue(matchNode, "referee")), Integer.parseInt(getAttributeValue(matchNode, "typeId")));
 	}
 
-	private List<Match> getCupMatchList(Team team, XPath xpath, Document doc, String cupName) throws XPathExpressionException {
-		String xpathExprParents = "/team/cups/cup[@" + ATTR_CUP_NAME + "='" + cupName + "']/matches/match";
+	private List<Match> getCupMatchList(Team team, XPath xpath, Document doc, Season season, String cupName) throws XPathExpressionException {
+		String xpathExprParents = "/team/seasons/season[@period='" + season.getPeriod() + "']/cups/cup[@" + ATTR_CUP_NAME + "='" + cupName + "']/matches/match";
 		CustomLog.e(this.getClass(), "xpath expr=" + xpathExprParents);
 		NodeList nodeList = (NodeList) xpath.evaluate(xpathExprParents, doc, XPathConstants.NODESET);
 		List<Match> matchList = new ArrayList<Match>();
 		for (int j = 0; j < nodeList.getLength(); j++) {
 			Node parentNode = nodeList.item(j);
 			try {
-				matchList.add(mapNodeToMatch(team, parentNode));
+				matchList.add(mapNodeToMatch(team, season, parentNode));
 			} catch (Exception e) {
 				CustomLog.e(this.getClass(), "cup=" + cupName + ", Invalid status: " + parentNode.getNodeName() + "=" + parentNode.getTextContent());
 				CustomLog.e(this.getClass(), e.toString());

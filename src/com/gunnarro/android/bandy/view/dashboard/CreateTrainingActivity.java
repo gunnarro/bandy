@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Activity.ActivityTypesEnum;
+import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
@@ -24,6 +25,7 @@ import com.gunnarro.android.bandy.utility.Utility;
 public class CreateTrainingActivity extends Activity {
 
 	private String selectedClubName = "Ullev%l";
+	private String selectedSeasonPeriod = "2013/2014";
 	private String selectedTeamName = "Kn%tt 2003";
 	private String selectedVenue = "Bergbanen";
 	private String selectedType = "Training";
@@ -61,6 +63,14 @@ public class CreateTrainingActivity extends Activity {
 	}
 
 	private void setupEventHandlers() {
+
+		// Type spinner
+		String[] seasonPeriods = new String[] { "2013/2014", "2014/2015" };
+		Spinner seasonSpinner = (Spinner) findViewById(R.id.activity_season_spinner);
+		ArrayAdapter<CharSequence> seasonAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item, seasonPeriods);
+		seasonAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		seasonSpinner.setAdapter(seasonAdapter);
+		seasonSpinner.setOnItemSelectedListener(new SeasonOnItemSelectedListener());
 
 		// Type spinner
 		String[] typeNames = new String[] { "Training" };
@@ -137,9 +147,32 @@ public class CreateTrainingActivity extends Activity {
 		TextView fromTimeTxtView = (TextView) findViewById(R.id.trainingFromTimeId);
 		TextView toTimeTxtView = (TextView) findViewById(R.id.trainingToTimeId);
 		Team team = bandyService.getTeam(selectedTeamName, false);
-		Training training = new Training(Utility.timeToDate(date + " " + fromTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(), Utility
-				.timeToDate(date + " " + toTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(), team, this.selectedVenue);
+		Training training = new Training(new Season(selectedSeasonPeriod, 0, 0), Utility.timeToDate(date + " " + fromTimeTxtView.getText().toString(),
+				"dd.MM.yyyy hh:mm").getTime(), Utility.timeToDate(date + " " + toTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(), team,
+				this.selectedVenue);
 		int trainingId = bandyService.createTraining(training);
+	}
+
+	/**
+	 * Season spinner listener
+	 * 
+	 * @author gunnarro
+	 * 
+	 */
+	public class SeasonOnItemSelectedListener implements OnItemSelectedListener {
+
+		public SeasonOnItemSelectedListener() {
+		}
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+			selectedSeasonPeriod = parent.getItemAtPosition(pos).toString();
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			// Do nothing.
+		}
 	}
 
 	/**

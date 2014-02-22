@@ -172,8 +172,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int createTraining(Training training) {
-		ContentValues values = TrainingsTable.createContentValues(training.getTeam().getId(), training.getStartDate(), training.getEndTime(),
-				training.getVenue());
+		ContentValues values = TrainingsTable.createContentValues(training.getSeason().getId(), training.getTeam().getId(), training.getStartDate(),
+				training.getEndTime(), training.getVenue());
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(TrainingsTable.TABLE_NAME, null, values);
 		CustomLog.d(this.getClass(), training.toString());
@@ -279,7 +279,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			Team team = getTeam(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_TEAM_ID)));
-			match = mapCursorToMatch(cursor, team);
+			Season season = getSeason(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_SEASON_ID)));
+			match = mapCursorToMatch(cursor, team, season);
 		}
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
@@ -309,7 +310,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
-				list.add(mapCursorToMatch(cursor, team));
+				Season season = getSeason(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_SEASON_ID)));
+				list.add(mapCursorToMatch(cursor, team, season));
 				cursor.moveToNext();
 			}
 		}
@@ -633,8 +635,9 @@ public class BandyRepositoryImpl implements BandyRepository {
 		Team team = getTeam(teamId);
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
+			Season season = getSeason(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_SEASON_ID)));
 			while (!cursor.isAfterLast()) {
-				list.add(mapCursorToTraining(cursor, team));
+				list.add(mapCursorToTraining(cursor, team, season));
 				cursor.moveToNext();
 			}
 		}
@@ -660,7 +663,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			Team team = getTeam(teamId);
-			training = mapCursorToTraining(cursor, team);
+			Season season = getSeason(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_SEASON_ID)));
+			training = mapCursorToTraining(cursor, team, season);
 		}
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
@@ -687,7 +691,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
-				list.add(mapCursorToCup(cursor));
+				Season season = getSeason(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_SEASON_ID)));
+				list.add(mapCursorToCup(cursor, season));
 				cursor.moveToNext();
 			}
 		}
@@ -720,6 +725,30 @@ public class BandyRepositoryImpl implements BandyRepository {
 		}
 		CustomLog.e(this.getClass(), "roles=" + list);
 		return list;
+	}
+
+	@Override
+	public List<Season> getSeasonList() {
+		return null;
+	}
+
+	@Override
+	public Season getSeason(Integer seasonId) {
+		Season season = null;
+		StringBuffer selection = new StringBuffer();
+		selection.append(SeasonsTable.COLUMN_ID + " = ?");
+		String[] selectionArgs = { seasonId.toString() };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(SeasonsTable.TABLE_NAME, SeasonsTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			season = mapCursorToSeason(cursor);
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), "seasonId=" + seasonId + ", season=" + season);
+		return season;
 	}
 
 	public Player getPlayer(Integer playerId) {
@@ -940,29 +969,28 @@ public class BandyRepositoryImpl implements BandyRepository {
 	// Mappings
 	// -----------------------------------------------------------------------------------------------
 
-	private Cup mapCursorToCup(Cursor cursor) {
+	private Cup mapCursorToCup(Cursor cursor, Season season) {
 		long start_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(CupsTable.COLUMN_START_DATE))) * 1000L;
 		long deadline_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(CupsTable.COLUMN_DEADLINE_DATE))) * 1000L;
-		return new Cup(cursor.getInt(cursor.getColumnIndex(CupsTable.COLUMN_ID)), start_date_ms, cursor.getString(cursor
+		return new Cup(cursor.getInt(cursor.getColumnIndex(CupsTable.COLUMN_ID)), season, start_date_ms, cursor.getString(cursor
 				.getColumnIndex(CupsTable.COLUMN_CUP_NAME)), cursor.getString(cursor.getColumnIndex(CupsTable.COLUMN_CLUB_NAME)), cursor.getString(cursor
 				.getColumnIndex(CupsTable.COLUMN_VENUE)), deadline_date_ms);
 	}
 
-	private Match mapCursorToMatch(Cursor cursor, Team team) {
+	private Match mapCursorToMatch(Cursor cursor, Team team, Season season) {
 		long start_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(MatchesTable.COLUMN_START_DATE))) * 1000L;
-		return new Match(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_ID)), cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_SEASON_ID)),
-				start_date_ms, team, new Team(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_HOME_TEAM))), new Team(cursor.getString(cursor
-						.getColumnIndex(MatchesTable.COLUMN_AWAY_TEAM))), cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_HOME_TEAM)),
-				cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_AWAY_TEAM)), cursor.getString(cursor
-						.getColumnIndex(MatchesTable.COLUMN_VENUE)), new Referee(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_REFEREE)),
-						cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_REFEREE))), cursor.getInt(cursor
-						.getColumnIndex(MatchesTable.COLUMN_MATCH_TYPE_ID)));
+		return new Match(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_ID)), season, start_date_ms, team, new Team(cursor.getString(cursor
+				.getColumnIndex(MatchesTable.COLUMN_HOME_TEAM))), new Team(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_AWAY_TEAM))),
+				cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_HOME_TEAM)), cursor.getInt(cursor
+						.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_AWAY_TEAM)), cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_VENUE)),
+				new Referee(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_REFEREE)), cursor.getString(cursor
+						.getColumnIndex(MatchesTable.COLUMN_REFEREE))), cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_MATCH_TYPE_ID)));
 	}
 
-	private Training mapCursorToTraining(Cursor cursor, Team team) {
+	private Training mapCursorToTraining(Cursor cursor, Team team, Season season) {
 		long start_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(TrainingsTable.COLUMN_START_DATE))) * 1000L;
 		long end_time_ms = ((long) cursor.getInt(cursor.getColumnIndex(TrainingsTable.COLUMN_END_TIME))) * 1000L;
-		return new Training(cursor.getInt(cursor.getColumnIndex(TrainingsTable.COLUMN_ID)), start_date_ms, end_time_ms, team, cursor.getString(cursor
+		return new Training(cursor.getInt(cursor.getColumnIndex(TrainingsTable.COLUMN_ID)), season, start_date_ms, end_time_ms, team, cursor.getString(cursor
 				.getColumnIndex(TrainingsTable.COLUMN_PLACE)));
 	}
 
@@ -977,6 +1005,11 @@ public class BandyRepositoryImpl implements BandyRepository {
 	private Setting mapCursorToSetting(Cursor cursor) {
 		return new Setting(cursor.getString(cursor.getColumnIndex(SettingsTable.COLUMN_KEY)), cursor.getString(cursor
 				.getColumnIndex(SettingsTable.COLUMN_VALUE)));
+	}
+
+	private Season mapCursorToSeason(Cursor cursor) {
+		return new Season(cursor.getInt(cursor.getColumnIndex(SeasonsTable.COLUMN_ID)), cursor.getString(cursor.getColumnIndex(SeasonsTable.COLUMN_PERIOD)),
+				cursor.getLong(cursor.getColumnIndex(SeasonsTable.COLUMN_START_DATE)), cursor.getLong(cursor.getColumnIndex(SeasonsTable.COLUMN_END_DATE)));
 	}
 
 	private Address mapCursorToAddress(Cursor cursor) {

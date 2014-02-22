@@ -23,9 +23,10 @@ public class TrainingTest extends TestCase {
 		startTime.set(Calendar.SECOND, 0);
 		startTime.set(Calendar.MINUTE, 0);
 		long endTime = startTime.getTimeInMillis() + 2 * 60 * 60 * 1000;
-		Training training = new Training(startTime.getTimeInMillis(), endTime, new Team("team name"), "venue");
+		Training training = new Training(new Season("2013/2014", 0, 0), startTime.getTimeInMillis(), endTime, new Team("team name"), "venue");
 		assertEquals(ActivityTypesEnum.Training.name(), training.getName());
 		assertEquals(ActivityTypesEnum.Training.name(), training.getType());
+		assertEquals("2013/2014", training.getSeason().getPeriod());
 		assertEquals("01.02.2014 04:00", Utility.formatTime(training.getStartDate(), "dd.MM.yyyy hh:mm"));
 		assertEquals("01.02.2014 06:00", Utility.formatTime(training.getEndTime(), "dd.MM.yyyy hh:mm"));
 		assertEquals(ActivityStatusEnum.BEGIN, training.getStatus());

@@ -21,6 +21,11 @@
         <item>Week</item>
         <item>Day</item>
     </string-array>
+    <string-array name="activitiy_season_options">
+	    <item>2013/2014</item>
+        <item>2014/2015</item>
+        <item>2015/2016</item>
+    </string-array>
     <string-array name="club_options">
         <item>Ullevål Bandy IL</item>
     </string-array>

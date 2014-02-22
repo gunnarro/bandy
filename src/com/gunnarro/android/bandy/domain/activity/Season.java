@@ -2,6 +2,7 @@ package com.gunnarro.android.bandy.domain.activity;
 
 public class Season {
 
+	private Integer id;
 	private String period;
 	private long startTime;
 	private long endTime;
@@ -10,6 +11,15 @@ public class Season {
 		this.period = period;
 		this.startTime = startTime;
 		this.endTime = endTime;
+	}
+
+	public Season(int id, String period, long startTime, long endTime) {
+		this(period, startTime, endTime);
+		this.id = id;
+	}
+
+	public Integer getId() {
+		return id;
 	}
 
 	public String getPeriod() {

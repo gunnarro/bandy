@@ -19,7 +19,8 @@ public class Match extends Activity {
 	private Integer numberOfGoalsAway;
 	private Integer matchTypeId;
 
-	public Match(long startTime, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee) {
+	private Match(Season season, long startTime, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee) {
+		super(season);
 		this.startTime = startTime;
 		this.team = team;
 		this.homeTeam = homeTeam;
@@ -28,24 +29,28 @@ public class Match extends Activity {
 		this.referee = referee;
 	}
 
-	public Match(Integer id, long startDate, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee) {
-		this(startDate, team, homeTeam, awayTeam, venue, referee);
+	public Match(Integer id, Season season, long startDate, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee, Integer matchTypeId) {
+		this(season, startDate, team, homeTeam, awayTeam, venue, referee);
 		this.id = id;
-	}
-
-	public Match(long startDate, Team team, Team homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer numberOfGoalsAway, String venue, Referee referee,
-			Integer matchTypeId) {
-		this(startDate, team, homeTeam, awayTeam, venue, referee);
-		this.numberOfGoalsHome = numberOfGoalsHome;
-		this.numberOfGoalsAway = numberOfGoalsAway;
 		this.matchTypeId = matchTypeId;
 	}
 
-	public Match(Integer id, long seasonId, long startDate, Team team, Team homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer numberOfGoalsAway,
+	public Match(Integer id, Season season, long startTime, Team team, Team homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer numberOfGoalsAway,
 			String venue, Referee referee, Integer matchTypeId) {
-		this(startDate, team, homeTeam, awayTeam, numberOfGoalsHome, numberOfGoalsAway, venue, referee, matchTypeId);
-		this.id = id;
+		this(id, season, startTime, team, homeTeam, awayTeam, venue, referee, matchTypeId);
+		this.numberOfGoalsHome = numberOfGoalsHome;
+		this.numberOfGoalsAway = numberOfGoalsAway;
+
 	}
+
+	// public Match(Integer id, Season season, long startTime, Team team, Team
+	// homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer
+	// numberOfGoalsAway,
+	// String venue, Referee referee, Integer matchTypeId) {
+	// this(startTime, team, homeTeam, awayTeam, numberOfGoalsHome,
+	// numberOfGoalsAway, venue, referee, matchTypeId);
+	// this.id = id;
+	// }
 
 	public Integer getId() {
 		return id;

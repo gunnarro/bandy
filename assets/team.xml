@@ -188,7 +188,7 @@
     </players>
 	
     <seasons>
-        <season period="2013/2014">
+        <season period="2013/2014" startDate="01.09.2013" endDate="01.04.2014">
 		    <matches>
 		        <match typeId="1" date="26.11.2013" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Røa 03 2" goalsHomeTeam="4" goalsAwayTeam="4" venue="Bergbanen" referee="dommer ukjent" />
 		        <match typeId="1" date="10.12.2013" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Ready 01 4" goalsHomeTeam="5" goalsAwayTeam="2" venue="Bergbanen" referee="dommer ukjent" />

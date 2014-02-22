@@ -10,7 +10,8 @@ public class Cup extends Activity {
 	private String venue;
 	private long deadlineDate;
 
-	public Cup(long startDate, String cupName, String clubName, String venue, long deadlineDate) {
+	public Cup(Season season, long startDate, String cupName, String clubName, String venue, long deadlineDate) {
+		super(season);
 		this.startDate = startDate;
 		this.cupName = cupName;
 		this.clubName = clubName;
@@ -18,8 +19,8 @@ public class Cup extends Activity {
 		this.deadlineDate = deadlineDate;
 	}
 
-	public Cup(Integer id, long startDate, String cupName, String clubName, String venue, long deadlineDate) {
-		this(startDate, cupName, clubName, venue, deadlineDate);
+	public Cup(Integer id, Season season, long startDate, String cupName, String clubName, String venue, long deadlineDate) {
+		this(season, startDate, cupName, clubName, venue, deadlineDate);
 		this.id = id;
 	}
 
