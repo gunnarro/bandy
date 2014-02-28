@@ -18,8 +18,8 @@ import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 
 /**
  * A fragment representing a single Item detail screen. This fragment is either
- * contained in a {@link } in two-pane mode (on tablets) or a
- * {@link } on handsets.
+ * contained in a {@link } in two-pane mode (on tablets) or a {@link } on
+ * handsets.
  */
 public class TeamDetailFragment extends Fragment {
 
@@ -51,7 +51,7 @@ public class TeamDetailFragment extends Fragment {
 		}
 		Team team = this.bandyService.getTeam(teamId);
 		updateTeamDetails(rootView, team);
-		Statistic teamStatistic = bandyService.getTeamStatistic(team.getId());
+		Statistic teamStatistic = bandyService.getTeamStatistic(team.getId(), 1);
 		updateTeamStatistic(rootView, teamStatistic);
 		return rootView;
 	}

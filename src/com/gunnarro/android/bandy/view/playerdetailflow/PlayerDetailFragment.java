@@ -51,7 +51,7 @@ public class PlayerDetailFragment extends Fragment {
 		Player player = this.bandyService.getPlayer(playerId);
 		getActivity().setTitle(player.getFullName());
 		updatePlayerDetails(rootView, player);
-		Statistic playerStatistic = bandyService.getPlayerStatistic(player.getTeam().getId(), player.getId());
+		Statistic playerStatistic = bandyService.getPlayerStatistic(player.getTeam().getId(), player.getId(), 1);
 		updatePlayerStatistic(rootView, playerStatistic);
 		return rootView;
 	}

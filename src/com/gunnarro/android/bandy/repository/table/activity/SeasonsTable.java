@@ -17,7 +17,7 @@ public class SeasonsTable {
 	public static final String COLUMN_START_DATE = "start_date";
 	public static final String COLUMN_END_DATE = "end_date";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_START_DATE, COLUMN_END_DATE };
+	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_PERIOD, COLUMN_START_DATE, COLUMN_END_DATE };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -28,7 +28,8 @@ public class SeasonsTable {
 		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_PERIOD).append(" STRING NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_START_DATE).append(" INTEGER NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_END_DATE).append(" INTEGER NOT NULL);");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_END_DATE).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_PERIOD).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT ABORT);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

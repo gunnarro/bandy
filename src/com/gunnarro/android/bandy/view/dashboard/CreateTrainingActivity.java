@@ -147,9 +147,9 @@ public class CreateTrainingActivity extends Activity {
 		TextView fromTimeTxtView = (TextView) findViewById(R.id.trainingFromTimeId);
 		TextView toTimeTxtView = (TextView) findViewById(R.id.trainingToTimeId);
 		Team team = bandyService.getTeam(selectedTeamName, false);
-		Training training = new Training(new Season(selectedSeasonPeriod, 0, 0), Utility.timeToDate(date + " " + fromTimeTxtView.getText().toString(),
-				"dd.MM.yyyy hh:mm").getTime(), Utility.timeToDate(date + " " + toTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(), team,
-				this.selectedVenue);
+		Season season = bandyService.getSeason(selectedSeasonPeriod);
+		Training training = new Training(season, Utility.timeToDate(date + " " + fromTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(), Utility
+				.timeToDate(date + " " + toTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(), team, this.selectedVenue);
 		int trainingId = bandyService.createTraining(training);
 	}
 

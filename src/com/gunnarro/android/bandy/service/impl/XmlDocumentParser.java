@@ -162,10 +162,10 @@ public class XmlDocumentParser {
 		CustomLog.d(this.getClass(), "node=" + node.getNodeName());
 		Season season = new Season(getAttributeValue(node, "period"), 0, 0);
 		CustomLog.d(this.getClass(), season.toString());
-		int seasonId = -1;
-		if (bandyService.getSeason(season.getId()) == null) {
-			seasonId = bandyService.createSeason(season);
-		}
+//		int seasonId = -1;
+//		if (bandyService.getSeason(season.getId()) == null) {
+			int seasonId = bandyService.createSeason(season);
+//		}
 		return bandyService.getSeason(seasonId);
 	}
 

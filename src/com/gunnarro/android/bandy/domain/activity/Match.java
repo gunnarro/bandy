@@ -8,7 +8,6 @@ import com.gunnarro.android.bandy.domain.party.Referee;
 public class Match extends Activity {
 
 	private Integer id;
-	private int seasonId;
 	private long startTime;
 	private Team team;
 	private Team homeTeam;
@@ -54,10 +53,6 @@ public class Match extends Activity {
 
 	public Integer getId() {
 		return id;
-	}
-
-	public int getSeasonId() {
-		return seasonId;
 	}
 
 	public Team getTeam() {

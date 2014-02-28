@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
-import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
+import com.gunnarro.android.bandy.domain.Team;
+import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.statistic.MatchStatistic;
+import com.gunnarro.android.bandy.domain.statistic.MatchStatistic.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
@@ -30,15 +32,17 @@ public class StatisticActivity extends DashboardActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.result_table_layout);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
+		Team team = bandyService.getTeam(DashboardActivity.DEFAULT_TEAM_NAME, false);
+		this.setTitle("Statistic");
+		this.getActionBar().setSubtitle(team.getName());
 		setupEventHandlers();
-		addTestData();
-		updateData();
+		updateData(team);
 	}
 
 	private void setupEventHandlers() {
 	}
 
-	private void updateData() {
+	private void updateData(Team team) {
 		TableLayout table = (TableLayout) findViewById(R.id.statTableLayout);
 		if (table == null) {
 			return;
@@ -46,27 +50,45 @@ public class StatisticActivity extends DashboardActivity {
 		// Remove all rows before updating the table, except for the table
 		// header rows.
 		clearTableData();
-		Statistic teamStatistic = this.bandyService.getTeamStatistic(1);
-
-		Date startDate = new Date(teamStatistic.getStartTime());
-		Date endDate = new Date(teamStatistic.getEndTime());
-		for (MatchStatistic statistic : teamStatistic.getMatchStatisticList()) {
-			table.addView(createTableRow(statistic, table.getChildCount()));
+		Season season = bandyService.getSeason("2013/2014");
+		MatchStatistic summaryStatistic = new MatchStatistic(MatchTypesEnum.TOTAL.getCode());
+		if (season != null && team != null) {
+			Statistic teamStatistic = this.bandyService.getTeamStatistic(team.getId(), season.getId());
+			// Date startDate = new Date(teamStatistic.getStartTime());
+			// Date endDate = new Date(teamStatistic.getEndTime());
+			for (MatchStatistic statistic : teamStatistic.getMatchStatisticList()) {
+				table.addView(createTableRow(statistic, table.getChildCount()));
+				summaryStatistic.incrementPlayed(statistic.getPlayed());
+				summaryStatistic.incrementWon(statistic.getWon());
+				summaryStatistic.incrementDraw(statistic.getDraw());
+				summaryStatistic.incrementLoss(statistic.getLoss());
+				summaryStatistic.incrementGoalsScored(statistic.getGoalsScored());
+				summaryStatistic.incrementGoalsAgainst(statistic.getGoalsAgainst());
+			}
 		}
-		Utility.getDateFormatter().applyPattern("dd.MM.yyyy");
-		String periode = Utility.getDateFormatter().format(startDate) + " - " + Utility.getDateFormatter().format(endDate);
+		table.addView(createTableRow(summaryStatistic, -1));
+		// Utility.getDateFormatter().applyPattern("dd.MM.yyyy");
+		// String periode = Utility.getDateFormatter().format(startDate) + " - "
+		// + Utility.getDateFormatter().format(endDate);
 		TextView tableHeaderTxt = (TextView) findViewById(R.id.tableHeaderPeriod);
-		tableHeaderTxt.setText(getResources().getString(R.string.activities_period) + ": " + periode);
+		tableHeaderTxt.setText("Match statistic for season: " + (season != null ? season.getPeriod() : ""));
 	}
 
 	private TableRow createTableRow(MatchStatistic statistic, int rowNumber) {
 		TableRow row = new TableRow(getApplicationContext());
-		int rowBgColor = getResources().getColor(R.color.white);
 		int txtColor = getResources().getColor(R.color.black);
-		int numberColor = getActivityTypeColor(statistic.getMatchTypeId());
+		int rowBgColor = getResources().getColor(R.color.tbl_row_even);
+		if (rowNumber % 2 != 0) {
+			rowBgColor = getResources().getColor(R.color.tbl_row_odd);
+		}
+		if (rowNumber == -1) {
+			rowBgColor = getResources().getColor(R.color.white);
+			txtColor = getResources().getColor(R.color.dark_green);
+		}
+		int numberColor = getActivityTypeColor(statistic.getMatchType());
 		Utility.getDateFormatter().applyPattern("dd.MM.yyyy");
 
-		row.addView(createTextView(statistic.getName(), rowBgColor, txtColor, Gravity.LEFT));
+		row.addView(createTextView(statistic.getMatchType().name(), rowBgColor, txtColor, Gravity.LEFT));
 		row.addView(createTextView(statistic.getPlayed().toString(), rowBgColor, txtColor, Gravity.RIGHT));
 		row.addView(createTextView(statistic.getWon().toString(), rowBgColor, txtColor, Gravity.RIGHT));
 		row.addView(createTextView(statistic.getDraw().toString(), rowBgColor, numberColor, Gravity.RIGHT));
@@ -100,13 +122,15 @@ public class StatisticActivity extends DashboardActivity {
 		}
 	}
 
-	private int getActivityTypeColor(ActivityTypeEnum type) {
+	private int getActivityTypeColor(MatchTypesEnum type) {
 		switch (type) {
 		case CUP:
 			return getResources().getColor(R.color.dark_green);
-		case MATCH:
+		case LEAGUE:
 			return getResources().getColor(R.color.dark_blue);
 		case TRAINING:
+			return getResources().getColor(R.color.black);
+		case TOTAL:
 			return getResources().getColor(R.color.black);
 		default:
 			return getResources().getColor(R.color.black);

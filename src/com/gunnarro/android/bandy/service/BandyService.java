@@ -43,7 +43,11 @@ public interface BandyService {
 
 	// -------------------------------------------------------------------
 
+	public Season getCurrentSeason();
+
 	public Season getSeason(Integer seasonId);
+
+	public Season getSeason(String period);
 
 	public String[] getTeamNames(String clubName);
 
@@ -157,9 +161,9 @@ public interface BandyService {
 	// ---------------------------------------------------------------------------
 	// Statistic table operations
 	// ---------------------------------------------------------------------------
-	public Statistic getPlayerStatistic(int teamId, int playerId);
+	public Statistic getPlayerStatistic(int teamId, int playerId, int seasonId);
 
-	public Statistic getTeamStatistic(int teamId);
+	public Statistic getTeamStatistic(int teamId, int seasonId);
 
 	public String getSqlQuery(String id, String type);
 

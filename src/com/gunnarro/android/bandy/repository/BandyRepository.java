@@ -86,7 +86,11 @@ public interface BandyRepository {
 
 	public List<Cup> getCupList(Integer teamId, Integer periode);
 
+	public Season getCurrentSeason();
+
 	public Season getSeason(Integer seasonId);
+
+	public Season getSeason(String period);
 
 	public List<Season> getSeasonList();
 
@@ -131,9 +135,9 @@ public interface BandyRepository {
 	// ---------------------------------------------------------------------------
 	// Statistic table operations
 	// ---------------------------------------------------------------------------
-	public Statistic getPlayerStatistic(int teamId, int playerId);
+	public Statistic getPlayerStatistic(int teamId, int playerId, int seasonId);
 
-	public Statistic getTeamStatistic(int teamId);
+	public Statistic getTeamStatistic(int teamId, int seasonId);
 
 	public Training getTrainingByDate(int teamId, long startTime);
 

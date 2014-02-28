@@ -178,6 +178,22 @@ public class BandyServiceImpl implements BandyService {
 		return this.bandyRepository.getSeason(seasonId);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Season getCurrentSeason() {
+		return this.bandyRepository.getCurrentSeason();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Season getSeason(String period) {
+		return this.bandyRepository.getSeason(period);
+	}
+
 	// ------------------------------------------------------------------------------------------
 	/**
 	 * {@inheritDoc}
@@ -588,13 +604,13 @@ public class BandyServiceImpl implements BandyService {
 	// Statistic table operations
 	// ---------------------------------------------------------------------------
 	@Override
-	public Statistic getPlayerStatistic(int teamId, int playerId) {
-		return bandyRepository.getPlayerStatistic(teamId, playerId);
+	public Statistic getPlayerStatistic(int teamId, int playerId, int seasonId) {
+		return bandyRepository.getPlayerStatistic(teamId, playerId, seasonId);
 	}
 
 	@Override
-	public Statistic getTeamStatistic(int teamId) {
-		return bandyRepository.getTeamStatistic(teamId);
+	public Statistic getTeamStatistic(int teamId, int seasonId) {
+		return bandyRepository.getTeamStatistic(teamId, seasonId);
 	}
 
 	@Override

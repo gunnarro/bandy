@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class CustomLog {
 
-	private static final boolean IS_TRACE_ON = false;
+	private static final boolean IS_TRACE_ON = true;
 
 	public static void i(Class<?> clazz, String msg) {
 		if (IS_TRACE_ON) {
@@ -12,9 +12,13 @@ public class CustomLog {
 		}
 	}
 
-	public static void d(Class<?> clazz, String msg) {
+	public static void d(Class<?> clazz, Object msg) {
 		if (IS_TRACE_ON) {
-			Log.d(createTag(clazz), msg);
+			if (msg != null) {
+				Log.d(createTag(clazz), msg.toString());
+			} else {
+				Log.d(createTag(clazz), "Log object is null!");
+			}
 		}
 	}
 

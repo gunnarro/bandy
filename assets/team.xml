@@ -198,7 +198,7 @@
 		        <match typeId="1" date="21.01.2014" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Røa 03 1" goalsHomeTeam="7" goalsAwayTeam="7" venue="Bergbanen" referee="dommer ukjent" />
 		        <match typeId="1" date="04.02.2014" startTime="17:00" homeTeam="Ready 01 2" awayTeam="Ullevål 1" goalsHomeTeam="10" goalsAwayTeam="1" venue="Gressbanen" referee="dommer ukjent" />
 		        <match typeId="1" date="11.02.2014" startTime="17:00" homeTeam="Ullevål 1" awayTeam="Ready 01" goalsHomeTeam="5" goalsAwayTeam="3" venue="Bergbanen" referee="dommer ukjent" />
-		        <match typeId="1" date="25.02.2014" startTime="18:00" homeTeam="Sagene 03" awayTeam="Ullevål 1" goalsHomeTeam="-1" goalsAwayTeam="-1" venue="Voldsløkka" referee="dommer ukjent" />
+		        <match typeId="1" date="26.02.2014" startTime="18:00" homeTeam="Sagene 03" awayTeam="Ullevål 1" goalsHomeTeam="3" goalsAwayTeam="11" venue="Voldsløkka" referee="dommer ukjent" />
 		        <match typeId="2" date="12.02.2014" startTime="17:00" homeTeam="Ullevål" awayTeam="Ullevål 2004" goalsHomeTeam="12" goalsAwayTeam="2" venue="Bergbanen" referee="dommer ukjent" />
 		    </matches>
 		   
@@ -227,9 +227,42 @@
 		    </cups>
 		    
 		    <trainings>
+		        <training date="16.10.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="17.10.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="22.10.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="24.10.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="29.10.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="30.10.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="31.10.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="04.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="06.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="13.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="18.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="20.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
 		        <training date="25.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
 		        <training date="27.11.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
 		        <training date="30.11.2013" fromTime="14:30" toTime="16:00" place="Bergbanen" />
+		        <training date="02.12.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="04.12.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="09.12.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="11.12.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="16.12.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="18.12.2013" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="06.01.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="08.01.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="11.02.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+				<training date="13.01.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="15.01.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="18.01.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="20.01.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="22.01.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="26.01.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="05.02.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="08.02.2014" fromTime="14:30" toTime="16:00" place="Bergbanen" />
+		        <training date="10.02.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="12.02.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
+		        <training date="15.02.2014" fromTime="14:30" toTime="16:00" place="Bergbanen" />
+		        <training date="24.02.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
 		    </trainings>
 	    </season>
     </seasons>

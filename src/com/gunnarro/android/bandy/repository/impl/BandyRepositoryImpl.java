@@ -137,7 +137,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int createMatch(Match match) {
-		ContentValues values = MatchesTable.createContentValues(match.getSeasonId(), match.getTeam().getId(), match.getStartTime(), match.getHomeTeam()
+		ContentValues values = MatchesTable.createContentValues(match.getSeason().getId(), match.getTeam().getId(), match.getStartTime(), match.getHomeTeam()
 				.getName(), match.getAwayTeam().getName(), match.getNumberOfGoalsHome(), match.getNumberOfGoalsAway(), match.getVenue(), match.getReferee()
 				.getFullName(), match.getMatchTypeId());
 		this.database = dbHelper.getWritableDatabase();
@@ -150,7 +150,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int createCup(Cup cup) {
-		ContentValues values = CupsTable.createContentValues(cup.getStartDate(), cup.getCupName(), cup.getClubName(), cup.getVenue(), cup.getDeadlineDate());
+		ContentValues values = CupsTable.createContentValues(cup.getSeason().getId(), cup.getStartDate(), cup.getCupName(), cup.getClubName(), cup.getVenue(),
+				cup.getDeadlineDate());
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(CupsTable.TABLE_NAME, null, values);
 		return Long.valueOf(id).intValue();
@@ -164,6 +165,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		ContentValues values = SeasonsTable.createContentValues(season.getPeriod(), season.getStartTime(), season.getEndTime());
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(SeasonsTable.TABLE_NAME, null, values);
+		CustomLog.d(this.getClass(), season);
 		return Long.valueOf(id).intValue();
 	}
 
@@ -176,7 +178,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 				training.getEndTime(), training.getVenue());
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(TrainingsTable.TABLE_NAME, null, values);
-		CustomLog.d(this.getClass(), training.toString());
+		CustomLog.d(this.getClass(), training);
 		return Long.valueOf(id).intValue();
 	}
 
@@ -197,7 +199,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 				}
 			}
 		}
-		CustomLog.d(this.getClass(), player.toString());
+		CustomLog.d(this.getClass(), player);
 		return Long.valueOf(playerId).intValue();
 	}
 
@@ -261,8 +263,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 				cursor.moveToNext();
 			}
 		}
-		CustomLog.d(this.getClass(), "contacts=" + cursor.getCount());
 		if (cursor != null && !cursor.isClosed()) {
+			CustomLog.d(this.getClass(), "contacts=" + cursor.getCount());
 			cursor.close();
 		}
 		return list;
@@ -398,7 +400,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), "club=" + club);
+		CustomLog.d(this.getClass(), club);
 		return club;
 	}
 
@@ -560,7 +562,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), address.toString());
+		CustomLog.d(this.getClass(), address);
 		return address;
 	}
 
@@ -584,7 +586,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), "contact=" + contact);
+		CustomLog.d(this.getClass(), contact);
 		return contact;
 	}
 
@@ -611,7 +613,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), "player=" + player);
+		CustomLog.d(this.getClass(), player);
 		return player;
 
 	}
@@ -669,7 +671,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), "Training=" + training);
+		CustomLog.d(this.getClass(), training);
 		return training;
 	}
 
@@ -727,17 +729,47 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return list;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Season> getSeasonList() {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Season getCurrentSeason() {
+		String selection = SeasonsTable.COLUMN_PERIOD + " LIKE ?";
+		String[] selectionArgs = { "2013/2014" };
+		return getSeason(selection, selectionArgs);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Season getSeason(String period) {
+		String selection = SeasonsTable.COLUMN_PERIOD + " LIKE ?";
+		String[] selectionArgs = { period };
+		return getSeason(selection, selectionArgs);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Season getSeason(Integer seasonId) {
-		Season season = null;
-		StringBuffer selection = new StringBuffer();
-		selection.append(SeasonsTable.COLUMN_ID + " = ?");
+		String selection = SeasonsTable.COLUMN_ID + " = ?";
 		String[] selectionArgs = { seasonId.toString() };
+		return getSeason(selection, selectionArgs);
+	}
+
+	private Season getSeason(String selection, String[] selectionArgs) {
+		Season season = null;
+		CustomLog.d(this.getClass(), "selection=" + selection + " " + selectionArgs);
 		this.database = dbHelper.getReadableDatabase();
 		Cursor cursor = database.query(SeasonsTable.TABLE_NAME, SeasonsTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
 		if (cursor != null && cursor.getCount() > 0) {
@@ -747,7 +779,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), "seasonId=" + seasonId + ", season=" + season);
+		CustomLog.d(this.getClass(), season);
 		return season;
 	}
 
@@ -887,7 +919,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (setting == null) {
 			throw new RuntimeException("DB not initialize! Please report bug!");
 		}
-		CustomLog.d(this.getClass(), setting.toString());
+		CustomLog.d(this.getClass(), setting);
 		return setting.getValue();
 	}
 
@@ -1161,7 +1193,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), relationshipList.toString());
+		CustomLog.d(this.getClass(), relationshipList);
 		return relationshipList;
 	}
 
@@ -1208,14 +1240,14 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), roleList.toString());
+		CustomLog.d(this.getClass(), roleList);
 		return roleList;
 	}
 
 	// Statistic
 
 	@Override
-	public Statistic getPlayerStatistic(int teamId, int playerId) {
+	public Statistic getPlayerStatistic(int teamId, int playerId, int seasonId) {
 		Statistic statistic = null;
 		CustomLog.d(this.getClass(), "teamId=" + teamId + ", playerId=" + playerId);
 		StringBuffer sqlQuery = new StringBuffer();
@@ -1250,7 +1282,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), statistic.toString());
+		CustomLog.d(this.getClass(), statistic);
 		return statistic;
 	}
 
@@ -1258,23 +1290,23 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Statistic getTeamStatistic(int teamId) {
+	public Statistic getTeamStatistic(int teamId, int seasonId) {
 		List<MatchStatistic> matchStatisticList = new ArrayList<MatchStatistic>();
-		CustomLog.d(this.getClass(), "teamId=" + teamId);
+		CustomLog.d(this.getClass(), "teamId=" + teamId + ", seasonId=" + seasonId);
 		String sqlQuery = createTeamMatchStatisticQuery();
-		String matchTypeId = "1";
-		String[] selectionArgs = { Integer.toString(teamId) };
+		String[] selectionArgs = { Integer.toString(teamId), Integer.toString(teamId) };
 		CustomLog.d(this.getClass(), "sqlQuery=" + sqlQuery);
 		this.database = dbHelper.getReadableDatabase();
 		Cursor cursor = database.rawQuery(sqlQuery, selectionArgs);
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
-				MatchStatistic matchStatistic = new MatchStatistic(Integer.parseInt(matchTypeId), cursor.getInt(cursor.getColumnIndex("numberOfMatches")),
-						cursor.getInt(cursor.getColumnIndex("numberOfWonMatches")), cursor.getInt(cursor.getColumnIndex("numberOfDrawMatches")),
-						cursor.getInt(cursor.getColumnIndex("numberOfLossMatches")), cursor.getInt(cursor.getColumnIndex("numberOfGoalsScored")),
-						cursor.getInt(cursor.getColumnIndex("numberOfGoalsAgainst")));
+				MatchStatistic matchStatistic = new MatchStatistic(cursor.getInt(cursor.getColumnIndex("matchTypeId")), cursor.getInt(cursor
+						.getColumnIndex("numberOfMatches")), cursor.getInt(cursor.getColumnIndex("numberOfWonMatches")), cursor.getInt(cursor
+						.getColumnIndex("numberOfDrawMatches")), cursor.getInt(cursor.getColumnIndex("numberOfLossMatches")), cursor.getInt(cursor
+						.getColumnIndex("numberOfGoalsScored")), cursor.getInt(cursor.getColumnIndex("numberOfGoalsAgainst")));
 				matchStatisticList.add(matchStatistic);
+				CustomLog.d(this.getClass(), matchStatistic);
 				cursor.moveToNext();
 			}
 		}
@@ -1283,19 +1315,19 @@ public class BandyRepositoryImpl implements BandyRepository {
 		}
 
 		Statistic statistic = new Statistic(matchStatisticList);
-		CustomLog.d(this.getClass(), statistic.toString());
+		CustomLog.d(this.getClass(), statistic);
 		return statistic;
 	}
 
 	private String createTeamMatchStatisticQuery() {
 		StringBuffer sqlQuery = new StringBuffer();
-		sqlQuery.append("SELECT count(fk_team_id) AS numberOfMatches,");
+		sqlQuery.append("SELECT match_type_id AS matchTypeId, count(fk_team_id) AS numberOfMatches,");
 		sqlQuery.append(" sum(goals_home_team > goals_away_team) AS numberOfWonMatches,");
 		sqlQuery.append(" sum(goals_home_team = goals_away_team) AS numberOfDrawMatches,");
 		sqlQuery.append(" sum(goals_home_team < goals_away_team) AS numberOfLossMatches,");
 		sqlQuery.append(" sum(goals_home_team) AS numberOfGoalsScored,");
 		sqlQuery.append(" sum(goals_away_team) AS numberOfGoalsAgainst");
-		sqlQuery.append(" FROM matches WHERE fk_team_id = ?");
+		sqlQuery.append(" FROM matches WHERE fk_team_id = ? AND fk_season_id = ?");
 		sqlQuery.append(" GROUP BY match_type_id");
 		return sqlQuery.toString();
 	}
