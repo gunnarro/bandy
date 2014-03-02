@@ -8,14 +8,14 @@ import com.gunnarro.android.bandy.utility.Utility;
 public class Training extends Activity {
 
 	private Integer id;
-	private long startDate;
+	private long startTime;
 	private long endTime;
 	private Team team;
 	private String venue;
 
-	public Training(Season season, long startDate, long endTime, Team team, String venue) {
+	public Training(Season season, long startTime, long endTime, Team team, String venue) {
 		super(season);
-		this.startDate = startDate;
+		this.startTime = startTime;
 		this.endTime = endTime;
 		this.team = team;
 		this.venue = venue;
@@ -46,8 +46,8 @@ public class Training extends Activity {
 		return id;
 	}
 
-	public long getStartDate() {
-		return startDate;
+	public long getStartTime() {
+		return startTime;
 	}
 
 	public long getEndTime() {
@@ -68,7 +68,7 @@ public class Training extends Activity {
 
 	@Override
 	public boolean isFinished() {
-		return new Date(startDate).before(new Date(System.currentTimeMillis()));
+		return new Date(startTime).before(new Date(System.currentTimeMillis()));
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class Training extends Activity {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getClass().getSimpleName());
 		sb.append(" [id=").append(id);
-		sb.append(", startDate=").append(Utility.formatTime(startDate, Utility.DATE_PATTERN));
+		sb.append(", startDate=").append(Utility.formatTime(startTime, Utility.DATE_PATTERN));
 		sb.append(", endTime=").append(Utility.formatTime(endTime, Utility.TIME_PATTERN));
 		sb.append(", team=").append(getTeam().getName());
 		sb.append(", venue=").append(venue).append("]");

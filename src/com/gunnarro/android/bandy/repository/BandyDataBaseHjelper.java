@@ -14,6 +14,7 @@ import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
+import com.gunnarro.android.bandy.repository.table.activity.PlayerPositionTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.SeasonsTable;
 import com.gunnarro.android.bandy.repository.table.activity.TrainingsTable;
 import com.gunnarro.android.bandy.repository.table.link.CupMatchLnkTable;
@@ -25,6 +26,7 @@ import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 import com.gunnarro.android.bandy.repository.table.party.RolesTable;
+import com.gunnarro.android.bandy.repository.table.party.StatusesTable;
 import com.gunnarro.android.bandy.service.impl.DataLoader;
 
 /**
@@ -39,7 +41,7 @@ import com.gunnarro.android.bandy.service.impl.DataLoader;
 public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "uilbandyDB.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 7;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
 
@@ -95,10 +97,12 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		PlayerContactLnkTable.onCreate(database);
 		PlayerCupLnkTable.onCreate(database);
 		PlayerMatchLnkTable.onCreate(database);
+		PlayerPositionTypesTable.onCreate(database);
 		PlayerTrainingLnkTable.onCreate(database);
 		RolesTable.onCreate(database);
 		SeasonsTable.onCreate(database);
 		SettingsTable.onCreate(database);
+		StatusesTable.onCreate(database);
 		TeamsTable.onCreate(database);
 		TrainingsTable.onCreate(database);
 		NotificationsTable.onCreate(database);
@@ -123,10 +127,12 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		PlayerContactLnkTable.onUpgrade(database, oldVersion, newVersion);
 		PlayerCupLnkTable.onUpgrade(database, oldVersion, newVersion);
 		PlayerMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
+		PlayerPositionTypesTable.onUpgrade(database, oldVersion, newVersion);
 		PlayerTrainingLnkTable.onUpgrade(database, oldVersion, newVersion);
 		RolesTable.onUpgrade(database, oldVersion, newVersion);
 		SeasonsTable.onUpgrade(database, oldVersion, newVersion);
 		SettingsTable.onUpgrade(database, oldVersion, newVersion);
+		StatusesTable.onUpgrade(database, oldVersion, newVersion);
 		TeamsTable.onUpgrade(database, oldVersion, newVersion);
 		TrainingsTable.onUpgrade(database, oldVersion, newVersion);
 		NotificationsTable.onUpgrade(database, oldVersion, newVersion);
@@ -139,15 +145,32 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	public void insertDefaultData(SQLiteDatabase database) {
 		// init settings
-		database.execSQL("insert into settings (_id, key, value) values(1,'" + SettingsTable.DATA_FILE_URL + "','" + DataLoader.TEAM_XML_URL + "')");
-		database.execSQL("insert into settings (_id, key, value) values(2,'" + SettingsTable.DATA_FILE_LAST_UPDATED + "','0')");
-		database.execSQL("insert into settings (_id, key, value) values(3,'" + SettingsTable.DATA_FILE_VERSION + "','na')");
-		database.execSQL("insert into settings (_id, key, value) values(4,'" + SettingsTable.MAIL_ACCOUNT + "','na')");
-		database.execSQL("insert into settings (_id, key, value) values(5,'" + SettingsTable.MAIL_ACCOUNT_PWD + "','na')");
+		database.execSQL("insert into settings (_id, key, value) values(1,'" + SettingsTable.DATA_FILE_URL_KEY + "','" + DataLoader.TEAM_XML_URL + "')");
+		database.execSQL("insert into settings (_id, key, value) values(2,'" + SettingsTable.DATA_FILE_LAST_UPDATED_KEY + "','0')");
+		database.execSQL("insert into settings (_id, key, value) values(3,'" + SettingsTable.DATA_FILE_VERSION_KEY + "','na')");
+		database.execSQL("insert into settings (_id, key, value) values(4,'" + SettingsTable.MAIL_ACCOUNT_KEY + "','na')");
+		database.execSQL("insert into settings (_id, key, value) values(5,'" + SettingsTable.MAIL_ACCOUNT_PWD_KEY + "','na')");
 		// init match types
 		database.execSQL("insert into match_types (_id, match_type_id, match_type_name) values(1, 1, 'LEAGUE')");
 		database.execSQL("insert into match_types (_id, match_type_id, match_type_name) values(2, 2, 'TRAINING')");
 		database.execSQL("insert into match_types (_id, match_type_id, match_type_name) values(3, 3, 'CUP')");
+		database.execSQL("insert into match_types (_id, match_type_id, match_type_name) values(4, 4, 'TOURNAMENT')");
+		// init player position types
+		database.execSQL("insert into position_types (_id, position_type_id, position_type_name) values(1, 1, 'GOALKEEPER')");
+		database.execSQL("insert into position_types (_id, position_type_id, position_type_name) values(2, 2, 'DEFENDER')");
+		database.execSQL("insert into position_types (_id, position_type_id, position_type_name) values(3, 3, 'MIDFIELDER')");
+		database.execSQL("insert into position_types (_id, position_type_id, position_type_name) values(4, 4, 'FORWARD')");
+		// init statuses
+		database.execSQL("insert into statuses (_id, status_id, status_name) values(1, 1, 'ACTIVE')");
+		database.execSQL("insert into statuses (_id, status_id, status_name) values(2, 2, 'PASSIVE')");
+		database.execSQL("insert into statuses (_id, status_id, status_name) values(3, 3, 'INJURED')");
+		database.execSQL("insert into statuses (_id, status_id, status_name) values(4, 4, 'QUIT')");
+		// init seasons
+		database.execSQL("insert into seasons (_id, period, start_date, end_date) values(1, '2013/2014', 1, 1)");
+		database.execSQL("insert into seasons (_id, period, start_date, end_date) values(2, '2014/2015', 1, 1)");
+		database.execSQL("insert into seasons (_id, period, start_date, end_date) values(3, '2015/2016', 1, 1)");
+		database.execSQL("insert into seasons (_id, period, start_date, end_date) values(4, '2016/2017', 1, 1)");
+		
 		CustomLog.i(this.getClass(), "inserted default test data");
 	}
 

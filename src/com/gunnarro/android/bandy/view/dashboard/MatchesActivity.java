@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2011 Wglxy.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.gunnarro.android.bandy.view.dashboard;
 
 import java.util.ArrayList;
@@ -23,11 +7,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ExpandableListView;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Activity.ActivityTypesEnum;
 import com.gunnarro.android.bandy.domain.activity.Match;
@@ -39,7 +28,7 @@ import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.expandablelist.MatchExpandableListAdapter;
 
 /**
- * 
+ * @deprecated
  */
 public class MatchesActivity extends DashboardActivity {
 
@@ -62,10 +51,33 @@ public class MatchesActivity extends DashboardActivity {
 		ExpandableListView listView = (ExpandableListView) findViewById(R.id.match_expandable_listView);
 		MatchExpandableListAdapter adapter = new MatchExpandableListAdapter(this, groups, bandyService, MIN_NUMBER_OF_SIGNED_PLAYERS);
 		listView.setAdapter(adapter);
-		setupEventHandlers();
 	}
 
-	private void setupEventHandlers() {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.actionbar_menu_create, menu);
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_new_activity:
+			startActivity(new Intent(getApplicationContext(), CreateMatchActivity.class));
+			break;
+		default:
+			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+			break;
+		}
+		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
+		return true;
 	}
 
 	private void populateList(String teamName) {

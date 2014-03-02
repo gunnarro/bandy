@@ -33,13 +33,21 @@
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
          -->
          <activity
+            android:name="com.gunnarro.android.bandy.view.dashboard.AboutActivity"
+            android:label="View statistic"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
+         <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.StatisticActivity"
-            android:label="New Activity"
+            android:label="View statistic"
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
          <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.CreateTrainingActivity"
-            android:label="New Activity"
+            android:label="New training"
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.TrainingsActivity" />
+         <activity
+            android:name="com.gunnarro.android.bandy.view.dashboard.CreateMatchActivity"
+            android:label="New match"
+            android:parentActivityName="com.gunnarro.android.bandy.view.matchdetailflow.MatchListActivity" />
          <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.TrainingsActivity"
             android:label="Trainings"

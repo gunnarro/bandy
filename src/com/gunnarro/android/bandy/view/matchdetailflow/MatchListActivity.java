@@ -2,11 +2,16 @@ package com.gunnarro.android.bandy.view.matchdetailflow;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.activity.Activity.ActivityTypesEnum;
+import com.gunnarro.android.bandy.view.dashboard.CreateMatchActivity;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.dashboard.HomeActivity;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -55,6 +60,33 @@ public class MatchListActivity extends DashboardActivity implements MatchListFra
 		}
 		// TODO: If exposing deep links into your app, handle intents here.
 		CustomLog.d(this.getClass(), "is Two Pane layout : " + mTwoPane);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.actionbar_menu_create, menu);
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_new_activity:
+			startActivity(new Intent(getApplicationContext(), CreateMatchActivity.class));
+			break;
+		default:
+			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+			break;
+		}
+		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
+		return true;
 	}
 
 	/**

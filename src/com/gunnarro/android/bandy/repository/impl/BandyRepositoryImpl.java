@@ -40,6 +40,7 @@ import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
+import com.gunnarro.android.bandy.repository.table.activity.PlayerPositionTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.SeasonsTable;
 import com.gunnarro.android.bandy.repository.table.activity.TrainingsTable;
 import com.gunnarro.android.bandy.repository.table.link.CupMatchLnkTable;
@@ -51,6 +52,7 @@ import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 import com.gunnarro.android.bandy.repository.table.party.RolesTable;
+import com.gunnarro.android.bandy.repository.table.party.StatusesTable;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.exception.ValidationException;
 
@@ -96,17 +98,22 @@ public class BandyRepositoryImpl implements BandyRepository {
 		database.delete(CupsTable.TABLE_NAME, null, null);
 		database.delete(CupMatchLnkTable.TABLE_NAME, null, null);
 		database.delete(MatchesTable.TABLE_NAME, null, null);
-		database.delete(MatchTypesTable.TABLE_NAME, null, null);
 		database.delete(PlayersTable.TABLE_NAME, null, null);
 		database.delete(PlayerContactLnkTable.TABLE_NAME, null, null);
 		database.delete(PlayerCupLnkTable.TABLE_NAME, null, null);
 		database.delete(PlayerMatchLnkTable.TABLE_NAME, null, null);
 		database.delete(PlayerTrainingLnkTable.TABLE_NAME, null, null);
-		database.delete(RolesTable.TABLE_NAME, null, null);
-		database.delete(SeasonsTable.TABLE_NAME, null, null);
-		// database.delete(SettingsTable.TABLE_NAME, null, null);
 		database.delete(TeamsTable.TABLE_NAME, null, null);
 		database.delete(TrainingsTable.TABLE_NAME, null, null);
+
+		// Do not delete constants
+		database.delete(SettingsTable.TABLE_NAME, null, null);
+		// database.delete(MatchTypesTable.TABLE_NAME, null, null);
+		// database.delete(PlayerPositionTypesTable.TABLE_NAME, null, null);
+		// database.delete(SeasonsTable.TABLE_NAME, null, null);
+		// database.delete(StatusesTable.TABLE_NAME, null, null);
+		// database.delete(RolesTable.TABLE_NAME, null, null);
+
 		CustomLog.i(this.getClass(), "Deleted all data!");
 	}
 
@@ -174,7 +181,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int createTraining(Training training) {
-		ContentValues values = TrainingsTable.createContentValues(training.getSeason().getId(), training.getTeam().getId(), training.getStartDate(),
+		ContentValues values = TrainingsTable.createContentValues(training.getSeason().getId(), training.getTeam().getId(), training.getStartTime(),
 				training.getEndTime(), training.getVenue());
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(TrainingsTable.TABLE_NAME, null, values);
@@ -404,11 +411,94 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return club;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getMatchTypes() {
+		String[] matchTypes = new String[] {};
+		String selection = MatchTypesTable.COLUMN_MATCH_TYPE_NAME + " LIKE ?";
+		String[] selectionArgs = { "%" };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(MatchTypesTable.TABLE_NAME, MatchTypesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			matchTypes = new String[cursor.getCount()];
+			int i = 0;
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				matchTypes[i] = cursor.getString(cursor.getColumnIndex(MatchTypesTable.COLUMN_MATCH_TYPE_NAME));
+				cursor.moveToNext();
+				i++;
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return matchTypes;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getSeasonPeriodes() {
+		String[] seasonPeriodes = new String[] {};
+		String selection = SeasonsTable.COLUMN_PERIOD + " LIKE ?";
+		String[] selectionArgs = { "%" };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(SeasonsTable.TABLE_NAME, SeasonsTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			seasonPeriodes = new String[cursor.getCount()];
+			int i = 0;
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				seasonPeriodes[i] = cursor.getString(cursor.getColumnIndex(SeasonsTable.COLUMN_PERIOD));
+				cursor.moveToNext();
+				i++;
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return seasonPeriodes;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getRefereeNames() {
+		String[] refereeNames = new String[] {};
+		String selection = ContactsTable.COLUMN_FK_TEAM_ID + " = ?";
+		String[] selectionArgs = { "1" };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(ContactsTable.TABLE_NAME, ContactsTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			refereeNames = new String[cursor.getCount()];
+			int i = 0;
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				refereeNames[i] = cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_FIRST_NAME)) + " "
+						+ cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_LAST_NAME));
+				cursor.moveToNext();
+				i++;
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return refereeNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public String[] getTeamNames(String clubName) {
 		if (clubName == null) {
 			throw new ValidationException(this.getClass().getName() + ".getTeam() arg clubName is null!");
 		}
-		String[] teamNames = null;
+		String[] teamNames = new String[] {};
 		StringBuffer query = new StringBuffer();
 		query.append("SELECT t.").append(TeamsTable.COLUMN_TEAM_NAME);
 		query.append(" FROM ").append(TeamsTable.TABLE_NAME).append(" t, ").append(ClubsTable.TABLE_NAME).append(" c");
@@ -917,7 +1007,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 			cursor.close();
 		}
 		if (setting == null) {
-			throw new RuntimeException("DB not initialize! Please report bug!");
+			throw new RuntimeException("DB not initialized! Please report bug! Missing key in Settings table: " + type);
 		}
 		CustomLog.d(this.getClass(), setting);
 		return setting.getValue();

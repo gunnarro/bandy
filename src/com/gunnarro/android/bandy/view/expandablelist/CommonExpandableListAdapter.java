@@ -1,16 +1,13 @@
 package com.gunnarro.android.bandy.view.expandablelist;
 
-import android.R.color;
 import android.app.Activity;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckedTextView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;

@@ -167,4 +167,10 @@ public interface BandyService {
 
 	public String getSqlQuery(String id, String type);
 
+	public String[] getRefereeNames();
+
+	public String[] getMatchTypes();
+
+	public String[] getSeasonPeriodes();
+
 }

@@ -182,6 +182,8 @@ public abstract class DashboardActivity extends FragmentActivity {
 	 * @param v
 	 */
 	public void onClickFeature(View v) {
+		Bundle argsBundle = new Bundle();
+		argsBundle.putString(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
 		int id = v.getId();
 		switch (id) {
 		case R.id.trainings_btn:
@@ -272,6 +274,12 @@ public abstract class DashboardActivity extends FragmentActivity {
 		if (tv != null) {
 			tv.setText(getTitle());
 		}
+	}
+
+	public void returnToParentView(Class<?> parent, Bundle param) {
+		Intent intent = new Intent(getApplicationContext(), parent);
+		intent.putExtra("param", param);
+		startActivity(intent);
 	}
 
 	/**

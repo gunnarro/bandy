@@ -1,7 +1,6 @@
 package com.gunnarro.android.bandy.view.expandablelist;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.View.OnClickListener;

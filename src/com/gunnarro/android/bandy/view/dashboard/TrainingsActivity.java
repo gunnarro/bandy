@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2011 Wglxy.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.gunnarro.android.bandy.view.dashboard;
 
 import java.util.ArrayList;
@@ -76,7 +60,7 @@ public class TrainingsActivity extends DashboardActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.actionbar_menu, menu);
+		inflater.inflate(R.menu.actionbar_menu_create, menu);
 		return true;
 	}
 
@@ -86,20 +70,15 @@ public class TrainingsActivity extends DashboardActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_create_training:
+		case R.id.action_new_activity:
 			startActivity(new Intent(getApplicationContext(), CreateTrainingActivity.class));
 			break;
 		default:
 			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
 			break;
 		}
-
 		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
 		return true;
-	}
-
-	protected int createTraining() {
-		return -1;
 	}
 
 	private void populateList(String teamName) {
@@ -116,7 +95,7 @@ public class TrainingsActivity extends DashboardActivity {
 			itemSet.addAll(playerList);
 			ArrayList<Item> players = new ArrayList<Item>(itemSet);
 			Collections.sort(players);
-			String header = Utility.formatTime(training.getStartDate(), Utility.DATE_TIME_PATTERN) + " - "
+			String header = Utility.formatTime(training.getStartTime(), Utility.DATE_TIME_PATTERN) + " - "
 					+ Utility.formatTime(training.getEndTime(), Utility.TIME_PATTERN);
 			Group group = new Group(training.getId(), header, !training.isFinished(), players);
 			group.setSubHeader1(training.getName());

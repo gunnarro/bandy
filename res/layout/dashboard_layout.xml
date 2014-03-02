@@ -68,7 +68,7 @@
             android:layout_column="0"
             android:layout_gravity="center_horizontal"
             android:layout_row="1"
-            android:drawableTop="@drawable/teamsx"
+            android:drawableTop="@drawable/bandy_player_48"
             android:onClick="onClickFeature"
             android:text="@string/clubs"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -92,7 +92,7 @@
             android:layout_column="2"
             android:layout_gravity="right|top"
             android:layout_row="1"
-            android:drawableTop="@drawable/players"
+            android:drawableTop="@drawable/teams_48_1"
             android:onClick="onClickFeature"
             android:text="@string/players"
             android:textAppearance="?android:attr/textAppearanceSmall" />

@@ -23,6 +23,10 @@ public class PlayersTable {
 	public static final String COLUMN_DATE_OF_BIRTH = "date_of_birth";
 	public static final String COLUMN_EMAIL = "email";
 	public static final String COLUMN_MOBILE = "mobile";
+	public static final String COLUMN_COUNTRY_OF_BIRTH = "country_of_birth";
+	public static final String COLUMN_NATIONAL_TEAM = "national_team";
+	
+
 
 	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_FK_ADDRESS_ID, COLUMN_STATUS, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME,
 			COLUMN_LAST_NAME, COLUMN_DATE_OF_BIRTH, COLUMN_EMAIL, COLUMN_MOBILE };

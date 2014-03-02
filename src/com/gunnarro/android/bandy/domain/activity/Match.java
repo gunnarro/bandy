@@ -7,6 +7,10 @@ import com.gunnarro.android.bandy.domain.party.Referee;
 
 public class Match extends Activity {
 
+	public enum MatchTypesEnum {
+		TRAINING, CUP, TOURNAMENT, LEAGUE;
+	}
+	
 	private Integer id;
 	private long startTime;
 	private Team team;

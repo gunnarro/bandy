@@ -21,36 +21,53 @@
         <item>Week</item>
         <item>Day</item>
     </string-array>
+    
     <string-array name="activitiy_season_options">
 	    <item>2013/2014</item>
         <item>2014/2015</item>
         <item>2015/2016</item>
     </string-array>
+    
     <string-array name="club_options">
         <item>Ullevål Bandy IL</item>
     </string-array>
+    
     <string-array name="team_options">
         <item>%2003</item>
         <item>%2004</item>
         <item>%2005</item>
     </string-array>
+    
 	<string-array name="activitiy_type_options">
 	    <item>Cup</item>
         <item>Match</item>
         <item>Training</item>
     </string-array>
+    
     <string-array name="venue_options">
         <item>Bergbanen</item>
         <item>NIH</item>
     </string-array>
 
-    
     <string-array name="activitiy_filter_options">
 		<item>All</item>
 	    <item>Cup</item>
         <item>Match</item>
         <item>Training</item>
     </string-array>
+    
+     <string-array name="home_team_options">
+    </string-array>
+    
+     <string-array name="away_team_options">
+    </string-array>
+    
+     <string-array name="referee_options">
+    </string-array>
+    
+      <string-array name="match_type_options">
+    </string-array>
+
     <string name="statestics">Statestics</string>
     <string name="team">Team</string>
     <string name="trainings">Trainings</string>
@@ -72,7 +89,7 @@
     <string name="teams">Teams</string>
     <string name="contacts">Contacts</string>
     <string name="cup">Cup</string>
-    <string name="match">match</string>
+    <string name="match">Match</string>
     <string name="training">Training</string>
     <string name="referees">Referees</string>
     <string name="settings">Settings</string>

@@ -1,5 +1,7 @@
 package com.gunnarro.android.bandy.view.dashboard;
 
+import java.net.URI;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -19,6 +21,7 @@ import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.service.impl.DataLoader;
 import com.gunnarro.android.bandy.service.impl.DownloadService;
+import com.gunnarro.android.bandy.utility.DownloadFileTask;
 import com.gunnarro.android.bandy.utility.Utility;
 
 public class SetupActivity extends DashboardActivity {
@@ -34,7 +37,7 @@ public class SetupActivity extends DashboardActivity {
 				int resultCode = bundle.getInt(DownloadService.RESULT);
 				if (resultCode == Activity.RESULT_OK) {
 					CustomLog.d(this.getClass(), "Downloaded file:" + file);
-					updateBandyDatabase(file);
+					// updateBandyDatabase(file);
 				} else {
 					CustomLog.d(this.getClass(), "Problem Downloading data file...");
 				}
@@ -52,6 +55,7 @@ public class SetupActivity extends DashboardActivity {
 		getActionBar().setTitle(R.string.settings);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
 		setupEventHandlers();
+		init();
 	}
 
 	/**
@@ -76,13 +80,17 @@ public class SetupActivity extends DashboardActivity {
 		findViewById(R.id.load_data_btn).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(), DownloadService.class);
-				intent.putExtra(DownloadService.FILENAME, "team.xml");
-				intent.putExtra(DownloadService.URL, DataLoader.TEAM_XML_URL);
-				startService(intent);
+				// Intent intent = new Intent(getApplicationContext(),
+				// DownloadService.class);
+				// intent.putExtra(DownloadService.FILENAME, "team.xml");
+				// intent.putExtra(DownloadService.URL,
+				// DataLoader.TEAM_XML_URL);
+				// startService(intent);
 
-				// UpdateDataTask task = new UpdateDataTask();
-				// task.execute(new String[] { DataLoader.TEAM_XML_URL });
+				UpdateDataTask task = new UpdateDataTask(SetupActivity.this);
+				task.execute(new String[] { DataLoader.TEAM_XML_URL });
+
+				// downloadFile();
 			}
 		});
 
@@ -95,6 +103,14 @@ public class SetupActivity extends DashboardActivity {
 				updateMailAccountPwd(mailAccountPwd.getText().toString());
 			}
 		});
+	}
+
+	private void downloadFile() {
+		final DownloadFileTask task = new DownloadFileTask(this);
+		try {
+			task.execute(new URI(DataLoader.TEAM_XML_URL), null, null);
+		} catch (Exception e) {
+		}
 	}
 
 	protected void updateMailAccount(String mailAccount) {
@@ -117,15 +133,6 @@ public class SetupActivity extends DashboardActivity {
 		mailAccountPwd.setText(this.bandyService.getEmailAccountPwd());
 	}
 
-	private void updateBandyDatabase(String dataFile) {
-		bandyService.loadData(dataFile);
-		bandyService.updateDataFileLastUpdated(System.currentTimeMillis());
-		TextView updatedDateTxtView = (TextView) findViewById(R.id.data_file_last_updated_date_txt);
-		updatedDateTxtView.setText(Utility.getDateFormatter().format(bandyService.getDataFileLastUpdated()));
-		TextView versionTxtView = (TextView) findViewById(R.id.data_file_version_txt);
-		versionTxtView.setText(bandyService.getDataFileVersion());
-	}
-
 	/**
 	 * Asynch task for updating data
 	 * 
@@ -133,15 +140,25 @@ public class SetupActivity extends DashboardActivity {
 	 * 
 	 */
 	class UpdateDataTask extends AsyncTask<String, Void, String> {
-		private ProgressDialog pdialog;
+		private ProgressDialog dialog;
+
+		public UpdateDataTask(Activity activity) {
+			dialog = new ProgressDialog(activity);
+		}
 
 		/**
 		 * {@inheritDoc}
 		 */
 		@Override
 		protected void onPreExecute() {
-			super.onPreExecute();
-			pdialog = ProgressDialog.show(getApplication(), "Loading data...", "Updating data...", true);
+			// super.onPreExecute();
+			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			dialog.setTitle("Loading data...");
+			dialog.setMessage("Please wait.");
+			// dialog.setCancelable(true);
+			// Show spinner in dialog
+			// dialog.setIndeterminate(false);
+			dialog.show();
 		}
 
 		/**
@@ -149,7 +166,7 @@ public class SetupActivity extends DashboardActivity {
 		 */
 		@Override
 		protected void onProgressUpdate(Void... values) {
-			super.onProgressUpdate(values);
+			dialog.setProgress(0);
 		}
 
 		/**
@@ -158,7 +175,9 @@ public class SetupActivity extends DashboardActivity {
 		@Override
 		protected String doInBackground(String... args) {
 			try {
-				updateBandyDatabase(args[0]);
+				publishProgress();
+				bandyService.loadData(args[0]);
+				bandyService.updateDataFileLastUpdated(System.currentTimeMillis());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -170,8 +189,8 @@ public class SetupActivity extends DashboardActivity {
 		 */
 		@Override
 		protected void onPostExecute(String result) {
-			if (pdialog != null) {
-				pdialog.dismiss();
+			if (dialog != null) {
+				dialog.dismiss();
 			}
 		}
 	}

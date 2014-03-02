@@ -28,7 +28,6 @@ public class CreateTrainingActivity extends Activity {
 	private String selectedSeasonPeriod = "2013/2014";
 	private String selectedTeamName = "Kn%tt 2003";
 	private String selectedVenue = "Bergbanen";
-	private String selectedType = "Training";
 	private BandyService bandyService;
 	private Bundle bundle;
 
@@ -36,10 +35,11 @@ public class CreateTrainingActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.create_training_layout);
+		setContentView(R.layout.training_create_layout);
 		// selectedTeamName =
 		// getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 		this.setTitle(ActivityTypesEnum.Training.name() + " " + selectedTeamName);
+		this.getActionBar().setSubtitle("New training");
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
 		setupEventHandlers();
 		bundle = getIntent().getExtras();
@@ -64,24 +64,16 @@ public class CreateTrainingActivity extends Activity {
 
 	private void setupEventHandlers() {
 
-		// Type spinner
-		String[] seasonPeriods = new String[] { "2013/2014", "2014/2015" };
+		// Season spinner
+		String[] seasonPeriods = bandyService.getSeasonPeriodes();
 		Spinner seasonSpinner = (Spinner) findViewById(R.id.activity_season_spinner);
 		ArrayAdapter<CharSequence> seasonAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item, seasonPeriods);
 		seasonAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		seasonSpinner.setAdapter(seasonAdapter);
 		seasonSpinner.setOnItemSelectedListener(new SeasonOnItemSelectedListener());
 
-		// Type spinner
-		String[] typeNames = new String[] { "Training" };
-		Spinner typeSpinner = (Spinner) findViewById(R.id.activity_type_spinner);
-		ArrayAdapter<CharSequence> typeAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item, typeNames);
-		typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		typeSpinner.setAdapter(typeAdapter);
-		typeSpinner.setOnItemSelectedListener(new TypeOnItemSelectedListener());
-
 		// Club spinner
-		String[] clubNames = new String[] { selectedClubName };// this.bandyService.getTeamNames("Ullev%l");
+		String[] clubNames = this.bandyService.getTeamNames("%");
 		Spinner clubsSpinner = (Spinner) findViewById(R.id.club_spinner);
 		ArrayAdapter<CharSequence> clubsAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item, clubNames);
 		clubsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -89,7 +81,7 @@ public class CreateTrainingActivity extends Activity {
 		clubsSpinner.setOnItemSelectedListener(new ClubOnItemSelectedListener());
 
 		// Team spinner
-		String[] teamNames = new String[] { selectedTeamName };// this.bandyService.getTeamNames("%2003");
+		String[] teamNames = this.bandyService.getTeamNames("%");
 		Spinner teamsSpinner = (Spinner) findViewById(R.id.team_spinner);
 		ArrayAdapter<CharSequence> teamsAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item, teamNames);
 		teamsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -107,9 +99,7 @@ public class CreateTrainingActivity extends Activity {
 		findViewById(R.id.cancel_create_activity_btn).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent trainingsIntent = new Intent(getApplicationContext(), TrainingsActivity.class);
-				trainingsIntent.putExtra(DashboardActivity.ARG_TEAM_NAME, DashboardActivity.DEFAULT_TEAM_NAME);
-				startActivity(trainingsIntent);
+				returnToParentView();
 			}
 		});
 
@@ -117,12 +107,16 @@ public class CreateTrainingActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				createTraining();
-				Intent trainingsIntent = new Intent(getApplicationContext(), TrainingsActivity.class);
-				trainingsIntent.putExtra(DashboardActivity.ARG_TEAM_NAME, DashboardActivity.DEFAULT_TEAM_NAME);
-				startActivity(trainingsIntent);
+				returnToParentView();
 			}
 		});
 
+	}
+
+	private void returnToParentView() {
+		Intent trainingsIntent = new Intent(getApplicationContext(), TrainingsActivity.class);
+		trainingsIntent.putExtra(DashboardActivity.ARG_TEAM_NAME, DashboardActivity.DEFAULT_TEAM_NAME);
+		startActivity(trainingsIntent);
 	}
 
 	private void init() {
@@ -167,28 +161,6 @@ public class CreateTrainingActivity extends Activity {
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 			selectedSeasonPeriod = parent.getItemAtPosition(pos).toString();
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-			// Do nothing.
-		}
-	}
-
-	/**
-	 * Type spinner listener
-	 * 
-	 * @author gunnarro
-	 * 
-	 */
-	public class TypeOnItemSelectedListener implements OnItemSelectedListener {
-
-		public TypeOnItemSelectedListener() {
-		}
-
-		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			selectedType = parent.getItemAtPosition(pos).toString();
 		}
 
 		@Override

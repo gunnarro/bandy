@@ -131,7 +131,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public int createTraining(Training training) {
-		Training existingTraning = this.bandyRepository.getTrainingByDate(training.getTeam().getId(), training.getStartDate());
+		Training existingTraning = this.bandyRepository.getTrainingByDate(training.getTeam().getId(), training.getStartTime());
 		if (existingTraning == null) {
 			return this.bandyRepository.createTraining(training);
 		}
@@ -201,6 +201,30 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public String[] getTeamNames(String clubName) {
 		return bandyRepository.getTeamNames(clubName);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getMatchTypes() {
+		return bandyRepository.getMatchTypes();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getSeasonPeriodes() {
+		return bandyRepository.getSeasonPeriodes();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getRefereeNames() {
+		return bandyRepository.getRefereeNames();
 	}
 
 	/**
@@ -297,7 +321,7 @@ public class BandyServiceImpl implements BandyService {
 		}
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.TRAINING.name())) {
 			for (Training training : getTrainingList(team.getId(), periode)) {
-				list.add(new Activity(ActivityTypeEnum.TRAINING, training.getStartDate(), training.getVenue(), training.getTeam().getName()));
+				list.add(new Activity(ActivityTypeEnum.TRAINING, training.getStartTime(), training.getVenue(), training.getTeam().getName()));
 			}
 		}
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.CUP.name())) {
@@ -481,7 +505,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public void updateDataFileUrl(String url) {
-		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_URL, url);
+		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_URL_KEY, url);
 	}
 
 	/**
@@ -489,7 +513,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public String getDataFileUrl() {
-		return this.bandyRepository.getSetting(SettingsTable.DATA_FILE_URL);
+		return this.bandyRepository.getSetting(SettingsTable.DATA_FILE_URL_KEY);
 	}
 
 	/**
@@ -497,7 +521,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public void updateDataFileVersion(String version) {
-		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_VERSION, version);
+		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_VERSION_KEY, version);
 	}
 
 	/**
@@ -505,7 +529,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public String getDataFileVersion() {
-		return this.bandyRepository.getSetting(SettingsTable.DATA_FILE_VERSION);
+		return this.bandyRepository.getSetting(SettingsTable.DATA_FILE_VERSION_KEY);
 	}
 
 	/**
@@ -513,7 +537,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public void updateDataFileLastUpdated(long lastUpdatedTime) {
-		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_LAST_UPDATED, Long.toString(lastUpdatedTime));
+		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_LAST_UPDATED_KEY, Long.toString(lastUpdatedTime));
 		;
 	}
 
@@ -522,7 +546,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public long getDataFileLastUpdated() {
-		String lastUpdatedTime = this.bandyRepository.getSetting(SettingsTable.DATA_FILE_LAST_UPDATED);
+		String lastUpdatedTime = this.bandyRepository.getSetting(SettingsTable.DATA_FILE_LAST_UPDATED_KEY);
 		long time = lastUpdatedTime != null ? Long.parseLong(lastUpdatedTime) : 0;
 		return time;
 	}
@@ -532,7 +556,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public String getEmailAccount() {
-		return this.bandyRepository.getSetting(SettingsTable.MAIL_ACCOUNT);
+		return this.bandyRepository.getSetting(SettingsTable.MAIL_ACCOUNT_KEY);
 	}
 
 	/**
@@ -540,7 +564,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public String getEmailAccountPwd() {
-		return this.bandyRepository.getSetting(SettingsTable.MAIL_ACCOUNT_PWD);
+		return this.bandyRepository.getSetting(SettingsTable.MAIL_ACCOUNT_PWD_KEY);
 	}
 
 	/**
@@ -548,7 +572,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public void updateEmailAccount(String mailAccount) {
-		this.bandyRepository.updateSetting(SettingsTable.MAIL_ACCOUNT, mailAccount);
+		this.bandyRepository.updateSetting(SettingsTable.MAIL_ACCOUNT_KEY, mailAccount);
 	}
 
 	/**
@@ -556,7 +580,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public void updateEmailAccountPwd(String mailAccountPwd) {
-		this.bandyRepository.updateSetting(SettingsTable.MAIL_ACCOUNT_PWD, mailAccountPwd);
+		this.bandyRepository.updateSetting(SettingsTable.MAIL_ACCOUNT_PWD_KEY, mailAccountPwd);
 	}
 
 	/**

@@ -103,11 +103,15 @@ public class XmlDocumentParser {
 		dbf.setValidating(false);
 		DocumentBuilder db = dbf.newDocumentBuilder();
 
-		// InputStream inputStream = getHttpsInput(url);
-		// System.out.println(inputStream);
-		// CustomLog.e(this.getClass(), "Downloaded data file...");
-		// Document doc = db.parse(inputStream);
-		Document doc = db.parse(new File(filePath));
+		InputStream inputStream = null;
+		Document doc = null;
+		if (filePath.startsWith("http")) {
+			inputStream = getHttpsInput(filePath);
+			doc = db.parse(inputStream);
+		} else {
+			doc = db.parse(new File(filePath));
+		}
+		CustomLog.e(this.getClass(), "Downloaded data file..." + filePath);
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 
@@ -140,7 +144,6 @@ public class XmlDocumentParser {
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Season season = mapAndSaveSeasonNode(nodeList.item(i), bandyService);
-
 			expression = "/team/seasons/season[@period='" + season.getPeriod() + "']/matches/match";
 			nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 			mapAndSaveMatchNodes(team, season, nodeList, bandyService);
@@ -160,13 +163,15 @@ public class XmlDocumentParser {
 
 	private Season mapAndSaveSeasonNode(Node node, BandyService bandyService) {
 		CustomLog.d(this.getClass(), "node=" + node.getNodeName());
-		Season season = new Season(getAttributeValue(node, "period"), 0, 0);
-		CustomLog.d(this.getClass(), season.toString());
-//		int seasonId = -1;
-//		if (bandyService.getSeason(season.getId()) == null) {
-			int seasonId = bandyService.createSeason(season);
-//		}
-		return bandyService.getSeason(seasonId);
+		String period = getAttributeValue(node, "period");
+		Season existingSeason = bandyService.getSeason(period);
+		if (existingSeason == null) {
+			Season newSeason = new Season(period, 0, 0);
+			CustomLog.d(this.getClass(), newSeason.toString());
+			int seasonId = bandyService.createSeason(newSeason);
+			return bandyService.getSeason(seasonId);
+		}
+		return existingSeason;
 	}
 
 	private Club mapAndSaveClubNode(NodeList nodeList, BandyService bandyService) {
