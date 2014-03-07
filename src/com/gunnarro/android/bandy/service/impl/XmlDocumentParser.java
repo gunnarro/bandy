@@ -111,7 +111,7 @@ public class XmlDocumentParser {
 		} else {
 			doc = db.parse(new File(filePath));
 		}
-		CustomLog.e(this.getClass(), "Downloaded data file..." + filePath);
+		CustomLog.i(this.getClass(), "Downloaded data file..." + filePath);
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 
@@ -143,18 +143,24 @@ public class XmlDocumentParser {
 		expression = "/team/seasons/season";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			Season season = mapAndSaveSeasonNode(nodeList.item(i), bandyService);
-			expression = "/team/seasons/season[@period='" + season.getPeriod() + "']/matches/match";
-			nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-			mapAndSaveMatchNodes(team, season, nodeList, bandyService);
+			if (nodeList.item(i).getNodeName().equalsIgnoreCase("season")) {
+				Season season = mapAndSaveSeasonNode(nodeList.item(i), bandyService);
+				expression = "/team/seasons/season[@period='" + season.getPeriod() + "']/matches/match";
+				nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+				mapAndSaveMatchNodes(team, season, nodeList, bandyService);
 
-			expression = "/team/seasons/season[@period='" + season.getPeriod() + "']/trainings/training";
-			nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-			mapAndSaveTrainingNodes(team, season, nodeList, bandyService);
+				expression = "/team/seasons/season[@period='" + season.getPeriod() + "']/trainings/training";
+				nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+				mapAndSaveTrainingNodes(team, season, nodeList, bandyService);
 
-			expression = "/team/seasons/season[@period='" + season.getPeriod() + "']/cups/cup";
-			nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-			mapAndSaveCupNodes(xpath, doc, team, season, nodeList, bandyService);
+				expression = "/team/seasons/season[@period='" + season.getPeriod() + "']/cups/cup";
+				nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+				mapAndSaveCupNodes(xpath, doc, team, season, nodeList, bandyService);
+			} else {
+				CustomLog.e(this.getClass(), "Error parsing XML, Not a season node! nodeName=" + nodeList.item(i).getNodeName() + ", i=" + i
+						+ ", node list size=" + nodeList.getLength());
+				CustomLog.e(this.getClass(), "Error parsing XML, Not a season node! node=" + nodeList.item(i) + ", i=" + i);
+			}
 		}
 		expression = "/team/players/player";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
@@ -164,6 +170,9 @@ public class XmlDocumentParser {
 	private Season mapAndSaveSeasonNode(Node node, BandyService bandyService) {
 		CustomLog.d(this.getClass(), "node=" + node.getNodeName());
 		String period = getAttributeValue(node, "period");
+		if (period == null) {
+			return null;
+		}
 		Season existingSeason = bandyService.getSeason(period);
 		if (existingSeason == null) {
 			Season newSeason = new Season(period, 0, 0);
@@ -207,7 +216,7 @@ public class XmlDocumentParser {
 			Player player = new Player(-1, team, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(i), ATTR_MIDDLE_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), PlayerStatusEnum.valueOf(status.toUpperCase()), parentList, Utility.timeToDate(
 							getAttributeValue(nodeList.item(i), ATTR_BIRTH_DATE), Utility.DATE_PATTERN).getTime(), address);
-			CustomLog.e(this.getClass(), player.toString());
+			CustomLog.d(this.getClass(), player.toString());
 			bandyService.createPlayer(player);
 		}
 	}
@@ -288,7 +297,7 @@ public class XmlDocumentParser {
 		for (int j = 0; j < nodeList.getLength(); j++) {
 			Node roleNode = nodeList.item(j);
 			// Read only text node
-			CustomLog.e(this.getClass(), "node=" + roleNode.getNodeName() + " " + roleNode.getNodeType() + " " + roleNode.getTextContent());
+			CustomLog.d(this.getClass(), "node=" + roleNode.getNodeName() + " " + roleNode.getNodeType() + " " + roleNode.getTextContent());
 			try {
 				roles.add(ContactRoleEnum.valueOf(roleNode.getTextContent().toUpperCase()));
 			} catch (Exception e) {
@@ -308,7 +317,7 @@ public class XmlDocumentParser {
 
 	private List<Match> getCupMatchList(Team team, XPath xpath, Document doc, Season season, String cupName) throws XPathExpressionException {
 		String xpathExprParents = "/team/seasons/season[@period='" + season.getPeriod() + "']/cups/cup[@" + ATTR_CUP_NAME + "='" + cupName + "']/matches/match";
-		CustomLog.e(this.getClass(), "xpath expr=" + xpathExprParents);
+		CustomLog.d(this.getClass(), "xpath expr=" + xpathExprParents);
 		NodeList nodeList = (NodeList) xpath.evaluate(xpathExprParents, doc, XPathConstants.NODESET);
 		List<Match> matchList = new ArrayList<Match>();
 		for (int j = 0; j < nodeList.getLength(); j++) {
@@ -326,7 +335,7 @@ public class XmlDocumentParser {
 	private List<Contact> getParentList(XPath xpath, Document doc, String firstName, String lastName) throws XPathExpressionException {
 		String xpathExprParents = "/team/players/player[@" + ATTR_FIRST_NAME + "='" + firstName + "' and @" + ATTR_LAST_NAME + "='" + lastName
 				+ "']/parents/parent";
-		CustomLog.e(this.getClass(), "xpath expr=" + xpathExprParents);
+		CustomLog.d(this.getClass(), "xpath expr=" + xpathExprParents);
 		NodeList nodeList = (NodeList) xpath.evaluate(xpathExprParents, doc, XPathConstants.NODESET);
 		List<Contact> parentList = new ArrayList<Contact>();
 		for (int j = 0; j < nodeList.getLength(); j++) {
@@ -350,8 +359,8 @@ public class XmlDocumentParser {
 		if (node.hasAttributes() && node.getAttributes().getNamedItem(name) != null) {
 			value = node.getAttributes().getNamedItem(name).getNodeValue().trim();
 		} else {
-			CustomLog.e(this.getClass(), "node=" + node.getNodeName() + "," + node.getNodeValue() + ", " + node.getTextContent() + ", attribute=" + name
-					+ ", is missing!");
+			CustomLog.e(this.getClass(), "node=" + node.getNodeName() + ",value=" + node.getNodeValue() + ", text=" + node.getTextContent() + ", attribute="
+					+ name + ", is missing!");
 		}
 		return value;
 	}

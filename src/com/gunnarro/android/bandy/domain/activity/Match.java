@@ -10,7 +10,7 @@ public class Match extends Activity {
 	public enum MatchTypesEnum {
 		TRAINING, CUP, TOURNAMENT, LEAGUE;
 	}
-	
+
 	private Integer id;
 	private long startTime;
 	private Team team;
@@ -22,7 +22,7 @@ public class Match extends Activity {
 	private Integer numberOfGoalsAway;
 	private Integer matchTypeId;
 
-	private Match(Season season, long startTime, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee) {
+	public Match(Season season, long startTime, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee) {
 		super(season);
 		this.startTime = startTime;
 		this.team = team;

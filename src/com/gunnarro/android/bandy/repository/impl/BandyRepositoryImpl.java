@@ -28,7 +28,6 @@ import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.domain.party.Role;
-import com.gunnarro.android.bandy.domain.statistic.ActivityStatistic;
 import com.gunnarro.android.bandy.domain.statistic.MatchStatistic;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
@@ -40,7 +39,6 @@ import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
-import com.gunnarro.android.bandy.repository.table.activity.PlayerPositionTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.SeasonsTable;
 import com.gunnarro.android.bandy.repository.table.activity.TrainingsTable;
 import com.gunnarro.android.bandy.repository.table.link.CupMatchLnkTable;
@@ -52,7 +50,6 @@ import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 import com.gunnarro.android.bandy.repository.table.party.RolesTable;
-import com.gunnarro.android.bandy.repository.table.party.StatusesTable;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.exception.ValidationException;
 
@@ -842,6 +839,10 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public Season getSeason(String period) {
+		if (period == null) {
+			CustomLog.e(this.getClass(), "periode is equal to null!");
+			return null;
+		}
 		String selection = SeasonsTable.COLUMN_PERIOD + " LIKE ?";
 		String[] selectionArgs = { period };
 		return getSeason(selection, selectionArgs);
@@ -1362,9 +1363,6 @@ public class BandyRepositoryImpl implements BandyRepository {
 						cursor.getInt(cursor.getColumnIndex("numberOfPlayerMatches")), cursor.getInt(cursor.getColumnIndex("numberOfPlayerCups")),
 						cursor.getInt(cursor.getColumnIndex("numberOfPlayerTrainings")), cursor.getInt(cursor.getColumnIndex("numberOfTeamMatches")),
 						cursor.getInt(cursor.getColumnIndex("numberOfTeamCups")), cursor.getInt(cursor.getColumnIndex("numberOfTeamTrainings")));
-
-				ActivityStatistic playerMatchStatistic = new ActivityStatistic(cursor.getInt(cursor.getColumnIndex("numberOfLeagueMatches")),
-						cursor.getInt(cursor.getColumnIndex("numberOfCupMatches")), cursor.getInt(cursor.getColumnIndex("numberOfTrainingMatches")));
 				cursor.moveToNext();
 			}
 		}

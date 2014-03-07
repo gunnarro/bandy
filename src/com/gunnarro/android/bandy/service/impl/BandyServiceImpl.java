@@ -627,16 +627,25 @@ public class BandyServiceImpl implements BandyService {
 	// ---------------------------------------------------------------------------
 	// Statistic table operations
 	// ---------------------------------------------------------------------------
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Statistic getPlayerStatistic(int teamId, int playerId, int seasonId) {
 		return bandyRepository.getPlayerStatistic(teamId, playerId, seasonId);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Statistic getTeamStatistic(int teamId, int seasonId) {
 		return bandyRepository.getTeamStatistic(teamId, seasonId);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getSqlQuery(String id, String type) {
 		return this.bandyRepository.getSqlQuery(id, type);

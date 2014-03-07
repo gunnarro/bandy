@@ -1,7 +1,5 @@
 package com.gunnarro.android.bandy.view.dashboard;
 
-import java.util.Date;
-
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -30,7 +28,7 @@ public class StatisticActivity extends DashboardActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.result_table_layout);
+		setContentView(R.layout.match_statistic_layout);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
 		Team team = bandyService.getTeam(DashboardActivity.DEFAULT_TEAM_NAME, false);
 		this.setTitle("Statistic");

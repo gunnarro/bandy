@@ -40,8 +40,8 @@ import com.gunnarro.android.bandy.service.impl.DataLoader;
  */
 public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
-	private static final String DATABASE_NAME = "uilbandyDB.db";
-	private static final int DATABASE_VERSION = 7;
+	private static final String DATABASE_NAME = "bandy-uil.db";
+	private static final int DATABASE_VERSION = 3;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
 

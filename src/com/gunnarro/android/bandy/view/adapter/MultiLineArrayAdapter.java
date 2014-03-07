@@ -58,9 +58,9 @@ public class MultiLineArrayAdapter extends ArrayAdapter<MultiLineItem> {
 		ViewHolder holder = (ViewHolder) rowView.getTag();
 		holder.header.setText(item.getValue());
 		holder.subHeader1.setText(item.getSubHeader1());
-		if (!item.isEnabled()) {
+//		if (!item.isEnabled()) {
 			holder.subHeader2.setText(item.getSubHeader2());
-		}
+//		}
 		return rowView;
 	}
 }
