@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:scrollbars="none" >
+
+    <TableLayout
+        android:id="@+id/teamStatisticTableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:id="@+id/tablePeroidHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_background"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/teamStatisticTableHeaderPeriod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="6"
+                android:background="@color/tbl_background_header"
+                android:gravity="center"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/tbl_header_txt" />
+        </TableRow>
+
+        <!-- headers -->
+
+        <TableRow
+            android:id="@+id/tableRowHeaders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_background_header"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+
+            <TextView
+                android:id="@+id/nameId"
+                android:contentDescription="@string/na"
+                android:gravity="left"
+                android:text="@string/label_name"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/playedId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/label_played"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/wonId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/label_won"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/drawId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/label_draw"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/lossId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/label_loss"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/goalsId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/label_goals"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/tbl_header_txt" />
+        </TableRow>
+        <!-- Liga -->
+
+        <TableRow
+            android:id="@+id/leagueRowHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_row_odd"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+
+            <TextView
+                android:id="@+id/leagueId"
+                android:contentDescription="@string/na"
+                android:gravity="left"
+                android:text="@string/label_league"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/leaguePlayedId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/leagueWonId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/leagueDrawId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/leagueLossId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/leagueGoalsId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+        </TableRow>
+        <!-- cup -->
+
+        <TableRow
+            android:id="@+id/cupRowHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_row_even"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+
+            <TextView
+                android:id="@+id/cupId"
+                android:contentDescription="@string/na"
+                android:gravity="left"
+                android:text="@string/label_cup"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/cupPlayedId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/cupWonId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/cupDrawId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/cupLossId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/cupGoalsId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+        </TableRow>
+        <!-- training -->
+
+        <TableRow
+            android:id="@+id/trainingRowHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_row_odd"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+
+            <TextView
+                android:id="@+id/trainingId"
+                android:contentDescription="@string/na"
+                android:gravity="left"
+                android:text="@string/label_training"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/trainingPlayedId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/trainingWonId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/trainingDrawId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/trainingLossId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/trainingGoalsId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/number" />
+        </TableRow>
+
+        <!-- total -->
+
+        <TableRow
+            android:id="@+id/totalRowHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_row_even"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
+
+            <TextView
+                android:id="@+id/totalId"
+                android:contentDescription="@string/na"
+                android:gravity="left"
+                android:text="@string/label_total"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/totalPlayedId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/totalWonId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/totalDrawId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/totalLossId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textColor="@color/number" />
+
+            <TextView
+                android:id="@+id/totalGoalsId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/value_0"
+                android:textColor="@color/number" />
+        </TableRow>
+    </TableLayout>
+
+</ScrollView>

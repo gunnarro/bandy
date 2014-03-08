@@ -1,144 +1,153 @@
 package com.gunnarro.android.bandy.view.dashboard;
 
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
-import com.gunnarro.android.bandy.custom.CustomLog;
-import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.activity.Season;
-import com.gunnarro.android.bandy.domain.statistic.MatchStatistic;
-import com.gunnarro.android.bandy.domain.statistic.MatchStatistic.MatchTypesEnum;
-import com.gunnarro.android.bandy.domain.statistic.Statistic;
-import com.gunnarro.android.bandy.service.BandyService;
-import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
-import com.gunnarro.android.bandy.utility.Utility;
+import com.gunnarro.android.bandy.view.statistic.PlayerStatisticFragment;
+import com.gunnarro.android.bandy.view.statistic.TeamStatisticFragment;
 
-public class StatisticActivity extends DashboardActivity {
+public class StatisticActivity extends Activity {
 
-	protected BandyService bandyService;
+	public static Context appContext;
+
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.statistic_layout);
+		appContext = getApplicationContext();
+
+		// ActionBar
+		ActionBar actionbar = getActionBar();
+		actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+		actionbar.addTab(actionbar.newTab().setText(R.string.tab_team)
+				.setTabListener(new TabListener<TeamStatisticFragment>(this, TeamStatisticFragment.class.getSimpleName(), TeamStatisticFragment.class)));
+		actionbar.addTab(actionbar.newTab().setText(R.string.tab_player)
+				.setTabListener(new TabListener<PlayerStatisticFragment>(this, PlayerStatisticFragment.class.getSimpleName(), PlayerStatisticFragment.class)));
+
+		if (savedInstanceState != null) {
+			actionbar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+		}
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.match_statistic_layout);
-		this.bandyService = new BandyServiceImpl(getApplicationContext());
-		Team team = bandyService.getTeam(DashboardActivity.DEFAULT_TEAM_NAME, false);
-		this.setTitle("Statistic");
-		this.getActionBar().setSubtitle(team.getName());
-		setupEventHandlers();
-		updateData(team);
-	}
-
-	private void setupEventHandlers() {
-	}
-
-	private void updateData(Team team) {
-		TableLayout table = (TableLayout) findViewById(R.id.statTableLayout);
-		if (table == null) {
-			return;
-		}
-		// Remove all rows before updating the table, except for the table
-		// header rows.
-		clearTableData();
-		Season season = bandyService.getSeason("2013/2014");
-		MatchStatistic summaryStatistic = new MatchStatistic(MatchTypesEnum.TOTAL.getCode());
-		if (season != null && team != null) {
-			Statistic teamStatistic = this.bandyService.getTeamStatistic(team.getId(), season.getId());
-			// Date startDate = new Date(teamStatistic.getStartTime());
-			// Date endDate = new Date(teamStatistic.getEndTime());
-			for (MatchStatistic statistic : teamStatistic.getMatchStatisticList()) {
-				table.addView(createTableRow(statistic, table.getChildCount()));
-				summaryStatistic.incrementPlayed(statistic.getPlayed());
-				summaryStatistic.incrementWon(statistic.getWon());
-				summaryStatistic.incrementDraw(statistic.getDraw());
-				summaryStatistic.incrementLoss(statistic.getLoss());
-				summaryStatistic.incrementGoalsScored(statistic.getGoalsScored());
-				summaryStatistic.incrementGoalsAgainst(statistic.getGoalsAgainst());
-			}
-		}
-		table.addView(createTableRow(summaryStatistic, -1));
-		// Utility.getDateFormatter().applyPattern("dd.MM.yyyy");
-		// String periode = Utility.getDateFormatter().format(startDate) + " - "
-		// + Utility.getDateFormatter().format(endDate);
-		TextView tableHeaderTxt = (TextView) findViewById(R.id.tableHeaderPeriod);
-		tableHeaderTxt.setText("Match statistic for season: " + (season != null ? season.getPeriod() : ""));
-	}
-
-	private TableRow createTableRow(MatchStatistic statistic, int rowNumber) {
-		TableRow row = new TableRow(getApplicationContext());
-		int txtColor = getResources().getColor(R.color.black);
-		int rowBgColor = getResources().getColor(R.color.tbl_row_even);
-		if (rowNumber % 2 != 0) {
-			rowBgColor = getResources().getColor(R.color.tbl_row_odd);
-		}
-		if (rowNumber == -1) {
-			rowBgColor = getResources().getColor(R.color.white);
-			txtColor = getResources().getColor(R.color.dark_green);
-		}
-		int numberColor = getActivityTypeColor(statistic.getMatchType());
-		Utility.getDateFormatter().applyPattern("dd.MM.yyyy");
-
-		row.addView(createTextView(statistic.getMatchType().name(), rowBgColor, txtColor, Gravity.LEFT));
-		row.addView(createTextView(statistic.getPlayed().toString(), rowBgColor, txtColor, Gravity.RIGHT));
-		row.addView(createTextView(statistic.getWon().toString(), rowBgColor, txtColor, Gravity.RIGHT));
-		row.addView(createTextView(statistic.getDraw().toString(), rowBgColor, numberColor, Gravity.RIGHT));
-		row.addView(createTextView(statistic.getLoss().toString(), rowBgColor, numberColor, Gravity.RIGHT));
-		row.addView(createTextView(statistic.getGoals(), rowBgColor, numberColor, Gravity.CENTER));
-
-		row.setBackgroundColor(rowBgColor);
-		row.setPadding(1, 1, 1, 1);
-		return row;
-	}
-
-	private TextView createTextView(String value, int bgColor, int txtColor, int gravity) {
-		TextView txtView = new TextView(getApplicationContext());
-		txtView.setText(value);
-		txtView.setGravity(gravity);
-		txtView.setBackgroundColor(bgColor);
-		txtView.setTextColor(txtColor);
-		txtView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 9);
-		return txtView;
-	}
-
-	private void clearTableData() {
-		TableLayout table = (TableLayout) findViewById(R.id.tableLayout);
-		if (table == null) {
-			return;
-		}
-		CustomLog.i(this.getClass(), "...child: " + table.getChildCount());
-		if (table.getChildCount() > 3) {
-			table.removeViews(3, table.getChildCount() - 3);
-			CustomLog.i(this.getClass(), "Removed rows from view: " + (table.getChildCount() - 3));
-		}
-	}
-
-	private int getActivityTypeColor(MatchTypesEnum type) {
-		switch (type) {
-		case CUP:
-			return getResources().getColor(R.color.dark_green);
-		case LEAGUE:
-			return getResources().getColor(R.color.dark_blue);
-		case TRAINING:
-			return getResources().getColor(R.color.black);
-		case TOTAL:
-			return getResources().getColor(R.color.black);
-		default:
-			return getResources().getColor(R.color.black);
-		}
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return true;
 	}
 
 	/**
-	 * for unit testing only
+	 * {@inheritDoc}
 	 */
-	@Deprecated
-	private void addTestData() {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		// case R.id.menuitem_help:
+		// Toast.makeText(appContext, "help", Toast.LENGTH_SHORT).show();
+		// return true;
+		case R.id.menuitem_about:
+			Toast.makeText(appContext, R.string.app_about, Toast.LENGTH_SHORT).show();
+			return true;
+		case R.id.menuitem_quit:
+			finish();
+			return true;
+		}
+		return false;
 	}
-}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
+	}
+
+	public Fragment getCurrentFragment(Fragment fragment) {
+		return null;
+	}
+
+	/**
+	 * Custom tab listener class
+	 * 
+	 * @author admin
+	 * 
+	 * @param <T>
+	 */
+	public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
+		private final Activity activity;
+		private final String tag;
+		private final Class<T> clazz;
+		private final Bundle args;
+		private Fragment fragment;
+
+		public TabListener(Activity activity, String tag, Class<T> clz) {
+			this(activity, tag, clz, null);
+		}
+
+		public TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
+			this.activity = activity;
+			this.tag = tag;
+			this.clazz = clz;
+			this.args = args;
+
+			// Check to see if we already have a fragment for this tab, probably
+			// from a previously saved state. If so, deactivate it, because our
+			// initial state is that a tab isn't shown.
+			this.fragment = this.activity.getFragmentManager().findFragmentByTag(this.tag);
+			if (this.fragment != null && !this.fragment.isDetached()) {
+				FragmentTransaction ft = this.activity.getFragmentManager().beginTransaction();
+				ft.detach(this.fragment);
+				ft.commit();
+			}
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+			if (this.fragment == null) {
+				this.fragment = Fragment.instantiate(this.activity, this.clazz.getName(), this.args);
+				ft.add(android.R.id.content, this.fragment, this.tag);
+			} else {
+				ft.attach(this.fragment);
+			}
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+			if (this.fragment != null) {
+				ft.detach(this.fragment);
+			}
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		}
+
+	} // end class TabListener
+
+} // end class MainActivity

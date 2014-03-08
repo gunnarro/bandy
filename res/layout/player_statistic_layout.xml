@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:scrollbars="none" >
+
+    <TableLayout
+        android:id="@+id/playerStatisticTableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        android:textAppearance="?android:attr/textAppearanceMedium" >
+
+        <TableRow
+            android:id="@+id/tablePeroidHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_background"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/playerStatisticTableHeaderPeriod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="6"
+                android:background="@color/tbl_background_header"
+                android:gravity="center"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/tbl_header_txt" />
+        </TableRow>
+
+        <!-- headers -->
+
+        <TableRow
+            android:id="@+id/tableRowHeaders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tbl_background_header"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
+
+            <TextView
+                android:id="@+id/nameId"
+                android:contentDescription="@string/na"
+                android:gravity="left"
+                android:text="@string/label_name"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/playedId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/label_league"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/wonId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/label_cup"
+                android:textColor="@color/tbl_header_txt" />
+
+            <TextView
+                android:id="@+id/drawId"
+                android:contentDescription="@string/na"
+                android:gravity="center_horizontal"
+                android:text="@string/label_training"
+                android:textColor="@color/tbl_header_txt" />
+        </TableRow>
+        <!-- generated table rows are inserted here -->
+    </TableLayout>
+
+</ScrollView>

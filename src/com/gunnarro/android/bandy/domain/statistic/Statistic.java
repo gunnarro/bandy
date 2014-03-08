@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Statistic {
 
+	private String name;
 	private long startTime;
 	private long endTime;
 	private String clubName;
@@ -36,6 +37,14 @@ public class Statistic {
 		this.numberOfTeamTrainings = numberOfTeamTrainings;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public long getStartTime() {
 		return startTime;
 	}
@@ -56,27 +65,27 @@ public class Statistic {
 		return playerId;
 	}
 
-	public int getNumberOfTeamMatches() {
+	public Integer getNumberOfTeamMatches() {
 		return numberOfTeamMatches;
 	}
 
-	public int getNumberOfTeamCups() {
+	public Integer getNumberOfTeamCups() {
 		return numberOfTeamCups;
 	}
 
-	public int getNumberOfTeamTrainings() {
+	public Integer getNumberOfTeamTrainings() {
 		return numberOfTeamTrainings;
 	}
 
-	public int getNumberOfPlayerMatches() {
+	public Integer getNumberOfPlayerMatches() {
 		return numberOfPlayerMatches;
 	}
 
-	public int getNumberOfPlayerCups() {
+	public Integer getNumberOfPlayerCups() {
 		return numberOfPlayerCups;
 	}
 
-	public int getNumberOfPlayerTrainings() {
+	public Integer getNumberOfPlayerTrainings() {
 		return numberOfPlayerTrainings;
 	}
 

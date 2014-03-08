@@ -6,9 +6,6 @@
     <string name="app_about">Bandy activities calendar v1.0.0\n.\nDeveloper gunnarro</string>
     <string name="na">na</string>
     <string name="blank"></string>
-    <string name="tab_setup">Setup</string>
-    <string name="tab_players">Players</string>
-    <string name="tab_activities">Activities</string>
     <string name="spinner_view_by">View by</string>
     <string name="spinner_activity_filter">Activity filter</string>
     <string name="activities_period">Activities period</string>
@@ -26,6 +23,9 @@
     <string name="label_training">Training</string>
     <string name="label_cup">Cup</string>
     <string name="label_total">Total</string>
+    
+    <string name="tab_team">Team</string>
+    <string name="tab_player">Player</string>
 
     <string-array name="activities_view_by_options">
         <item>All</item>
