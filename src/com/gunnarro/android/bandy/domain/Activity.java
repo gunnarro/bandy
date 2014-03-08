@@ -2,6 +2,8 @@ package com.gunnarro.android.bandy.domain;
 
 import java.util.Date;
 
+import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
+
 public class Activity implements Comparable<Activity> {
 
 	public enum ActivityTypeEnum {
@@ -9,6 +11,7 @@ public class Activity implements Comparable<Activity> {
 	}
 
 	private ActivityTypeEnum type;
+	private MatchTypesEnum matchType;
 	private long startDate;
 	private String place;
 	private String description;
@@ -20,8 +23,17 @@ public class Activity implements Comparable<Activity> {
 		this.description = description;
 	}
 
+	public Activity(ActivityTypeEnum type, long startDate, String place, String description, MatchTypesEnum matchType) {
+		this(type, startDate, place, description);
+		this.matchType = matchType;
+	}
+
 	public ActivityTypeEnum getType() {
 		return type;
+	}
+
+	public MatchTypesEnum getMatchType() {
+		return matchType;
 	}
 
 	public long getStartDate() {
@@ -34,10 +46,6 @@ public class Activity implements Comparable<Activity> {
 
 	public String getDescription() {
 		return description;
-	}
-
-	public static Activity createMatchActivity() {
-		return null;// new Activity();
 	}
 
 	@Override

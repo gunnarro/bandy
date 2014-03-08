@@ -1,8 +1,8 @@
 package com.gunnarro.android.bandy.domain.statistic;
 
-import com.gunnarro.android.bandy.domain.statistic.MatchStatistic.MatchTypesEnum;
-
 import junit.framework.TestCase;
+
+import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
 
 public class MatchStatisticTest extends TestCase {
 

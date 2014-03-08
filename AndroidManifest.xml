@@ -34,11 +34,11 @@
          -->
          <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.AboutActivity"
-            android:label="View statistic"
+            android:label="About"
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
          <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.StatisticActivity"
-            android:label="View statistic"
+            android:label="Statistic"
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
          <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.CreateTrainingActivity"
@@ -48,6 +48,10 @@
             android:name="com.gunnarro.android.bandy.view.dashboard.CreateMatchActivity"
             android:label="New match"
             android:parentActivityName="com.gunnarro.android.bandy.view.matchdetailflow.MatchListActivity" />
+          <activity
+            android:name="com.gunnarro.android.bandy.view.dashboard.CreatePlayerActivity"
+            android:label="New player"
+            android:parentActivityName="com.gunnarro.android.bandy.view.matchdetailflow.PlayerListActivity" />
          <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.TrainingsActivity"
             android:label="Trainings"

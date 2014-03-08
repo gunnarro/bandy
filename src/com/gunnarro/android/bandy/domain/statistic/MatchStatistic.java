@@ -1,29 +1,8 @@
 package com.gunnarro.android.bandy.domain.statistic;
 
+import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
+
 public class MatchStatistic {
-
-	public enum MatchTypesEnum {
-		TOTAL(0), LEAGUE(1), TRAINING(2), CUP(3);
-
-		private int code;
-
-		MatchTypesEnum(int code) {
-			this.code = code;
-		}
-
-		public int getCode() {
-			return code;
-		}
-
-		public static String getName(int code) {
-			for (MatchTypesEnum m : MatchTypesEnum.values()) {
-				if (m.code == code) {
-					return m.name();
-				}
-			}
-			return "unkown code " + code;
-		}
-	}
 
 	private int matchTypeId = 9;
 	private int played;

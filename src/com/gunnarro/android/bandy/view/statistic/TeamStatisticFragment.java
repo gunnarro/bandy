@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.domain.Team;
+import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.statistic.MatchStatistic;
-import com.gunnarro.android.bandy.domain.statistic.MatchStatistic.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
@@ -27,9 +27,9 @@ public class TeamStatisticFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		if (getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
-//			playerId = getArguments().getInt(PlayerDetailActivity.ARG_PLAYER_ID);
-//		}
+		// if (getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
+		// playerId = getArguments().getInt(PlayerDetailActivity.ARG_PLAYER_ID);
+		// }
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class TeamStatisticFragment extends Fragment {
 		// Remove all rows before updating the table, except for the table
 		// header rows.
 		Season season = bandyService.getSeason("2013/2014");
-		MatchStatistic summaryStatistic = new MatchStatistic(MatchTypesEnum.TOTAL.getCode());
+		MatchStatistic summaryStatistic = new MatchStatistic(0);
 		if (season != null && team != null) {
 			Statistic teamStatistic = this.bandyService.getTeamStatistic(team.getId(), season.getId());
 			// Date startDate = new Date(teamStatistic.getStartTime());
@@ -99,15 +99,14 @@ public class TeamStatisticFragment extends Fragment {
 			setValue(view, R.id.trainingLossId, statistic.getLoss().toString());
 			setValue(view, R.id.trainingGoalsId, statistic.getGoals().toString());
 			break;
-		case TOTAL:
+		default:
+			// Total is default
 			setValue(view, R.id.totalPlayedId, statistic.getPlayed().toString());
 			setValue(view, R.id.totalWonId, statistic.getWon().toString());
 			setValue(view, R.id.totalDrawId, statistic.getDraw().toString());
 			setValue(view, R.id.totalLossId, statistic.getLoss().toString());
 			setValue(view, R.id.totalGoalsId, statistic.getGoals().toString());
 			break;
-		default:
-
 		}
 	}
 

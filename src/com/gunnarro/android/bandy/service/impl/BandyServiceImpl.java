@@ -1,8 +1,11 @@
 package com.gunnarro.android.bandy.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 
@@ -10,19 +13,19 @@ import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Activity;
 import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
 import com.gunnarro.android.bandy.domain.Club;
+import com.gunnarro.android.bandy.domain.SearchResult;
+import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
+import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Role;
-import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
-import com.gunnarro.android.bandy.domain.SearchResult;
-import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.repository.BandyRepository;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl.PlayerLinkTableTypeEnum;
@@ -32,6 +35,14 @@ import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.exception.ValidationException;
 
 public class BandyServiceImpl implements BandyService {
+
+	private static Map<String, Integer> datePeriodeMap = new HashMap<String, Integer>();
+	{
+		datePeriodeMap.put("Year", Calendar.YEAR);
+		datePeriodeMap.put("Month", Calendar.MONTH);
+		datePeriodeMap.put("Week", Calendar.WEEK_OF_YEAR);
+		datePeriodeMap.put("Day", Calendar.DAY_OF_YEAR);
+	}
 
 	private Context context;
 	private BandyRepository bandyRepository;
@@ -144,6 +155,14 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public int createPlayer(Player player) {
 		return this.bandyRepository.createPlayer(player);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void changePlayerStatus(int playerId, String status) {
+		this.bandyRepository.changePlayerStatus(playerId, status);
 	}
 
 	/**
@@ -300,7 +319,7 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Activity> getActivityList(String teamName, String selectedPeriode, String filterBy) {
+	public List<Activity> getActivityList(String teamName, String period, String filterBy) {
 		List<Activity> list = new ArrayList<Activity>();
 		Team team = null;
 		try {
@@ -313,19 +332,19 @@ public class BandyServiceImpl implements BandyService {
 			// Simply ignore, no data found
 			return list;
 		}
-		Integer periode = 9;
+
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.MATCH.name())) {
-			for (Match match : getMatchList(team.getId(), periode)) {
-				list.add(new Activity(ActivityTypeEnum.MATCH, match.getStartTime(), match.getVenue(), match.getTeamVersus()));
+			for (Match match : getMatchList(team.getId(), datePeriodeMap.get(period))) {
+				list.add(new Activity(ActivityTypeEnum.MATCH, match.getStartTime(), match.getVenue(), match.getTeamVersus(),match.getMatchType()));
 			}
 		}
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.TRAINING.name())) {
-			for (Training training : getTrainingList(team.getId(), periode)) {
+			for (Training training : getTrainingList(team.getId(), datePeriodeMap.get(period))) {
 				list.add(new Activity(ActivityTypeEnum.TRAINING, training.getStartTime(), training.getVenue(), training.getTeam().getName()));
 			}
 		}
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.CUP.name())) {
-			for (Cup cup : getCupList(team.getId(), periode)) {
+			for (Cup cup : getCupList(team.getId(), datePeriodeMap.get(period))) {
 				list.add(new Activity(ActivityTypeEnum.CUP, cup.getStartDate(), cup.getVenue(), cup.getCupName()));
 			}
 		}
@@ -649,5 +668,13 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public String getSqlQuery(String id, String type) {
 		return this.bandyRepository.getSqlQuery(id, type);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getPlayerStatusTypes() {
+		return this.bandyRepository.getPlayerStatusTypes();
 	}
 }

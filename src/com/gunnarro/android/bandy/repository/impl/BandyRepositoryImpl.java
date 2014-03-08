@@ -50,6 +50,7 @@ import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 import com.gunnarro.android.bandy.repository.table.party.RolesTable;
+import com.gunnarro.android.bandy.repository.table.party.StatusesTable;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.exception.ValidationException;
 
@@ -143,7 +144,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public int createMatch(Match match) {
 		ContentValues values = MatchesTable.createContentValues(match.getSeason().getId(), match.getTeam().getId(), match.getStartTime(), match.getHomeTeam()
 				.getName(), match.getAwayTeam().getName(), match.getNumberOfGoalsHome(), match.getNumberOfGoalsAway(), match.getVenue(), match.getReferee()
-				.getFullName(), match.getMatchTypeId());
+				.getFullName(), match.getMatchType().getCode());
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(MatchesTable.TABLE_NAME, null, values);
 		return Long.valueOf(id).intValue();
@@ -184,6 +185,21 @@ public class BandyRepositoryImpl implements BandyRepository {
 		long id = database.insert(TrainingsTable.TABLE_NAME, null, values);
 		CustomLog.d(this.getClass(), training);
 		return Long.valueOf(id).intValue();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void changePlayerStatus(Integer playerId, String status) {
+		StringBuffer query = new StringBuffer();
+		query.append(PlayersTable.COLUMN_ID).append(" = ?");
+		CustomLog.d(this.getClass(), "query=" + query.toString());
+		ContentValues values = new ContentValues();
+		values.put(PlayersTable.COLUMN_STATUS, status);
+		this.database = dbHelper.getReadableDatabase();
+		int id = database.update(PlayersTable.TABLE_NAME, values, query.toString(), new String[] { playerId.toString() });
+		CustomLog.d(this.getClass(), "player=" + playerId + ", new status=" + status);
 	}
 
 	@Override
@@ -300,16 +316,16 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Match> getMatchList(Integer teamId, Integer periode) {
+	public List<Match> getMatchList(Integer teamId, Integer period) {
 		List<Match> list = new ArrayList<Match>();
-		String periodeSelection = getPeriodeSelectionClause(periode, System.currentTimeMillis());
+		String periodSelection = getPeriodeSelectionClause(period, System.currentTimeMillis());
 		StringBuffer query = new StringBuffer();
 		query.append("SELECT *");
 		query.append(" FROM ").append(MatchesTable.TABLE_NAME);
 		query.append(" WHERE ").append(MatchesTable.COLUMN_FK_TEAM_ID).append(" = ").append(teamId);
-		query.append(" AND ").append(periodeSelection);
+		query.append(" AND ").append(periodSelection);
 		query.append(" ORDER BY ").append(MatchesTable.COLUMN_START_DATE).append(" COLLATE LOCALIZED ASC");
-		CustomLog.d(this.getClass(), "query=" + query.toString());
+		CustomLog.e(this.getClass(), "query=" + query.toString());
 		this.database = dbHelper.getReadableDatabase();
 		Cursor cursor = database.rawQuery(query.toString(), null);
 		Team team = getTeam(teamId);
@@ -406,6 +422,32 @@ public class BandyRepositoryImpl implements BandyRepository {
 		}
 		CustomLog.d(this.getClass(), club);
 		return club;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getPlayerStatusTypes() {
+		String[] statusTypes = new String[] {};
+		String selection = StatusesTable.COLUMN_STATUS_NAME + " LIKE ?";
+		String[] selectionArgs = { "%" };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(StatusesTable.TABLE_NAME, StatusesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			statusTypes = new String[cursor.getCount()];
+			int i = 0;
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				statusTypes[i] = cursor.getString(cursor.getColumnIndex(StatusesTable.COLUMN_STATUS_NAME));
+				cursor.moveToNext();
+				i++;
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return statusTypes;
 	}
 
 	/**
@@ -1060,27 +1102,27 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return new SearchResult(value.toString());
 	}
 
-	private String getPeriodeSelectionClause(Integer periode, Long time) {
+	private String getPeriodeSelectionClause(Integer period, Long time) {
 		String selectClause = null;
 		Calendar cal = Calendar.getInstance();
 		// Period equal to null, then select all time
-		if (periode == null) {
+		if (period == null) {
 			cal.set(Calendar.HOUR, 0);
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 			// only those newer than today
 			selectClause = "start_date < " + Long.toString(cal.getTimeInMillis());
-		} else if (periode == Calendar.YEAR) {
+		} else if (period == Calendar.YEAR) {
 			int year = cal.get(Calendar.YEAR);
 			selectClause = "strftime('%Y', datetime(start_date, 'unixepoch')) LIKE '" + year + "'";
-		} else if (periode == Calendar.MONTH) {
+		} else if (period == Calendar.MONTH) {
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("MMyyyy", Locale.UK);
 			String todayMMYYY = dateFormatter.format(time);
 			selectClause = "strftime('%m%Y', datetime(start_date, 'unixepoch')) LIKE '" + todayMMYYY + "'";
-		} else if (periode == Calendar.WEEK_OF_YEAR) {
+		} else if (period == Calendar.WEEK_OF_YEAR) {
 			int week = cal.get(Calendar.WEEK_OF_YEAR);
 			selectClause = "strftime('%W', datetime(start_date, 'unixepoch')) LIKE '" + week + "'";
-		} else if (periode == Calendar.DAY_OF_YEAR) {
+		} else if (period == Calendar.DAY_OF_YEAR) {
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("ddMMyyyy", Locale.UK);
 			String todayDDMMYYY = dateFormatter.format(time);
 			selectClause = "strftime('%d%m%Y', datetime(start_date, 'unixepoch')) LIKE '" + todayDDMMYYY + "'";

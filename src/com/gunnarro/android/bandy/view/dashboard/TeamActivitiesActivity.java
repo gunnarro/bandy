@@ -26,9 +26,10 @@ import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Activity;
 import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
+import com.gunnarro.android.bandy.domain.Team;
+import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Role;
-import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
@@ -37,7 +38,7 @@ import com.gunnarro.android.mail.MailSender;
 public class TeamActivitiesActivity extends DashboardActivity {
 
 	protected BandyService bandyService;
-	private String viewBy = "Week";
+	private String period = "Week";
 	private String activityFilter = ActivityTypeEnum.MATCH.name();
 	private String selectedTeamName = "%2003";
 
@@ -64,12 +65,12 @@ public class TeamActivitiesActivity extends DashboardActivity {
 		teamsSpinner.setAdapter(teamsAdapter);
 		teamsSpinner.setOnItemSelectedListener(new TeamOnItemSelectedListener());
 		// viewBy spinner
-		Spinner viewBySpinner = (Spinner) findViewById(R.id.view_by_spinner);
-		ArrayAdapter<CharSequence> viewByAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.activities_view_by_options,
+		Spinner periodSpinner = (Spinner) findViewById(R.id.view_by_spinner);
+		ArrayAdapter<CharSequence> periodAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.date_peroid_options,
 				android.R.layout.simple_spinner_item);
-		viewByAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		viewBySpinner.setAdapter(viewByAdapter);
-		viewBySpinner.setOnItemSelectedListener(new ViewByOnItemSelectedListener());
+		periodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		periodSpinner.setAdapter(periodAdapter);
+		periodSpinner.setOnItemSelectedListener(new PeriodOnItemSelectedListener());
 		// Filter spinner
 		Spinner activityFilterSpinner = (Spinner) findViewById(R.id.activity_filter_spinner);
 		ArrayAdapter<CharSequence> activityFilterAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.activitiy_filter_options,
@@ -93,7 +94,7 @@ public class TeamActivitiesActivity extends DashboardActivity {
 				intent.putExtra("fromEmail", team.getTeamLead().getEmailAddress());
 				intent.putExtra("fromMobile", team.getTeamLead().getMobileNumber());
 				intent.putExtra("message", composeMessage(team));
-				intent.putExtra("periode", viewBy);
+				intent.putExtra("periode", period);
 				startService(intent);
 				startActivity(intent);
 			}
@@ -108,7 +109,7 @@ public class TeamActivitiesActivity extends DashboardActivity {
 		// Remove all rows before updating the table, except for the table
 		// header rows.
 		clearTableData();
-		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, viewBy, activityFilter);
+		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, period, activityFilter);
 
 		Date startDate = activityList.isEmpty() ? new Date() : new Date(activityList.get(0).getStartDate());
 		Date endDate = activityList.isEmpty() ? new Date() : new Date(activityList.get(activityList.size() - 1).getStartDate());
@@ -125,7 +126,7 @@ public class TeamActivitiesActivity extends DashboardActivity {
 		TableRow row = new TableRow(getApplicationContext());
 		int rowBgColor = getResources().getColor(R.color.white);
 		int txtColor = getResources().getColor(R.color.black);
-		int numberColor = getActivityTypeColor(activity.getType());
+		int numberColor = getActivityTypeColor(activity);
 		Utility.getDateFormatter().applyPattern("dd.MM.yyyy");
 		row.addView(createTextView(Utility.getDateFormatter().format(new Date(activity.getStartDate())), rowBgColor, txtColor, Gravity.CENTER));
 		Utility.getDateFormatter().applyPattern("HH:mm");
@@ -160,16 +161,29 @@ public class TeamActivitiesActivity extends DashboardActivity {
 		}
 	}
 
-	private int getActivityTypeColor(ActivityTypeEnum type) {
-		switch (type) {
+	private int getActivityTypeColor(Activity activity) {
+		switch (activity.getType()) {
 		case CUP:
 			return getResources().getColor(R.color.dark_green);
 		case MATCH:
+			return getMatchTypeColor(activity.getMatchType());
+		case TRAINING:
+			return getResources().getColor(R.color.black);
+		default:
+			return getResources().getColor(R.color.error);
+		}
+	}
+
+	private int getMatchTypeColor(MatchTypesEnum matchType) {
+		switch (matchType) {
+		case CUP:
+			return getResources().getColor(R.color.dark_green);
+		case LEAGUE:
 			return getResources().getColor(R.color.dark_blue);
 		case TRAINING:
 			return getResources().getColor(R.color.black);
 		default:
-			return getResources().getColor(R.color.black);
+			return getResources().getColor(R.color.red);
 		}
 	}
 
@@ -208,14 +222,14 @@ public class TeamActivitiesActivity extends DashboardActivity {
 	 * @author gunnarro
 	 * 
 	 */
-	public class ViewByOnItemSelectedListener implements OnItemSelectedListener {
+	public class PeriodOnItemSelectedListener implements OnItemSelectedListener {
 
-		public ViewByOnItemSelectedListener() {
+		public PeriodOnItemSelectedListener() {
 		}
 
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			viewBy = parent.getItemAtPosition(pos).toString();
+			period = parent.getItemAtPosition(pos).toString();
 			// update the table upon item selection
 			updateActivitesData();
 		}
@@ -227,7 +241,7 @@ public class TeamActivitiesActivity extends DashboardActivity {
 	}
 
 	private String composeMessage(Team team) {
-		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, viewBy, activityFilter);
+		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, period, activityFilter);
 		String msg = Utility.createActivitiesHtmlTable(team, activityList);
 		StringBuffer regards = new StringBuffer();
 		regards.append(msg);
@@ -243,11 +257,11 @@ public class TeamActivitiesActivity extends DashboardActivity {
 	}
 
 	private void sendMail() {
-		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, viewBy, activityFilter);
+		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, period, activityFilter);
 		MailSender mailSender = new MailSender(this.bandyService.getEmailAccount(), this.bandyService.getEmailAccountPwd());
 		Team team = this.bandyService.getTeam(selectedTeamName, true);
 		String msg = Utility.createActivitiesHtmlTable(team, activityList);
-		String subject = team.getName() + " aktiviteter for " + viewBy;
+		String subject = team.getName() + " aktiviteter for " + period;
 		StringBuffer regards = new StringBuffer();
 		List<String> recipients = new ArrayList<String>();
 		List<Contact> contactList = this.bandyService.getContactList(team.getId());

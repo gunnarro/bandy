@@ -25,6 +25,8 @@
     <color name="dark_blue">#0000ff</color>
     <color name="blue_light">#00ccff</color>
     <color name="black">#000000</color>
+    <color name="red">#234567</color>
+    <color name="error">#998877</color>
     <color name="white">#ffffff</color>
     <color name="number">#0000ff</color>
     <color name="label">#006400</color>

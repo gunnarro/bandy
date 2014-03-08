@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:shrinkColumns="*"
         android:stretchColumns="*" >
-         
+
         <TableRow
             android:id="@+id/tablePeroidHeader"
             android:layout_width="match_parent"
@@ -26,7 +26,7 @@
                 android:layout_span="6"
                 android:background="@color/tbl_background_header"
                 android:gravity="center"
-                android:text="Activities period"
+                android:text="@string/blank"
                 android:textColor="@color/white" />
         </TableRow>
 
@@ -88,7 +88,7 @@
                 android:id="@+id/starttime"
                 android:contentDescription="@string/na"
                 android:gravity="center_horizontal"
-                android:text="Start"
+                android:text="Time"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView

@@ -173,4 +173,8 @@ public interface BandyService {
 
 	public String[] getSeasonPeriodes();
 
+	public void changePlayerStatus(int playerId, String status);
+
+	public String[] getPlayerStatusTypes();
+
 }

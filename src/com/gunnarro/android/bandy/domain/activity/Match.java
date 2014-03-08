@@ -7,8 +7,36 @@ import com.gunnarro.android.bandy.domain.party.Referee;
 
 public class Match extends Activity {
 
-	public enum MatchTypesEnum {
-		TRAINING, CUP, TOURNAMENT, LEAGUE;
+	public static enum MatchTypesEnum {
+		LEAGUE(1), TRAINING(2), CUP(3);
+
+		private int code;
+
+		MatchTypesEnum(int code) {
+			this.code = code;
+		}
+
+		public int getCode() {
+			return code;
+		}
+
+		public static String getName(int code) {
+			for (MatchTypesEnum m : MatchTypesEnum.values()) {
+				if (m.code == code) {
+					return m.name();
+				}
+			}
+			return "unkown code " + code;
+		}
+
+		public static MatchTypesEnum toType(int code) {
+			for (MatchTypesEnum m : MatchTypesEnum.values()) {
+				if (m.code == code) {
+					return m;
+				}
+			}
+			return null;
+		}
 	}
 
 	private Integer id;
@@ -107,8 +135,8 @@ public class Match extends Activity {
 		}
 	}
 
-	public Integer getMatchTypeId() {
-		return matchTypeId;
+	public MatchTypesEnum getMatchType() {
+		return MatchTypesEnum.toType(matchTypeId);
 	}
 
 	/**

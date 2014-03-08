@@ -27,7 +27,7 @@
     <string name="tab_team">Team</string>
     <string name="tab_player">Player</string>
 
-    <string-array name="activities_view_by_options">
+    <string-array name="date_peroid_options">
         <item>All</item>
         <item>Year</item>
         <item>Month</item>
@@ -66,6 +66,7 @@
     <string-array name="away_team_options"></string-array>
     <string-array name="referee_options"></string-array>
     <string-array name="match_type_options"></string-array>
+    <string-array name="player_status_options"></string-array>
 
     <string name="statestics">Statestics</string>
     <string name="team">Team</string>
@@ -106,6 +107,10 @@
     <!-- Club -->
     <!-- Team -->
     <!-- Player -->
+    <string name="first_name">First name</string>
+    <string name="middle_name">Middle name</string>
+    <string name="last_name">Last name</string>
+    <string name="f">First name</string>
 
 
     <!-- Menu Strings -->

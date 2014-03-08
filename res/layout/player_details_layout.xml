@@ -12,11 +12,23 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
 
+    <Spinner
+        android:id="@+id/playerStatusSpinnerId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/personaliaHeader"
+        android:gravity="right|top"
+        android:prompt="@array/player_status_options"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="@dimen/text_size_medium" />
+
     <View
         android:id="@+id/personaliaSeparator"
         android:layout_width="wrap_content"
         android:layout_height="1dp"
-        android:layout_below="@+id/personaliaHeader"
+        android:layout_below="@+id/playerStatusSpinnerId"
         android:layout_marginBottom="3dp"
         android:background="@drawable/line_separator" />
 
@@ -168,7 +180,7 @@
                 android:text="emilie.paulen@yahoo.no"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
-        
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -188,9 +200,10 @@
                 android:text="Tåsen skole"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
-        
+
         <TableRow>
-         <TextView
+
+            <TextView
                 android:id="@+id/playerStatusLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -204,7 +217,6 @@
                 android:text="Active"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
-        
     </TableLayout>
 
     <TextView

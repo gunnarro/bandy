@@ -30,7 +30,7 @@ public class MatchTest extends TestCase {
 		assertEquals(4, match.getNumberOfGoalsHome().intValue());
 		assertEquals(5, match.getNumberOfGoalsAway().intValue());
 		assertEquals("4 - 5", match.getResult());
-		assertEquals(33, match.getMatchTypeId().intValue());
+		assertEquals(33, match.getMatchType().getCode());
 		assertEquals("firstname lastname", match.getReferee().getFullName());
 		assertTrue(match.isFinished());
 		assertTrue(match.isPlayed());
@@ -45,7 +45,7 @@ public class MatchTest extends TestCase {
 		assertNull(match.getResult());
 		assertFalse(match.isPlayed());
 	}
-	
+
 	public void testConstructorNotPlayedDateAfter() {
 		Match match = new Match(1, new Season("2013/2014", 0, 0), System.currentTimeMillis() + 60000, new Team(""), new Team("homeTeam"), new Team("awayTeam"),
 				null, null, "venue", new Referee("firstname", "lastname"), 33);

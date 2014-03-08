@@ -151,4 +151,8 @@ public interface BandyRepository {
 
 	public String[] getSeasonPeriodes();
 
+	public void changePlayerStatus(Integer playerId, String status);
+
+	public String[] getPlayerStatusTypes();
+
 }

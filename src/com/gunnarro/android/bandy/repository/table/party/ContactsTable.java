@@ -13,6 +13,7 @@ public class ContactsTable {
 	// Database table
 	public static final String TABLE_NAME = "contacts";
 	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_CREATED_DATE = "created_date";
 	public static final String COLUMN_FK_ADDRESS_ID = "fk_address_id";
 	public static final String COLUMN_FK_TEAM_ID = "fk_team_id";
 	public static final String COLUMN_FIRST_NAME = "first_name";

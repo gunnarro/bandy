@@ -2,10 +2,15 @@ package com.gunnarro.android.bandy.view.playerdetailflow;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.view.dashboard.CreatePlayerActivity;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.dashboard.HomeActivity;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -41,7 +46,7 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 			teamName = DashboardActivity.DEFAULT_TEAM_NAME;
 		}
 		this.setTitle(teamName);
-		
+
 		if (findViewById(R.id.item_detail_container) != null) {
 		}
 		CustomLog.d(this.getClass(), "onCreate state: " + savedInstanceState);
@@ -71,5 +76,32 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 			detailIntent.putExtra(PlayerDetailActivity.ARG_PLAYER_ID, id);
 			startActivity(detailIntent);
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.actionbar_menu_create, menu);
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_new_activity:
+			startActivity(new Intent(getApplicationContext(), CreatePlayerActivity.class));
+			break;
+		default:
+			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+			break;
+		}
+		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
+		return true;
 	}
 }
