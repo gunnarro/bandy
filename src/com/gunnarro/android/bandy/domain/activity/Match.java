@@ -8,7 +8,7 @@ import com.gunnarro.android.bandy.domain.party.Referee;
 public class Match extends Activity {
 
 	public static enum MatchTypesEnum {
-		LEAGUE(1), TRAINING(2), CUP(3);
+		DEFAULT(0), LEAGUE(1), TRAINING(2), CUP(3);
 
 		private int code;
 

@@ -89,12 +89,16 @@ public class TeamActivitiesActivity extends DashboardActivity {
 				Intent intent = new Intent(getApplicationContext(), NotificationActivity.class);
 				Team team = bandyService.getTeam(selectedTeamName, true);
 				intent.putExtra("teamName", team.getName());
-				intent.putStringArrayListExtra("toEmail", new ArrayList<String>(team.getEmailAddresseForContacts()));
-				intent.putStringArrayListExtra("toMobile", new ArrayList<String>(team.getMobileNrForContacts()));
+				// intent.putStringArrayListExtra("toEmail", new
+				// ArrayList<String>(team.getEmailAddresseForContacts()));
+				// intent.putStringArrayListExtra("toMobile", new
+				// ArrayList<String>(team.getMobileNrForContacts()));
 				intent.putExtra("fromEmail", team.getTeamLead().getEmailAddress());
 				intent.putExtra("fromMobile", team.getTeamLead().getMobileNumber());
 				intent.putExtra("message", composeMessage(team));
 				intent.putExtra("periode", period);
+				intent.putExtra("toEmail", team.getEmailAddresseForContacts());
+				intent.putExtra("toMobile", team.getMobileNrForContacts());
 				startService(intent);
 				startActivity(intent);
 			}

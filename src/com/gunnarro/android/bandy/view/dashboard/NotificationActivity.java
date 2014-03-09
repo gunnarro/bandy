@@ -5,10 +5,13 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
@@ -27,8 +30,8 @@ public class NotificationActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.notification_layout);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
-		setupEventHandlers();
 		bundle = getIntent().getExtras();
+		setupEventHandlers();
 		init();
 	}
 
@@ -49,6 +52,30 @@ public class NotificationActivity extends Activity {
 	}
 
 	private void setupEventHandlers() {
+
+		// to email spinner
+		String[] toEmailList = bundle.getStringArray("toEmail");
+		Spinner toEmailSpinner = (Spinner) findViewById(R.id.toEmailSpinner);
+		ArrayAdapter<CharSequence> toEmailAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item, toEmailList);
+		toEmailAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		toEmailSpinner.setAdapter(toEmailAdapter);
+
+		// to sms spinner
+		String[] toMobileList = bundle.getStringArray("toMobile");
+		Spinner toMobileSpinner = (Spinner) findViewById(R.id.toMobileSpinner);
+		ArrayAdapter<CharSequence> toMobileAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item, toMobileList);
+		toMobileAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		toMobileSpinner.setAdapter(toMobileAdapter);
+
+		findViewById(R.id.cancel_btn).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				final Intent intent = new Intent(v.getContext(), HomeActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				v.getContext().startActivity(intent);
+			}
+		});
+
 		findViewById(R.id.send_email_btn).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -68,12 +95,14 @@ public class NotificationActivity extends Activity {
 	}
 
 	private void init() {
+		TextView fromTxtView = (TextView) findViewById(R.id.fromTxt);
 		TextView msgTxtView = (TextView) findViewById(R.id.notification_msg_txt);
-		StringBuffer msg = new StringBuffer();
-		msg.append("To     : ").append(bundle.getStringArrayList("toEmail")).append(bundle.getStringArrayList("toMobile")).append("\n");
-		msg.append("From   : ").append(bundle.getString("fromEmail")).append("(").append(bundle.getString("fromMobile")).append(")\n");
-		msg.append("Message:").append(bundle.getString("message"));
-		msgTxtView.setText(msg.toString());
+		// StringBuffer msg = new StringBuffer();
+		// msg.append("To     : ").append(bundle.getStringArrayList("toEmail")).append(bundle.getStringArrayList("toMobile")).append("\n");
+		// msg.append("From   : ").append(bundle.getString("fromEmail")).append("(").append(bundle.getString("fromMobile")).append(")\n");
+		// msg.append("Message:").append(bundle.getString("message"));
+		fromTxtView.setText(bundle.getString("fromEmail") + ", " + bundle.getString("fromMobile"));
+		msgTxtView.setText(bundle.getString("message"));
 	}
 
 	private void sendEmail() {

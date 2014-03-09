@@ -92,20 +92,20 @@ public class Team implements Serializable {
 		this.teamLead = teamLead;
 	}
 
-	public List<String> getMobileNrForContacts() {
+	public String[] getMobileNrForContacts() {
 		List<String> mobileNumbers = new ArrayList<String>();
 		for (Contact contact : conatctList) {
 			mobileNumbers.add(contact.getMobileNumber());
 		}
-		return mobileNumbers;
+		return mobileNumbers.toArray(new String[mobileNumbers.size()]);
 	}
 
-	public List<String> getEmailAddresseForContacts() {
-		List<String> emailsNumbers = new ArrayList<String>();
+	public String[] getEmailAddresseForContacts() {
+		List<String> emailAddreses = new ArrayList<String>();
 		for (Contact contact : conatctList) {
-			emailsNumbers.add(contact.getEmailAddress());
+			emailAddreses.add(contact.getEmailAddress());
 		}
-		return emailsNumbers;
+		return emailAddreses.toArray(new String[emailAddreses.size()]);
 	}
 
 	/**

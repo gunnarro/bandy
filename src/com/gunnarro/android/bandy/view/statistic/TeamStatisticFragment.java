@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.statistic.MatchStatistic;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;

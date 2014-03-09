@@ -74,7 +74,7 @@
             android:label="Team"
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
         <activity
-            android:name="com.gunnarro.android.bandy.view.NotificationActivity"
+            android:name="com.gunnarro.android.bandy.view.dashboard.NotificationActivity"
             android:label="Notification" />
          <activity
             android:name="com.gunnarro.android.bandy.view.dashboard.TeamActivitiesActivity"
