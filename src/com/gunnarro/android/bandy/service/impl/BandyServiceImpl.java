@@ -335,7 +335,7 @@ public class BandyServiceImpl implements BandyService {
 
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.MATCH.name())) {
 			for (Match match : getMatchList(team.getId(), datePeriodeMap.get(period))) {
-				list.add(new Activity(ActivityTypeEnum.MATCH, match.getStartTime(), match.getVenue(), match.getTeamVersus(),match.getMatchType()));
+				list.add(new Activity(ActivityTypeEnum.MATCH, match.getStartTime(), match.getVenue(), match.getTeamVersus(), match.getMatchType()));
 			}
 		}
 		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.TRAINING.name())) {

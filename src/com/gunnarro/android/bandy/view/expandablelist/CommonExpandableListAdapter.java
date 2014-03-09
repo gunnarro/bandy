@@ -148,14 +148,18 @@ public class CommonExpandableListAdapter extends BaseExpandableListAdapter {
 		((TextView) convertView.findViewById(R.id.groupSubHeader1TxtId)).setText(group.getSubHeader1());
 		((TextView) convertView.findViewById(R.id.groupSubHeader2TxtId)).setText(group.getSubHeader2());
 		if (!group.isEnabled()) {
-//			((TableLayout) convertView.findViewById(R.id.expandableTableLayout)).setBackgroundColor(Color.DKGRAY);
+			// ((TableLayout)
+			// convertView.findViewById(R.id.expandableTableLayout)).setBackgroundColor(Color.DKGRAY);
 			((TextView) convertView.findViewById(R.id.activityCompletedId)).setText(ActivityStatusEnum.COMPLETED.toString());
-//			((CheckedTextView) convertView.findViewById(R.id.rowGroupId)).setBackgroundResource(R.drawable.icon_bandy);
-//			((TextView) convertView.findViewById(R.id.groupSubHeader1TxtId)).setTextColor(color.holo_green_dark);
-//			((CheckedTextView) convertView.findViewById(R.id.rowGroupId)).setBackgroundColor(color.holo_blue_light);
-//			convertView.setBackgroundColor(color.holo_orange_light);
-//			convertView.setEnabled(false);
-//			convertView.setActivated(false);
+			// ((CheckedTextView)
+			// convertView.findViewById(R.id.rowGroupId)).setBackgroundResource(R.drawable.icon_bandy);
+			// ((TextView)
+			// convertView.findViewById(R.id.groupSubHeader1TxtId)).setTextColor(color.holo_green_dark);
+			// ((CheckedTextView)
+			// convertView.findViewById(R.id.rowGroupId)).setBackgroundColor(color.holo_blue_light);
+			// convertView.setBackgroundColor(color.holo_orange_light);
+			// convertView.setEnabled(false);
+			// convertView.setActivated(false);
 			CustomLog.e(this.getClass(), "disable: " + group.getHeader());
 		}
 	}

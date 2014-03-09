@@ -12,6 +12,7 @@ public class AddressTable {
 
 	// Database table
 	public static final String TABLE_NAME = "addresses";
+	public static final String COLUMN_CREATED_DATE = "created_date";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_STREET_NAME = "street_name";
 	public static final String COLUMN_STREET_NUMBER = "street_number";
@@ -22,8 +23,8 @@ public class AddressTable {
 	public static final String COLUMN_POST_BOX = "post_box";
 	public static final String COLUMN_COUNTRY = "country";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_STREET_NAME, COLUMN_STREET_NUMBER, COLUMN_STREET_NUMBER_POSTFIX, COLUMN_ZIP_CODE, COLUMN_CITY,
-			COLUMN_POST_CODE, COLUMN_POST_BOX, COLUMN_COUNTRY };
+	public static String[] TABLE_COLUMNS = { COLUMN_CREATED_DATE, COLUMN_ID, COLUMN_STREET_NAME, COLUMN_STREET_NUMBER, COLUMN_STREET_NUMBER_POSTFIX,
+			COLUMN_ZIP_CODE, COLUMN_CITY, COLUMN_POST_CODE, COLUMN_POST_BOX, COLUMN_COUNTRY };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -31,7 +32,8 @@ public class AddressTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_CREATED_DATE).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STREET_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STREET_NUMBER).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STREET_NUMBER_POSTFIX).append(" TEXT");
@@ -69,6 +71,7 @@ public class AddressTable {
 	public static ContentValues createContentValues(String streetName, String streetNumber, String streetNumberPostfix, String city, String zipCode,
 			String country) {
 		ContentValues values = new ContentValues();
+		values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
 		values.put(COLUMN_STREET_NAME, streetName);
 		values.put(COLUMN_STREET_NUMBER, streetNumber);
 		values.put(COLUMN_STREET_NUMBER_POSTFIX, streetNumberPostfix);

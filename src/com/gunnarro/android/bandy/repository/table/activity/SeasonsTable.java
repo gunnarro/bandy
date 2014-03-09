@@ -12,12 +12,13 @@ public class SeasonsTable {
 
 	// Database table
 	public static final String TABLE_NAME = "seasons";
+	public static final String COLUMN_CREATED_DATE = "created_date";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_PERIOD = "period";
 	public static final String COLUMN_START_DATE = "start_date";
 	public static final String COLUMN_END_DATE = "end_date";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_PERIOD, COLUMN_START_DATE, COLUMN_END_DATE };
+	public static String[] TABLE_COLUMNS = { COLUMN_CREATED_DATE, COLUMN_ID, COLUMN_PERIOD, COLUMN_START_DATE, COLUMN_END_DATE };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -25,7 +26,8 @@ public class SeasonsTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_CREATED_DATE).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_PERIOD).append(" STRING NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_START_DATE).append(" INTEGER NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_END_DATE).append(" INTEGER NOT NULL");
@@ -56,6 +58,7 @@ public class SeasonsTable {
 
 	public static ContentValues createContentValues(String period, long startDate, long endDate) {
 		ContentValues values = new ContentValues();
+		values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
 		values.put(COLUMN_PERIOD, period);
 		values.put(COLUMN_START_DATE, (int) (startDate / 1000));
 		values.put(COLUMN_END_DATE, (int) (endDate / 1000));

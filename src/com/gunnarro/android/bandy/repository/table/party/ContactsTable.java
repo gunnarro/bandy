@@ -12,8 +12,8 @@ public class ContactsTable {
 
 	// Database table
 	public static final String TABLE_NAME = "contacts";
-	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_CREATED_DATE = "created_date";
+	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_FK_ADDRESS_ID = "fk_address_id";
 	public static final String COLUMN_FK_TEAM_ID = "fk_team_id";
 	public static final String COLUMN_FIRST_NAME = "first_name";
@@ -23,7 +23,8 @@ public class ContactsTable {
 	public static final String COLUMN_EMAIL = "email";
 	public static final String COLUMN_CONTACT_TYPE = "contact_type";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_ADDRESS_ID, COLUMN_FK_TEAM_ID, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_MOBILE, COLUMN_EMAIL };
+	public static String[] TABLE_COLUMNS = { COLUMN_CREATED_DATE, COLUMN_ID, COLUMN_FK_ADDRESS_ID, COLUMN_FK_TEAM_ID, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME,
+			COLUMN_LAST_NAME, COLUMN_MOBILE, COLUMN_EMAIL };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -31,7 +32,8 @@ public class ContactsTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_CREATED_DATE).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_ADDRESS_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_TEAM_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FIRST_NAME).append(" TEXT NOT NULL");
@@ -64,8 +66,10 @@ public class ContactsTable {
 		}
 	}
 
-	public static ContentValues createContentValues(Long addressId, Integer teamId, String firstName, String middleName, String lastName, String mobile, String epostAddress) {
+	public static ContentValues createContentValues(Long addressId, Integer teamId, String firstName, String middleName, String lastName, String mobile,
+			String epostAddress) {
 		ContentValues values = new ContentValues();
+		values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
 		values.put(COLUMN_FK_ADDRESS_ID, addressId);
 		values.put(COLUMN_FK_TEAM_ID, teamId);
 		values.put(COLUMN_FIRST_NAME, firstName);

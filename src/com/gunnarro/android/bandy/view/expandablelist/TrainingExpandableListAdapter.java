@@ -66,7 +66,7 @@ public class TrainingExpandableListAdapter extends CommonExpandableListAdapter {
 		Group group = (Group) getGroup(groupPosition);
 		setGroupInfo(group, convertView);
 		if (group.isEnabled()) {
-//			parent.setBackgroundColor(Color.YELLOW);
+			// parent.setBackgroundColor(Color.YELLOW);
 		}
 		return convertView;
 	}

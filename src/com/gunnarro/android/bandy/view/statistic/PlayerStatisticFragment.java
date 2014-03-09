@@ -99,7 +99,7 @@ public class PlayerStatisticFragment extends Fragment {
 		txtView.setGravity(gravity);
 		txtView.setBackgroundColor(bgColor);
 		txtView.setTextColor(txtColor);
-//		txtView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+		// txtView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 		return txtView;
 	}
 

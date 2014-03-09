@@ -12,11 +12,12 @@ public class TeamsTable {
 
 	// Database table
 	public static final String TABLE_NAME = "teams";
+	public static final String COLUMN_CREATED_DATE = "created_date";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_FK_CLUB_ID = "fk_club_id";
 	public static final String COLUMN_TEAM_NAME = "team_name";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_CLUB_ID, COLUMN_TEAM_NAME };
+	public static String[] TABLE_COLUMNS = { COLUMN_CREATED_DATE, COLUMN_ID, COLUMN_FK_CLUB_ID, COLUMN_TEAM_NAME };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -24,7 +25,8 @@ public class TeamsTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_CREATED_DATE).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_CLUB_ID).append(" INTEGER NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_NAME).append(" TEXT NOT NULL UNIQUE");
 		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_CLUB_ID).append(") REFERENCES ").append(ClubsTable.TABLE_NAME).append("(")
@@ -55,10 +57,10 @@ public class TeamsTable {
 
 	public static ContentValues createContentValues(Integer fkClubId, String teamName) {
 		ContentValues values = new ContentValues();
+		values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
 		values.put(COLUMN_FK_CLUB_ID, fkClubId);
 		values.put(COLUMN_TEAM_NAME, teamName);
 		return values;
 	}
 
 }
-

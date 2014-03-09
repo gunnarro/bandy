@@ -12,11 +12,12 @@ public class MatchTypesTable {
 
 	// Database table
 	public static final String TABLE_NAME = "match_types";
+	public static final String COLUMN_CREATED_DATE = "created_date";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_MATCH_TYPE_ID = "match_type_id";
 	public static final String COLUMN_MATCH_TYPE_NAME = "match_type_name";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_MATCH_TYPE_ID, COLUMN_MATCH_TYPE_NAME };
+	public static String[] TABLE_COLUMNS = { COLUMN_CREATED_DATE, COLUMN_ID, COLUMN_MATCH_TYPE_ID, COLUMN_MATCH_TYPE_NAME };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -24,7 +25,8 @@ public class MatchTypesTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_CREATED_DATE).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MATCH_TYPE_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MATCH_TYPE_NAME).append(" TEXT NOT NULL);");
 	}
@@ -53,6 +55,7 @@ public class MatchTypesTable {
 
 	public static ContentValues createContentValues(int matchTypeId, String matchTypeName) {
 		ContentValues values = new ContentValues();
+		values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
 		values.put(COLUMN_MATCH_TYPE_ID, matchTypeId);
 		values.put(COLUMN_MATCH_TYPE_NAME, matchTypeName);
 		return values;

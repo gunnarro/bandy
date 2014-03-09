@@ -170,7 +170,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL("insert into seasons (_id, period, start_date, end_date) values(2, '2014/2015', 1, 1)");
 		database.execSQL("insert into seasons (_id, period, start_date, end_date) values(3, '2015/2016', 1, 1)");
 		database.execSQL("insert into seasons (_id, period, start_date, end_date) values(4, '2016/2017', 1, 1)");
-		
+
 		CustomLog.i(this.getClass(), "inserted default test data");
 	}
 

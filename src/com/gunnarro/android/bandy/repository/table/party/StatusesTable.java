@@ -12,11 +12,12 @@ public class StatusesTable {
 
 	// Database table
 	public static final String TABLE_NAME = "statuses";
+	public static final String COLUMN_CREATED_DATE = "created_date";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_STATUS_ID = "status_id";
 	public static final String COLUMN_STATUS_NAME = "status_name";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_STATUS_ID, COLUMN_STATUS_NAME };
+	public static String[] TABLE_COLUMNS = { COLUMN_CREATED_DATE, COLUMN_ID, COLUMN_STATUS_ID, COLUMN_STATUS_NAME };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -24,7 +25,8 @@ public class StatusesTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_CREATED_DATE).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STATUS_ID).append(" INTEGER NOT NULL UNIQUE");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STATUS_NAME).append(" TEXT NOT NULL);");
 	}
@@ -53,6 +55,7 @@ public class StatusesTable {
 
 	public static ContentValues createContentValues(String statusName, Integer statusId) {
 		ContentValues values = new ContentValues();
+		values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
 		values.put(COLUMN_STATUS_ID, statusId);
 		values.put(COLUMN_STATUS_NAME, statusName);
 		return values;

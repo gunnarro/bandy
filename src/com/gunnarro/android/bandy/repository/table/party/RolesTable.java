@@ -12,11 +12,12 @@ public class RolesTable {
 
 	// Database table
 	public static final String TABLE_NAME = "roles";
+	public static final String COLUMN_CREATED_DATE = "created_date";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_ROLE = "role";
 	public static final String COLUMN_FK_CONTACT_ID = "fk_contact_id";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_ROLE, COLUMN_FK_CONTACT_ID };
+	public static String[] TABLE_COLUMNS = { COLUMN_CREATED_DATE, COLUMN_ID, COLUMN_ROLE, COLUMN_FK_CONTACT_ID };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -24,7 +25,8 @@ public class RolesTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_CREATED_DATE).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ROLE).append(" TEXT NOT NULL UNIQUE");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_CONTACT_ID).append(" INTEGER NOT NULL);");
 	}
@@ -53,6 +55,7 @@ public class RolesTable {
 
 	public static ContentValues createContentValues(String role, Integer contactId) {
 		ContentValues values = new ContentValues();
+		values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
 		values.put(COLUMN_ROLE, role);
 		values.put(COLUMN_FK_CONTACT_ID, contactId);
 		return values;

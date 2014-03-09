@@ -13,8 +13,8 @@ public class PlayersTable {
 
 	// Database table
 	public static final String TABLE_NAME = "players";
-	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_CREATED_DATE = "created_date";
+	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_FK_TEAM_ID = "fk_team_id";
 	public static final String COLUMN_FK_ADDRESS_ID = "fk_address_id";
 	public static final String COLUMN_STATUS = "status";
@@ -27,8 +27,8 @@ public class PlayersTable {
 	public static final String COLUMN_COUNTRY_OF_BIRTH = "country_of_birth";
 	public static final String COLUMN_NATIONAL_TEAM = "national_team";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_FK_ADDRESS_ID, COLUMN_STATUS, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME,
-			COLUMN_LAST_NAME, COLUMN_DATE_OF_BIRTH, COLUMN_EMAIL, COLUMN_MOBILE };
+	public static String[] TABLE_COLUMNS = { COLUMN_CREATED_DATE, COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_FK_ADDRESS_ID, COLUMN_STATUS, COLUMN_FIRST_NAME,
+			COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_DATE_OF_BIRTH, COLUMN_EMAIL, COLUMN_MOBILE };
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -36,8 +36,8 @@ public class PlayersTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CREATED_DATE).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append("(").append(COLUMN_CREATED_DATE).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_TEAM_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_ADDRESS_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STATUS).append(" TEXT NOT NULL");
@@ -77,7 +77,8 @@ public class PlayersTable {
 	public static ContentValues createContentValues(Long addressId, Integer teamId, String status, String fistName, String middleName, String lastName,
 			long dateOfBirth) {
 		ContentValues values = new ContentValues();
-		// values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
+		values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
+		values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
 		values.put(COLUMN_FK_ADDRESS_ID, addressId);
 		values.put(COLUMN_FK_TEAM_ID, teamId);
 		values.put(COLUMN_STATUS, status);
