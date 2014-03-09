@@ -1,19 +1,14 @@
 package com.gunnarro.android.bandy.repository.table.party;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.repository.table.TableHelper;
 
 public class ContactsTable {
 
 	// Database table
 	public static final String TABLE_NAME = "contacts";
-	public static final String COLUMN_CREATED_DATE = "created_date";
-	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_FK_ADDRESS_ID = "fk_address_id";
 	public static final String COLUMN_FK_TEAM_ID = "fk_team_id";
 	public static final String COLUMN_FIRST_NAME = "first_name";
@@ -23,8 +18,8 @@ public class ContactsTable {
 	public static final String COLUMN_EMAIL = "email";
 	public static final String COLUMN_CONTACT_TYPE = "contact_type";
 
-	public static String[] TABLE_COLUMNS = { COLUMN_CREATED_DATE, COLUMN_ID, COLUMN_FK_ADDRESS_ID, COLUMN_FK_TEAM_ID, COLUMN_FIRST_NAME, COLUMN_MIDDLE_NAME,
-			COLUMN_LAST_NAME, COLUMN_MOBILE, COLUMN_EMAIL };
+	public static String[] TABLE_COLUMNS = TableHelper.createColumns(new String[] { COLUMN_FK_ADDRESS_ID, COLUMN_FK_TEAM_ID, COLUMN_FIRST_NAME,
+			COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_MOBILE, COLUMN_EMAIL });
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -32,8 +27,7 @@ public class ContactsTable {
 		DATABASE_CREATE_QUERY = new StringBuffer();
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
-		DATABASE_CREATE_QUERY.append("(").append(COLUMN_CREATED_DATE).append(" INTEGER NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
+		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_ADDRESS_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_TEAM_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FIRST_NAME).append(" TEXT NOT NULL");
@@ -45,31 +39,20 @@ public class ContactsTable {
 	}
 
 	public static void onCreate(SQLiteDatabase database) {
-		CustomLog.i(ContactsTable.class, DATABASE_CREATE_QUERY.toString());
-		database.execSQL(DATABASE_CREATE_QUERY.toString());
+		TableHelper.onCreate(database, DATABASE_CREATE_QUERY.toString());
 	}
 
 	public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-		CustomLog.i(ContactsTable.class, "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
-		database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-		onCreate(database);
+		TableHelper.onUpgrade(database, oldVersion, newVersion, TABLE_NAME, DATABASE_CREATE_QUERY.toString());
 	}
 
 	public static void checkColumnNames(String[] projection) {
-		if (projection != null) {
-			HashSet<String> requestedColumns = new HashSet<String>(Arrays.asList(projection));
-			HashSet<String> availableColumns = new HashSet<String>(Arrays.asList(TABLE_COLUMNS));
-			// Check if all columns which are requested are available
-			if (!availableColumns.containsAll(requestedColumns)) {
-				throw new IllegalArgumentException("Unknown columns in projection");
-			}
-		}
+		TableHelper.checkColumnNames(projection, TABLE_COLUMNS);
 	}
 
 	public static ContentValues createContentValues(Long addressId, Integer teamId, String firstName, String middleName, String lastName, String mobile,
 			String epostAddress) {
-		ContentValues values = new ContentValues();
-		values.put(COLUMN_CREATED_DATE, System.currentTimeMillis());
+		ContentValues values = TableHelper.createContentValues();
 		values.put(COLUMN_FK_ADDRESS_ID, addressId);
 		values.put(COLUMN_FK_TEAM_ID, teamId);
 		values.put(COLUMN_FIRST_NAME, firstName);

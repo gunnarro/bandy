@@ -1,10 +1,11 @@
 package com.gunnarro.android.bandy.repository.table.link;
 
-import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
-import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
-
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.gunnarro.android.bandy.repository.table.TableHelper;
+import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
+import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 
 public class TeamCupLnkTable {
 
@@ -23,7 +24,7 @@ public class TeamCupLnkTable {
 	}
 
 	public static String[] getTableColumns() {
-		return new String[] { LinkTableHelper.COLUMN_ID, COLUMN_FK_TEAM_ID, COLUMN_FK_CUP_ID };
+		return TableHelper.createColumns(new String[] { COLUMN_FK_TEAM_ID, COLUMN_FK_CUP_ID });
 	}
 
 	public static ContentValues createContentValues(Integer playerId, Integer cupId) {

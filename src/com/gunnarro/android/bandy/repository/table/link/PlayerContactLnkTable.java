@@ -3,6 +3,7 @@ package com.gunnarro.android.bandy.repository.table.link;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.gunnarro.android.bandy.repository.table.TableHelper;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 
@@ -24,7 +25,7 @@ public class PlayerContactLnkTable {
 	}
 
 	public static String[] getTableColumns() {
-		return new String[] { LinkTableHelper.COLUMN_ID, COLUMN_FK_PLAYER_ID, COLUMN_FK_CONTACT_ID };
+		return TableHelper.createColumns(new String[] { COLUMN_FK_PLAYER_ID, COLUMN_FK_CONTACT_ID });
 	}
 
 	public static ContentValues createContentValues(Integer playerId, Integer contactId) {

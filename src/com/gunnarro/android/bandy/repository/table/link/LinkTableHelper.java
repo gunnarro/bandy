@@ -7,11 +7,9 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.repository.table.TableHelper;
 
 public class LinkTableHelper {
-
-	protected static final String COLUMN_ID = "_id";
-	protected static final String COLUMN_CREATED_TIME = "created_time";
 
 	public static void onCreate(SQLiteDatabase database, String tableName, String fkColumnNameId1, String fkColumnNameId2, String fkTableName1,
 			String fkTableName2) {
@@ -37,8 +35,7 @@ public class LinkTableHelper {
 	}
 
 	public static ContentValues createContentValues(String[] tableColumns, Integer[] ids) {
-		ContentValues values = new ContentValues();
-		values.put(COLUMN_CREATED_TIME, System.currentTimeMillis());
+		ContentValues values = TableHelper.createContentValues();
 		values.put(tableColumns[0], ids[0]);
 		values.put(tableColumns[1], ids[1]);
 		return values;
@@ -48,15 +45,14 @@ public class LinkTableHelper {
 		StringBuffer databaseCreateQuery = new StringBuffer();
 		databaseCreateQuery.append("CREATE TABLE ");
 		databaseCreateQuery.append(tableName);
-		databaseCreateQuery.append("(").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
-		databaseCreateQuery.append(",").append(COLUMN_CREATED_TIME).append(" INTEGER NOT NULL");
+		databaseCreateQuery.append("(").append(TableHelper.createCommonColumnsQuery());
 		databaseCreateQuery.append(",").append(fkColumnNameId1).append(" INTEGER NOT NULL");
 		databaseCreateQuery.append(",").append(fkColumnNameId2).append(" INTEGER NOT NULL");
 		databaseCreateQuery.append(",").append("UNIQUE (").append(fkColumnNameId1).append(",").append(fkColumnNameId2).append(") ON CONFLICT ABORT");
-		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId1).append(") REFERENCES ").append(fkTableName1).append("(").append(COLUMN_ID)
-				.append(")");
-		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId2).append(") REFERENCES ").append(fkTableName2).append("(").append(COLUMN_ID)
-				.append("));");
+		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId1).append(") REFERENCES ").append(fkTableName1).append("(")
+				.append(TableHelper.COLUMN_ID).append(")");
+		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId2).append(") REFERENCES ").append(fkTableName2).append("(")
+				.append(TableHelper.COLUMN_ID).append("));");
 		return databaseCreateQuery.toString();
 	}
 }
