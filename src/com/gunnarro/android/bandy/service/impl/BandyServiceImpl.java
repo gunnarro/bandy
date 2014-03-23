@@ -74,6 +74,39 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String getDBFileName() {
+		return bandyRepository.getDBFileName();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getDBUserVersion() {
+		return bandyRepository.getDBUserVersion();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getDBEncoding() {
+		return bandyRepository.getDBEncoding();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void createView() {
+		bandyRepository.createView();
+		CustomLog.d(this.getClass(), "Created View");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void loadData(String filePath) {
 		try {
 			CustomLog.d(this.getClass(), "Start loading data into DB: " + filePath);
@@ -147,6 +180,18 @@ public class BandyServiceImpl implements BandyService {
 			return this.bandyRepository.createTraining(training);
 		}
 		return 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int savePlayer(Player player) {
+		if (player.getId() == null) {
+			return bandyRepository.createPlayer(player);
+		} else {
+			return bandyRepository.updatePlayer(player);
+		}
 	}
 
 	/**

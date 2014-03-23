@@ -41,7 +41,8 @@ import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
 public abstract class DashboardActivity extends FragmentActivity {
 
 	public static final String ARG_TEAM_NAME = "team_name";
-	public final static String DEFAULT_TEAM_NAME = "Kn%tt 2003";
+	public static final String ARG_PLAYER_ID = "player_id";
+	public final static String DEFAULT_TEAM_NAME = "UIL Knøtt 2003";
 
 	/**
 	 * onCreate - called when the activity is first created.

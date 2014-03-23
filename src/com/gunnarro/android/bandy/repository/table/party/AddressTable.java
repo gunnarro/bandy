@@ -52,7 +52,7 @@ public class AddressTable {
 		TableHelper.checkColumnNames(projection, TABLE_COLUMNS);
 	}
 
-	public static ContentValues createContentValues(String streetName, String streetNumber, String streetNumberPostfix, String city, String zipCode,
+	public static ContentValues createContentValues(String streetName, String streetNumber, String streetNumberPostfix, String zipCode, String city,
 			String country) {
 		ContentValues values = TableHelper.createContentValues();
 		values.put(COLUMN_STREET_NAME, streetName);

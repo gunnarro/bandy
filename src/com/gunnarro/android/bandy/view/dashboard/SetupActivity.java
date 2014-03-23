@@ -103,6 +103,13 @@ public class SetupActivity extends DashboardActivity {
 				updateMailAccountPwd(mailAccountPwd.getText().toString());
 			}
 		});
+
+		findViewById(R.id.create_view_btn).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				bandyService.createView();
+			}
+		});
 	}
 
 	private void downloadFile() {
@@ -131,6 +138,13 @@ public class SetupActivity extends DashboardActivity {
 		mailAccount.setText(this.bandyService.getEmailAccount());
 		EditText mailAccountPwd = (EditText) findViewById(R.id.gmail_account_pwd_txt);
 		mailAccountPwd.setText(this.bandyService.getEmailAccountPwd());
+
+		TextView dbFilenameTxtView = (TextView) findViewById(R.id.db_filename_txt);
+		dbFilenameTxtView.setText(bandyService.getDBFileName());
+		TextView dbUserVersionTxtView = (TextView) findViewById(R.id.db_user_version_txt);
+		dbUserVersionTxtView.setText(bandyService.getDBUserVersion());
+		TextView dbEncodingTxtView = (TextView) findViewById(R.id.db_encoding_txt);
+		dbEncodingTxtView.setText(bandyService.getDBUserVersion());
 	}
 
 	/**

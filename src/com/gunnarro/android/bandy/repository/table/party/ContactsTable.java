@@ -7,6 +7,10 @@ import com.gunnarro.android.bandy.repository.table.TableHelper;
 
 public class ContactsTable {
 
+	public static enum GenderEnum {
+		MALE, FEMALE;
+	}
+
 	// Database table
 	public static final String TABLE_NAME = "contacts";
 	public static final String COLUMN_FK_ADDRESS_ID = "fk_address_id";

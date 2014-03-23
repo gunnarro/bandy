@@ -8,7 +8,9 @@ public class MatchStatisticTest extends TestCase {
 
 	// @Test
 	public void testConstructor() {
-		MatchStatistic matchStatistic = new MatchStatistic(MatchTypesEnum.LEAGUE.getCode(), 1, 2, 3, 4, 5, 6);
+		MatchStatistic matchStatistic = new MatchStatistic(1, "Team Name", MatchTypesEnum.LEAGUE.getCode(), 1, 2, 3, 4, 5, 6);
+		assertEquals(1, matchStatistic.getSeasonId());
+		assertEquals("Team Name", matchStatistic.getTeamName());
 		assertEquals(MatchTypesEnum.LEAGUE.name(), matchStatistic.getName());
 		assertEquals(MatchTypesEnum.LEAGUE.getCode(), matchStatistic.getMatchTypeId());
 		assertEquals(1, matchStatistic.getPlayed().intValue());

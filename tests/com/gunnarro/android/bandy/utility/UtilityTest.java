@@ -24,5 +24,4 @@ public class UtilityTest {
 	public void isInActiveTimePeriode() {
 		assertTrue(Utility.isInActiveTimePeriode("01:00", "24:00"));
 	}
-
 }

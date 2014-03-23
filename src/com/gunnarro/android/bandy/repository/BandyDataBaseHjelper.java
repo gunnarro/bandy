@@ -1,5 +1,9 @@
 package com.gunnarro.android.bandy.repository;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Locale;
 
 import android.content.Context;
@@ -12,12 +16,15 @@ import com.gunnarro.android.bandy.repository.table.NotificationsTable;
 import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
+import com.gunnarro.android.bandy.repository.table.activity.LeaguesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
 import com.gunnarro.android.bandy.repository.table.activity.PlayerPositionTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.SeasonsTable;
 import com.gunnarro.android.bandy.repository.table.activity.TrainingsTable;
 import com.gunnarro.android.bandy.repository.table.link.CupMatchLnkTable;
+import com.gunnarro.android.bandy.repository.table.link.LeagueMatchLnkTable;
+import com.gunnarro.android.bandy.repository.table.link.LeagueTeamLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerContactLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerCupLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerMatchLnkTable;
@@ -27,6 +34,7 @@ import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 import com.gunnarro.android.bandy.repository.table.party.RolesTable;
 import com.gunnarro.android.bandy.repository.table.party.StatusesTable;
+import com.gunnarro.android.bandy.repository.view.MatchResultView;
 import com.gunnarro.android.bandy.service.impl.DataLoader;
 
 /**
@@ -38,14 +46,18 @@ import com.gunnarro.android.bandy.service.impl.DataLoader;
  * @author admin
  * 
  */
-public class BandyDataBaseHjelper extends SQLiteOpenHelper {
-
-	private static final String DATABASE_NAME = "bandy-uil.db";
-	private static final int DATABASE_VERSION = 7;
+public class BandyDataBaseHjelper extends SQLiteOpenHelper {		
+	private static final boolean IS_LOAD_FROM_SCRIPT = false;
+	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
+	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
+	private static final String DATABASE_NAME = "sportsteam3.db";
+	public static final int DATABASE_VERSION = 1;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
 
 	private static BandyDataBaseHjelper instance = null;
+	private String dbCreate;
+	private String dbDrop;
 
 	/**
 	 * Declare your database helper as a static instance variable and use the
@@ -73,6 +85,14 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	private BandyDataBaseHjelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		try {
+			if (IS_LOAD_FROM_SCRIPT) {
+				dbCreate = getQuery(context, DATABASE_CREATE);
+				dbDrop = getQuery(context, DATABASE_DROP);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Method is called during creation of the database
@@ -86,29 +106,40 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		}
 		// Set encoding
 		database.execSQL("PRAGMA encoding=\"UTF-8\";");
-		AddressTable.onCreate(database);
-		ClubsTable.onCreate(database);
-		ContactsTable.onCreate(database);
-		CupsTable.onCreate(database);
-		CupMatchLnkTable.onCreate(database);
-		MatchesTable.onCreate(database);
-		MatchTypesTable.onCreate(database);
-		PlayersTable.onCreate(database);
-		PlayerContactLnkTable.onCreate(database);
-		PlayerCupLnkTable.onCreate(database);
-		PlayerMatchLnkTable.onCreate(database);
-		PlayerPositionTypesTable.onCreate(database);
-		PlayerTrainingLnkTable.onCreate(database);
-		RolesTable.onCreate(database);
-		SeasonsTable.onCreate(database);
-		SettingsTable.onCreate(database);
-		StatusesTable.onCreate(database);
-		TeamsTable.onCreate(database);
-		TrainingsTable.onCreate(database);
-		NotificationsTable.onCreate(database);
+		if (IS_LOAD_FROM_SCRIPT) {
+			executeMultipleQueries(database, dbCreate);
+		} else {
+			AddressTable.onCreate(database);
+			ClubsTable.onCreate(database);
+			ContactsTable.onCreate(database);
+			CupsTable.onCreate(database);
+			CupMatchLnkTable.onCreate(database);
+			LeaguesTable.onCreate(database);
+			LeagueMatchLnkTable.onCreate(database);
+			LeagueTeamLnkTable.onCreate(database);
+			MatchesTable.onCreate(database);
+			MatchTypesTable.onCreate(database);
+			PlayersTable.onCreate(database);
+			PlayerContactLnkTable.onCreate(database);
+			PlayerCupLnkTable.onCreate(database);
+			PlayerMatchLnkTable.onCreate(database);
+			PlayerPositionTypesTable.onCreate(database);
+			PlayerTrainingLnkTable.onCreate(database);
+			RolesTable.onCreate(database);
+			SeasonsTable.onCreate(database);
+			SettingsTable.onCreate(database);
+			StatusesTable.onCreate(database);
+			TeamsTable.onCreate(database);
+			TrainingsTable.onCreate(database);
+			NotificationsTable.onCreate(database);
+			MatchResultView.onCreate(database);
+		}
 		// init data
 		insertDefaultData(database);
 		insertTestData(database);
+
+		database.isDatabaseIntegrityOk();
+		// database.execSQL("PRAGMA integrity_check;");
 		CustomLog.i(this.getClass(), "created and initialized DB tables");
 	}
 
@@ -116,39 +147,47 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	// e.g. if you increase the database version
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-		AddressTable.onUpgrade(database, oldVersion, newVersion);
-		ClubsTable.onUpgrade(database, oldVersion, newVersion);
-		ContactsTable.onUpgrade(database, oldVersion, newVersion);
-		CupsTable.onUpgrade(database, oldVersion, newVersion);
-		CupMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
-		MatchesTable.onUpgrade(database, oldVersion, newVersion);
-		MatchTypesTable.onUpgrade(database, oldVersion, newVersion);
-		PlayersTable.onUpgrade(database, oldVersion, newVersion);
-		PlayerContactLnkTable.onUpgrade(database, oldVersion, newVersion);
-		PlayerCupLnkTable.onUpgrade(database, oldVersion, newVersion);
-		PlayerMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
-		PlayerPositionTypesTable.onUpgrade(database, oldVersion, newVersion);
-		PlayerTrainingLnkTable.onUpgrade(database, oldVersion, newVersion);
-		RolesTable.onUpgrade(database, oldVersion, newVersion);
-		SeasonsTable.onUpgrade(database, oldVersion, newVersion);
-		SettingsTable.onUpgrade(database, oldVersion, newVersion);
-		StatusesTable.onUpgrade(database, oldVersion, newVersion);
-		TeamsTable.onUpgrade(database, oldVersion, newVersion);
-		TrainingsTable.onUpgrade(database, oldVersion, newVersion);
-		NotificationsTable.onUpgrade(database, oldVersion, newVersion);
-		insertDefaultData(database);
-		// for testing only
-		insertTestData(database);
+		CustomLog.i(this.getClass(), "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
+		if (IS_LOAD_FROM_SCRIPT) {
+			executeMultipleQueries(database, dbDrop);
+			onCreate(database);
+		} else {
+			AddressTable.onUpgrade(database, oldVersion, newVersion);
+			ClubsTable.onUpgrade(database, oldVersion, newVersion);
+			ContactsTable.onUpgrade(database, oldVersion, newVersion);
+			CupsTable.onUpgrade(database, oldVersion, newVersion);
+			CupMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
+			LeaguesTable.onUpgrade(database, oldVersion, newVersion);
+			LeagueMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
+			LeagueTeamLnkTable.onUpgrade(database, oldVersion, newVersion);
+			MatchesTable.onUpgrade(database, oldVersion, newVersion);
+			MatchTypesTable.onUpgrade(database, oldVersion, newVersion);
+			PlayersTable.onUpgrade(database, oldVersion, newVersion);
+			PlayerContactLnkTable.onUpgrade(database, oldVersion, newVersion);
+			PlayerCupLnkTable.onUpgrade(database, oldVersion, newVersion);
+			PlayerMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
+			PlayerPositionTypesTable.onUpgrade(database, oldVersion, newVersion);
+			PlayerTrainingLnkTable.onUpgrade(database, oldVersion, newVersion);
+			RolesTable.onUpgrade(database, oldVersion, newVersion);
+			SeasonsTable.onUpgrade(database, oldVersion, newVersion);
+			SettingsTable.onUpgrade(database, oldVersion, newVersion);
+			StatusesTable.onUpgrade(database, oldVersion, newVersion);
+			TeamsTable.onUpgrade(database, oldVersion, newVersion);
+			TrainingsTable.onUpgrade(database, oldVersion, newVersion);
+			NotificationsTable.onUpgrade(database, oldVersion, newVersion);
+			MatchResultView.onUpgrade(database, oldVersion, newVersion);
+		}
 		CustomLog.i(this.getClass(), "upgraded DB tables");
-
 	}
 
 	public void insertDefaultData(SQLiteDatabase database) {
 		// init settings
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(1, 'datetime()', '" + SettingsTable.DATA_FILE_URL_KEY + "','"
 				+ DataLoader.TEAM_XML_URL + "')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(2, 'datetime()', '" + SettingsTable.DATA_FILE_LAST_UPDATED_KEY + "','0')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(3, 'datetime()', '" + SettingsTable.DATA_FILE_VERSION_KEY + "','na')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(2, 'datetime()', '" + SettingsTable.DATA_FILE_LAST_UPDATED_KEY
+				+ "','0')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(3, 'datetime()', '" + SettingsTable.DATA_FILE_VERSION_KEY
+				+ "','na')");
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(4, 'datetime()', '" + SettingsTable.MAIL_ACCOUNT_KEY + "','na')");
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(5, 'datetime()', '" + SettingsTable.MAIL_ACCOUNT_PWD_KEY + "','na')");
 		// init match types
@@ -171,6 +210,14 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(2, 'datetime()', '2014/2015', 1, 1)");
 		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(3, 'datetime()', '2015/2016', 1, 1)");
 		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(4, 'datetime()', '2016/2017', 1, 1)");
+		// init. team types
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(1, 'datetime()', 'Knøtt', '', '11', 'male', '25', '', '7', 'Spillerne må ikke ha fylt 11 år ved årsskiftet i inneværende sesong')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(2, 'datetime()', 'Lillegutt', '', '13', 'male', '25', '', '7', 'Spillerne må ikke ha fylt 13 år ved årsskiftet i inneværende sesong')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(3, 'datetime()', 'Smågutt', '', '15', 'male', '30', '5', '11', 'Spillerne må ikke ha fylt 15 år ved årsskiftet i inneværende sesong')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(4, 'datetime()', 'Gutt', '', '17', 'male', '40', '10', '11', 'Spillerne må ikke ha fylt 17 år ved årsskiftet i inneværende sesong')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(5, 'datetime()', 'Junior', '', '20', 'male', '45', '10', '11', 'Spillerne må ikke ha fylt 20 år ved årsskiftet i inneværende sesong')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(6, 'datetime()', 'Old boys', '35', '50', 'male', '30','5',  '11', 'info')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(7, 'datetime()', 'Veteran', '50', '', 'male', '30', '5', '7', 'info')");
 
 		CustomLog.i(this.getClass(), "inserted default test data");
 	}
@@ -191,4 +238,30 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		// database.execSQL("insert into player_match_lnk (_id, fk_player_id, fk_match_id) values(1, 2, 4)");
 	}
 
+	private void executeMultipleQueries(SQLiteDatabase database, String queries) {
+		for (String query : queries.split(";")) {
+			if (query != null && !query.isEmpty()) {
+				String q = query.trim().replace("\n", "").replace("\t", "") + ";";
+				CustomLog.d(this.getClass(), q);
+				database.execSQL(q);
+			}
+		}
+	}
+
+	private String getQuery(Context context, String file) throws IOException {
+		InputStream fStream = context.getAssets().open(file);
+		StringBuilder sbuilder = new StringBuilder();
+		BufferedReader input = new BufferedReader(new InputStreamReader(fStream, "UTF-8"));
+		try {
+			String str = input.readLine();
+			while (str != null) {
+				sbuilder.append(str);
+				str = input.readLine();
+			}
+		} finally {
+			input.close();
+			fStream.close();
+		}
+		return sbuilder.toString();
+	}
 }

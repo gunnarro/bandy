@@ -71,4 +71,17 @@ public class PlayersTable {
 		return values;
 	}
 
+	public static ContentValues updateContentValues(String status, String fistName, String middleName, String lastName, long dateOfBirth, String emailAddress,
+			String mobileNumber) {
+		ContentValues values = TableHelper.createContentValues();
+		values.put(COLUMN_STATUS, status);
+		values.put(COLUMN_FIRST_NAME, fistName);
+		values.put(COLUMN_MIDDLE_NAME, middleName);
+		values.put(COLUMN_LAST_NAME, lastName);
+		values.put(COLUMN_EMAIL, emailAddress);
+		values.put(COLUMN_MOBILE, mobileNumber);
+		values.put(COLUMN_DATE_OF_BIRTH, (int) (dateOfBirth / 1000));
+		return values;
+	}
+
 }

@@ -9,8 +9,11 @@ public class TeamsTable {
 	public static final String TABLE_NAME = "teams";
 	public static final String COLUMN_FK_CLUB_ID = "fk_club_id";
 	public static final String COLUMN_TEAM_NAME = "team_name";
+	public static final String COLUMN_TEAM_YEAR_OF_BIRTH = "team_year_of_birth";
+	public static final String COLUMN_TEAM_GENDER = "team_gender";
 
-	public static String[] TABLE_COLUMNS = TableHelper.createColumns(new String[] { COLUMN_FK_CLUB_ID, COLUMN_TEAM_NAME });
+	public static String[] TABLE_COLUMNS = TableHelper.createColumns(new String[] { COLUMN_FK_CLUB_ID, COLUMN_TEAM_NAME, COLUMN_TEAM_YEAR_OF_BIRTH,
+			COLUMN_TEAM_GENDER });
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -21,6 +24,8 @@ public class TeamsTable {
 		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_CLUB_ID).append(" INTEGER NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_NAME).append(" TEXT NOT NULL UNIQUE");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_YEAR_OF_BIRTH).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_GENDER).append(" TEXT NOT NULL UNIQUE");
 		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_CLUB_ID).append(") REFERENCES ").append(ClubsTable.TABLE_NAME).append("(")
 				.append(TableHelper.COLUMN_ID).append("));");
 	}
@@ -37,10 +42,12 @@ public class TeamsTable {
 		TableHelper.checkColumnNames(projection, TABLE_COLUMNS);
 	}
 
-	public static ContentValues createContentValues(Integer fkClubId, String teamName) {
+	public static ContentValues createContentValues(Integer fkClubId, String teamName, Integer teamYearOfBirth, String teamGender) {
 		ContentValues values = TableHelper.createContentValues();
 		values.put(COLUMN_FK_CLUB_ID, fkClubId);
 		values.put(COLUMN_TEAM_NAME, teamName);
+		values.put(COLUMN_TEAM_YEAR_OF_BIRTH, teamYearOfBirth);
+		values.put(COLUMN_TEAM_GENDER, teamGender);
 		return values;
 	}
 

@@ -41,6 +41,7 @@ import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.domain.party.Referee;
+import com.gunnarro.android.bandy.repository.table.party.ContactsTable.GenderEnum;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.utility.Utility;
@@ -194,7 +195,7 @@ public class XmlDocumentParser {
 	}
 
 	private Team mapAndSaveTeamNode(Club club, NodeList nodeList, BandyService bandyService) {
-		Team team = new Team(getAttributeValue(nodeList.item(0), "name"), club);
+		Team team = new Team(getAttributeValue(nodeList.item(0), "name"), club, 0, GenderEnum.MALE.name());
 		CustomLog.d(this.getClass(), team.toString());
 		System.out.print("mapAndSaveTeamNode: " + team.toString());
 		try {

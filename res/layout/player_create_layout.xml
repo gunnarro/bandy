@@ -25,23 +25,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/personaliaSeparator"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:baselineAligned="false"
-        android:padding="0dp"
         android:shrinkColumns="*"
         android:stretchColumns="*"
-        android:textAppearance="?android:attr/textAppearanceSmall" >
+        android:textAppearance="?android:attr/textAppearanceMedium" >
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_margin="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:paddingBottom="0dp"
-            android:paddingTop="0dp" >
+            android:textAppearance="?android:attr/textAppearanceMedium" >
 
             <TextView
-                android:id="@+id/playerFirstNameLbl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -52,11 +49,12 @@
                 android:id="@+id/playerFirstNameTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
                 android:gravity="center_vertical"
                 android:inputType="textPersonName"
-                android:text="@string/blank"
-                android:textStyle="normal"
-                android:typeface="normal" >
+                android:text="@string/blank" >
+
+                <requestFocus />
             </EditText>
         </TableRow>
 
@@ -66,7 +64,6 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/playerMiddleNameLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/middle_name" />
@@ -75,9 +72,12 @@
                 android:id="@+id/playerMiddleNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
                 android:gravity="left"
                 android:inputType="textPersonName"
-                android:text="@string/blank" >
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black" >
             </EditText>
         </TableRow>
 
@@ -87,7 +87,6 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/playerLastNameLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/last_name" />
@@ -96,9 +95,12 @@
                 android:id="@+id/playerLastNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
                 android:gravity="left"
                 android:inputType="textPersonName"
-                android:text="@string/blank" >
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black" >
             </EditText>
         </TableRow>
 
@@ -108,7 +110,6 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/playerDateOfBirthLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/birth" />
@@ -117,9 +118,12 @@
                 android:id="@+id/playerDateOfBirthTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
                 android:gravity="left"
                 android:inputType="date"
-                android:text="@string/blank" >
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black" >
             </EditText>
         </TableRow>
 
@@ -129,18 +133,20 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/playerStreetLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/street" />
+                android:text="@string/street_name" />
 
             <EditText
-                android:id="@+id/playerStreetTxt"
+                android:id="@+id/playerStreetNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
                 android:gravity="left"
                 android:inputType="text"
-                android:text="@string/blank" >
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black" >
             </EditText>
         </TableRow>
 
@@ -150,7 +156,78 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/playerCityLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/street_number" />
+
+            <EditText
+                android:id="@+id/playerStreetNumberTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
+                android:gravity="left"
+                android:inputType="number"
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black" >
+            </EditText>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/street_number_postfix" />
+
+            <EditText
+                android:id="@+id/playerStreetNumberPostfixTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
+                android:ems="1"
+                android:gravity="left"
+                android:inputType="text"
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black" >
+            </EditText>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/postal_code" />
+
+            <EditText
+                android:id="@+id/playerPostalCodeTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
+                android:ems="6"
+                android:gravity="left"
+                android:inputType="number"
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black"
+                android:textSize="12sp" >
+            </EditText>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/city" />
@@ -159,9 +236,12 @@
                 android:id="@+id/playerCityTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
                 android:gravity="left"
                 android:inputType="text"
-                android:text="@string/blank" >
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black" >
             </EditText>
         </TableRow>
 
@@ -171,7 +251,6 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/playerCountryLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/country" />
@@ -180,9 +259,12 @@
                 android:id="@+id/playerCountryTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
                 android:gravity="left"
                 android:inputType="text"
-                android:text="@string/blank" >
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black" >
             </EditText>
         </TableRow>
 
@@ -192,18 +274,21 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/playerMobileLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mobile" />
 
             <EditText
-                android:id="@+id/playerMobileTxt"
+                android:id="@+id/playerMobileNumberTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
                 android:gravity="left"
                 android:inputType="phone"
-                android:text="@string/blank" >
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black"
+                android:textSize="12sp" >
             </EditText>
         </TableRow>
 
@@ -213,18 +298,20 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/playerEmailLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/email" />
 
             <EditText
-                android:id="@+id/playerEmailTxt"
+                android:id="@+id/playerEmailAddressTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
                 android:gravity="left"
                 android:inputType="textEmailAddress"
-                android:text="@string/blank" >
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black" >
             </EditText>
         </TableRow>
 
@@ -234,40 +321,21 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/playerSchoolLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/school" />
 
             <EditText
-                android:id="@+id/playerSchoolTxt"
+                android:id="@+id/playerSchoolNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_custom"
                 android:gravity="left"
                 android:inputType="text"
-                android:text="@string/blank" >
+                android:text="@string/blank"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@android:color/black" >
             </EditText>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:padding="2dip" >
-
-            <ImageButton
-                android:id="@+id/cancel_create_player_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/na"
-                android:src="@drawable/table_delete" />
-
-            <ImageButton
-                android:id="@+id/create_player_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/na"
-                android:src="@drawable/table_add" />
         </TableRow>
     </TableLayout>
 

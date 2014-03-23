@@ -33,7 +33,7 @@ public class TableHelper {
 	public static String createCommonColumnsQuery() {
 		StringBuffer query = new StringBuffer();
 		query.append("").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
-		query.append(",").append(COLUMN_CREATED_DATETIME).append(" DATETIME CURRENT_TIMESTAMP");
+		query.append(",").append(COLUMN_CREATED_DATETIME).append(" DATETIME DEFAULT CURRENT_TIMESTAMP");
 		return query.toString();
 	}
 

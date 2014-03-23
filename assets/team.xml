@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<team name="UIL Knøtt 2003" version="0.1" releaseDate="10.03.2014">
+<team name="UIL Knøtt 2003" gender="M" yearOfBirth="2003" version="0.1" releaseDate="10.03.2014">
     <club name="Ullevål IL - Bandy">
     	<abbrivation>UiL</abbrivation>
         <stadium>Bergbanen</stadium>
@@ -12,174 +12,174 @@
     </club>
     
     <contacts>
-        <contact id="1" firstName="Gunnar" middleName="" lastName="Rønneberg"  mobile="+4745465500" email="gunnar_ronneberg@yahoo.no" >
+        <contact id="1" gender="M" firstName="Gunnar" middleName="" lastName="Rønneberg"  mobile="+4745465500" email="gunnar_ronneberg@yahoo.no" >
         	<address streetName="Stavangergata" streetNumber="35" zipCode="0467" city="Oslo" country="Norway" />
         	<roles>
             	 <role>teamlead</role>
              	 <role>coach</role>
          	</roles>
         </contact>
-        <contact id="2" firstName="Siri" middleName="Birgitte" lastName="Paulen" mobile="+4792671308" email="spaulen@ymail.com" >
+        <contact id="2" gender="F" firstName="Siri" middleName="Birgitte" lastName="Paulen" mobile="+4792671308" email="spaulen@ymail.com" >
         	<address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="3" firstName="Trond" middleName="" lastName="Kiplesund" mobile="+4792045699" email="trond.kiplesund@sparebank1.no" >
+        <contact id="3" gender="M" firstName="Trond" middleName="" lastName="Kiplesund" mobile="+4792045699" email="trond.kiplesund@sparebank1.no" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="4" firstName="Heidi" middleName="" lastName="Kiplesund" mobile="" email="" >
+        <contact id="4" gender="F" firstName="Heidi" middleName="" lastName="Kiplesund" mobile="" email="" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="5" firstName="Vemund" middleName="" lastName="Hartberg" mobile="+4792668817" email="vem-har@online.no" >
+        <contact id="5" gender="M" firstName="Vemund" middleName="" lastName="Hartberg" mobile="+4792668817" email="vem-har@online.no" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="6" firstName="Cecilie" middleName="" lastName="Hartberg" mobile="+4792666231" email="c.b.hartberg@medisin.uio.no" >
+        <contact id="6" gender="F" firstName="Cecilie" middleName="" lastName="Hartberg" mobile="+4792666231" email="c.b.hartberg@medisin.uio.no" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="7" firstName="Johan" middleName="" lastName="Braanen" mobile="" email="Johan@Braanen.com" >
+        <contact id="7" gender="M" firstName="Johan" middleName="" lastName="Braanen" mobile="" email="Johan@Braanen.com" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="8" firstName="Frank" middleName="" lastName="Halse" mobile="" email="fhalse@gmail.com" >
+        <contact id="8" gender="M" firstName="Frank" middleName="" lastName="Halse" mobile="" email="fhalse@gmail.com" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="9" firstName="Anita" middleName="" lastName="Halse" mobile="+4798616194" email="halseanita@gmail.com" >
+        <contact id="9" gender="F" firstName="Anita" middleName="" lastName="Halse" mobile="+4798616194" email="halseanita@gmail.com" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="10" firstName="Mats" middleName="" lastName="Håkansson" mobile="+4792031707" email="mats.hakansson@hotmail.no" >
+        <contact id="10" gender="M" firstName="Mats" middleName="" lastName="Håkansson" mobile="+4792031707" email="mats.hakansson@hotmail.no" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="11" firstName="Atle" middleName="" lastName="Jensen" mobile="" email="atlej@math.uio.no" >
+        <contact id="11" gender="M" firstName="Atle" middleName="" lastName="Jensen" mobile="" email="atlej@math.uio.no" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="12" firstName="Kristin" middleName="" lastName="Halvorsen" mobile="" email="kristinprivat@hotmail.com" >
+        <contact id="12" gender="F" firstName="Kristin" middleName="" lastName="Halvorsen" mobile="" email="kristinprivat@hotmail.com" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact id="13" firstName="David" middleName="" lastName="Dunlop" mobile="+4799106806" email="david.dunlop@ude.oslo.kommune.no" >
+        <contact id="13" gender="M" firstName="David" middleName="" lastName="Dunlop" mobile="+4799106806" email="david.dunlop@ude.oslo.kommune.no" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact firstName="Torstein" middleName="" lastName="Harildstad" mobile="" email="torstein.harildstad@software-innovation.com" >
+        <contact gender="M" firstName="Torstein" middleName="" lastName="Harildstad" mobile="" email="torstein.harildstad@software-innovation.com" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact firstName="Petter" middleName="" lastName="Karal" mobile="" email="petter@karal.no" >
+        <contact gender="M" firstName="Petter" middleName="" lastName="Karal" mobile="" email="petter@karal.no" >
             <address streetName="Blåsbortveien" streetNumber="19" streetNumberPrefix="b" zipCode="0873" city="Oslo" country="Norway" />
         </contact>
-        <contact firstName="Heidi" middleName="" lastName="Karal" mobile="" email="heidi.karal@gmail.com" >
+        <contact gender="F" firstName="Heidi" middleName="" lastName="Karal" mobile="" email="heidi.karal@gmail.com" >
             <address streetName="Blåsbortveien" streetNumber="19" streetNumberPrefix="b" zipCode="0873" city="Oslo" country="Norway" />
         </contact>
-        <contact firstName="Otto" middleName="" lastName="Scharff" mobile="" email="otto@scharff.net" >
+        <contact gender="M" firstName="Otto" middleName="" lastName="Scharff" mobile="" email="otto@scharff.net" >
             <address streetName="Kongleveien" streetNumber="11" zipCode="0875" city="Oslo" country="Norway" />
         </contact>
-        <contact firstName="Kristin" middleName="" lastName="Bjelland" mobile="" email="kbjellan@gmail.com" >
+        <contact gender="F" firstName="Kristin" middleName="" lastName="Bjelland" mobile="" email="kbjellan@gmail.com" >
            <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact firstName="Anne Jorun" middleName="" lastName="Aas" mobile="" email="annejorunaas@gmail.com" >
+        <contact gender="F" firstName="Anne Jorun" middleName="" lastName="Aas" mobile="" email="annejorunaas@gmail.com" >
             <address streetName="Tåsen Terrasse" streetNumber="9" streetNumberPrefix="b" zipCode="0873" city="Oslo" country="Norway" />
         </contact>
-        <contact firstName="Karen" middleName="" lastName="Frivik" mobile="" email="karen@dyrevern.no" >
+        <contact gender="F" firstName="Karen" middleName="" lastName="Frivik" mobile="" email="karen@dyrevern.no" >
             <address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
         </contact>
-        <contact firstName="Nini" middleName="" lastName="Ring" mobile="" email="nini.ring@domstol.no" >
+        <contact gender="F" firstName="Nini" middleName="" lastName="Ring" mobile="" email="nini.ring@domstol.no" >
             <address streetName="Bregneveien" streetNumber="27" streetNumberPrefix="b" zipCode="0875" city="Oslo" country="Norway" />
         </contact> 
     </contacts>
     
     <players>
-    	<player id="1" status="active" firstName="Emilie" middleName="" lastName="Paluen" birthDate="22.01.2002" mobile="" email="" >
+    	<player id="1" gender="F" status="active" firstName="Emilie" middleName="" lastName="Paluen" birthDate="22.01.2002" mobile="" email="" >
     	 	<address streetName="Stavangergata" streetNumber="35" zipCode="0467" city="Oslo" country="Norway" />
     	 	<parents>
     	 	    <parent firstName="Gunnar" lastName="Rønneberg" />
         		<parent firstName="Siri" middleName="Birgitte" lastName="Paulen" />
     	 	</parents>
     	</player>   
-    	<player id="2" status="active" firstName="Andreas" middleName="" lastName="Paluen" birthDate="20.11.2003" mobile="" email="" >
+    	<player id="2" gender="M" status="active" firstName="Andreas" middleName="" lastName="Paluen" birthDate="20.11.2003" mobile="" email="" >
     	 	<address streetName="Stavangergata" streetNumber="35" zipCode="0467" city="Oslo" country="Norway" />
     	 	<parents>
     	 	    <parent firstName="Gunnar" lastName="Rønneberg" />
         		<parent firstName="Siri" middleName="Birgitte" lastName="Paulen" />
     	 	</parents>
     	</player>   
-    	<player id="3" status="active" firstName="Marius" middleName="" lastName="Kiplesund" birthDate="17.11.2003" mobile="" email="" >
+    	<player id="3" gender="M" status="active" firstName="Marius" middleName="" lastName="Kiplesund" birthDate="17.11.2003" mobile="" email="" >
     		<address streetName="" streetNumber="" zipCode="" city="" country="" />
     		<parents>
     	 	    <parent firstName="Trond" lastName="Kiplesund" />
         		<parent firstName="Heidi" lastName="Kiplesund" />
     	 	</parents>
    	 	</player>
-    	<player id="4" status="active" firstName="August" middleName="" lastName="Hartberg" birthDate="" mobile="" email="" >
+    	<player id="4" gender="M" status="active" firstName="August" middleName="" lastName="Hartberg" birthDate="" mobile="" email="" >
     	    <address streetName="" streetNumber="" zipCode="" city="" country="" />
     		<parents>
     	 	    <parent firstName="Vemund" lastName="Hartberg" />
         		<parent firstName="Cecilie" lastName="Hartberg" />
     	 	</parents>
    	 	</player>
-    	<player id="5" status="active" firstName="Anton" middleName="" lastName="Braanen" birthDate="" mobile="" email="" >
+    	<player id="5" gender="M" status="active" firstName="Anton" middleName="" lastName="Braanen" birthDate="" mobile="" email="" >
     		<address streetName="" streetNumber="" zipCode="" city="" country="" />
     		<parents>
     	 	    <parent firstName="Johan" lastName="Braanen" />
     	 	</parents>
    	 	</player>
-    	<player id="6" status="active" firstName="Magnus" middleName="" lastName="Halse" birthDate="18.11.2013" mobile="" email="" >
+    	<player id="6" gender="M" status="active" firstName="Magnus" middleName="" lastName="Halse" birthDate="18.11.2013" mobile="" email="" >
     		<address streetName="" streetNumber="" zipCode="" city="" country="" />
     		<parents>
     	 	    <parent firstName="Frank" lastName="Halse" />
         		<parent firstName="Anita" lastName="Halse" />
     	 	</parents>
    	 	</player>
-    	<player id="7" status="active" firstName="Thomas" middleName="" lastName="Bergan Håkansson" birthDate="" mobile="" email="" >
+    	<player id="7" gender="M" status="active" firstName="Thomas" middleName="" lastName="Bergan Håkansson" birthDate="" mobile="" email="" >
     		<address streetName="" streetNumber="" zipCode="" city="" country="" />
     		<parents>
     	 	    <parent firstName="Mats" lastName="Håkansson" />
     	 	</parents>
    	 	</player>
-    	<player id="8" status="active" firstName="Linus" middleName="" lastName="Jensen" birthDate="" mobile="" email="" >
+    	<player id="8" gender="M" status="active" firstName="Linus" middleName="" lastName="Jensen" birthDate="" mobile="" email="" >
     		<address streetName="" streetNumber="" zipCode="" city="" country="" />
     		<parents>
     	 	    <parent firstName="Atle" lastName="Jensen" />
         		<parent firstName="Kristin" lastName="Halvorsen" />
     	 	</parents>
    	 	</player>
-    	<player id="9" status="active" firstName="Oscar" middleName="" lastName="Dunlop" birthDate="" mobile="" email="" >
+    	<player id="9" gender="M" status="active" firstName="Oscar" middleName="" lastName="Dunlop" birthDate="" mobile="" email="" >
     		<address streetName="" streetNumber="" zipCode="" city="" country="" />
     		<parents>
     	 	    <parent firstName="David" lastName="Dunlop" />
     	 	</parents>
    	 	</player>
-    	<player id="10" status="active" firstName="Mathias" middleName="" lastName="Harildstad" birthDate="" mobile="" email="" >
+    	<player id="10" gender="M" status="active" firstName="Mathias" middleName="" lastName="Harildstad" birthDate="" mobile="" email="" >
     		<address streetName="" streetNumber="" zipCode="" city="" country="" />
     		<parents>
     	 	    <parent firstName="Torstein" lastName="Harildstad" />
     	 	</parents>
    	 	</player>
-    	<player id="11" status="active" firstName="Martin André" middleName="" lastName="Karal" birthDate="27.10.2003" mobile="" email="" >
+    	<player id="11" gender="M" status="active" firstName="Martin André" middleName="" lastName="Karal" birthDate="27.10.2003" mobile="" email="" >
     		<address streetName="" streetNumber="" zipCode="" city="" country="" />
     		<parents>
     	 	    <parent firstName="Petter" lastName="Karal" />
         		<parent firstName="Heidi"  lastName="Karal" />
     	 	</parents>
      	</player>
-    	<player id="12" status="active" firstName="Trygve" middleName="" lastName="Scharff" birthDate="04.08.2003" mobile="" email="" >
+    	<player id="12" gender="M" status="active" firstName="Trygve" middleName="" lastName="Scharff" birthDate="04.08.2003" mobile="" email="" >
     		<address streetName="" streetNumber="" zipCode="" city="" country="" />
     		<parents>
     	 	    <parent firstName="Otto" lastName="Scharff" />
     	 	</parents>
     	</player>
-    	<player id="13" status="active" firstName="Andreas" middleName="" lastName="Bjelland" birthDate="" mobile="" email="" >
+    	<player id="13" gender="M" status="active" firstName="Andreas" middleName="" lastName="Bjelland" birthDate="" mobile="" email="" >
 	    	<address streetName="" streetNumber="" zipCode="" city="" country="" />
 	    	<parents>
 	    	 	    <parent firstName="Kristin" lastName="Bjelland" />
 	    	 </parents>
     	</player>
-    	<player id="14" status="active" firstName="Paul" middleName="Ring" lastName="Sørensen" birthDate="27.11.2003" mobile="" email="" >
+    	<player id="14" gender="M" status="active" firstName="Paul" middleName="Ring" lastName="Sørensen" birthDate="27.11.2003" mobile="" email="" >
 	    	<address streetName="" streetNumber="" zipCode="" city="" country="" />
 	    	<parents>
 	    	 	    <parent firstName="Nini" lastName="Ring" />
 	    	 </parents>
     	</player>
-    	<player id="15" status="active" firstName="Brage" middleName="" lastName="Frivik" birthDate="" mobile="" email="" >
+    	<player id="15" gender="M" status="active" firstName="Brage" middleName="" lastName="Frivik" birthDate="" mobile="" email="" >
 	    	<address streetName="" streetNumber="" zipCode="" city="" country="" />
 	    	<parents>
 	    	 	    <parent firstName="Karen" lastName="Frivik" />
 	    	 </parents>
     	</player>
-    	<player id="16" status="active" firstName="Ole Martin" middleName="" lastName="Skedsmo" birthDate="06.05.2003" mobile="" email="" >
+    	<player id="16" gender="M" status="active" firstName="Ole Martin" middleName="" lastName="Skedsmo" birthDate="06.05.2003" mobile="" email="" >
 	    	<address streetName="" streetNumber="" zipCode="" city="" country="" />
 	    	<parents>
 	    	 	    <parent firstName="Anne Jorun" lastName="Aas" />
@@ -188,8 +188,8 @@
     </players>
 	
     <seasons>
-        <season period="2013/2014" startDate="01.09.2013" endDate="01.04.2014">
-		    <matches>
+        <season period="2013/2014" startDate="01.09.2013" endDate="01.04.2014" >
+		    <matches leagueId="1">
 		        <match typeId="1" date="26.11.2013" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="Røa 03 2" goalsHomeTeam="4" goalsAwayTeam="4" venue="Bergbanen" referee="dommer ukjent" />
 		        <match typeId="1" date="10.12.2013" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="Ready 01 4" goalsHomeTeam="5" goalsAwayTeam="2" venue="Bergbanen" referee="dommer ukjent" />
 		        <match typeId="1" date="17.12.2013" startTime="17:00" homeTeam="Ready 01 3 Jenter" awayTeam="UIL Knøtt 2003" goalsHomeTeam="3" goalsAwayTeam="5" venue="Gressbanen" referee="dommer ukjent" />
@@ -202,7 +202,7 @@
 		        <match typeId="2" date="12.02.2014" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="Ullevål 2004" goalsHomeTeam="11" goalsAwayTeam="2" venue="Bergbanen" referee="dommer ukjent" />
 		        <match typeId="2" date="05.03.2014" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="Ullevål 2002" goalsHomeTeam="3" goalsAwayTeam="6" venue="Bergbanen" referee="Mats Håkansson" />
 		    </matches>
-		   
+	
 		    <cups>
 		        <cup date="10.11.2013" startTime="09:00" deadlineDate="10.11.2013" signed="true" clubName="Stabekk" cupName="Kosa Cup" venue="Hauger kunstis" >
 		            <matches clubName="" teamName="">

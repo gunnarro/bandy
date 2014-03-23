@@ -19,6 +19,14 @@ import com.gunnarro.android.bandy.domain.view.list.Item;
 
 public interface BandyService {
 
+	public String getDBFileName();
+
+	public String getDBUserVersion();
+
+	public String getDBEncoding();
+
+	public void createView();
+
 	public void loadData(String filePath);
 
 	public int createClub(Club club);
@@ -34,6 +42,8 @@ public interface BandyService {
 	public int createTraining(Training training);
 
 	public int createPlayer(Player player);
+
+	public int savePlayer(Player player);
 
 	public int createContact(Contact contact);
 

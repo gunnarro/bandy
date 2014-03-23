@@ -9,8 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="header"
         android:gravity="left"
+        android:text="header"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white" />
 
@@ -19,6 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/lineHeaderId"
+        android:gravity="right"
         android:src="@drawable/arrow_right"
         android:textAppearance="?android:attr/textAppearanceMedium" 
         android:paddingTop="2dp"/>

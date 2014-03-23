@@ -49,7 +49,7 @@
             android:label="New match"
             android:parentActivityName="com.gunnarro.android.bandy.view.matchdetailflow.MatchListActivity" />
           <activity
-            android:name="com.gunnarro.android.bandy.view.dashboard.CreatePlayerActivity"
+            android:name="com.gunnarro.android.bandy.view.dashboard.EditPlayerActivity"
             android:label="New player"
             android:parentActivityName="com.gunnarro.android.bandy.view.matchdetailflow.PlayerListActivity" />
          <activity

@@ -22,7 +22,8 @@ public class PlayerTest extends TestCase {
 		parents.add(new Contact(new Team("team name"), p1roles, "p1firstname", "p1middleName", "p1lastName", "11111111", "p1@email.no", address));
 		parents.add(new Contact(new Team("team name"), p2roles, "p2firstname", "p2middleName", "p2lastName", "22222222", "p2@email.no", address));
 		long dateOfBirth = System.currentTimeMillis();
-		Player player = new Player(1, new Team("team name"), "firstname", "middlename", "lastname", PlayerStatusEnum.ACTIVE, parents, dateOfBirth, address);
+		Player player = new Player(909, new Team("team name"), "firstname", "middlename", "lastname", PlayerStatusEnum.ACTIVE, parents, dateOfBirth, address);
+		assertEquals("909", player.getId().toString());
 		assertEquals("firstname lastname", player.getFullName());
 		assertTrue(player.hasParents());
 		assertEquals("COACH", player.getParents().get(0).getRoles().get(0).name());
@@ -36,5 +37,9 @@ public class PlayerTest extends TestCase {
 		assertEquals("streetname 25c", player.getAddress().getFullStreetName());
 		assertEquals("postalcode", player.getAddress().getPostalCode());
 		assertTrue(player.getAddress().isAddressValid());
+
+		player = new Player(new Team("team name"), "firstname", "middlename", "lastname", PlayerStatusEnum.ACTIVE, parents, dateOfBirth, address);
+		assertNull(player.getId());
 	}
+
 }

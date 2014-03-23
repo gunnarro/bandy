@@ -58,7 +58,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Emilie Paulen"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
         </TableRow>
 
         <TableRow
@@ -78,7 +79,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="22.01.2002"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
         </TableRow>
 
         <TableRow
@@ -90,7 +92,7 @@
                 android:id="@+id/playerStreetLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/street"
+                android:text="@string/street_name"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
@@ -98,7 +100,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bergslia 39"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
         </TableRow>
 
         <TableRow
@@ -118,7 +121,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0467 Oslo"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
         </TableRow>
 
         <TableRow
@@ -138,7 +142,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Norway"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
         </TableRow>
 
         <TableRow
@@ -158,7 +163,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+47 55 22 00 00"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
         </TableRow>
 
         <TableRow
@@ -178,7 +184,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="emilie.paulen@yahoo.no"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
         </TableRow>
 
         <TableRow
@@ -198,7 +205,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tåsen skole"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
         </TableRow>
 
         <TableRow>
@@ -215,7 +223,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Active"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
         </TableRow>
     </TableLayout>
 

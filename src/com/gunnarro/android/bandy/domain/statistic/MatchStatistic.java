@@ -4,7 +4,9 @@ import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
 
 public class MatchStatistic {
 
-	private int matchTypeId = 9;
+	private String teamName = null;
+	private int seasonId = 0;
+	private int matchTypeId = 0;
 	private int played;
 	private int won;
 	private int draw;
@@ -16,14 +18,24 @@ public class MatchStatistic {
 		this.matchTypeId = matchTypeId;
 	}
 
-	public MatchStatistic(int matchTypeId, int played, int won, int draw, int loss, int goalsScored, int goalsAgainst) {
+	public MatchStatistic(int seasonId, String teamName, int matchTypeId, int played, int won, int draw, int loss, int goalsScored, int goalsAgainst) {
 		this(matchTypeId);
+		this.seasonId = seasonId;
+		this.teamName = teamName;
 		this.played = played;
 		this.won = won;
 		this.draw = draw;
 		this.loss = loss;
 		this.goalsScored = goalsScored;
 		this.goalsAgainst = goalsAgainst;
+	}
+
+	public String getTeamName() {
+		return teamName;
+	}
+
+	public int getSeasonId() {
+		return seasonId;
 	}
 
 	public int getMatchTypeId() {

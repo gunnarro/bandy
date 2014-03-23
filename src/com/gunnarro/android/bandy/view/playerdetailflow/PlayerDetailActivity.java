@@ -3,11 +3,15 @@ package com.gunnarro.android.bandy.view.playerdetailflow;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.dashboard.HomeActivity;
 
 /**
  * An activity representing a single Item detail screen. This activity is only
@@ -19,13 +23,13 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  */
 public class PlayerDetailActivity extends FragmentActivity {
 
-	public static final String ARG_PLAYER_ID = "player_id";
 	private String teamName;
+	private Integer playerId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_item_detail);
+		setContentView(R.layout.player_details_container_layout);
 		setTitle("Player Details");
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -42,31 +46,56 @@ public class PlayerDetailActivity extends FragmentActivity {
 		if (savedInstanceState == null) {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
-			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			Bundle arguments = new Bundle();
-			arguments.putInt(ARG_PLAYER_ID, getIntent().getIntExtra(ARG_PLAYER_ID, -1));
+			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			playerId = getIntent().getIntExtra(DashboardActivity.ARG_PLAYER_ID, -1);
+			arguments.putInt(DashboardActivity.ARG_PLAYER_ID, playerId);
 			PlayerDetailFragment fragment = new PlayerDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.item_detail_container, fragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.player_details_container_id, fragment).commit();
 		}
 	}
 
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		MenuInflater inflater = getMenuInflater();
+//		inflater.inflate(R.menu.actionbar_menu_edit, menu);
+//		return true;
+//	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		CustomLog.e(this.getClass(), item.toString());
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			Intent playerListIntent = new Intent(getApplicationContext(), PlayerListActivity.class);
-			playerListIntent.putExtra(DashboardActivity.ARG_TEAM_NAME, teamName);
-			NavUtils.navigateUpTo(this, playerListIntent);
+		case R.id.action_edit:
+			// Intent editIntent = new Intent(this, EditPlayerActivity.class);
+			// editIntent.putExtra(DashboardActivity.ARG_TEAM_NAME, teamName);
+			// editIntent.putExtra(DashboardActivity.ARG_PLAYER_ID, playerId);
+			// startActivity(editIntent);
+			// break;
+			Bundle arguments = new Bundle();
+			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			playerId = getIntent().getIntExtra(DashboardActivity.ARG_PLAYER_ID, -1);
+			arguments.putInt(DashboardActivity.ARG_PLAYER_ID, playerId);
+			PlayerEditFragment fragment = new PlayerEditFragment();
+			fragment.setArguments(arguments);
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(R.id.player_details_container_id, fragment);
+			transaction.addToBackStack(null);
+			transaction.commit();
 			return true;
+		default:
+//			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+			break;
 		}
-		return super.onOptionsItemSelected(item);
+		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
+		return false;
 	}
+
 }

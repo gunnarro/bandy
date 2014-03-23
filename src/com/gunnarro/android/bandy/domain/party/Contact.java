@@ -20,22 +20,32 @@ public class Contact {
 	private String emailAddress;
 	private Address address;
 
-	public Contact(Integer id, Team team, String firstName, String middleName, String lastName) {
-		this.id = id;
+	public Contact(Team team, String firstName, String middleName, String lastName) {
 		this.team = team;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
 	}
 
-	public Contact(Integer id, Team team, String firstName, String middleName, String lastName, Address address) {
+	public Contact(Integer id, Team team, String firstName, String middleName, String lastName) {
+		this(team, firstName, middleName, lastName);
+		this.id = id;
+	}
+
+	public Contact(Team team, String firstName, String middleName, String lastName, Address address) {
+		this(team, firstName, middleName, lastName);
+		this.address = address;
+	}
+
+	public Contact(int id, Team team, String firstName, String middleName, String lastName, Address address) {
 		this(id, team, firstName, middleName, lastName);
 		this.address = address;
 	}
 
 	public Contact(Integer id, Team team, Address address, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName,
 			String mobileNumber, String emailAddress) {
-		this(id, team, firstName, middleName, lastName, address);
+		this(id, team, firstName, middleName, lastName);
+		this.address = address;
 		this.roles = roles;
 		this.mobileNumber = mobileNumber;
 		this.emailAddress = emailAddress;
@@ -110,7 +120,7 @@ public class Contact {
 	}
 
 	public String getFullName() {
-		return firstName + " " + lastName;
+		return firstName + " " + (middleName != null ? middleName + " " : "") + lastName;
 	}
 
 	@Override

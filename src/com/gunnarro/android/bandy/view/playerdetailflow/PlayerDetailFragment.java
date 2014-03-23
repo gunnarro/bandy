@@ -3,6 +3,9 @@ package com.gunnarro.android.bandy.view.playerdetailflow;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,12 +16,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
+import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
  * A fragment representing a single Item detail screen. This fragment is either
@@ -40,8 +45,9 @@ public class PlayerDetailFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (getArguments().containsKey(PlayerDetailActivity.ARG_PLAYER_ID)) {
-			playerId = getArguments().getInt(PlayerDetailActivity.ARG_PLAYER_ID);
+		super.setHasOptionsMenu(true);
+		if (getArguments().containsKey(DashboardActivity.ARG_PLAYER_ID)) {
+			playerId = getArguments().getInt(DashboardActivity.ARG_PLAYER_ID);
 		}
 	}
 
@@ -54,10 +60,37 @@ public class PlayerDetailFragment extends Fragment {
 		Player player = this.bandyService.getPlayer(playerId);
 		getActivity().setTitle(player.getFullName());
 		updatePlayerDetails(rootView, player);
-		Statistic playerStatistic = bandyService.getPlayerStatistic(player.getTeam().getId(), player.getId(), 1);
+		Statistic playerStatistic = this.bandyService.getPlayerStatistic(player.getTeam().getId(), player.getId(), 1);
 		setupEventHandlers(rootView);
 		updatePlayerStatistic(rootView, playerStatistic);
 		return rootView;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.actionbar_menu_edit, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	/**
+	 * Note that the parent Activity’s onOptionsItemSelected() method is called
+	 * first. Your fragment’s method is called only, when the Activity didn’t
+	 * consume the event! {@inheritDoc}
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		CustomLog.e(this.getClass(), item.toString());
+		// handle item selection
+		switch (item.getItemId()) {
+		// This is consumed in the parent activity
+		// case R.id.action_edit:
+		// return true;
+		default:
+			return false;
+		}
 	}
 
 	private void setupEventHandlers(View view) {
@@ -88,10 +121,6 @@ public class PlayerDetailFragment extends Fragment {
 			ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(getActivity(), R.layout.custom_simple_list_item, player.getParentItemList());
 			parentListView.setAdapter(adapter);
 		}
-	}
-
-	private void changePlayerStatus(int playerId, String status) {
-		this.bandyService.changePlayerStatus(playerId, status);
 	}
 
 	private void updatePlayerStatistic(View rootView, Statistic statistic) {

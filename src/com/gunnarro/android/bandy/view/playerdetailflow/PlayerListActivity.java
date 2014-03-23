@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
-import com.gunnarro.android.bandy.view.dashboard.CreatePlayerActivity;
+import com.gunnarro.android.bandy.view.dashboard.EditPlayerActivity;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 import com.gunnarro.android.bandy.view.dashboard.HomeActivity;
 
@@ -73,7 +73,7 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this, PlayerDetailActivity.class);
 			detailIntent.putExtra(ARG_TEAM_NAME, teamName);
-			detailIntent.putExtra(PlayerDetailActivity.ARG_PLAYER_ID, id);
+			detailIntent.putExtra(DashboardActivity.ARG_PLAYER_ID, id);
 			startActivity(detailIntent);
 		}
 	}
@@ -84,7 +84,7 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.actionbar_menu_create, menu);
+		inflater.inflate(R.menu.actionbar_menu_new, menu);
 		return true;
 	}
 
@@ -94,11 +94,11 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_new_activity:
-			startActivity(new Intent(getApplicationContext(), CreatePlayerActivity.class));
+		case R.id.action_new:
+			startActivity(new Intent(getApplicationContext(), EditPlayerActivity.class));
 			break;
 		default:
-			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+//			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
 			break;
 		}
 		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());

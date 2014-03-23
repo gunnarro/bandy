@@ -9,7 +9,7 @@ import com.gunnarro.android.bandy.domain.view.list.Item;
 public class Player extends Contact {
 
 	public enum PlayerStatusEnum {
-		ACTIVE, PASSIVE, QUIT;
+		ACTIVE, PASSIVE, QUIT, INJURED;
 	}
 
 	private PlayerStatusEnum status = PlayerStatusEnum.ACTIVE;
@@ -18,8 +18,16 @@ public class Player extends Contact {
 	private long dateOfBirth;
 	private String schoolName;
 
-	public Player(int id, Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth,
+	public Player(Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth,
 			Address address) {
+		super(team, firstName, middleName, lastName, address);
+		this.status = status;
+		this.parents = parents;
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public Player(Integer id, Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents,
+			long dateOfBirth, Address address) {
 		super(id, team, firstName, middleName, lastName, address);
 		this.status = status;
 		this.parents = parents;
@@ -54,12 +62,21 @@ public class Player extends Contact {
 		return schoolName;
 	}
 
+	public void setStatus(PlayerStatusEnum status) {
+		this.status = status;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
+	}
+
 	public boolean hasParents() {
 		return (parents != null && parents.size() > 0);
 	}
 
 	@Override
 	public String toString() {
-		return super.toString() + ", dateOfBirth=" + dateOfBirth + ", parents=" + parents.toString();
+		return super.toString() + "+nPlayer [status=" + status + ", parents=" + parents + ", parentItemList=" + parentItemList + ", dateOfBirth=" + dateOfBirth
+				+ ", schoolName=" + schoolName + "]";
 	}
 }

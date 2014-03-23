@@ -46,6 +46,72 @@
                 android:layout_height="wrap_content"
                 android:gravity="left|fill"
                 android:padding="2dip"
+                android:text="Database" />
+
+            <TextView
+                android:id="@+id/db_filename_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="" />
+        </TableRow>
+        
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|fill"
+                android:padding="2dip"
+                android:text="User version" />
+
+            <TextView
+                android:id="@+id/db_user_version_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="" />
+        </TableRow>
+        
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|fill"
+                android:padding="2dip"
+                android:text="Encoding" />
+
+            <TextView
+                android:id="@+id/db_encoding_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="" />
+        </TableRow>
+        
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="2dip" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|fill"
+                android:padding="2dip"
                 android:text="Data file url" />
 
             <TextView
@@ -170,6 +236,14 @@
                 android:layout_gravity="right"
                 android:contentDescription="@string/na"
                 android:text="Save mail settings" />
+            
+            <Button
+                android:id="@+id/create_view_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:contentDescription="@string/na"
+                android:text="Create view" />
         </TableRow>
     </TableLayout>
     <!--

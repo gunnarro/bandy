@@ -38,6 +38,14 @@ public interface BandyRepository {
 	 */
 	public void close();
 
+	public String getDBFileName();
+
+	public String getDBUserVersion();
+
+	public String getDBEncoding();
+
+	public void createView();
+
 	public void deleteAllTableData();
 
 	public int createClub(Club club);
@@ -154,5 +162,7 @@ public interface BandyRepository {
 	public void changePlayerStatus(Integer playerId, String status);
 
 	public String[] getPlayerStatusTypes();
+
+	public int updatePlayer(Player player);
 
 }

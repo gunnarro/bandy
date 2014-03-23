@@ -2,6 +2,7 @@
 <resources>
 
     <!-- text colors -->
+    <color name="txt_value">#00ccff</color>
     <color name="txt_default">#000000</color>
     <color name="txt_disabled">#736F6E</color>
     <color name="txt_bg">#ffffff</color>
@@ -30,8 +31,6 @@
     <color name="white">#ffffff</color>
     <color name="number">#0000ff</color>
     <color name="label">#006400</color>
-    
-    
     
     <color name="title_background">#ff355689</color>
     <color name="title_text">#ffffffff</color>
