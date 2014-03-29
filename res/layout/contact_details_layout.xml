@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/personaliaHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="@string/personalia"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <View
+        android:id="@+id/personaliaSeparator"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/personaliaHeader"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/line_separator" />
+
+    <TableLayout
+        android:id="@+id/personaliaTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/personaliaSeparator"
+        android:layout_marginLeft="10dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/contactFullNameLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/contactFullNameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Emilie Paulen"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/contactStreetLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/street_name"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/contactStreetTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bergslia 39"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/contactCityLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/city"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/contactCityTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0467 Oslo"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/contactCountryLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/country"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/contactCountryTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Norway"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/contactMobileLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mobile"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/contactMobileTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+47 55 22 00 00"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/contactEmailLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/contactEmailTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="emilie.paulen@yahoo.no"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
+        </TableRow>
+    </TableLayout>
+
+</RelativeLayout>
