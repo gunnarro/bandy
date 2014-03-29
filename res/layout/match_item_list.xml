@@ -1,6 +1,6 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/match_item_list"
+    android:id="@+id/match_item_list_id"
     android:name="com.gunnarro.android.bandy.view.matchdetailflow.MatchListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

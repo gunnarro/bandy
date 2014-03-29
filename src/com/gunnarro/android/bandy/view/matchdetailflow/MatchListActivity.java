@@ -9,9 +9,7 @@ import android.view.MenuItem;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.activity.Activity.ActivityTypesEnum;
-import com.gunnarro.android.bandy.view.dashboard.CreateMatchActivity;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
-import com.gunnarro.android.bandy.view.dashboard.HomeActivity;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -48,15 +46,13 @@ public class MatchListActivity extends DashboardActivity implements MatchListFra
 		}
 		this.setTitle(ActivityTypesEnum.Match.name() + " " + teamName);
 
-		if (findViewById(R.id.item_detail_container) != null) {
-		}
 		CustomLog.d(this.getClass(), "onCreate state: " + savedInstanceState);
 		if (savedInstanceState == null) {
 			Bundle arguments = new Bundle();
 			arguments.putString(ARG_TEAM_NAME, teamName);
 			MatchListFragment fragment = new MatchListFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.match_item_list, fragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.match_item_list_id, fragment).commit();
 		}
 		// TODO: If exposing deep links into your app, handle intents here.
 		CustomLog.d(this.getClass(), "is Two Pane layout : " + mTwoPane);
@@ -68,7 +64,7 @@ public class MatchListActivity extends DashboardActivity implements MatchListFra
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.actionbar_menu_create, menu);
+		inflater.inflate(R.menu.actionbar_menu_new, menu);
 		return true;
 	}
 
@@ -78,15 +74,16 @@ public class MatchListActivity extends DashboardActivity implements MatchListFra
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_new_activity:
-			startActivity(new Intent(getApplicationContext(), CreateMatchActivity.class));
-			break;
+		case R.id.action_new:
+			startActivity(new Intent(getApplicationContext(), NewMatchActivity.class));
+			return true;
 		default:
-			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+			// startActivity(new Intent(getApplicationContext(),
+			// HomeActivity.class));
 			break;
 		}
 		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
-		return true;
+		return false;
 	}
 
 	/**
@@ -101,7 +98,7 @@ public class MatchListActivity extends DashboardActivity implements MatchListFra
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this, MatchDetailActivity.class);
 			detailIntent.putExtra(ARG_TEAM_NAME, teamName);
-			detailIntent.putExtra(MatchDetailActivity.ARG_MATCH_ID, id);
+			detailIntent.putExtra(DashboardActivity.ARG_MATCH_ID, id);
 			startActivity(detailIntent);
 		}
 	}

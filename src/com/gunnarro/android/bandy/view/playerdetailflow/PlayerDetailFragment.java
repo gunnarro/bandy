@@ -88,9 +88,16 @@ public class PlayerDetailFragment extends Fragment {
 		// This is consumed in the parent activity
 		// case R.id.action_edit:
 		// return true;
+		case R.id.action_delete:
+			delete(playerId);
+			super.getActivity().onBackPressed();
 		default:
 			return false;
 		}
+	}
+
+	private void delete(Integer playerId) {
+		this.bandyService.deletePlayer(playerId);
 	}
 
 	private void setupEventHandlers(View view) {

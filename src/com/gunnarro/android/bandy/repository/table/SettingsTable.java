@@ -26,7 +26,7 @@ public class SettingsTable {
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
 		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_KEY).append(" TEXT NOT NULL UNIQUE");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_KEY).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_VALUE).append(" TEXT NOT NULL);");
 	}
 

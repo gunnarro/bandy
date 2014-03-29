@@ -17,6 +17,7 @@ public class TableHelper {
 	// Common database table columns
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_CREATED_DATETIME = "created_date_time";
+	public static final String COLUMN_LAST_MODIFIED_DATETIME = "last_modified_date_time";
 
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
@@ -24,6 +25,7 @@ public class TableHelper {
 		ArrayList<String> columnNames = new ArrayList<String>();
 		columnNames.add(COLUMN_ID);
 		columnNames.add(COLUMN_CREATED_DATETIME);
+		columnNames.add(COLUMN_LAST_MODIFIED_DATETIME);
 		for (String name : columns) {
 			columnNames.add(name);
 		}
@@ -34,6 +36,7 @@ public class TableHelper {
 		StringBuffer query = new StringBuffer();
 		query.append("").append(COLUMN_ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT");
 		query.append(",").append(COLUMN_CREATED_DATETIME).append(" DATETIME DEFAULT CURRENT_TIMESTAMP");
+		query.append(",").append(COLUMN_LAST_MODIFIED_DATETIME).append(" DATETIME DEFAULT CURRENT_TIMESTAMP");
 		return query.toString();
 	}
 
@@ -61,7 +64,7 @@ public class TableHelper {
 
 	public static ContentValues createContentValues() {
 		ContentValues values = new ContentValues();
-		values.put(COLUMN_CREATED_DATETIME, getCurrentDateTime());
+		values.put(COLUMN_LAST_MODIFIED_DATETIME, getCurrentDateTime());
 		return values;
 	}
 

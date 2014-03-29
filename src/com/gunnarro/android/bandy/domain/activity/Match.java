@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.party.Referee;
+import com.gunnarro.android.bandy.utility.Utility;
 
 public class Match extends Activity {
 
@@ -74,15 +75,6 @@ public class Match extends Activity {
 
 	}
 
-	// public Match(Integer id, Season season, long startTime, Team team, Team
-	// homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer
-	// numberOfGoalsAway,
-	// String venue, Referee referee, Integer matchTypeId) {
-	// this(startTime, team, homeTeam, awayTeam, numberOfGoalsHome,
-	// numberOfGoalsAway, venue, referee, matchTypeId);
-	// this.id = id;
-	// }
-
 	public Integer getId() {
 		return id;
 	}
@@ -93,6 +85,10 @@ public class Match extends Activity {
 
 	public Long getStartTime() {
 		return startTime;
+	}
+
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
 	}
 
 	public Team getHomeTeam() {
@@ -111,6 +107,10 @@ public class Match extends Activity {
 		return referee;
 	}
 
+	public void setReferee(Referee referee) {
+		this.referee = referee;
+	}
+
 	public String getTeamVersus() {
 		return this.homeTeam.getName() + " - " + this.awayTeam.getName();
 	}
@@ -125,6 +125,14 @@ public class Match extends Activity {
 
 	public Integer getNumberOfGoalsAway() {
 		return numberOfGoalsAway;
+	}
+
+	public void setNumberOfGoalsHome(Integer numberOfGoalsHome) {
+		this.numberOfGoalsHome = numberOfGoalsHome;
+	}
+
+	public void setNumberOfGoalsAway(Integer numberOfGoalsAway) {
+		this.numberOfGoalsAway = numberOfGoalsAway;
 	}
 
 	public String getResult() {
@@ -147,7 +155,7 @@ public class Match extends Activity {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getClass().getSimpleName());
 		sb.append(" [id=").append(id);
-		sb.append(", startDate=").append(new Date(startTime).toString());
+		sb.append(", startDate=").append(Utility.formatTime(startTime, Utility.DATE_TIME_PATTERN));
 		sb.append(", versus=").append(getTeamVersus());
 		sb.append(", venue=").append(venue).append("]");
 		return sb.toString();

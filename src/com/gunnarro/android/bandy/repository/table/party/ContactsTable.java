@@ -67,4 +67,14 @@ public class ContactsTable {
 		return values;
 	}
 
+	public static ContentValues updateContentValues(String firstName, String middleName, String lastName, String emailAddress, String mobileNumber) {
+		ContentValues values = TableHelper.createContentValues();
+		values.put(COLUMN_FIRST_NAME, firstName);
+		values.put(COLUMN_MIDDLE_NAME, middleName);
+		values.put(COLUMN_LAST_NAME, lastName);
+		values.put(COLUMN_MOBILE, mobileNumber);
+		values.put(COLUMN_EMAIL, emailAddress);
+		return values;
+	}
+
 }

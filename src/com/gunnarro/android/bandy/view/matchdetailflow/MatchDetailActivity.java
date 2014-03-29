@@ -1,12 +1,12 @@
 package com.gunnarro.android.bandy.view.matchdetailflow;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
@@ -19,13 +19,16 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  */
 public class MatchDetailActivity extends FragmentActivity {
 
-	public static final String ARG_MATCH_ID = "match_id";
 	private String teamName;
+	private Integer matchId;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_item_detail);
+		setContentView(R.layout.match_details_container_layout);
 		setTitle("Match Details");
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -42,31 +45,38 @@ public class MatchDetailActivity extends FragmentActivity {
 		if (savedInstanceState == null) {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
-			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			Bundle arguments = new Bundle();
-			arguments.putInt(ARG_MATCH_ID, getIntent().getIntExtra(ARG_MATCH_ID, -1));
+			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			matchId = getIntent().getIntExtra(DashboardActivity.ARG_MATCH_ID, -1);
+			arguments.putInt(DashboardActivity.ARG_MATCH_ID, matchId);
 			MatchDetailFragment fragment = new MatchDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.item_detail_container, fragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.match_details_container_id, fragment).commit();
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			Intent playerListIntent = new Intent(getApplicationContext(), MatchListActivity.class);
-			playerListIntent.putExtra(DashboardActivity.ARG_TEAM_NAME, teamName);
-			NavUtils.navigateUpTo(this, playerListIntent);
+		case R.id.action_edit:
+			Bundle arguments = new Bundle();
+			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			matchId = getIntent().getIntExtra(DashboardActivity.ARG_MATCH_ID, -1);
+			arguments.putInt(DashboardActivity.ARG_MATCH_ID, matchId);
+			MatchEditFragment fragment = new MatchEditFragment();
+			fragment.setArguments(arguments);
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(R.id.match_details_container_id, fragment);
+			transaction.addToBackStack(null);
+			transaction.commit();
 			return true;
+		default:
+			break;
 		}
-		return super.onOptionsItemSelected(item);
+		CustomLog.d(this.getClass(), "clicked on: " + item.toString());
+		return false;
 	}
 }

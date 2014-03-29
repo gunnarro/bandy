@@ -44,6 +44,8 @@ public interface BandyService {
 	public int createPlayer(Player player);
 
 	public int savePlayer(Player player);
+	
+	public int saveContact(Contact contact);
 
 	public int createContact(Contact contact);
 
@@ -83,6 +85,8 @@ public interface BandyService {
 
 	public List<Item> getPlayersAsItemList(int teamId);
 
+	public List<Item> getContactsAsItemList(Integer id);
+
 	public Player lookupPlayer(String mobileNr);
 
 	public boolean registrerOnTraining(Integer playerId, Integer trainingId);
@@ -121,6 +125,8 @@ public interface BandyService {
 	public List<Role> getRoleList();
 
 	public Player getPlayer(int playerId);
+	
+	public Contact getContact(int contactId);
 
 	void listRelationsShips();
 
@@ -186,5 +192,19 @@ public interface BandyService {
 	public void changePlayerStatus(int playerId, String status);
 
 	public String[] getPlayerStatusTypes();
+
+	public int saveMatch(Match match);
+
+	public void deletePlayer(Integer playerId);
+
+	public void deleteMatch(Integer matchId);
+
+	public void deleteTraining(Integer trainingId);
+
+	public void deleteContact(Integer contactId);
+
+	public int saveTeam(Team team);
+
+	public List<Team> getTeamList(String string);
 
 }

@@ -106,9 +106,13 @@ public interface BandyRepository {
 
 	public List<Item> getPlayersAsItemList(int teamId);
 
+	public List<Item> getContactsAsItemList(Integer teamId);
+
 	public List<Contact> getContactList(Integer teamId, String role);
 
 	public Contact getContact(String firstName, String lastName);
+
+	public Contact getContact(Integer contactId);
 
 	public Player getPlayer(Integer playerId);
 
@@ -124,7 +128,7 @@ public interface BandyRepository {
 
 	public void createPlayerLink(PlayerLinkTableTypeEnum type, int playerId, int id);
 
-	public void deletePlayerLink(PlayerLinkTableTypeEnum type, int playerId, int id);
+	public void deletePlayerLink(PlayerLinkTableTypeEnum type, Integer playerId, Integer id);
 
 	// ---------------------------------------------------------------------------
 	// Settings table operations
@@ -164,5 +168,25 @@ public interface BandyRepository {
 	public String[] getPlayerStatusTypes();
 
 	public int updatePlayer(Player player);
+
+	public int updateMatch(Match match);
+
+	public void deletePlayer(Integer playerId);
+
+	public void deleteMatch(Integer matchId);
+
+	public void deleteTraining(Integer trainingId);
+
+	public void deleteRelationship(Integer playerId);
+
+	public void deleteContact(Integer contactId);
+
+	public int updateContact(Contact contact);
+
+	public int updateAddress(Address address);
+
+	public int updateTeam(Team team);
+
+	public List<Team> getTeamList(String clubName);
 
 }

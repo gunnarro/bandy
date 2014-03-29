@@ -41,7 +41,7 @@ public class PlayerEditFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setHasOptionsMenu(true);
-		if (getArguments().containsKey(DashboardActivity.ARG_PLAYER_ID)) {
+		if (getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
 			teamName = getArguments().getString(DashboardActivity.ARG_TEAM_NAME);
 		}
 		if (getArguments().containsKey(DashboardActivity.ARG_PLAYER_ID)) {
@@ -54,7 +54,7 @@ public class PlayerEditFragment extends Fragment {
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.player_create_layout, container, false);
+		View rootView = inflater.inflate(R.layout.player_new_layout, container, false);
 		if (this.bandyService == null) {
 			this.bandyService = new BandyServiceImpl(rootView.getContext());
 		}
@@ -87,24 +87,15 @@ public class PlayerEditFragment extends Fragment {
 		CustomLog.e(this.getClass(), item.toString());
 		switch (item.getItemId()) {
 		case R.id.action_cancel:
-			cancel();
 			super.getActivity().onBackPressed();
 			return true;
 		case R.id.action_save:
-			savePlayer();
+			save();
 			super.getActivity().onBackPressed();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	private void cancel() {
-
-	}
-
-	private void navigateBack() {
-		super.getActivity().onBackPressed();
 	}
 
 	private void init(View rootView, Player player) {
@@ -127,7 +118,7 @@ public class PlayerEditFragment extends Fragment {
 		}
 	}
 
-	private void savePlayer() {
+	private void save() {
 		String firstName = getInputValue(R.id.playerFirstNameTxt);
 		String middleName = getInputValue(R.id.playerMiddleNameTxt);
 		String lastName = getInputValue(R.id.playerLastNameTxt);

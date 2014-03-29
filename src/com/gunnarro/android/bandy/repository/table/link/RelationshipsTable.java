@@ -5,9 +5,11 @@ import java.util.HashSet;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.test.suitebuilder.annotation.LargeTest;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
 
+@Deprecated
 public class RelationshipsTable {
 
 	// Database table

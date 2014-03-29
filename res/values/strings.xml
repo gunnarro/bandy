@@ -83,6 +83,8 @@
     <string name="mobile">Mobile</string>
     <string name="name">Name</string>
     <string name="birth">Birth</string>
+    <string name="gender">Gender</string>
+    <string name="yearOfBirth">Year of birth</string>
     <string name="school">School</string>
     <string name="status">Status</string>
     <string name="parents">Parents</string>

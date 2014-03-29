@@ -4,7 +4,7 @@ import com.gunnarro.android.bandy.utility.Utility;
 
 public class Address {
 
-	private long id;
+	private int id;
 	private String streetName;
 	private String streetNumber;
 	private String streetNumberPrefix;
@@ -26,7 +26,7 @@ public class Address {
 		this.id = id;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
@@ -68,7 +68,7 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return "Address [isEmpty=" + this.isAddressValid() + ", streetName=" + streetName + ", streetNumber=" + streetNumber + ", streetNumberPrefix="
+		return "Address [isAddressValid=" + this.isAddressValid() + ", streetName=" + streetName + ", streetNumber=" + streetNumber + ", streetNumberPrefix="
 				+ streetNumberPrefix + ", postalCode=" + postalCode + ", city=" + city + ", country=" + country + "]";
 	}
 

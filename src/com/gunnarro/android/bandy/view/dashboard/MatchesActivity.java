@@ -26,6 +26,7 @@ import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.expandablelist.MatchExpandableListAdapter;
+import com.gunnarro.android.bandy.view.matchdetailflow.NewMatchActivity;
 
 /**
  * @deprecated
@@ -70,7 +71,7 @@ public class MatchesActivity extends DashboardActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_new_activity:
-			startActivity(new Intent(getApplicationContext(), CreateMatchActivity.class));
+			startActivity(new Intent(getApplicationContext(), NewMatchActivity.class));
 			break;
 		default:
 			startActivity(new Intent(getApplicationContext(), HomeActivity.class));

@@ -64,4 +64,15 @@ public class AddressTable {
 		return values;
 	}
 
+	public static ContentValues updateContentValues(String streetName, String streetNumber, String streetNumberPostfix, String postalCode, String city,
+			String country) {
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_STREET_NAME, streetName);
+		values.put(COLUMN_STREET_NUMBER, streetNumber);
+		values.put(COLUMN_STREET_NUMBER_POSTFIX, streetNumberPostfix);
+		values.put(COLUMN_ZIP_CODE, postalCode);
+		values.put(COLUMN_CITY, city);
+		values.put(COLUMN_COUNTRY, country);
+		return values;
+	}
 }

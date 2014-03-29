@@ -28,22 +28,22 @@ public class SetupActivity extends DashboardActivity {
 
 	private BandyService bandyService;
 
-	private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Bundle bundle = intent.getExtras();
-			if (bundle != null) {
-				String file = bundle.getString(DownloadService.FILEPATH);
-				int resultCode = bundle.getInt(DownloadService.RESULT);
-				if (resultCode == Activity.RESULT_OK) {
-					CustomLog.d(this.getClass(), "Downloaded file:" + file);
-					// updateBandyDatabase(file);
-				} else {
-					CustomLog.d(this.getClass(), "Problem Downloading data file...");
-				}
-			}
-		}
-	};
+//	private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
+//		@Override
+//		public void onReceive(Context context, Intent intent) {
+//			Bundle bundle = intent.getExtras();
+//			if (bundle != null) {
+//				String file = bundle.getString(DownloadService.FILEPATH);
+//				int resultCode = bundle.getInt(DownloadService.RESULT);
+//				if (resultCode == Activity.RESULT_OK) {
+//					CustomLog.d(this.getClass(), "Downloaded file:" + file);
+//					// updateBandyDatabase(file);
+//				} else {
+//					CustomLog.d(this.getClass(), "Problem Downloading data file...");
+//				}
+//			}
+//		}
+//	};
 
 	/**
 	 * {@inheritDoc}
@@ -64,7 +64,7 @@ public class SetupActivity extends DashboardActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		registerReceiver(downloadReceiver, new IntentFilter(DownloadService.NOTIFICATION));
+//		registerReceiver(downloadReceiver, new IntentFilter(DownloadService.NOTIFICATION));
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class SetupActivity extends DashboardActivity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		unregisterReceiver(downloadReceiver);
+//		unregisterReceiver(downloadReceiver);
 	}
 
 	private void setupEventHandlers() {
@@ -190,7 +190,9 @@ public class SetupActivity extends DashboardActivity {
 		protected String doInBackground(String... args) {
 			try {
 				publishProgress();
-				bandyService.loadData(args[0]);
+				for (String file : args) {
+					bandyService.loadData(file);
+				}
 				bandyService.updateDataFileLastUpdated(System.currentTimeMillis());
 			} catch (Exception e) {
 				e.printStackTrace();

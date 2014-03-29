@@ -1,17 +1,13 @@
 package com.gunnarro.android.bandy.view.playerdetailflow;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
-import com.gunnarro.android.bandy.view.dashboard.HomeActivity;
 
 /**
  * An activity representing a single Item detail screen. This activity is only
@@ -74,11 +70,6 @@ public class PlayerDetailActivity extends FragmentActivity {
 		CustomLog.e(this.getClass(), item.toString());
 		switch (item.getItemId()) {
 		case R.id.action_edit:
-			// Intent editIntent = new Intent(this, EditPlayerActivity.class);
-			// editIntent.putExtra(DashboardActivity.ARG_TEAM_NAME, teamName);
-			// editIntent.putExtra(DashboardActivity.ARG_PLAYER_ID, playerId);
-			// startActivity(editIntent);
-			// break;
 			Bundle arguments = new Bundle();
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			playerId = getIntent().getIntExtra(DashboardActivity.ARG_PLAYER_ID, -1);
@@ -94,8 +85,7 @@ public class PlayerDetailActivity extends FragmentActivity {
 //			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
 			break;
 		}
-		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
+		CustomLog.d(this.getClass(), "clicked on: " + item.toString());
 		return false;
 	}
-
 }

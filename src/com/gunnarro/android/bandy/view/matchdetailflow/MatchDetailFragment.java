@@ -9,6 +9,9 @@ import java.util.Set;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -16,11 +19,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
+import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
  * A fragment representing a single Item detail screen. This fragment is either
@@ -42,8 +47,9 @@ public class MatchDetailFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (getArguments().containsKey(MatchDetailActivity.ARG_MATCH_ID)) {
-			matchId = getArguments().getInt(MatchDetailActivity.ARG_MATCH_ID);
+		super.setHasOptionsMenu(true);
+		if (getArguments().containsKey(DashboardActivity.ARG_MATCH_ID)) {
+			matchId = getArguments().getInt(DashboardActivity.ARG_MATCH_ID);
 		}
 	}
 
@@ -56,7 +62,45 @@ public class MatchDetailFragment extends Fragment {
 		Match match = this.bandyService.getMatch(matchId);
 		getActivity().setTitle(match.getTeamVersus());
 		updateMatchDetails(rootView, match);
+		// Do not show the edit options menu if the match is finished.
+		if (match.isFinished()) {
+			super.setHasOptionsMenu(false);
+		}
 		return rootView;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.actionbar_menu_edit, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	/**
+	 * Note that the parent Activity’s onOptionsItemSelected() method is called
+	 * first. Your fragment’s method is called only, when the Activity didn’t
+	 * consume the event! {@inheritDoc}
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		CustomLog.e(this.getClass(), item.toString());
+		// handle item selection
+		switch (item.getItemId()) {
+		// This is consumed in the parent activity
+		// case R.id.action_edit:
+		// return true;
+		case R.id.action_delete:
+			delete(matchId);
+			super.getActivity().onBackPressed();
+		default:
+			return false;
+		}
+	}
+
+	private void delete(Integer matchId) {
+		this.bandyService.deleteMatch(matchId);
 	}
 
 	private void updateMatchDetails(View rootView, Match match) {

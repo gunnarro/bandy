@@ -8,9 +8,7 @@ import android.view.MenuItem;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
-import com.gunnarro.android.bandy.view.dashboard.EditPlayerActivity;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
-import com.gunnarro.android.bandy.view.dashboard.HomeActivity;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -55,7 +53,7 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 			arguments.putString(ARG_TEAM_NAME, teamName);
 			PlayerListFragment fragment = new PlayerListFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.player_item_list, fragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.player_item_list_id, fragment).commit();
 		}
 		// TODO: If exposing deep links into your app, handle intents here.
 		CustomLog.d(this.getClass(), "is Two Pane layout : " + mTwoPane);
@@ -95,10 +93,11 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_new:
-			startActivity(new Intent(getApplicationContext(), EditPlayerActivity.class));
+			startActivity(new Intent(getApplicationContext(), NewPlayerActivity.class));
 			break;
 		default:
-//			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+			// startActivity(new Intent(getApplicationContext(),
+			// HomeActivity.class));
 			break;
 		}
 		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());

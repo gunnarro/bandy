@@ -4,13 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.YuvImage;
-
 import com.gunnarro.android.bandy.domain.party.Coach;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.view.list.Item;
-import com.gunnarro.android.bandy.repository.table.party.ContactsTable.GenderEnum;
 
 public class Team implements Serializable {
 
@@ -45,6 +42,11 @@ public class Team implements Serializable {
 		this.club = club;
 		this.teamYearOfBirth = teamYearOfBirth;
 		this.gender = gender;
+	}
+
+	public Team(int id, String name, Club club, int teamYearOfBirth, String gender) {
+		this(name, club, teamYearOfBirth, gender);
+		this.id = id;
 	}
 
 	public Club getClub() {

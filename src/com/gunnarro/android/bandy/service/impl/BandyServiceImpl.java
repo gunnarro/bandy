@@ -147,6 +147,30 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public int saveMatch(Match match) {
+		if (match.getId() == null) {
+			return bandyRepository.createMatch(match);
+		} else {
+			return bandyRepository.updateMatch(match);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int saveTeam(Team team) {
+		if (team.getId() == null) {
+			return bandyRepository.createTeam(team);
+		} else {
+			return bandyRepository.updateTeam(team);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public int createMatch(Match match) {
 		return this.bandyRepository.createMatch(match);
 	}
@@ -190,8 +214,59 @@ public class BandyServiceImpl implements BandyService {
 		if (player.getId() == null) {
 			return bandyRepository.createPlayer(player);
 		} else {
+			bandyRepository.updateAddress(player.getAddress());
 			return bandyRepository.updatePlayer(player);
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int saveContact(Contact contact) {
+		if (contact.getId() == null) {
+			return bandyRepository.createContact(contact);
+		} else {
+			bandyRepository.updateAddress(contact.getAddress());
+			return bandyRepository.updateContact(contact);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deletePlayer(Integer playerId) {
+		for (PlayerLinkTableTypeEnum type : PlayerLinkTableTypeEnum.values()) {
+			this.bandyRepository.deletePlayerLink(type, playerId, null);
+		}
+		// Not used
+		// this.bandyRepository.deleteRelationship(playerId);
+		this.bandyRepository.deletePlayer(playerId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteContact(Integer contactId) {
+		this.bandyRepository.deleteContact(contactId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteMatch(Integer matchId) {
+		this.bandyRepository.deleteMatch(matchId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteTraining(Integer trainingId) {
+		this.bandyRepository.deleteTraining(trainingId);
 	}
 
 	/**
@@ -267,6 +342,14 @@ public class BandyServiceImpl implements BandyService {
 		return bandyRepository.getTeamNames(clubName);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Team> getTeamList(String clubName) {
+		return bandyRepository.getTeamList(clubName);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -556,8 +639,24 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public List<Item> getContactsAsItemList(Integer teamId) {
+		return bandyRepository.getContactsAsItemList(teamId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Player getPlayer(int playerId) {
 		return this.bandyRepository.getPlayer(playerId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Contact getContact(int contactId) {
+		return this.bandyRepository.getContact(contactId);
 	}
 
 	// ---------------------------------------------------------------------------

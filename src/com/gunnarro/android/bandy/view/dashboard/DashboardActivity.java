@@ -27,8 +27,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.view.contactdetailflow.ContactListActivity;
 import com.gunnarro.android.bandy.view.matchdetailflow.MatchListActivity;
 import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
+import com.gunnarro.android.bandy.view.teamdetailflow.TeamListActivity;
 
 /**
  * This is the base class for activities in the dashboard application. It
@@ -41,7 +43,10 @@ import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
 public abstract class DashboardActivity extends FragmentActivity {
 
 	public static final String ARG_TEAM_NAME = "team_name";
+	public static final String ARG_TEAM_ID = "team_id";
 	public static final String ARG_PLAYER_ID = "player_id";
+	public static final String ARG_CONTACT_ID = "contact_id";
+	public static final String ARG_MATCH_ID = "match_id";
 	public final static String DEFAULT_TEAM_NAME = "UIL Knøtt 2003";
 
 	/**
@@ -206,7 +211,7 @@ public abstract class DashboardActivity extends FragmentActivity {
 			Toast.makeText(this, "Clubs view Not implements", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.teams_btn:
-			startActivity(new Intent(getApplicationContext(), TeamActivitiesActivity.class));
+			startActivity(new Intent(getApplicationContext(), TeamListActivity.class));
 			break;
 		case R.id.players_btn:
 			Intent playerListIntent = new Intent(getApplicationContext(), PlayerListActivity.class);
@@ -214,7 +219,9 @@ public abstract class DashboardActivity extends FragmentActivity {
 			startActivity(playerListIntent);
 			break;
 		case R.id.contacts_btn:
-			Toast.makeText(this, "Contacts view Not implements", Toast.LENGTH_SHORT).show();
+			Intent contactListIntent = new Intent(getApplicationContext(), ContactListActivity.class);
+			contactListIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
+			startActivity(contactListIntent);
 			break;
 		case R.id.referee_btn:
 			// Toast.makeText(this, "Referee view Not implements",

@@ -98,7 +98,7 @@ public class PlayerListFragment extends ListFragment {
 		} else {
 			CustomLog.d(this.getClass(), "No team id argument found! use teamName=" + teamName);
 		}
-		this.itemList = getTeamItemList(teamName);
+		this.itemList = getItemList(teamName);
 		CustomLog.d(this.getClass(), "items:" + this.itemList.size());
 		setListAdapter(new ArrayAdapter<Item>(getActivity(), R.layout.custom_checked_list_item, android.R.id.text1, this.itemList));
 		// finally, update the action bar sub title with number of players for
@@ -196,7 +196,7 @@ public class PlayerListFragment extends ListFragment {
 		getListView().setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
 
-	private List<Item> getTeamItemList(String teamName) {
+	private List<Item> getItemList(String teamName) {
 		if (teamName != null) {
 			try {
 				Team team = this.bandyService.getTeam(teamName, false);

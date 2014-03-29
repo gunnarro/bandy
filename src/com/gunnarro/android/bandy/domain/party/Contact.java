@@ -71,6 +71,10 @@ public class Contact {
 		return address;
 	}
 
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
 	public Team getTeam() {
 		return team;
 	}

@@ -59,12 +59,12 @@ public class MatchesTable {
 		TableHelper.checkColumnNames(projection, TABLE_COLUMNS);
 	}
 
-	public static ContentValues createContentValues(int seasonId, int fkTeamId, long startDate, String homeTeam, String awayTeam, int goalsHomeTeam,
+	public static ContentValues createContentValues(int seasonId, int fkTeamId, long startTime, String homeTeam, String awayTeam, int goalsHomeTeam,
 			int goalsAwayTeam, String venue, String referee, int matchTypeId) {
 		ContentValues values = TableHelper.createContentValues();
 		values.put(COLUMN_FK_SEASON_ID, seasonId);
 		values.put(COLUMN_FK_TEAM_ID, fkTeamId);
-		values.put(COLUMN_START_DATE, (int) (startDate / 1000));
+		values.put(COLUMN_START_DATE, (int) (startTime / 1000));
 		values.put(COLUMN_HOME_TEAM, homeTeam);
 		values.put(COLUMN_AWAY_TEAM, awayTeam);
 		values.put(COLUMN_NUMBER_OF_GOALS_HOME_TEAM, goalsHomeTeam);
@@ -75,4 +75,12 @@ public class MatchesTable {
 		return values;
 	}
 
+	public static ContentValues updateContentValues(long startTime, int goalsHomeTeam, int goalsAwayTeam, String referee) {
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_START_DATE, (int) (startTime / 1000));
+		values.put(COLUMN_NUMBER_OF_GOALS_HOME_TEAM, goalsHomeTeam);
+		values.put(COLUMN_NUMBER_OF_GOALS_AWAY_TEAM, goalsAwayTeam);
+		values.put(COLUMN_REFEREE, referee);
+		return values;
+	}
 }

@@ -29,9 +29,11 @@ import com.gunnarro.android.bandy.repository.table.link.PlayerContactLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerCupLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerTrainingLnkTable;
+import com.gunnarro.android.bandy.repository.table.link.TeamContactLnkTable;
 import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
+import com.gunnarro.android.bandy.repository.table.party.RoleTypesTable;
 import com.gunnarro.android.bandy.repository.table.party.RolesTable;
 import com.gunnarro.android.bandy.repository.table.party.StatusesTable;
 import com.gunnarro.android.bandy.repository.view.MatchResultView;
@@ -46,7 +48,7 @@ import com.gunnarro.android.bandy.service.impl.DataLoader;
  * @author admin
  * 
  */
-public class BandyDataBaseHjelper extends SQLiteOpenHelper {		
+public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	private static final boolean IS_LOAD_FROM_SCRIPT = false;
 	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
 	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
@@ -126,10 +128,12 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			PlayerPositionTypesTable.onCreate(database);
 			PlayerTrainingLnkTable.onCreate(database);
 			RolesTable.onCreate(database);
+			RoleTypesTable.onCreate(database);
 			SeasonsTable.onCreate(database);
 			SettingsTable.onCreate(database);
 			StatusesTable.onCreate(database);
 			TeamsTable.onCreate(database);
+			TeamContactLnkTable.onCreate(database);
 			TrainingsTable.onCreate(database);
 			NotificationsTable.onCreate(database);
 			MatchResultView.onCreate(database);
@@ -169,10 +173,12 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			PlayerPositionTypesTable.onUpgrade(database, oldVersion, newVersion);
 			PlayerTrainingLnkTable.onUpgrade(database, oldVersion, newVersion);
 			RolesTable.onUpgrade(database, oldVersion, newVersion);
+			RoleTypesTable.onUpgrade(database, oldVersion, newVersion);
 			SeasonsTable.onUpgrade(database, oldVersion, newVersion);
 			SettingsTable.onUpgrade(database, oldVersion, newVersion);
 			StatusesTable.onUpgrade(database, oldVersion, newVersion);
 			TeamsTable.onUpgrade(database, oldVersion, newVersion);
+			TeamContactLnkTable.onUpgrade(database, oldVersion, newVersion);
 			TrainingsTable.onUpgrade(database, oldVersion, newVersion);
 			NotificationsTable.onUpgrade(database, oldVersion, newVersion);
 			MatchResultView.onUpgrade(database, oldVersion, newVersion);
@@ -183,13 +189,15 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	public void insertDefaultData(SQLiteDatabase database) {
 		// init settings
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(1, 'datetime()', '" + SettingsTable.DATA_FILE_URL_KEY + "','"
-				+ DataLoader.TEAM_XML_URL + "')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(2, 'datetime()', '" + SettingsTable.DATA_FILE_LAST_UPDATED_KEY
+				+ DataLoader.TEAM_XML_URL + "team-2002.xml')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(2, 'datetime()', '" + SettingsTable.DATA_FILE_URL_KEY + "','"
+				+ DataLoader.TEAM_XML_URL + "team-2003.xml')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(3, 'datetime()', '" + SettingsTable.DATA_FILE_LAST_UPDATED_KEY
 				+ "','0')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(3, 'datetime()', '" + SettingsTable.DATA_FILE_VERSION_KEY
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(4, 'datetime()', '" + SettingsTable.DATA_FILE_VERSION_KEY
 				+ "','na')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(4, 'datetime()', '" + SettingsTable.MAIL_ACCOUNT_KEY + "','na')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(5, 'datetime()', '" + SettingsTable.MAIL_ACCOUNT_PWD_KEY + "','na')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(5, 'datetime()', '" + SettingsTable.MAIL_ACCOUNT_KEY + "','na')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(6, 'datetime()', '" + SettingsTable.MAIL_ACCOUNT_PWD_KEY + "','na')");
 		// init match types
 		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(1, 'datetime()', 1, 'LEAGUE')");
 		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(2, 'datetime()', 2, 'TRAINING')");
@@ -218,6 +226,11 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(5, 'datetime()', 'Junior', '', '20', 'male', '45', '10', '11', 'Spillerne må ikke ha fylt 20 år ved årsskiftet i inneværende sesong')");
 		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(6, 'datetime()', 'Old boys', '35', '50', 'male', '30','5',  '11', 'info')");
 		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(7, 'datetime()', 'Veteran', '50', '', 'male', '30', '5', '7', 'info')");
+		// init role types
+		database.execSQL("insert into role_types (_id, created_date_time, role_name) values(1, 'datetime()', 'DEFAULT')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_name) values(2, 'datetime()', 'TEAMLEAD')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_name) values(3, 'datetime()', 'COACH')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_name) values(4, 'datetime()', 'PARENT')");
 
 		CustomLog.i(this.getClass(), "inserted default test data");
 	}

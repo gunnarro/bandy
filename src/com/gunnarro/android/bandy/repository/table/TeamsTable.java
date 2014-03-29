@@ -51,4 +51,10 @@ public class TeamsTable {
 		return values;
 	}
 
+	public static ContentValues updateContentValues(String teamName) {
+		ContentValues values = TableHelper.createContentValues();
+		values.put(COLUMN_TEAM_NAME, teamName);
+		return values;
+	}
+
 }
