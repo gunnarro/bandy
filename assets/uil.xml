@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <club name="Ullevål Idretts Lag" department="Bandy" abbrivation="UIL" version="0.1" releaseDate="05.04.2014">
+	        <stadium>Bergbanen</stadium>
+	        <address>Bergbanen</address>
+	        <postbox>Pb 3901 Ullevål Hageby</postbox>
+	        <postnumber>0805</postnumber>
+	        <city>Oslo</city>
+	        <country>Norge</country>
+	        <homepage>http://idrett.speaker.no/organisation.asp?OrgElementId=52653</homepage>
+	  
+	         <contacts>
+	             <contact id="1" gender="M" firstName="Gunnar" middleName="" lastName="Rønneberg"  mobile="+4745465500" email="gunnar_ronneberg@yahoo.no" >
+		        	<address streetName="Stavangergata" streetNumber="35" zipCode="0467" city="Oslo" country="Norway" />
+		        	<roles>
+		            	 <role>chairman</role>
+		         	</roles>
+		        </contact>
+	        </contacts>
+	        
+	         <teams>
+	             <team file="team-2002.xml">
+	             <team file="team-2003.xml">
+	         </teams>
+    </club>
+    
+  
