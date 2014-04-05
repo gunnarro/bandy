@@ -377,7 +377,7 @@ public class XmlDocumentParser {
 			Node parentNode = nodeList.item(j);
 			try {
 				parentList.add(new Contact(null, null, getAttributeValue(parentNode, ATTR_FIRST_NAME), getAttributeValue(parentNode, ATTR_MIDDLE_NAME),
-						getAttributeValue(parentNode, ATTR_LAST_NAME)));
+						getAttributeValue(parentNode, ATTR_LAST_NAME), getAttributeValue(parentNode, ATTR_GENDER)));
 			} catch (Exception e) {
 				CustomLog.e(this.getClass(), "contact=" + firstName + ", Invalid status: " + parentNode.getNodeName() + "=" + parentNode.getTextContent());
 				CustomLog.e(this.getClass(), e.toString());

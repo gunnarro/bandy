@@ -53,11 +53,9 @@ public class TeamDetailFragment extends Fragment {
 		Team team = this.bandyService.getTeam(teamId);
 		getActivity().setTitle(team.getName());
 		updateTeamDetails(rootView, team);
-		// Statistic teamStatistic =
-		// this.bandyService.getTeamStatistic(player.getTeam().getId(),
-		// player.getId(), 1);
 		setupEventHandlers(rootView);
-		// updateTeamStatistic(rootView, playerStatistic);
+		Statistic teamStatistic = this.bandyService.getTeamStatistic(team.getId(), 1);
+		updateTeamStatistic(rootView, teamStatistic);
 		return rootView;
 	}
 
@@ -101,8 +99,8 @@ public class TeamDetailFragment extends Fragment {
 	private void updateTeamDetails(View rootView, Team team) {
 		if (team != null) {
 			((TextView) rootView.findViewById(R.id.teamNameTxt)).setText(team.getName());
-			((TextView) rootView.findViewById(R.id.teamYearOfBirthTxt)).setText("");
-			((TextView) rootView.findViewById(R.id.teamGenderTxt)).setText("");
+			((TextView) rootView.findViewById(R.id.teamYearOfBirthTxt)).setText(team.getTeamYearOfBirth().toString());
+			((TextView) rootView.findViewById(R.id.teamGenderTxt)).setText(team.getGender());
 
 			if (team.getTeamLead() != null) {
 				((TextView) rootView.findViewById(R.id.teamLeadTxt)).setText(team.getTeamLead().getFullName());
@@ -120,7 +118,6 @@ public class TeamDetailFragment extends Fragment {
 
 	private void updateTeamStatistic(View rootView, Statistic statistic) {
 		if (statistic != null) {
-			((TextView) rootView.findViewById(R.id.teamTxt)).setText(statistic.getClubName() + ", " + statistic.getTeamName());
 			((TextView) rootView.findViewById(R.id.matchesTxt)).setText("played=" + statistic.getNumberOfPlayerMatches() + ", total="
 					+ statistic.getNumberOfTeamMatches());
 			((TextView) rootView.findViewById(R.id.cupsTxt)).setText("played=" + statistic.getNumberOfPlayerCups() + ", total="

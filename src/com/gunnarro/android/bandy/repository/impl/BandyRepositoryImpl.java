@@ -418,10 +418,12 @@ public class BandyRepositoryImpl implements BandyRepository {
 		this.database = dbHelper.getWritableDatabase();
 		long contactId = database.insert(ContactsTable.TABLE_NAME, null, contactValues);
 		if (contact.getRoles() != null) {
-			for (ContactRoleEnum role : contact.getRoles()) {
-				ContentValues roleValues = RolesTable.createContentValues(role.name(), Long.valueOf(contactId).intValue());
-				database.insert(RolesTable.TABLE_NAME, null, roleValues);
-			}
+			// for (ContactRoleEnum role : contact.getRoles()) {
+			// ContentValues roleValues =
+			// RolesTable.createContentValues(role.name(),
+			// Long.valueOf(contactId).intValue());
+			// database.insert(RolesTable.TABLE_NAME, null, roleValues);
+			// }
 		}
 		return Long.valueOf(contactId).intValue();
 	}
@@ -915,6 +917,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	@Override
 	public Contact getContact(String firstName, String lastName) {
 		Contact contact = null;
+		CustomLog.d(this.getClass(), "firstName=" + firstName + ", lastName=" + lastName);
 		StringBuffer selection = new StringBuffer();
 		selection.append(ContactsTable.COLUMN_FIRST_NAME + " LIKE ?");
 		selection.append(" AND ").append(ContactsTable.COLUMN_LAST_NAME + " LIKE ?");

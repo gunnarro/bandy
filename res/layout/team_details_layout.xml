@@ -284,25 +284,7 @@
         android:shrinkColumns="*"
         android:stretchColumns="*" >
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/team"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <TextView
-                android:id="@+id/teamTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Knøtt 2003"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-        </TableRow>
-
+        
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
