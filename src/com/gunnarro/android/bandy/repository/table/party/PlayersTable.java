@@ -65,6 +65,7 @@ public class PlayersTable {
 		ContentValues values = updateContentValues(player);
 		values.put(COLUMN_FK_ADDRESS_ID, addressId);
 		values.put(COLUMN_FK_TEAM_ID, player.getTeam().getId());
+		values.put(COLUMN_GENDER, player.getGender());
 		return values;
 	}
 
@@ -74,7 +75,6 @@ public class PlayersTable {
 		values.put(COLUMN_FIRST_NAME, player.getFirstName());
 		values.put(COLUMN_MIDDLE_NAME, player.getMiddleName());
 		values.put(COLUMN_LAST_NAME, player.getLastName());
-		values.put(COLUMN_GENDER, player.getGender());
 		values.put(COLUMN_DATE_OF_BIRTH, (int) (player.getDateOfBirth() / 1000));
 		return values;
 	}

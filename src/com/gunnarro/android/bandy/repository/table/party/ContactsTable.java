@@ -37,7 +37,7 @@ public class ContactsTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_ADDRESS_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_TEAM_ID).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FIRST_NAME).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MIDDLE_NAME).append(" TEXT NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MIDDLE_NAME).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LAST_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_GENDER).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MOBILE).append(" TEXT NOT NULL");
@@ -61,6 +61,7 @@ public class ContactsTable {
 		ContentValues values = updateContentValues(contact);
 		values.put(COLUMN_FK_ADDRESS_ID, addressId);
 		values.put(COLUMN_FK_TEAM_ID, contact.getTeam().getId());
+		values.put(COLUMN_GENDER, contact.getGender());
 		return values;
 	}
 

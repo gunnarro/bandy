@@ -1,6 +1,5 @@
 package com.gunnarro.android.bandy.service.impl;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -26,6 +25,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.content.Context;
 import android.net.http.AndroidHttpClient;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -100,8 +100,8 @@ public class XmlDocumentParser {
 		return inputStream;
 	}
 
-	public void downloadAndUpdateDB(String filePath, BandyService bandyService) throws Exception {
-		Document doc = loadDocument(filePath);
+	public void downloadAndUpdateDB(Context context, String filePath, BandyService bandyService) throws Exception {
+		Document doc = loadDocument(context, filePath);
 		CustomLog.i(this.getClass(), "Downloaded data file..." + filePath);
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
@@ -122,7 +122,7 @@ public class XmlDocumentParser {
 		expression = "/club/teams/team";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			loadAndSaveTeam(getAttributeValue(nodeList.item(i), "file"), club, bandyService, xpath);
+			loadAndSaveTeam(context, getAttributeValue(nodeList.item(i), "file"), club, bandyService, xpath);
 		}
 		// Node mapping to domain objects and saved to repository must be done
 		// in strict order
@@ -134,7 +134,7 @@ public class XmlDocumentParser {
 		// Club club = mapAndSaveClubNode(nodeList, bandyService);
 	}
 
-	private Document loadDocument(String filePath) throws Exception {
+	private Document loadDocument(Context context, String filePath) throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setValidating(false);
 		DocumentBuilder db = dbf.newDocumentBuilder();
@@ -144,12 +144,13 @@ public class XmlDocumentParser {
 			inputStream = getHttpsInput(filePath);
 			return db.parse(inputStream);
 		} else {
-			return db.parse(new File(filePath));
+			InputStream fStream = context.getAssets().open(filePath);
+			return db.parse(fStream);
 		}
 	}
 
-	private void loadAndSaveTeam(String teamFilePath, Club club, BandyService bandyService, XPath xpath) throws Exception {
-		Document doc = loadDocument(teamFilePath);
+	private void loadAndSaveTeam(Context context, String teamFilePath, Club club, BandyService bandyService, XPath xpath) throws Exception {
+		Document doc = loadDocument(context, teamFilePath);
 		String expression = "/team";
 		NodeList nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		Team team = mapAndSaveTeamNode(club, nodeList, bandyService);

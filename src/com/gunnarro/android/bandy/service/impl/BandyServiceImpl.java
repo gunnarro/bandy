@@ -115,7 +115,7 @@ public class BandyServiceImpl implements BandyService {
 			// for (String file : getDataFileUrlList()) {
 			// this.xmlParser.downloadAndUpdateDB(file, this);
 			// }
-			this.xmlParser.downloadAndUpdateDB(getDataFileUrl(), this);
+			this.xmlParser.downloadAndUpdateDB(getContext(), getDataFileUrl(), this);
 			CustomLog.d(this.getClass(), "Finished loading data into DB");
 		} catch (Exception e) {
 			e.printStackTrace();

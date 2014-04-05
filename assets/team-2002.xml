@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <team name="UIL Knøtt 2002" gender="M" yearOfBirth="2002" version="0.1" releaseDate="10.03.2014">
     <contacts>
-        <contact id="1" gender="M" firstName="Svein" middleName="Tore" lastName="Heimdal"  mobile="" email="svein-tore@yahoo.no" >
-        	<address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />
+        <contact id="1" gender="M" firstName="Svein" middleName="Tore" lastName="Heimdal"  mobile="11223344" email="svein-tore@yahoo.no" >
+        	<address streetName="xx" streetNumber="0" zipCode="9999" city="Oslo" country="Norway" />
         	<roles>
             	 <role>teamlead</role>
              	 <role>coach</role>
