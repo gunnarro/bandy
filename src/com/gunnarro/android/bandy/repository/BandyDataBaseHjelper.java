@@ -52,7 +52,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	private static final boolean IS_LOAD_FROM_SCRIPT = false;
 	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
 	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
-	private static final String DATABASE_NAME = "sportsteam10.db";
+	private static final String DATABASE_NAME = "sportsteam11.db";
 	public static final int DATABASE_VERSION = 1;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";

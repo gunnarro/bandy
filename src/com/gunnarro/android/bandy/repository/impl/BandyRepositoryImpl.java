@@ -192,6 +192,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		ContentValues values = ClubsTable.createContentValues(club);
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(ClubsTable.TABLE_NAME, null, values);
+		CustomLog.d(this.getClass(), "Created club: " + club.getFullName());
 		return Long.valueOf(id).intValue();
 	}
 

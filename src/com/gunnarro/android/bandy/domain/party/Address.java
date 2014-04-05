@@ -63,7 +63,7 @@ public class Address {
 	}
 
 	public static Address createEmptyAddress() {
-		return new Address("na", "na", "na", "na", "na", "na");
+		return new Address(-1, "na", "na", "na", "na", "na", "na");
 	}
 
 	@Override

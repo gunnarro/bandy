@@ -108,13 +108,11 @@ public class XmlDocumentParser {
 
 		String expression = "/club";
 		NodeList nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		Club club = mapAndSaveClubNode(nodeList, bandyService);
+		Club club = mapAndSaveClubNode(xpath, doc, nodeList, bandyService);
 		if (club == null) {
 			throw new ApplicationException("Invalid xml document, Club node is missing!");
 		}
-		Address address = mapAddress(xpath, doc, getAttributeValue(nodeList.item(0), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(0), ATTR_LAST_NAME));
-		club.setAddress(address);
-		
+
 		// FIXME must relate to
 		// expression = "/club/contacts/contact";
 		// nodeList = (NodeList) xpath.evaluate(expression, doc,
@@ -208,9 +206,12 @@ public class XmlDocumentParser {
 		return existingSeason;
 	}
 
-	private Club mapAndSaveClubNode(NodeList nodeList, BandyService bandyService) {
+	private Club mapAndSaveClubNode(XPath xpath, Document doc, NodeList nodeList, BandyService bandyService) throws XPathExpressionException, DOMException {
 		CustomLog.d(this.getClass(), "node=" + nodeList.item(0).getNodeName());
 		Club club = new Club(getAttributeValue(nodeList.item(0), "name"), getAttributeValue(nodeList.item(0), "department"));
+		String xpathExprAddress = "/club/address";
+		Address address = mapAddress(xpath, doc, xpathExprAddress);
+		club.setAddress(address);
 		CustomLog.d(this.getClass(), club.toString());
 		if (bandyService.getClub(club.getName(), club.getDepartmentName()) == null) {
 			bandyService.createClub(club);
@@ -233,7 +234,11 @@ public class XmlDocumentParser {
 	private void mapAndSavePlayerNodes(XPath xpath, Document doc, Team team, NodeList nodeList, BandyService bandyService) throws XPathExpressionException,
 			DOMException {
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			Address address = mapAddress(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
+			String firstName = getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME);
+			String lastName = getAttributeValue(nodeList.item(i), ATTR_LAST_NAME);
+			String xpathExprAddress = "/team/players/player[@" + ATTR_FIRST_NAME + "='" + firstName + "' and @" + ATTR_LAST_NAME + "='" + lastName
+					+ "']/address";
+			Address address = mapAddress(xpath, doc, xpathExprAddress);
 			List<Contact> parentList = getParentList(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
 			String status = getAttributeValue(nodeList.item(i), "status");
@@ -291,7 +296,11 @@ public class XmlDocumentParser {
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
 			Address address = Address.createEmptyAddress();
 			if (nodeList.item(i).hasChildNodes()) {
-				address = mapAddress(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
+				String firstName = getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME);
+				String lastName = getAttributeValue(nodeList.item(i), ATTR_LAST_NAME);
+				String xpathExprAddress = "/team/players/player[@" + ATTR_FIRST_NAME + "='" + firstName + "' and @" + ATTR_LAST_NAME + "='" + lastName
+						+ "']/address";
+				address = mapAddress(xpath, doc, xpathExprAddress);
 			}
 			Contact contact = new Contact(new Team(team.getId(), team.getName()), roleList, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_MIDDLE_NAME), getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), getAttributeValue(
@@ -302,8 +311,7 @@ public class XmlDocumentParser {
 		}
 	}
 
-	private Address mapAddress(XPath xpath, Document doc, String firstName, String lastName) throws XPathExpressionException, DOMException {
-		String xpathExprAddress = "/team/players/player[@" + ATTR_FIRST_NAME + "='" + firstName + "' and @" + ATTR_LAST_NAME + "='" + lastName + "']/address";
+	private Address mapAddress(XPath xpath, Document doc, String xpathExprAddress) throws XPathExpressionException, DOMException {
 		Node addressNode = (Node) xpath.evaluate(xpathExprAddress, doc, XPathConstants.NODE);
 		if (addressNode != null) {
 			Address address = new Address(getAttributeValue(addressNode, "streetName"), getAttributeValue(addressNode, "streetNumber"), getAttributeValue(
@@ -385,8 +393,8 @@ public class XmlDocumentParser {
 		if (node.hasAttributes() && node.getAttributes().getNamedItem(name) != null) {
 			value = node.getAttributes().getNamedItem(name).getNodeValue().trim();
 		} else {
-			CustomLog.e(this.getClass(), "node=" + node.getNodeName() + ",value=" + node.getNodeValue() + ", text=" + node.getTextContent() + ", attribute="
-					+ name + ", is missing!");
+			CustomLog.e(this.getClass(), "node=" + node.getNodeName() + ", hasAttribuest=" + node.hasAttributes() + ", value=" + node.getNodeValue()
+					+ ", text=" + node.getTextContent() + ", attribute=" + name + ", is missing!");
 		}
 		return value;
 	}
