@@ -229,7 +229,7 @@ public abstract class DashboardActivity extends FragmentActivity {
 			startActivity(new Intent(getApplicationContext(), SearchActivity.class));
 			break;
 		case R.id.settings_btn:
-			startActivity(new Intent(getApplicationContext(), SetupActivity.class));
+			startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
 			break;
 		case R.id.search_btn:
 			startActivity(new Intent(getApplicationContext(), SearchActivity.class));

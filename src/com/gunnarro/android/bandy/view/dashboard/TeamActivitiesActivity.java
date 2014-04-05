@@ -256,7 +256,7 @@ public class TeamActivitiesActivity extends DashboardActivity {
 		regards.append("Trener/Lagleder\n");
 		regards.append(team.getName()).append("\n");
 		regards.append("Mobile: ").append(team.getTeamLead().getMobileNumber()).append("\n");
-		regards.append("Homepage: ").append(team.getClub().getHomepage()).append("\n");
+		regards.append("Homepage: ").append(team.getClub().getHomePageUrl()).append("\n");
 		return regards.toString();
 	}
 
@@ -282,11 +282,11 @@ public class TeamActivitiesActivity extends DashboardActivity {
 		regards.append("\n\n\n");
 		regards.append("Vennlig hilsen").append("\n");
 		regards.append(teamLead.getFullName()).append("\n");
-		regards.append(team.getClub().getName()).append("\n");
+		regards.append(team.getClub().getFullName()).append("\n");
 		regards.append("Trener/Lagleder\n");
 		regards.append(team.getName()).append("\n");
 		regards.append("Mobile: ").append(teamLead.getMobileNumber()).append("\n");
-		regards.append("Homepage: ").append(team.getClub().getHomepage()).append("\n");
+		regards.append("Homepage: ").append(team.getClub().getHomePageUrl()).append("\n");
 		try {
 			CustomLog.d(this.getClass(), "email msg=" + msg);
 			CustomLog.d(this.getClass(), "email regards=" + regards.toString());

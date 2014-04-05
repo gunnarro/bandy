@@ -3,14 +3,21 @@ package com.gunnarro.android.bandy.repository.table;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.gunnarro.android.bandy.domain.Club;
+
 public class ClubsTable {
 
 	// Database table
 	public static final String TABLE_NAME = "clubs";
+	public static final String COLUMN_FK_ADDRESS_ID = "fk_address_id";
 	public static final String COLUMN_CLUB_NAME = "club_name";
-	public static final String COLUMN_STADIUM = "club_stadium";
+	public static final String COLUMN_CLUB_DEPARTMENT_NAME = "club_department_name";
+	public static final String COLUMN_CLUB_STADIUM_NAME = "club_stadium_name";
+	public static final String COLUMN_CLUB_NAME_ABBREVIATION = "club_name_abbreviation";
+	public static final String COLUMN_CLUB_URL_HOME_PAGE = "club_ulr_home_page";
 
-	public static String[] TABLE_COLUMNS = TableHelper.createColumns(new String[] { COLUMN_CLUB_NAME });
+	public static String[] TABLE_COLUMNS = TableHelper.createColumns(new String[] { COLUMN_CLUB_NAME, COLUMN_CLUB_DEPARTMENT_NAME, COLUMN_FK_ADDRESS_ID,
+			COLUMN_CLUB_STADIUM_NAME, COLUMN_CLUB_NAME_ABBREVIATION, COLUMN_CLUB_URL_HOME_PAGE });
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -34,9 +41,13 @@ public class ClubsTable {
 		TableHelper.checkColumnNames(projection, TABLE_COLUMNS);
 	}
 
-	public static ContentValues createContentValues(String clubName) {
+	public static ContentValues createContentValues(Club club) {
 		ContentValues values = TableHelper.createContentValues();
-		values.put(COLUMN_CLUB_NAME, clubName);
+		values.put(COLUMN_CLUB_NAME, club.getName());
+		values.put(COLUMN_CLUB_DEPARTMENT_NAME, club.getDepartmentName());
+		values.put(COLUMN_FK_ADDRESS_ID, club.getAddress().getId());
+		values.put(COLUMN_CLUB_NAME_ABBREVIATION, club.getClubNameAbbreviation());
+		values.put(COLUMN_CLUB_STADIUM_NAME, club.getStadiumName());
 		return values;
 	}
 

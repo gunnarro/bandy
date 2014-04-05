@@ -63,7 +63,7 @@ public class Training extends Activity {
 	}
 
 	public static Training createTraining(Team team) {
-		return new Training(null, System.currentTimeMillis(), System.currentTimeMillis(), team, team.getClub().getStadium());
+		return new Training(null, System.currentTimeMillis(), System.currentTimeMillis(), team, team.getClub().getStadiumName());
 	}
 
 	@Override

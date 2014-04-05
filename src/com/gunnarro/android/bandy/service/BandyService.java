@@ -44,7 +44,7 @@ public interface BandyService {
 	public int createPlayer(Player player);
 
 	public int savePlayer(Player player);
-	
+
 	public int saveContact(Contact contact);
 
 	public int createContact(Contact contact);
@@ -67,7 +67,7 @@ public interface BandyService {
 
 	public Team getTeam(Integer id);
 
-	public Club getClub(String name);
+	public Club getClub(String name, String departmentName);
 
 	public Club getClub(Integer id);
 
@@ -98,6 +98,8 @@ public interface BandyService {
 	// ---------------------------------------------------------------------------
 	public void updateDataFileUrl(String url);
 
+	public List<String> getDataFileUrlList();
+
 	public String getDataFileUrl();
 
 	public void updateDataFileVersion(String version);
@@ -125,7 +127,7 @@ public interface BandyService {
 	public List<Role> getRoleList();
 
 	public Player getPlayer(int playerId);
-	
+
 	public Contact getContact(int contactId);
 
 	void listRelationsShips();

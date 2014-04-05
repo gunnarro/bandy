@@ -61,7 +61,7 @@
             android:label="Search"
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" />
         <activity
-            android:name="com.gunnarro.android.bandy.view.dashboard.SetupActivity"
+            android:name="com.gunnarro.android.bandy.view.dashboard.SettingsActivity"
             android:label="Setup"
             android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->

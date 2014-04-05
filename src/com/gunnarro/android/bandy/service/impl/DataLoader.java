@@ -37,7 +37,7 @@ public class DataLoader extends Service {
 
 	public void loadData() {
 		try {
-			xmlParser.testParseByXpath(TEAM_XML_URL, bandyService);
+			xmlParser.downloadAndUpdateDB(TEAM_XML_URL, bandyService);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -110,9 +110,12 @@ public class BandyServiceImpl implements BandyService {
 	public void loadData(String filePath) {
 		try {
 			CustomLog.d(this.getClass(), "Start loading data into DB: " + filePath);
-			bandyRepository.deleteAllTableData();
+			this.bandyRepository.deleteAllTableData();
 			CustomLog.d(this.getClass(), "Deleted all current stored DB data...");
-			this.xmlParser.testParseByXpath(filePath, this);
+			// for (String file : getDataFileUrlList()) {
+			// this.xmlParser.downloadAndUpdateDB(file, this);
+			// }
+			this.xmlParser.downloadAndUpdateDB(getDataFileUrl(), this);
 			CustomLog.d(this.getClass(), "Finished loading data into DB");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -349,7 +352,7 @@ public class BandyServiceImpl implements BandyService {
 	public List<Team> getTeamList(String clubName) {
 		return bandyRepository.getTeamList(clubName);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -431,8 +434,8 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Club getClub(String name) {
-		return this.bandyRepository.getClub(name);
+	public Club getClub(String name, String departmentName) {
+		return this.bandyRepository.getClub(name, departmentName);
 	}
 
 	/**
@@ -669,6 +672,14 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public void updateDataFileUrl(String url) {
 		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_URL_KEY, url);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getDataFileUrlList() {
+		return bandyRepository.getSettings(SettingsTable.DATA_FILE_URL_KEY);
 	}
 
 	/**

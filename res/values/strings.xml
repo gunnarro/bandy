@@ -18,12 +18,10 @@
     <string name="label_draw">D</string>
     <string name="label_loss">L</string>
     <string name="label_goals">Goal</string>
-    
     <string name="label_league">League</string>
     <string name="label_training">Training</string>
     <string name="label_cup">Cup</string>
     <string name="label_total">Total</string>
-    
     <string name="tab_team">Team</string>
     <string name="tab_player">Player</string>
 
@@ -74,6 +72,8 @@
     <string name="matches">Matches</string>
     <string name="email">Email</string>
     <string name="cups">Cups</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
     <string name="street_name">Street name</string>
     <string name="street_number">Street number</string>
     <string name="street_number_postfix">Street number postfix</string>
@@ -115,7 +115,6 @@
     <string name="first_name">First name</string>
     <string name="middle_name">Middle name</string>
     <string name="last_name">Last name</string>
-
 
     <!-- Menu Strings -->
     <string name="menu_quit">Quit</string>

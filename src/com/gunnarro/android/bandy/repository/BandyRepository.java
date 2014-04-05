@@ -76,7 +76,7 @@ public interface BandyRepository {
 
 	public Contact getTeamContactPerson(int teamId, String role);
 
-	public Club getClub(String name);
+	public Club getClub(String name, String departmentName);
 
 	public Club getClub(Integer id);
 
@@ -135,6 +135,8 @@ public interface BandyRepository {
 	// ---------------------------------------------------------------------------
 
 	public String getSetting(String type);
+
+	public List<String> getSettings(String type);
 
 	public void updateSetting(String type, String value);
 

@@ -19,12 +19,14 @@ public class PlayerTest extends TestCase {
 		p1roles.add(ContactRoleEnum.COACH);
 		List<ContactRoleEnum> p2roles = new ArrayList<ContactRoleEnum>();
 		p2roles.add(ContactRoleEnum.TEAMLEAD);
-		parents.add(new Contact(new Team("team name"), p1roles, "p1firstname", "p1middleName", "p1lastName", "11111111", "p1@email.no", address));
-		parents.add(new Contact(new Team("team name"), p2roles, "p2firstname", "p2middleName", "p2lastName", "22222222", "p2@email.no", address));
+		parents.add(new Contact(new Team("team name"), p1roles, "p1firstname", "p1middleName", "p1lastName", "M", "11111111", "p1@email.no", address));
+		parents.add(new Contact(new Team("team name"), p2roles, "p2firstname", "p2middleName", "p2lastName", "M", "22222222", "p2@email.no", address));
 		long dateOfBirth = System.currentTimeMillis();
-		Player player = new Player(909, new Team("team name"), "firstname", "middlename", "lastname", PlayerStatusEnum.ACTIVE, parents, dateOfBirth, address);
+		Player player = new Player(909, new Team("team name"), "firstname", "middlename", "lastname", "M", PlayerStatusEnum.ACTIVE, parents, dateOfBirth,
+				address);
 		assertEquals("909", player.getId().toString());
 		assertEquals("firstname lastname", player.getFullName());
+		assertEquals("M", player.getGender());
 		assertTrue(player.hasParents());
 		assertEquals("COACH", player.getParents().get(0).getRoles().get(0).name());
 		assertEquals("p1firstname p1lastName", player.getParents().get(0).getFullName());
@@ -38,7 +40,7 @@ public class PlayerTest extends TestCase {
 		assertEquals("postalcode", player.getAddress().getPostalCode());
 		assertTrue(player.getAddress().isAddressValid());
 
-		player = new Player(new Team("team name"), "firstname", "middlename", "lastname", PlayerStatusEnum.ACTIVE, parents, dateOfBirth, address);
+		player = new Player(new Team("team name"), "firstname", "middlename", "lastname", "M", PlayerStatusEnum.ACTIVE, parents, dateOfBirth, address);
 		assertNull(player.getId());
 	}
 

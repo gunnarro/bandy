@@ -16,48 +16,51 @@ public class Contact {
 	private String firstName;
 	private String middleName;
 	private String lastName;
+	private String gender;
 	private String mobileNumber;
 	private String emailAddress;
 	private Address address;
 
-	public Contact(Team team, String firstName, String middleName, String lastName) {
+	public Contact(Team team, String firstName, String middleName, String lastName, String gender) {
 		this.team = team;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
+		this.gender = gender;
 	}
 
-	public Contact(Integer id, Team team, String firstName, String middleName, String lastName) {
-		this(team, firstName, middleName, lastName);
+	public Contact(Integer id, Team team, String firstName, String middleName, String lastName, String gender) {
+		this(team, firstName, middleName, lastName, gender);
 		this.id = id;
 	}
 
-	public Contact(Team team, String firstName, String middleName, String lastName, Address address) {
-		this(team, firstName, middleName, lastName);
+	public Contact(Team team, String firstName, String middleName, String lastName, String gender, Address address) {
+		this(team, firstName, middleName, lastName, gender);
 		this.address = address;
 	}
 
-	public Contact(int id, Team team, String firstName, String middleName, String lastName, Address address) {
-		this(id, team, firstName, middleName, lastName);
+	public Contact(int id, Team team, String firstName, String middleName, String lastName, String gender, Address address) {
+		this(id, team, firstName, middleName, lastName, gender);
 		this.address = address;
 	}
 
-	public Contact(Integer id, Team team, Address address, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName,
+	public Contact(Integer id, Team team, Address address, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName, String gender,
 			String mobileNumber, String emailAddress) {
-		this(id, team, firstName, middleName, lastName);
+		this(id, team, firstName, middleName, lastName, gender);
 		this.address = address;
 		this.roles = roles;
 		this.mobileNumber = mobileNumber;
 		this.emailAddress = emailAddress;
 	}
 
-	public Contact(Team team, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName, String mobileNumber, String emailAddress,
-			Address address) {
+	public Contact(Team team, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName, String gender, String mobileNumber,
+			String emailAddress, Address address) {
 		this.team = team;
 		this.roles = roles;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
+		this.gender = gender;
 		this.mobileNumber = mobileNumber;
 		this.emailAddress = emailAddress;
 		this.address = address;
@@ -105,6 +108,14 @@ public class Contact {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public String getMobileNumber() {

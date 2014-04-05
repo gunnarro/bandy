@@ -2,20 +2,33 @@ package com.gunnarro.android.bandy.domain;
 
 import java.util.List;
 
+import com.gunnarro.android.bandy.domain.party.Address;
+
 public class Club {
 	private Integer id;
 	private String name;
-	private String stadium;
-	private String address;
+	private String departmentName;
+	private String stadiumName;
+	private String clubNameAbbreviation;
+	private Address address;
+	private String homePageUrl;
 	private List<Team> teams;
-	private String homepage;
 
-	public Club(String name) {
+	public Club(String name, String departmentName) {
 		this.name = name;
+		this.departmentName = departmentName;
 	}
 
-	public Club(int id, String name) {
-		this(name);
+	public Club(String name, String departmentName, String clubNameAbbreviation, String stadiumName, Address address, String homePageUrl) {
+		this(stadiumName, departmentName);
+		this.clubNameAbbreviation = clubNameAbbreviation;
+		this.stadiumName = stadiumName;
+		this.address = address;
+		this.homePageUrl = homePageUrl;
+	}
+
+	public Club(Integer id, String name, String departmentName, String clubNameAbbreviation, String stadiumName, Address address, String homepageUrl) {
+		this(name, departmentName, clubNameAbbreviation, stadiumName, address, homepageUrl);
 		this.id = id;
 	}
 
@@ -23,21 +36,32 @@ public class Club {
 		return id;
 	}
 
+	public String getFullName() {
+		return name + " " + departmentName;
+	}
+
 	public String getName() {
 		return name;
 	}
 
-	public String getStadium() {
-		return stadium;
+	public String getDepartmentName() {
+		return departmentName;
 	}
 
-	public String getHomepage() {
-		return homepage;
+	public String getClubNameAbbreviation() {
+		return clubNameAbbreviation;
 	}
 
-	@Override
-	public String toString() {
-		return "Club [id=" + id + ", name=" + name + ", stadium=" + stadium + ", address=" + address + ", homepage=" + homepage + "]";
+	public Address getAddress() {
+		return address;
+	}
+
+	public String getStadiumName() {
+		return stadiumName;
+	}
+
+	public String getHomePageUrl() {
+		return homePageUrl;
 	}
 
 }

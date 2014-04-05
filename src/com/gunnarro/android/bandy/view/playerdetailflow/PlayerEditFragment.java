@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -132,13 +133,20 @@ public class PlayerEditFragment extends Fragment {
 		String mobileNumber = getInputValue(R.id.playerMobileNumberTxt);
 		String emailAddress = getInputValue(R.id.playerEmailAddressTxt);
 		String schoolName = getInputValue(R.id.playerSchoolNameTxt);
+
+		String gender = "M";
+		boolean isFemale = ((RadioButton) getView().findViewById(R.id.femaleRadioBtn)).isSelected();
+		if (isFemale) {
+			gender = "F";
+		}
+
 		Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
 		Team team = this.bandyService.getTeam(1);
-		Player player = new Player(team, firstName, middleName, lastName, PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth, "dd.mm.yyyy")
+		Player player = new Player(team, firstName, middleName, lastName, gender, PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth, "dd.mm.yyyy")
 				.getTime(), address);
 		if (playerId > 0) {
-			player = new Player(playerId, team, firstName, middleName, lastName, PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth, "dd.mm.yyyy")
-					.getTime(), address);
+			player = new Player(playerId, team, firstName, middleName, lastName, gender, PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth,
+					"dd.mm.yyyy").getTime(), address);
 		}
 		player.setEmailAddress(emailAddress);
 		player.setMobileNumber(mobileNumber);

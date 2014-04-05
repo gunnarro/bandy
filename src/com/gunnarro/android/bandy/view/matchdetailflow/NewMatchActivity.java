@@ -234,7 +234,7 @@ public class NewMatchActivity extends Activity {
 			selectedHomeTeamName = parent.getItemAtPosition(pos).toString();
 			Team team = bandyService.getTeam(selectedHomeTeamName, false);
 			TextView venueeView = (TextView) findViewById(R.id.venueTxtId);
-			venueeView.setText(team.getClub().getStadium());
+			venueeView.setText(team.getClub().getStadiumName());
 		}
 
 		@Override

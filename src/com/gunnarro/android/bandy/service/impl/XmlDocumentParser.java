@@ -55,6 +55,7 @@ public class XmlDocumentParser {
 	private final static String ATTR_FIRST_NAME = "firstName";
 	private final static String ATTR_MIDDLE_NAME = "middleName";
 	private final static String ATTR_LAST_NAME = "lastName";
+	private final static String ATTR_GENDER = "gender";
 
 	private final static String ATTR_CUP_NAME = "cupName";
 
@@ -99,7 +100,7 @@ public class XmlDocumentParser {
 		return inputStream;
 	}
 
-	public void testParseByXpath(String filePath, BandyService bandyService) throws Exception {
+	public void downloadAndUpdateDB(String filePath, BandyService bandyService) throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setValidating(false);
 		DocumentBuilder db = dbf.newDocumentBuilder();
@@ -168,6 +169,16 @@ public class XmlDocumentParser {
 		mapAndSavePlayerNodes(xpath, doc, team, nodeList, bandyService);
 	}
 
+	private void paresClub(Document doc, XPath xpath, BandyService bandyService) throws XPathExpressionException {
+		String expression = "/club";
+		NodeList nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+		Club club = mapAndSaveClubNode(nodeList, bandyService);
+
+		if (club == null) {
+			throw new ApplicationException("Invalid xml document, Club node is missing!");
+		}
+	}
+
 	private Season mapAndSaveSeasonNode(Node node, BandyService bandyService) {
 		CustomLog.d(this.getClass(), "node=" + node.getNodeName());
 		String period = getAttributeValue(node, "period");
@@ -186,18 +197,17 @@ public class XmlDocumentParser {
 
 	private Club mapAndSaveClubNode(NodeList nodeList, BandyService bandyService) {
 		CustomLog.d(this.getClass(), "node=" + nodeList.item(0).getNodeName());
-		Club club = new Club(getAttributeValue(nodeList.item(0), "name"));
+		Club club = new Club(getAttributeValue(nodeList.item(0), "name"), getAttributeValue(nodeList.item(0), "department"));
 		CustomLog.d(this.getClass(), club.toString());
-		if (bandyService.getClub(club.getName()) == null) {
+		if (bandyService.getClub(club.getName(), club.getDepartmentName()) == null) {
 			bandyService.createClub(club);
 		}
-		return bandyService.getClub(club.getName());
+		return bandyService.getClub(club.getName(), club.getDepartmentName());
 	}
 
 	private Team mapAndSaveTeamNode(Club club, NodeList nodeList, BandyService bandyService) {
 		Team team = new Team(getAttributeValue(nodeList.item(0), "name"), club, 0, GenderEnum.MALE.name());
 		CustomLog.d(this.getClass(), team.toString());
-		System.out.print("mapAndSaveTeamNode: " + team.toString());
 		try {
 			bandyService.getTeam(team.getName(), false);
 		} catch (ApplicationException ae) {
@@ -215,8 +225,9 @@ public class XmlDocumentParser {
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
 			String status = getAttributeValue(nodeList.item(i), "status");
 			Player player = new Player(-1, team, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(i), ATTR_MIDDLE_NAME),
-					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), PlayerStatusEnum.valueOf(status.toUpperCase()), parentList, Utility.timeToDate(
-							getAttributeValue(nodeList.item(i), ATTR_BIRTH_DATE), Utility.DATE_PATTERN).getTime(), address);
+					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), getAttributeValue(nodeList.item(i), ATTR_GENDER), PlayerStatusEnum.valueOf(status
+							.toUpperCase()), parentList, Utility.timeToDate(getAttributeValue(nodeList.item(i), ATTR_BIRTH_DATE), Utility.DATE_PATTERN)
+							.getTime(), address);
 			CustomLog.d(this.getClass(), player.toString());
 			bandyService.createPlayer(player);
 		}
@@ -271,7 +282,8 @@ public class XmlDocumentParser {
 			}
 			Contact contact = new Contact(new Team(team.getId(), team.getName()), roleList, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_MIDDLE_NAME), getAttributeValue(nodeList.item(i), ATTR_LAST_NAME), getAttributeValue(
-							nodeList.item(i), "mobile"), getAttributeValue(nodeList.item(i), "email"), address);
+							nodeList.item(i), ATTR_GENDER), getAttributeValue(nodeList.item(i), "mobile"), getAttributeValue(nodeList.item(i), "email"),
+					address);
 			CustomLog.d(this.getClass(), contact.toString());
 			bandyService.createContact(contact);
 		}

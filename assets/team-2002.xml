@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <team name="UIL Knøtt 2002" gender="M" yearOfBirth="2002" version="0.1" releaseDate="10.03.2014">
-    <club name="Ullevål IL - Bandy">
-    	<abbrivation>UiL</abbrivation>
-        <stadium>Bergbanen</stadium>
-        <address>Bergbanen</address>
-        <postbox>Pb 3901 Ullevål Hageby</postbox>
-        <postnumber>0805</postnumber>
-        <city>Oslo</city>
-        <country>Norge</country>
-        <homepage>http://idrett.speaker.no/organisation.asp?OrgElementId=52653</homepage>
-    </club>
-    
     <contacts>
         <contact id="1" gender="M" firstName="Svein" middleName="Tore" lastName="Heimdal"  mobile="" email="svein-tore@yahoo.no" >
         	<address streetName="" streetNumber="" zipCode="" city="Oslo" country="Norway" />

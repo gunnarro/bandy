@@ -188,49 +188,52 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	public void insertDefaultData(SQLiteDatabase database) {
 		// init settings
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(1, 'datetime()', '" + SettingsTable.DATA_FILE_URL_KEY + "','"
-				+ DataLoader.TEAM_XML_URL + "team-2002.xml')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(2, 'datetime()', '" + SettingsTable.DATA_FILE_URL_KEY + "','"
-				+ DataLoader.TEAM_XML_URL + "team-2003.xml')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(3, 'datetime()', '" + SettingsTable.DATA_FILE_LAST_UPDATED_KEY
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(1, datetime(), '" + SettingsTable.DATA_FILE_URL_KEY + "','"
+				+ DataLoader.TEAM_XML_URL + "/uil.xml')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(2, datetime(), '" + SettingsTable.DATA_FILE_URL_KEY + "','"
+				+ DataLoader.TEAM_XML_URL + "/team-2003.xml')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(3, datetime(), '" + SettingsTable.DATA_FILE_LAST_UPDATED_KEY
 				+ "','0')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(4, 'datetime()', '" + SettingsTable.DATA_FILE_VERSION_KEY
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(4, datetime(), '" + SettingsTable.DATA_FILE_VERSION_KEY
 				+ "','na')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(5, 'datetime()', '" + SettingsTable.MAIL_ACCOUNT_KEY + "','na')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(6, 'datetime()', '" + SettingsTable.MAIL_ACCOUNT_PWD_KEY + "','na')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(5, datetime(), '" + SettingsTable.MAIL_ACCOUNT_KEY + "','na')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(6, datetime(), '" + SettingsTable.MAIL_ACCOUNT_PWD_KEY + "','na')");
 		// init match types
-		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(1, 'datetime()', 1, 'LEAGUE')");
-		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(2, 'datetime()', 2, 'TRAINING')");
-		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(3, 'datetime()', 3, 'CUP')");
-		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(4, 'datetime()', 4, 'TOURNAMENT')");
+		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(1, datetime(), 1, 'LEAGUE')");
+		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(2, datetime(), 2, 'TRAINING')");
+		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(3, datetime(), 3, 'CUP')");
+		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(4, datetime(), 4, 'TOURNAMENT')");
 		// init player position types
-		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(1, 'datetime()', 1, 'GOALKEEPER')");
-		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(2, 'datetime()', 2, 'DEFENDER')");
-		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(3, 'datetime()', 3, 'MIDFIELDER')");
-		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(4, 'datetime()', 4, 'FORWARD')");
+		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(1, datetime(), 1, 'GOALKEEPER')");
+		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(2, datetime(), 2, 'DEFENDER')");
+		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(3, datetime(), 3, 'MIDFIELDER')");
+		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(4, datetime(), 4, 'FORWARD')");
 		// init statuses
-		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(1, 'datetime()', 1, 'ACTIVE')");
-		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(2, 'datetime()', 2, 'PASSIVE')");
-		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(3, 'datetime()', 3, 'INJURED')");
-		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(4, 'datetime()', 4, 'QUIT')");
+		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(1, datetime(), 1, 'ACTIVE')");
+		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(2, datetime(), 2, 'PASSIVE')");
+		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(3, datetime(), 3, 'INJURED')");
+		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(4, datetime(), 4, 'QUIT')");
 		// init seasons
-		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(1, 'datetime()', '2013/2014', 1, 1)");
-		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(2, 'datetime()', '2014/2015', 1, 1)");
-		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(3, 'datetime()', '2015/2016', 1, 1)");
-		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(4, 'datetime()', '2016/2017', 1, 1)");
+		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(1, datetime(), '2013/2014', 1, 1)");
+		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(2, datetime(), '2014/2015', 1, 1)");
+		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(3, datetime(), '2015/2016', 1, 1)");
+		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(4, datetime(), '2016/2017', 1, 1)");
 		// init. team types
-		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(1, 'datetime()', 'Knøtt', '', '11', 'male', '25', '', '7', 'Spillerne må ikke ha fylt 11 år ved årsskiftet i inneværende sesong')");
-		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(2, 'datetime()', 'Lillegutt', '', '13', 'male', '25', '', '7', 'Spillerne må ikke ha fylt 13 år ved årsskiftet i inneværende sesong')");
-		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(3, 'datetime()', 'Smågutt', '', '15', 'male', '30', '5', '11', 'Spillerne må ikke ha fylt 15 år ved årsskiftet i inneværende sesong')");
-		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(4, 'datetime()', 'Gutt', '', '17', 'male', '40', '10', '11', 'Spillerne må ikke ha fylt 17 år ved årsskiftet i inneværende sesong')");
-		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(5, 'datetime()', 'Junior', '', '20', 'male', '45', '10', '11', 'Spillerne må ikke ha fylt 20 år ved årsskiftet i inneværende sesong')");
-		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(6, 'datetime()', 'Old boys', '35', '50', 'male', '30','5',  '11', 'info')");
-		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(7, 'datetime()', 'Veteran', '50', '', 'male', '30', '5', '7', 'info')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(1, datetime(), 'Knøtt', '', '11', 'male', '25', '', '7', 'Spillerne må ikke ha fylt 11 år ved årsskiftet i inneværende sesong')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(2, datetime(), 'Lillegutt', '', '13', 'male', '25', '', '7', 'Spillerne må ikke ha fylt 13 år ved årsskiftet i inneværende sesong')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(3, datetime(), 'Smågutt', '', '15', 'male', '30', '5', '11', 'Spillerne må ikke ha fylt 15 år ved årsskiftet i inneværende sesong')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(4, datetime(), 'Gutt', '', '17', 'male', '40', '10', '11', 'Spillerne må ikke ha fylt 17 år ved årsskiftet i inneværende sesong')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(5, datetime(), 'Junior', '', '20', 'male', '45', '10', '11', 'Spillerne må ikke ha fylt 20 år ved årsskiftet i inneværende sesong')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(6, datetime(), 'Old boys', '35', '50', 'male', '30','5',  '11', 'info')");
+		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(7, datetime(),'Veteran', '50', '', 'male', '30', '5', '7', 'info')");
 		// init role types
-		database.execSQL("insert into role_types (_id, created_date_time, role_name) values(1, 'datetime()', 'DEFAULT')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_name) values(2, 'datetime()', 'TEAMLEAD')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_name) values(3, 'datetime()', 'COACH')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_name) values(4, 'datetime()', 'PARENT')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(1, datetime(), 'DEFAULT', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(2, datetime(), 'PARENT', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(3, datetime(), 'TEAMLEAD', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(4, datetime(), 'COACH', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(5, datetime(), 'CHAIRMAN', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(6, datetime(), 'DEPUTY_	CHAIRMAN', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(7, datetime(), 'BOARD_MEMBER', '')");
 
 		CustomLog.i(this.getClass(), "inserted default test data");
 	}

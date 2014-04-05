@@ -18,17 +18,17 @@ public class Player extends Contact {
 	private long dateOfBirth;
 	private String schoolName;
 
-	public Player(Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents, long dateOfBirth,
-			Address address) {
-		super(team, firstName, middleName, lastName, address);
+	public Player(Team team, String firstName, String middleName, String lastName, String gender, PlayerStatusEnum status, List<Contact> parents,
+			long dateOfBirth, Address address) {
+		super(team, firstName, middleName, lastName, gender, address);
 		this.status = status;
 		this.parents = parents;
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public Player(Integer id, Team team, String firstName, String middleName, String lastName, PlayerStatusEnum status, List<Contact> parents,
+	public Player(Integer id, Team team, String firstName, String middleName, String lastName, String gender, PlayerStatusEnum status, List<Contact> parents,
 			long dateOfBirth, Address address) {
-		super(id, team, firstName, middleName, lastName, address);
+		super(id, team, firstName, middleName, lastName, gender, address);
 		this.status = status;
 		this.parents = parents;
 		this.dateOfBirth = dateOfBirth;

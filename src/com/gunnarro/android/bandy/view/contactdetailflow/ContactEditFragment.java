@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -126,11 +127,18 @@ public class ContactEditFragment extends Fragment {
 		String country = getInputValue(R.id.contactCountryTxt);
 		String mobileNumber = getInputValue(R.id.contactMobileNumberTxt);
 		String emailAddress = getInputValue(R.id.contactEmailAddressTxt);
+
+		String gender = "M";
+		boolean isFemale = ((RadioButton) getView().findViewById(R.id.femaleRadioBtn)).isSelected();
+		if (isFemale) {
+			gender = "F";
+		}
+
 		Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
 		Team team = this.bandyService.getTeam(1);
-		Contact contact = new Contact(team, firstName, middleName, lastName, address);
+		Contact contact = new Contact(team, firstName, middleName, lastName, gender, address);
 		if (contactId > 0) {
-			contact = new Contact(contactId, team, firstName, middleName, lastName, address);
+			contact = new Contact(contactId, team, firstName, middleName, lastName, gender, address);
 		}
 		contact.setEmailAddress(emailAddress);
 		contact.setMobileNumber(mobileNumber);
