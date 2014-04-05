@@ -101,36 +101,59 @@ public class XmlDocumentParser {
 	}
 
 	public void downloadAndUpdateDB(String filePath, BandyService bandyService) throws Exception {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setValidating(false);
-		DocumentBuilder db = dbf.newDocumentBuilder();
-
-		InputStream inputStream = null;
-		Document doc = null;
-		if (filePath.startsWith("http")) {
-			inputStream = getHttpsInput(filePath);
-			doc = db.parse(inputStream);
-		} else {
-			doc = db.parse(new File(filePath));
-		}
+		Document doc = loadDocument(filePath);
 		CustomLog.i(this.getClass(), "Downloaded data file..." + filePath);
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 
+		String expression = "/club";
+		NodeList nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+		Club club = mapAndSaveClubNode(nodeList, bandyService);
+		if (club == null) {
+			throw new ApplicationException("Invalid xml document, Club node is missing!");
+		}
+		Address address = mapAddress(xpath, doc, getAttributeValue(nodeList.item(0), ATTR_FIRST_NAME), getAttributeValue(nodeList.item(0), ATTR_LAST_NAME));
+		club.setAddress(address);
+		
+		// FIXME must relate to
+		// expression = "/club/contacts/contact";
+		// nodeList = (NodeList) xpath.evaluate(expression, doc,
+		// XPathConstants.NODESET);
+		// mapAndSaveContacts(xpath, doc, null, nodeList, bandyService);
+
+		expression = "/club/teams/team";
+		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			loadAndSaveTeam(getAttributeValue(nodeList.item(i), "file"), club, bandyService, xpath);
+		}
 		// Node mapping to domain objects and saved to repository must be done
 		// in strict order
 		// due to database table references. We use foreing key as references
 		// between tables.
-		String expression = "/team/club";
-		NodeList nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		Club club = mapAndSaveClubNode(nodeList, bandyService);
+		// String expression = "/team/club";
+		// NodeList nodeList = (NodeList) xpath.evaluate(expression, doc,
+		// XPathConstants.NODESET);
+		// Club club = mapAndSaveClubNode(nodeList, bandyService);
+	}
 
-		if (club == null) {
-			throw new ApplicationException("Invalid xml document, Club node is missing!");
+	private Document loadDocument(String filePath) throws Exception {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setValidating(false);
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		InputStream inputStream = null;
+		CustomLog.d(this.getClass(), "Start loading: " + filePath);
+		if (filePath.startsWith("http")) {
+			inputStream = getHttpsInput(filePath);
+			return db.parse(inputStream);
+		} else {
+			return db.parse(new File(filePath));
 		}
+	}
 
-		expression = "/team";
-		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+	private void loadAndSaveTeam(String teamFilePath, Club club, BandyService bandyService, XPath xpath) throws Exception {
+		Document doc = loadDocument(teamFilePath);
+		String expression = "/team";
+		NodeList nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		Team team = mapAndSaveTeamNode(club, nodeList, bandyService);
 		if (team == null) {
 			throw new ApplicationException("Invalid xml document, Tema node is missing!");
@@ -167,16 +190,6 @@ public class XmlDocumentParser {
 		expression = "/team/players/player";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		mapAndSavePlayerNodes(xpath, doc, team, nodeList, bandyService);
-	}
-
-	private void paresClub(Document doc, XPath xpath, BandyService bandyService) throws XPathExpressionException {
-		String expression = "/club";
-		NodeList nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
-		Club club = mapAndSaveClubNode(nodeList, bandyService);
-
-		if (club == null) {
-			throw new ApplicationException("Invalid xml document, Club node is missing!");
-		}
 	}
 
 	private Season mapAndSaveSeasonNode(Node node, BandyService bandyService) {

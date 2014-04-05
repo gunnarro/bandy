@@ -56,6 +56,10 @@ public class Club {
 		return address;
 	}
 
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
 	public String getStadiumName() {
 		return stadiumName;
 	}

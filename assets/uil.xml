@@ -3,9 +3,8 @@
 	        <stadium>Bergbanen</stadium>
 	        <address>Bergbanen</address>
 	        <postbox>Pb 3901 Ullevål Hageby</postbox>
-	        <postnumber>0805</postnumber>
-	        <city>Oslo</city>
-	        <country>Norge</country>
+	        <address streetName="" streetNumber="" zipCode="0805" city="Oslo" country="Norway" />
+	        
 	        <homepage>http://idrett.speaker.no/organisation.asp?OrgElementId=52653</homepage>
 	  
 	         <contacts>
@@ -18,8 +17,8 @@
 	        </contacts>
 	        
 	         <teams>
-	             <team file="team-2002.xml">
-	             <team file="team-2003.xml">
+	             <team file="team-2002.xml" />
+	             <team file="team-2003.xml" />
 	         </teams>
     </club>
     

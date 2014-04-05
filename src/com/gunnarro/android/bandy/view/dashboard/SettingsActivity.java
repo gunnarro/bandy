@@ -55,7 +55,7 @@ public class SettingsActivity extends DashboardActivity {
 		getActionBar().setTitle(R.string.settings);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
 		setupEventHandlers();
-		init();
+//		init();
 	}
 
 	/**
