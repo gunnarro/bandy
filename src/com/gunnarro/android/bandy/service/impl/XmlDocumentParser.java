@@ -37,10 +37,10 @@ import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
-import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.domain.party.Referee;
+import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable.GenderEnum;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
@@ -293,7 +293,7 @@ public class XmlDocumentParser {
 			DOMException {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			// Get the contact node roles child node
-			List<ContactRoleEnum> roleList = getRoleList(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
+			List<RoleTypesEnum> roleList = getRoleList(xpath, doc, getAttributeValue(nodeList.item(i), ATTR_FIRST_NAME),
 					getAttributeValue(nodeList.item(i), ATTR_LAST_NAME));
 			Address address = Address.createEmptyAddress();
 			if (nodeList.item(i).hasChildNodes()) {
@@ -324,17 +324,17 @@ public class XmlDocumentParser {
 		return Address.createEmptyAddress();
 	}
 
-	private List<ContactRoleEnum> getRoleList(XPath xpath, Document doc, String firstName, String lastName) throws XPathExpressionException {
+	private List<RoleTypesEnum> getRoleList(XPath xpath, Document doc, String firstName, String lastName) throws XPathExpressionException {
 		String xpathExprRoles = "/team/contacts/contact[@" + ATTR_FIRST_NAME + "='" + firstName + "' and @" + ATTR_LAST_NAME + "='" + lastName
 				+ "']/roles/role";
 		NodeList nodeList = (NodeList) xpath.evaluate(xpathExprRoles, doc, XPathConstants.NODESET);
-		List<ContactRoleEnum> roles = new ArrayList<ContactRoleEnum>();
+		List<RoleTypesEnum> roles = new ArrayList<RoleTypesEnum>();
 		for (int j = 0; j < nodeList.getLength(); j++) {
 			Node roleNode = nodeList.item(j);
 			// Read only text node
 			CustomLog.d(this.getClass(), "node=" + roleNode.getNodeName() + " " + roleNode.getNodeType() + " " + roleNode.getTextContent());
 			try {
-				roles.add(ContactRoleEnum.valueOf(roleNode.getTextContent().toUpperCase()));
+				roles.add(RoleTypesEnum.valueOf(roleNode.getTextContent().toUpperCase()));
 			} catch (Exception e) {
 				CustomLog.e(this.getClass(), "contact=" + firstName + ", Invalid status: " + roleNode.getNodeName() + "=" + roleNode.getTextContent());
 			}

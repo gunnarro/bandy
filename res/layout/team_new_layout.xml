@@ -56,14 +56,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/gender"
+                android:text="@string/yearOfBirth"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <EditText
-                android:id="@+id/teamGenderTxt"
+                android:id="@+id/teamYearOfBirthTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/blank"
+                android:text="2014"
+                android:inputType="number"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
 
@@ -75,15 +76,32 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/yearOfBirth"
+                android:text="@string/league"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <EditText
-                android:id="@+id/teamYearOfBirthTxt"
+            <Spinner
+                android:id="@+id/teamLeagueSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <RadioButton
+                android:id="@+id/maleRadioBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/blank"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:text="@string/male" />
+
+            <RadioButton
+                android:id="@+id/femaleRadioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female" />
         </TableRow>
     </TableLayout>
+
 </RelativeLayout>

@@ -5,7 +5,6 @@
         	<address streetName="xx" streetNumber="0" zipCode="9999" city="Oslo" country="Norway" />
         	<roles>
             	 <role>teamlead</role>
-             	 <role>coach</role>
          	</roles>
         </contact>
     </contacts>

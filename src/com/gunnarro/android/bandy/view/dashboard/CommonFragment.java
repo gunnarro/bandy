@@ -1,15 +1,17 @@
 package com.gunnarro.android.bandy.view.dashboard;
 
+import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 public class CommonFragment extends Fragment {
 
-	private String teamName;
+	protected String teamName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,5 +39,13 @@ public class CommonFragment extends Fragment {
 		} else {
 			CustomLog.e(this.getClass(), "No input field found for id: " + id + ", value: " + value);
 		}
+	}
+
+	protected String getSelectedGender() {
+		RadioButton femaleRadioBtn = (RadioButton) getView().findViewById(R.id.femaleRadioBtn);
+		if (femaleRadioBtn.isSelected()) {
+			return femaleRadioBtn.getText().toString();
+		}
+		return ((RadioButton) getView().findViewById(R.id.maleRadioBtn)).getText().toString();
 	}
 }

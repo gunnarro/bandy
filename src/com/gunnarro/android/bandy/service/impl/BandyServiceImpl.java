@@ -13,6 +13,7 @@ import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Activity;
 import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
 import com.gunnarro.android.bandy.domain.Club;
+import com.gunnarro.android.bandy.domain.League;
 import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
@@ -21,9 +22,8 @@ import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
-import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.party.Player;
-import com.gunnarro.android.bandy.domain.party.Role;
+import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.repository.BandyRepository;
@@ -382,7 +382,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public Contact getTeamLead(Integer teamId) {
-		return this.bandyRepository.getTeamContactPerson(teamId, ContactRoleEnum.TEAMLEAD.name());
+		return this.bandyRepository.getTeamContactPerson(teamId, RoleTypesEnum.TEAMLEAD.name());
 	}
 
 	/**
@@ -390,7 +390,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public Contact getCoach(Integer teamId) {
-		return this.bandyRepository.getTeamContactPerson(teamId, ContactRoleEnum.COACH.name());
+		return this.bandyRepository.getTeamContactPerson(teamId, RoleTypesEnum.COACH.name());
 	}
 
 	/**
@@ -650,6 +650,14 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public League getLeague(String name) {
+		return bandyRepository.getLeague(name);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Player getPlayer(int playerId) {
 		return this.bandyRepository.getPlayer(playerId);
 	}
@@ -757,14 +765,6 @@ public class BandyServiceImpl implements BandyService {
 		this.bandyRepository.updateSetting(SettingsTable.MAIL_ACCOUNT_PWD_KEY, mailAccountPwd);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Role> getRoleList() {
-		return this.bandyRepository.getRoleList();
-	}
-
 	public SearchResult search(String sqlQuery) {
 		CustomLog.e(this.getClass(), "sql=" + sqlQuery);
 		try {
@@ -831,5 +831,9 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public String[] getPlayerStatusTypes() {
 		return this.bandyRepository.getPlayerStatusTypes();
+	}
+
+	public String[] getLeagueNames() {
+		return this.bandyRepository.getLeagueNames();
 	}
 }

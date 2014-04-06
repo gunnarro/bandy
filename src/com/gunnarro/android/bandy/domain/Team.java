@@ -13,12 +13,13 @@ public class Team implements Serializable {
 
 	private static final long serialVersionUID = -7342682849751732634L;
 
-	private Integer id = -1;
+	private Integer id;
 	private String name;
 	private int teamYearOfBirth;
 	private String gender;
 	private Coach coach;
 	private Club club;
+	private League league;
 	private List<Contact> conatctList;
 	private List<Player> playerList;
 	private Contact teamLead;
@@ -123,6 +124,14 @@ public class Team implements Serializable {
 			emailAddreses.add(contact.getEmailAddress());
 		}
 		return emailAddreses.toArray(new String[emailAddreses.size()]);
+	}
+
+	public League getLeague() {
+		return league;
+	}
+
+	public void setLeague(League league) {
+		this.league = league;
 	}
 
 	/**

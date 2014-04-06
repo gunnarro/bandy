@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.repository.table.TableHelper;
 
+@Deprecated
 public class RolesTable {
 
 	// Database table

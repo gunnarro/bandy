@@ -22,6 +22,7 @@ import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
 import com.gunnarro.android.bandy.repository.table.activity.PlayerPositionTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.SeasonsTable;
 import com.gunnarro.android.bandy.repository.table.activity.TrainingsTable;
+import com.gunnarro.android.bandy.repository.table.link.ContactRoleTypeLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.CupMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.LeagueMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.LeagueTeamLnkTable;
@@ -34,7 +35,6 @@ import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 import com.gunnarro.android.bandy.repository.table.party.RoleTypesTable;
-import com.gunnarro.android.bandy.repository.table.party.RolesTable;
 import com.gunnarro.android.bandy.repository.table.party.StatusesTable;
 import com.gunnarro.android.bandy.repository.view.MatchResultView;
 import com.gunnarro.android.bandy.service.impl.DataLoader;
@@ -52,8 +52,8 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	private static final boolean IS_LOAD_FROM_SCRIPT = false;
 	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
 	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
-	private static final String DATABASE_NAME = "sportsteam12.db";
-	public static final int DATABASE_VERSION = 1;
+	private static final String DATABASE_NAME = "sportsteamA.db";
+	public static final int DATABASE_VERSION = 2;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
 
@@ -114,6 +114,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			AddressTable.onCreate(database);
 			ClubsTable.onCreate(database);
 			ContactsTable.onCreate(database);
+			ContactRoleTypeLnkTable.onCreate(database);
 			CupsTable.onCreate(database);
 			CupMatchLnkTable.onCreate(database);
 			LeaguesTable.onCreate(database);
@@ -127,7 +128,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			PlayerMatchLnkTable.onCreate(database);
 			PlayerPositionTypesTable.onCreate(database);
 			PlayerTrainingLnkTable.onCreate(database);
-			RolesTable.onCreate(database);
+//			RolesTable.onCreate(database);
 			RoleTypesTable.onCreate(database);
 			SeasonsTable.onCreate(database);
 			SettingsTable.onCreate(database);
@@ -159,6 +160,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			AddressTable.onUpgrade(database, oldVersion, newVersion);
 			ClubsTable.onUpgrade(database, oldVersion, newVersion);
 			ContactsTable.onUpgrade(database, oldVersion, newVersion);
+			ContactRoleTypeLnkTable.onUpgrade(database, oldVersion, newVersion);
 			CupsTable.onUpgrade(database, oldVersion, newVersion);
 			CupMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
 			LeaguesTable.onUpgrade(database, oldVersion, newVersion);
@@ -172,7 +174,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			PlayerMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
 			PlayerPositionTypesTable.onUpgrade(database, oldVersion, newVersion);
 			PlayerTrainingLnkTable.onUpgrade(database, oldVersion, newVersion);
-			RolesTable.onUpgrade(database, oldVersion, newVersion);
+//			RolesTable.onUpgrade(database, oldVersion, newVersion);
 			RoleTypesTable.onUpgrade(database, oldVersion, newVersion);
 			SeasonsTable.onUpgrade(database, oldVersion, newVersion);
 			SettingsTable.onUpgrade(database, oldVersion, newVersion);
@@ -194,8 +196,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 				+ DataLoader.TEAM_XML_URL + "/team-2003.xml')");
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(3, datetime(), '" + SettingsTable.DATA_FILE_LAST_UPDATED_KEY
 				+ "','0')");
-		database.execSQL("insert into settings (_id, created_date_time, key, value) values(4, datetime(), '" + SettingsTable.DATA_FILE_VERSION_KEY
-				+ "','na')");
+		database.execSQL("insert into settings (_id, created_date_time, key, value) values(4, datetime(), '" + SettingsTable.DATA_FILE_VERSION_KEY + "','na')");
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(5, datetime(), '" + SettingsTable.MAIL_ACCOUNT_KEY + "','na')");
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(6, datetime(), '" + SettingsTable.MAIL_ACCOUNT_PWD_KEY + "','na')");
 		// init match types

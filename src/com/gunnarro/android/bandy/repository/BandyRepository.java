@@ -5,6 +5,7 @@ import java.util.List;
 import android.database.SQLException;
 
 import com.gunnarro.android.bandy.domain.Club;
+import com.gunnarro.android.bandy.domain.League;
 import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
@@ -14,7 +15,6 @@ import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
-import com.gunnarro.android.bandy.domain.party.Role;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl.PlayerLinkTableTypeEnum;
@@ -130,6 +130,10 @@ public interface BandyRepository {
 
 	public void deletePlayerLink(PlayerLinkTableTypeEnum type, Integer playerId, Integer id);
 
+	public long createContactRoleTypeLnk(int contactId, int roleTypeIdId);
+
+	public long deleteContactRoleTypeLnk(int contactId, int roleTypeIdId);
+
 	// ---------------------------------------------------------------------------
 	// Settings table operations
 	// ---------------------------------------------------------------------------
@@ -139,8 +143,6 @@ public interface BandyRepository {
 	public List<String> getSettings(String type);
 
 	public void updateSetting(String type, String value);
-
-	public List<Role> getRoleList();
 
 	void listRelationsShips();
 
@@ -190,5 +192,9 @@ public interface BandyRepository {
 	public int updateTeam(Team team);
 
 	public List<Team> getTeamList(String clubName);
+
+	public String[] getLeagueNames();
+
+	public League getLeague(String name);
 
 }

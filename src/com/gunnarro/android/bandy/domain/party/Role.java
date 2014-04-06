@@ -2,6 +2,19 @@ package com.gunnarro.android.bandy.domain.party;
 
 public class Role {
 
+	public enum RoleTypesEnum {
+		DEFAULT(1), PARENT(2), TEAMLEAD(3), COACH(4), CHAIRMAN(5), DEPUTY_CHAIRMAN(6), BOARD_MEMBER(7);
+		int id;
+
+		RoleTypesEnum(int id) {
+			this.id = id;
+		}
+
+		public int getId() {
+			return id;
+		}
+	}
+
 	private int id;
 	private int conctactId;
 	private String role;

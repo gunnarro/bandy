@@ -1,7 +1,6 @@
 package com.gunnarro.android.bandy.view.playerdetailflow;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RadioButton;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -20,9 +18,10 @@ import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
+import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
-public class PlayerEditFragment extends Fragment {
+public class PlayerEditFragment extends CommonFragment {
 
 	private BandyService bandyService;
 	private String teamName;
@@ -134,44 +133,19 @@ public class PlayerEditFragment extends Fragment {
 		String emailAddress = getInputValue(R.id.playerEmailAddressTxt);
 		String schoolName = getInputValue(R.id.playerSchoolNameTxt);
 
-		String gender = "M";
-		boolean isFemale = ((RadioButton) getView().findViewById(R.id.femaleRadioBtn)).isSelected();
-		if (isFemale) {
-			gender = "F";
-		}
-
 		Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
 		Team team = this.bandyService.getTeam(1);
-		Player player = new Player(team, firstName, middleName, lastName, gender, PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth, "dd.mm.yyyy")
-				.getTime(), address);
+		Player player = new Player(team, firstName, middleName, lastName, getSelectedGender(), PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth,
+				"dd.mm.yyyy").getTime(), address);
 		if (playerId > 0) {
-			player = new Player(playerId, team, firstName, middleName, lastName, gender, PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth,
-					"dd.mm.yyyy").getTime(), address);
+			player = new Player(playerId, team, firstName, middleName, lastName, getSelectedGender(), PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(
+					dateOfBirth, "dd.mm.yyyy").getTime(), address);
 		}
 		player.setEmailAddress(emailAddress);
 		player.setMobileNumber(mobileNumber);
 		player.setSchoolName(schoolName);
 		int trainingId = bandyService.savePlayer(player);
 		CustomLog.e(this.getClass(), player.toString());
-	}
-
-	private String getInputValue(int id) {
-		EditText inputView = (EditText) getView().findViewById(id);
-		if (inputView != null) {
-			return inputView.getText().toString();
-		} else {
-			CustomLog.e(this.getClass(), "No input field found for id: " + id);
-		}
-		return null;
-	}
-
-	private void setInputValue(View rootView, int id, String value) {
-		EditText inputView = (EditText) rootView.findViewById(id);
-		if (inputView != null) {
-			inputView.setText(value);
-		} else {
-			CustomLog.e(this.getClass(), "No input field found for id: " + id + ", value: " + value);
-		}
 	}
 
 }

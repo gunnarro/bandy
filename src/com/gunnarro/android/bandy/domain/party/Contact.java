@@ -3,16 +3,13 @@ package com.gunnarro.android.bandy.domain.party;
 import java.util.List;
 
 import com.gunnarro.android.bandy.domain.Team;
+import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 
 public class Contact {
 
-	public enum ContactRoleEnum {
-		DEFAULT, COACH, TEAMLEAD, PARENT;
-	}
-
 	private Integer id;
 	private Team team;
-	private List<ContactRoleEnum> roles;
+	private List<RoleTypesEnum> roles;
 	private String firstName;
 	private String middleName;
 	private String lastName;
@@ -44,7 +41,7 @@ public class Contact {
 		this.address = address;
 	}
 
-	public Contact(Integer id, Team team, Address address, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName, String gender,
+	public Contact(Integer id, Team team, Address address, List<RoleTypesEnum> roles, String firstName, String middleName, String lastName, String gender,
 			String mobileNumber, String emailAddress) {
 		this(id, team, firstName, middleName, lastName, gender);
 		this.address = address;
@@ -53,7 +50,7 @@ public class Contact {
 		this.emailAddress = emailAddress;
 	}
 
-	public Contact(Team team, List<ContactRoleEnum> roles, String firstName, String middleName, String lastName, String gender, String mobileNumber,
+	public Contact(Team team, List<RoleTypesEnum> roles, String firstName, String middleName, String lastName, String gender, String mobileNumber,
 			String emailAddress, Address address) {
 		this.team = team;
 		this.roles = roles;
@@ -82,7 +79,7 @@ public class Contact {
 		return team;
 	}
 
-	public List<ContactRoleEnum> getRoles() {
+	public List<RoleTypesEnum> getRoles() {
 		return roles;
 	}
 

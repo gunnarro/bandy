@@ -6,8 +6,8 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
+import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 
 public class PlayerTest extends TestCase {
 
@@ -15,10 +15,10 @@ public class PlayerTest extends TestCase {
 	public void testConstructor() {
 		Address address = new Address("streetname", "25", "c", "postalcode", "city", "country");
 		List<Contact> parents = new ArrayList<Contact>();
-		List<ContactRoleEnum> p1roles = new ArrayList<ContactRoleEnum>();
-		p1roles.add(ContactRoleEnum.COACH);
-		List<ContactRoleEnum> p2roles = new ArrayList<ContactRoleEnum>();
-		p2roles.add(ContactRoleEnum.TEAMLEAD);
+		List<RoleTypesEnum> p1roles = new ArrayList<RoleTypesEnum>();
+		p1roles.add(RoleTypesEnum.COACH);
+		List<RoleTypesEnum> p2roles = new ArrayList<RoleTypesEnum>();
+		p2roles.add(RoleTypesEnum.TEAMLEAD);
 		parents.add(new Contact(new Team("team name"), p1roles, "p1firstname", "p1middleName", "p1lastName", "M", "11111111", "p1@email.no", address));
 		parents.add(new Contact(new Team("team name"), p2roles, "p2firstname", "p2middleName", "p2lastName", "M", "22222222", "p2@email.no", address));
 		long dateOfBirth = System.currentTimeMillis();

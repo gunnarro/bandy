@@ -1,28 +1,32 @@
 package com.gunnarro.android.bandy.view.teamdetailflow;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Club;
+import com.gunnarro.android.bandy.domain.League;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
-public class TeamEditFragment extends Fragment {
+public class TeamEditFragment extends CommonFragment {
 
 	private BandyService bandyService;
-	private String teamName;
 	private Integer teamId;
+	private String selectedLeagueName;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,6 +65,7 @@ public class TeamEditFragment extends Fragment {
 			init(rootView, team);
 			getActivity().getActionBar().setSubtitle(team.getName());
 		}
+		setupEventHandlers(rootView);
 		return rootView;
 	}
 
@@ -95,6 +100,17 @@ public class TeamEditFragment extends Fragment {
 		}
 	}
 
+	private void setupEventHandlers(View rootView) {
+		// league spinner
+		String[] leagueNames = this.bandyService.getLeagueNames();
+		ArrayAdapter<CharSequence> leagueAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
+				leagueNames);
+		Spinner leagueSpinner = (Spinner) rootView.findViewById(R.id.teamLeagueSpinner);
+		leagueAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		leagueSpinner.setAdapter(leagueAdapter);
+		leagueSpinner.setOnItemSelectedListener(new LeagueOnItemSelectedListener());
+	}
+
 	private void init(View rootView, Team team) {
 		if (team != null) {
 			setInputValue(rootView, R.id.teamNameTxt, team.getName());
@@ -107,32 +123,35 @@ public class TeamEditFragment extends Fragment {
 	private void save() {
 		String teamName = getInputValue(R.id.teamNameTxt);
 		String teamYearOfBirth = getInputValue(R.id.teamYearOfBirthTxt);
-		String teamGender = getInputValue(R.id.teamGenderTxt);
 		Club club = bandyService.getClub(1);
-		Team team = new Team(teamName, club, Integer.parseInt(teamYearOfBirth), teamGender);
-		if (teamId > 0) {
-			team = new Team(teamId, teamName, club, Integer.parseInt(teamYearOfBirth), teamGender);
+		Team team = new Team(teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
+		if (teamId != null && teamId.intValue() > 0) {
+			team = new Team(teamId, teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
 		}
+		League league = bandyService.getLeague(selectedLeagueName);
+		team.setLeague(league);
 		int id = bandyService.saveTeam(team);
 		CustomLog.e(this.getClass(), team.toString());
 	}
 
-	private String getInputValue(int id) {
-		EditText inputView = (EditText) getView().findViewById(id);
-		if (inputView != null) {
-			return inputView.getText().toString();
-		} else {
-			CustomLog.e(this.getClass(), "No input field found for id: " + id);
-		}
-		return null;
-	}
+	/**
+	 * 
+	 * @author gunnarro
+	 * 
+	 */
+	public class LeagueOnItemSelectedListener implements OnItemSelectedListener {
 
-	private void setInputValue(View rootView, int id, String value) {
-		EditText inputView = (EditText) rootView.findViewById(id);
-		if (inputView != null) {
-			inputView.setText(value);
-		} else {
-			CustomLog.e(this.getClass(), "No input field found for id: " + id + ", value: " + value);
+		public LeagueOnItemSelectedListener() {
+		}
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+			selectedLeagueName = parent.getItemAtPosition(pos).toString();
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			// Do nothing.
 		}
 	}
 

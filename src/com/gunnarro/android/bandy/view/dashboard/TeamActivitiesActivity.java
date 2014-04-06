@@ -29,7 +29,6 @@ import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.party.Contact;
-import com.gunnarro.android.bandy.domain.party.Role;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
@@ -59,8 +58,6 @@ public class TeamActivitiesActivity extends DashboardActivity {
 		String[] teamNames = this.bandyService.getTeamNames("Ulle%");
 		Spinner teamsSpinner = (Spinner) findViewById(R.id.teams_spinner);
 		ArrayAdapter<CharSequence> teamsAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item, teamNames); // createFromResource(getApplicationContext(),
-																																							// teamNames,
-																																							// android.R.layout.simple_spinner_item);
 		teamsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		teamsSpinner.setAdapter(teamsAdapter);
 		teamsSpinner.setOnItemSelectedListener(new TeamOnItemSelectedListener());
@@ -273,10 +270,7 @@ public class TeamActivitiesActivity extends DashboardActivity {
 			CustomLog.e(this.getClass(), c.toString());
 			recipients.add(c.getEmailAddress());
 		}
-		List<Role> roleList = this.bandyService.getRoleList();
-		for (Role r : roleList) {
-			CustomLog.e(this.getClass(), r.toString());
-		}
+
 		CustomLog.e(this.getClass(), recipients.toString());
 		Contact teamLead = this.bandyService.getTeamLead(team.getId());
 		regards.append("\n\n\n");

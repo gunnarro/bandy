@@ -1,6 +1,5 @@
 package com.gunnarro.android.bandy.repository.impl;
 
-import java.nio.MappedByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Club;
+import com.gunnarro.android.bandy.domain.League;
 import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Setting;
 import com.gunnarro.android.bandy.domain.Team;
@@ -24,11 +24,11 @@ import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
-import com.gunnarro.android.bandy.domain.party.Contact.ContactRoleEnum;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.domain.party.Role;
+import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 import com.gunnarro.android.bandy.domain.statistic.MatchStatistic;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
@@ -39,10 +39,12 @@ import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.repository.table.TableHelper;
 import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
+import com.gunnarro.android.bandy.repository.table.activity.LeaguesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
 import com.gunnarro.android.bandy.repository.table.activity.SeasonsTable;
 import com.gunnarro.android.bandy.repository.table.activity.TrainingsTable;
+import com.gunnarro.android.bandy.repository.table.link.ContactRoleTypeLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.CupMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.LeagueMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.LeagueTeamLnkTable;
@@ -156,6 +158,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		database.delete(AddressTable.TABLE_NAME, null, null);
 		database.delete(ClubsTable.TABLE_NAME, null, null);
 		database.delete(ContactsTable.TABLE_NAME, null, null);
+		database.delete(ContactRoleTypeLnkTable.TABLE_NAME, null, null);
 		database.delete(CupsTable.TABLE_NAME, null, null);
 		database.delete(CupMatchLnkTable.TABLE_NAME, null, null);
 		database.delete(LeagueMatchLnkTable.TABLE_NAME, null, null);
@@ -201,7 +204,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int createTeam(Team team) {
-		ContentValues values = TeamsTable.createContentValues(team.getClub().getId(), team.getName(), team.getTeamYearOfBirth(), team.getGender());
+		ContentValues values = TeamsTable.createContentValues(team);
 		this.database = dbHelper.getWritableDatabase();
 		long id = database.insert(TeamsTable.TABLE_NAME, null, values);
 		return Long.valueOf(id).intValue();
@@ -330,7 +333,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		ContentValues teamUpdateValues = TeamsTable.updateContentValues(team.getName());
 		String whereClause = TableHelper.COLUMN_ID + " = ?";
 		String[] whereArgs = { team.getId().toString() };
-		long teamId = database.update(PlayersTable.TABLE_NAME, teamUpdateValues, whereClause, whereArgs);
+		long teamId = database.update(TeamsTable.TABLE_NAME, teamUpdateValues, whereClause, whereArgs);
 		return new Long(teamId).intValue();
 	}
 
@@ -418,12 +421,9 @@ public class BandyRepositoryImpl implements BandyRepository {
 		this.database = dbHelper.getWritableDatabase();
 		long contactId = database.insert(ContactsTable.TABLE_NAME, null, contactValues);
 		if (contact.getRoles() != null) {
-			// for (ContactRoleEnum role : contact.getRoles()) {
-			// ContentValues roleValues =
-			// RolesTable.createContentValues(role.name(),
-			// Long.valueOf(contactId).intValue());
-			// database.insert(RolesTable.TABLE_NAME, null, roleValues);
-			// }
+			for (RoleTypesEnum role : contact.getRoles()) {
+				createContactRoleTypeLnk(Long.valueOf(contactId).intValue(), role.getId());
+			}
 		}
 		return Long.valueOf(contactId).intValue();
 	}
@@ -614,6 +614,33 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String[] getLeagueNames() {
+		String[] leagueNames = new String[] {};
+		String orderBy = LeaguesTable.COLUMN_LEAGUE_NAME + " COLLATE LOCALIZED ASC";
+		String selection = LeaguesTable.COLUMN_LEAGUE_NAME + " LIKE ?";
+		String[] selectionArgs = { "%" };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(LeaguesTable.TABLE_NAME, LeaguesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
+		if (cursor != null && cursor.getCount() > 0) {
+			leagueNames = new String[cursor.getCount()];
+			int i = 0;
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				leagueNames[i] = cursor.getString(cursor.getColumnIndex(LeaguesTable.COLUMN_LEAGUE_NAME));
+				cursor.moveToNext();
+				i++;
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return leagueNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public String[] getPlayerStatusTypes() {
 		String[] statusTypes = new String[] {};
 		String selection = StatusesTable.COLUMN_STATUS_NAME + " LIKE ?";
@@ -795,6 +822,28 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return getTeam(selection, selectionArgs);
 	}
 
+	public League getLeague(String name) {
+		League league = null;
+		String orderBy = LeaguesTable.COLUMN_LEAGUE_NAME + " COLLATE LOCALIZED ASC";
+		String selection = LeaguesTable.COLUMN_LEAGUE_NAME + " = ?";
+		String[] selectionArgs = { name };
+		this.database = dbHelper.getReadableDatabase();
+		Cursor cursor = database.query(LeaguesTable.TABLE_NAME, LeaguesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			league = mapCursorToLeague(cursor);
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), league);
+		return league;
+	}
+
+	private League mapCursorToLeague(Cursor cursor) {
+		return new League(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), cursor.getString(cursor.getColumnIndex(LeaguesTable.COLUMN_LEAGUE_NAME)));
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -830,15 +879,16 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Contact getTeamContactPerson(int teamId, String role) {
+	public Contact getTeamContactPerson(int teamId, String roleTypeName) {
 		StringBuffer query = new StringBuffer();
-		query.append("SELECT c.").append(TableHelper.COLUMN_ID);
-		query.append(" FROM ").append(ContactsTable.TABLE_NAME).append(" c,").append(RolesTable.TABLE_NAME).append(" r");
-		query.append(" WHERE c.").append(ContactsTable.COLUMN_FK_TEAM_ID).append(" = ").append(teamId);
-		query.append(" AND c.").append(TableHelper.COLUMN_ID).append(" = r.").append(RolesTable.COLUMN_FK_CONTACT_ID);
-		query.append(" AND r.").append(RolesTable.COLUMN_ROLE_NAME).append(" LIKE '").append(role.toLowerCase()).append("'");
+		query.append("SELECT DISTINCT c._id");
+		query.append(" FROM contacts c, contact_role_type_lnk l");
+		query.append(" WHERE c.fk_team_id = ?");
+		query.append(" AND l.fk_contact_id = c._id");
+		query.append(" AND l.fk_role_type_id = ?");
+		String[] selectionArgs = { Integer.toString(teamId), Integer.toString(RoleTypesEnum.valueOf(roleTypeName).getId()) };
 		this.database = dbHelper.getReadableDatabase();
-		Cursor cursor = this.database.rawQuery(query.toString(), null);
+		Cursor cursor = this.database.rawQuery(query.toString(), selectionArgs);
 		int contactId = -1;
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
@@ -848,7 +898,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 			cursor.close();
 		}
 		Contact contact = getContact(contactId);
-		CustomLog.d(this.getClass(), "role=" + role + ", contact=" + contact);
+		CustomLog.d(this.getClass(), "role=" + roleTypeName + ", contact=" + contact);
 		return contact;
 	}
 
@@ -1048,30 +1098,6 @@ public class BandyRepositoryImpl implements BandyRepository {
 			cursor.close();
 		}
 		CustomLog.d(this.getClass(), "cups=" + cursor.getCount());
-		return list;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Role> getRoleList() {
-		List<Role> list = new ArrayList<Role>();
-		String selection = TableHelper.COLUMN_ID + " > ?";
-		String[] selectionArgs = { "-1" };
-		this.database = dbHelper.getReadableDatabase();
-		Cursor cursor = database.query(RolesTable.TABLE_NAME, RolesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
-		if (cursor != null && cursor.getCount() > 0) {
-			cursor.moveToFirst();
-			while (!cursor.isAfterLast()) {
-				list.add(mapCursorToRole(cursor));
-				cursor.moveToNext();
-			}
-		}
-		if (cursor != null && !cursor.isClosed()) {
-			cursor.close();
-		}
-		CustomLog.e(this.getClass(), "roles=" + list);
 		return list;
 	}
 
@@ -1483,7 +1509,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	private Contact mapCursorToContact(Cursor cursor, Team team) {
 		Address address = getAddress(cursor.getInt(cursor.getColumnIndex(ContactsTable.COLUMN_FK_ADDRESS_ID)));
-		List<ContactRoleEnum> roles = getRoles(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)));
+		List<RoleTypesEnum> roles = getRoles(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)));
 		Contact contact = new Contact(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), team, address, roles, cursor.getString(cursor
 				.getColumnIndex(ContactsTable.COLUMN_FIRST_NAME)), cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_MIDDLE_NAME)),
 				cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_LAST_NAME)), cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_GENDER)),
@@ -1554,13 +1580,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 		}
 
 		if (type == PlayerLinkTableTypeEnum.CONTACT) {
-			deletePlayerLnk(PlayerContactLnkTable.TABLE_NAME, PlayerContactLnkTable.getTableColumns(), playerId.toString(), linkToId);
+			deleteLink(PlayerContactLnkTable.TABLE_NAME, PlayerContactLnkTable.getTableColumns(), playerId.toString(), linkToId);
 		} else if (type == PlayerLinkTableTypeEnum.MATCH) {
-			deletePlayerLnk(PlayerMatchLnkTable.TABLE_NAME, PlayerMatchLnkTable.getTableColumns(), playerId.toString(), linkToId);
+			deleteLink(PlayerMatchLnkTable.TABLE_NAME, PlayerMatchLnkTable.getTableColumns(), playerId.toString(), linkToId);
 		} else if (type == PlayerLinkTableTypeEnum.CUP) {
-			deletePlayerLnk(PlayerCupLnkTable.TABLE_NAME, PlayerCupLnkTable.getTableColumns(), playerId.toString(), linkToId);
+			deleteLink(PlayerCupLnkTable.TABLE_NAME, PlayerCupLnkTable.getTableColumns(), playerId.toString(), linkToId);
 		} else if (type == PlayerLinkTableTypeEnum.TRAINING) {
-			deletePlayerLnk(PlayerTrainingLnkTable.TABLE_NAME, PlayerTrainingLnkTable.getTableColumns(), playerId.toString(), linkToId);
+			deleteLink(PlayerTrainingLnkTable.TABLE_NAME, PlayerTrainingLnkTable.getTableColumns(), playerId.toString(), linkToId);
 		} else {
 			throw new ApplicationException("Invalid link table type: " + type);
 		}
@@ -1572,22 +1598,42 @@ public class BandyRepositoryImpl implements BandyRepository {
 	@Override
 	public void createPlayerLink(PlayerLinkTableTypeEnum type, int playerId, int id) {
 		if (type == PlayerLinkTableTypeEnum.CONTACT) {
-			createPlayerLnk(PlayerContactLnkTable.TABLE_NAME, PlayerContactLnkTable.createContentValues(playerId, id));
+			createLink(PlayerContactLnkTable.TABLE_NAME, PlayerContactLnkTable.createContentValues(playerId, id));
 		} else if (type == PlayerLinkTableTypeEnum.MATCH) {
-			createPlayerLnk(PlayerMatchLnkTable.TABLE_NAME, PlayerMatchLnkTable.createContentValues(playerId, id));
+			createLink(PlayerMatchLnkTable.TABLE_NAME, PlayerMatchLnkTable.createContentValues(playerId, id));
 		} else if (type == PlayerLinkTableTypeEnum.CUP) {
-			createPlayerLnk(PlayerCupLnkTable.TABLE_NAME, PlayerCupLnkTable.createContentValues(playerId, id));
+			createLink(PlayerCupLnkTable.TABLE_NAME, PlayerCupLnkTable.createContentValues(playerId, id));
 		} else if (type == PlayerLinkTableTypeEnum.TRAINING) {
-			createPlayerLnk(PlayerTrainingLnkTable.TABLE_NAME, PlayerTrainingLnkTable.createContentValues(playerId, id));
+			createLink(PlayerTrainingLnkTable.TABLE_NAME, PlayerTrainingLnkTable.createContentValues(playerId, id));
 		} else {
 			throw new ApplicationException("Invalid link table type: " + type);
 		}
 	}
 
-	private void createPlayerLnk(String tableName, ContentValues contentValues) {
+	private long createLink(String tableName, ContentValues contentValues) {
 		this.database = dbHelper.getWritableDatabase();
-		database.insert(tableName, null, contentValues);
+		long id = database.insert(tableName, null, contentValues);
 		CustomLog.d(this.getClass(), "created=" + tableName + ", values=" + contentValues.toString());
+		return id;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public long createContactRoleTypeLnk(int contactId, int roleTypeIdId) {
+		ContentValues contentValues = ContactRoleTypeLnkTable.createContentValues(contactId, roleTypeIdId);
+		return createLink(ContactRoleTypeLnkTable.TABLE_NAME, contentValues);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public long deleteContactRoleTypeLnk(int contactId, int roleTypeIdId) {
+		ContentValues contentValues = ContactRoleTypeLnkTable.createContentValues(contactId, roleTypeIdId);
+		return deleteLink(ContactRoleTypeLnkTable.TABLE_NAME, ContactRoleTypeLnkTable.getIdTableColumns(), Integer.toString(contactId),
+				Integer.toString(roleTypeIdId));
 	}
 
 	/**
@@ -1602,12 +1648,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return Long.valueOf(id).intValue();
 	}
 
-	private void deletePlayerLnk(String tableName, String[] colNames, String id1, String id2) {
+	private int deleteLink(String tableName, String[] colNames, String id1, String id2) {
 		String whereClause = colNames[1] + " LIKE ? AND " + colNames[2] + " LIKE ?";
 		String[] whereArgs = { id1, id2 };
 		this.database = dbHelper.getWritableDatabase();
-		database.delete(tableName, whereClause, whereArgs);
+		int id = database.delete(tableName, whereClause, whereArgs);
 		CustomLog.d(this.getClass(), "deleted=" + tableName + ", values=" + id1 + ", " + id2);
+		return id;
 	}
 
 	private List<Contact> getRelationsShips(Integer playerId, Team team) {
@@ -1663,18 +1710,22 @@ public class BandyRepositoryImpl implements BandyRepository {
 		}
 	}
 
-	private List<ContactRoleEnum> getRoles(Integer contactId) {
-		List<ContactRoleEnum> roleList = new ArrayList<ContactRoleEnum>();
-		String orderBy = null;
-		String selection = RolesTable.COLUMN_FK_CONTACT_ID + " = ?";
+	private List<RoleTypesEnum> getRoles(Integer contactId) {
+		List<RoleTypesEnum> roleList = new ArrayList<RoleTypesEnum>();
+		StringBuffer sqlQuery = new StringBuffer();
+		sqlQuery.append("SELECT r.role_type_name AS role_type_name");
+		sqlQuery.append(" FROM contact_role_type_lnk l, role_types r");
+		sqlQuery.append(" WHERE l.fk_contact_id = ?");
+		sqlQuery.append(" AND r.role_type_id = l.fk_contact_id");
+		sqlQuery.append(" ORDER BY r.role_type_name ASC");
 		String[] selectionArgs = { contactId.toString() };
 		this.database = dbHelper.getReadableDatabase();
-		Cursor cursor = database.query(RolesTable.TABLE_NAME, RolesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
+		Cursor cursor = database.rawQuery(sqlQuery.toString(), selectionArgs);
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
-				String role = cursor.getString(cursor.getColumnIndex(RolesTable.COLUMN_ROLE_NAME));
-				roleList.add(ContactRoleEnum.valueOf(role.toUpperCase()));
+				String roleTypeName = cursor.getString(cursor.getColumnIndex("role_type_name"));
+				roleList.add(RoleTypesEnum.valueOf(roleTypeName.toUpperCase()));
 				cursor.moveToNext();
 			}
 		}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gunnarro.android.bandy.domain.Activity;
 import com.gunnarro.android.bandy.domain.Club;
+import com.gunnarro.android.bandy.domain.League;
 import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
@@ -13,7 +14,6 @@ import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
-import com.gunnarro.android.bandy.domain.party.Role;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 
@@ -124,8 +124,6 @@ public interface BandyService {
 
 	public List<Contact> getContactList(Integer id);
 
-	public List<Role> getRoleList();
-
 	public Player getPlayer(int playerId);
 
 	public Contact getContact(int contactId);
@@ -208,5 +206,9 @@ public interface BandyService {
 	public int saveTeam(Team team);
 
 	public List<Team> getTeamList(String string);
+
+	public String[] getLeagueNames();
+
+	public League getLeague(String name);
 
 }
