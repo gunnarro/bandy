@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gunnarro.android.bandy.domain.party.Coach;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.view.list.Item;
@@ -17,11 +16,11 @@ public class Team implements Serializable {
 	private String name;
 	private int teamYearOfBirth;
 	private String gender;
-	private Coach coach;
 	private Club club;
 	private League league;
 	private List<Contact> conatctList;
 	private List<Player> playerList;
+	private Contact coach;
 	private Contact teamLead;
 
 	public Team(String name) {
@@ -54,11 +53,11 @@ public class Team implements Serializable {
 		return club;
 	}
 
-	public Coach getCoach() {
+	public Contact getCoach() {
 		return coach;
 	}
 
-	public void setCoach(Coach coach) {
+	public void setCoach(Contact coach) {
 		this.coach = coach;
 	}
 

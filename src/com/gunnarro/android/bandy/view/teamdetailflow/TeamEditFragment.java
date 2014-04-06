@@ -123,7 +123,10 @@ public class TeamEditFragment extends CommonFragment {
 	private void save() {
 		String teamName = getInputValue(R.id.teamNameTxt);
 		String teamYearOfBirth = getInputValue(R.id.teamYearOfBirthTxt);
-		Club club = bandyService.getClub(1);
+		Club club = bandyService.getClub("Ulle%", "Bandy");
+		if (club == null) {
+			throw new RuntimeException("Club is not found!");
+		}
 		Team team = new Team(teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
 		if (teamId != null && teamId.intValue() > 0) {
 			team = new Team(teamId, teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());

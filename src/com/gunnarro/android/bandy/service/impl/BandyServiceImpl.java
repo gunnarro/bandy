@@ -424,9 +424,10 @@ public class BandyServiceImpl implements BandyService {
 		if (team == null) {
 			throw new ApplicationException("Team not found, team id=" + id);
 		}
-		team.setTeamLead(this.getTeamLead(team.getId()));
-		team.setConatctList(this.getContactList(team.getId()));
-		team.setPlayerList(getPlayerList(team.getId()));
+		team.setTeamLead(this.getTeamLead(id));
+		team.setCoach(this.getCoach(id));
+		team.setConatctList(this.getContactList(id));
+		team.setPlayerList(getPlayerList(id));
 		return team;
 	}
 
@@ -653,7 +654,7 @@ public class BandyServiceImpl implements BandyService {
 	public League getLeague(String name) {
 		return bandyRepository.getLeague(name);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

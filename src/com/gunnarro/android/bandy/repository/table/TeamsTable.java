@@ -49,7 +49,9 @@ public class TeamsTable {
 	public static ContentValues createContentValues(Team team) {
 		ContentValues values = TableHelper.createContentValues();
 		values.put(COLUMN_FK_CLUB_ID, team.getClub().getId());
-		values.put(COLUMN_FK_LEAGUE_ID, team.getLeague().getId());
+		if (team.getLeague() != null) {
+			values.put(COLUMN_FK_LEAGUE_ID, team.getLeague().getId());
+		}
 		values.put(COLUMN_TEAM_NAME, team.getName());
 		values.put(COLUMN_TEAM_YEAR_OF_BIRTH, team.getTeamYearOfBirth());
 		values.put(COLUMN_TEAM_GENDER, team.getGender());

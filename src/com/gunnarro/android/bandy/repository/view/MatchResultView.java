@@ -37,7 +37,7 @@ public class MatchResultView {
 		query.append("			sum( m.goals_home_team ) AS scored,");
 		query.append("			sum( m.goals_away_team ) AS against");
 		query.append(" FROM matches m,");
-		query.append("       teams t");
+		query.append("      teams t");
 		query.append(" WHERE m.home_team LIKE t.team_name");
 		query.append(" GROUP BY m.fk_season_id,");
 		query.append("			m.fk_team_id,");
@@ -55,7 +55,7 @@ public class MatchResultView {
 		query.append("			sum( m.goals_away_team ) AS scored,");
 		query.append("			sum( m.goals_home_team ) AS against");
 		query.append("  FROM matches m,");
-		query.append("		teams t");
+		query.append("		 teams t");
 		query.append(" WHERE m.away_team LIKE t.team_name");
 		query.append(" GROUP BY m.fk_season_id,");
 		query.append("			m.fk_team_id,");
