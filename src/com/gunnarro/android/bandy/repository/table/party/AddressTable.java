@@ -3,6 +3,7 @@ package com.gunnarro.android.bandy.repository.table.party;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.repository.table.TableHelper;
 
 public class AddressTable {
@@ -52,27 +53,18 @@ public class AddressTable {
 		TableHelper.checkColumnNames(projection, TABLE_COLUMNS);
 	}
 
-	public static ContentValues createContentValues(String streetName, String streetNumber, String streetNumberPostfix, String zipCode, String city,
-			String country) {
-		ContentValues values = TableHelper.createContentValues();
-		values.put(COLUMN_STREET_NAME, streetName);
-		values.put(COLUMN_STREET_NUMBER, streetNumber);
-		values.put(COLUMN_STREET_NUMBER_POSTFIX, streetNumberPostfix);
-		values.put(COLUMN_ZIP_CODE, zipCode);
-		values.put(COLUMN_CITY, city);
-		values.put(COLUMN_COUNTRY, country);
+	public static ContentValues createContentValues(Address address) {
+		ContentValues values = TableHelper.defaultContentValues();
+		values.put(COLUMN_STREET_NAME, address.getStreetName());
+		values.put(COLUMN_STREET_NUMBER, address.getStreetNumber());
+		values.put(COLUMN_STREET_NUMBER_POSTFIX, address.getStreetNumberPrefix());
+		values.put(COLUMN_ZIP_CODE, address.getPostalCode());
+		values.put(COLUMN_CITY, address.getCity());
+		values.put(COLUMN_COUNTRY, address.getCountry());
 		return values;
 	}
 
-	public static ContentValues updateContentValues(String streetName, String streetNumber, String streetNumberPostfix, String postalCode, String city,
-			String country) {
-		ContentValues values = new ContentValues();
-		values.put(COLUMN_STREET_NAME, streetName);
-		values.put(COLUMN_STREET_NUMBER, streetNumber);
-		values.put(COLUMN_STREET_NUMBER_POSTFIX, streetNumberPostfix);
-		values.put(COLUMN_ZIP_CODE, postalCode);
-		values.put(COLUMN_CITY, city);
-		values.put(COLUMN_COUNTRY, country);
-		return values;
+	public static ContentValues updateContentValues(Address address) {
+		return createContentValues(address);
 	}
 }

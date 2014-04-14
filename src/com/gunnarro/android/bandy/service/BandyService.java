@@ -9,6 +9,8 @@ import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Match.MatchStatus;
+import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
@@ -82,6 +84,10 @@ public interface BandyService {
 	public List<Activity> getActivityList(String teamName, String viewBy, String filterBy);
 
 	public List<Player> getPlayerList(Integer teamId);
+
+	public String[] getPlayerNames(int teamId);
+
+	public String[] getPlayerNames(String teamName);
 
 	public List<Item> getPlayersAsItemList(int teamId);
 
@@ -210,5 +216,17 @@ public interface BandyService {
 	public String[] getLeagueNames();
 
 	public League getLeague(String name);
+
+	public void updateGoalsAwayTeam(int matchId, int goals, int playerId);
+
+	public void updateGoalsHomeTeam(int matchId, int goals, int playerId);
+
+	public List<MatchEvent> getMatchEventList(int matchId);
+
+	public void updateMatchStatus(int matchId, MatchStatus matchStatus);
+
+	public String[] getMatchStatusList();
+
+	public int createMatchEvent(MatchEvent matchEvent);
 
 }

@@ -43,7 +43,7 @@ public class SettingsTable {
 	}
 
 	public static ContentValues createContentValues(String key, String value) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_KEY, key);
 		values.put(COLUMN_VALUE, value);
 		return values;

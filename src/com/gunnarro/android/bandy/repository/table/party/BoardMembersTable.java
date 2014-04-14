@@ -52,7 +52,7 @@ public class BoardMembersTable {
 
 	public static ContentValues createContentValues(Long addressId, Integer teamId, String firstName, String middleName, String lastName, String mobile,
 			String epostAddress) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_FK_ADDRESS_ID, addressId);
 		values.put(COLUMN_FK_CLUB_ID, teamId);
 		values.put(COLUMN_FIRST_NAME, firstName);
@@ -64,7 +64,7 @@ public class BoardMembersTable {
 	}
 
 	public static ContentValues updateContentValues(String firstName, String middleName, String lastName, String emailAddress, String mobileNumber) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_FIRST_NAME, firstName);
 		values.put(COLUMN_MIDDLE_NAME, middleName);
 		values.put(COLUMN_LAST_NAME, lastName);

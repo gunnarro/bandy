@@ -190,8 +190,7 @@ public abstract class DashboardActivity extends FragmentActivity {
 	public void onClickFeature(View v) {
 		Bundle argsBundle = new Bundle();
 		argsBundle.putString(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
-		int id = v.getId();
-		switch (id) {
+		switch (v.getId()) {
 		case R.id.trainings_btn:
 			Intent trainingsIntent = new Intent(getApplicationContext(), TrainingsActivity.class);
 			trainingsIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
@@ -205,10 +204,10 @@ public abstract class DashboardActivity extends FragmentActivity {
 			startActivity(matchesIntent);
 			break;
 		case R.id.cups_btn:
-			Toast.makeText(this, "Cups view Not implements", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Cups view not implements", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.clubs_btn:
-			Toast.makeText(this, "Clubs view Not implements", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Clubs view not implements", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.teams_btn:
 			startActivity(new Intent(getApplicationContext(), TeamListActivity.class));
@@ -224,9 +223,7 @@ public abstract class DashboardActivity extends FragmentActivity {
 			startActivity(contactListIntent);
 			break;
 		case R.id.referee_btn:
-			// Toast.makeText(this, "Referee view Not implements",
-			// Toast.LENGTH_SHORT).show();
-			startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+			Toast.makeText(this, "Referee view not implements", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.settings_btn:
 			startActivity(new Intent(getApplicationContext(), SettingsActivity.class));

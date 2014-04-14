@@ -40,7 +40,7 @@ public class RoleTypesTable {
 	}
 
 	public static ContentValues createContentValues(int roleTypeId, String roleTypeName, String roleTypeDescription) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_ROLE_TYPE_ID, roleTypeId);
 		values.put(COLUMN_ROLE_TYPE_NAME, roleTypeName);
 		values.put(COLUMN_ROLE_TYPE_DESCRIPTION, roleTypeDescription);

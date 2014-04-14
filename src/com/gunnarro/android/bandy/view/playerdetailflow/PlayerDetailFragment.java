@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -90,6 +91,7 @@ public class PlayerDetailFragment extends Fragment {
 		// return true;
 		case R.id.action_delete:
 			delete(playerId);
+			Toast.makeText(getActivity().getApplicationContext(), "Deleted player!", Toast.LENGTH_SHORT).show();
 			super.getActivity().onBackPressed();
 		default:
 			return false;

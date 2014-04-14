@@ -14,18 +14,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.dashboard.ViewUtils;
 
 /**
  * A fragment representing a single Item detail screen. This fragment is either
@@ -63,9 +65,10 @@ public class MatchDetailFragment extends Fragment {
 		getActivity().setTitle(match.getTeamVersus());
 		updateMatchDetails(rootView, match);
 		// Do not show the edit options menu if the match is finished.
-		if (match.isFinished()) {
-			super.setHasOptionsMenu(false);
-		}
+		// FIXME
+		// if (match.isFinished()) {
+		super.setHasOptionsMenu(true);
+		// }
 		return rootView;
 	}
 
@@ -93,6 +96,7 @@ public class MatchDetailFragment extends Fragment {
 		// return true;
 		case R.id.action_delete:
 			delete(matchId);
+			Toast.makeText(getActivity().getApplicationContext(), "Deleted match!", Toast.LENGTH_SHORT).show();
 			super.getActivity().onBackPressed();
 		default:
 			return false;
@@ -105,21 +109,39 @@ public class MatchDetailFragment extends Fragment {
 
 	private void updateMatchDetails(View rootView, Match match) {
 		if (match != null) {
-			String matchInfo = match.getTeamVersus();
+			((TextView) rootView.findViewById(R.id.matchVersusTxt)).setText(match.getTeamVersus());
 			if (match.getResult() != null) {
-				matchInfo = matchInfo + " " + match.getResult();
+				((TextView) rootView.findViewById(R.id.matchResultTxt)).setText(match.getResult());
 			}
-			((TextView) rootView.findViewById(R.id.matchNameTxt)).setText(matchInfo);
+			((TextView) rootView.findViewById(R.id.matchStatusTxt)).setText(match.getMatchStatus().name());
 			((TextView) rootView.findViewById(R.id.matchVenueTxt)).setText(match.getVenue());
 			((TextView) rootView.findViewById(R.id.matchStartTimeTxt)).setText(Utility.formatTime(match.getStartTime(), null));
 			((TextView) rootView.findViewById(R.id.matchRefereeTxt)).setText(match.getReferee().getFullName());
 			((TextView) rootView.findViewById(R.id.matchRegisteredPlayersTxt)).setText("");
 
-			ListView playerListView = (ListView) rootView.findViewById(R.id.matchPlayerList);
-			ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(getActivity(), R.layout.custom_simple_list_item, getPlayerList(match.getTeam().getId(),
-					match.getId()));
-			playerListView.setAdapter(adapter);
+			//
+			// ListView playerListView = (ListView)
+			// rootView.findViewById(R.id.matchPlayerList);
+			// ArrayAdapter<Item> adapter = new
+			// ArrayAdapter<Item>(getActivity(),
+			// R.layout.custom_simple_list_item,
+			// getPlayerList(match.getTeam().getId(),
+			// match.getId()));
+			// playerListView.setAdapter(adapter);
 		}
+	}
+
+	private void updateMatchEventTable(Match match) {
+//		TableLayout homeTable = (TableLayout) getView().findViewById(tableId);
+//		TableLayout awayTable = (TableLayout) getView().findViewById(tableId);
+//		List<MatchEvent> matchEventList = bandyService.getMatchEventList(matchId);
+//		for (MatchEvent event : matchEventList) {
+//			if (event.getTeamName().equals(match.getHomeTeam().getName())) {
+//				homeTable.addView(ViewUtils.createTableRow(getActivity().getApplicationContext(), event, homeTable.getChildCount()));
+//			} else if (event.getTeamName().equals(match.getAwayTeam().getName())) {
+//				awayTable.addView(ViewUtils.createTableRow(getActivity().getApplicationContext(), event, awayTable.getChildCount()));
+//			}
+//		}
 	}
 
 	private List<Item> getPlayerList(int teamId, int matchId) {

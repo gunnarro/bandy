@@ -7,7 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -91,6 +91,7 @@ public class PlayerEditFragment extends CommonFragment {
 			return true;
 		case R.id.action_save:
 			save();
+			Toast.makeText(getActivity().getApplicationContext(), "Saved player!", Toast.LENGTH_SHORT).show();
 			super.getActivity().onBackPressed();
 			return true;
 		default:
@@ -137,7 +138,7 @@ public class PlayerEditFragment extends CommonFragment {
 		Team team = this.bandyService.getTeam(1);
 		Player player = new Player(team, firstName, middleName, lastName, getSelectedGender(), PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth,
 				"dd.mm.yyyy").getTime(), address);
-		if (playerId > 0) {
+		if (playerId != null && playerId > 0) {
 			player = new Player(playerId, team, firstName, middleName, lastName, getSelectedGender(), PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(
 					dateOfBirth, "dd.mm.yyyy").getTime(), address);
 		}

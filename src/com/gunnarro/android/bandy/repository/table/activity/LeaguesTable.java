@@ -53,7 +53,7 @@ public class LeaguesTable {
 
 	public static ContentValues createContentValues(String leagueName, String leagueGender, int playerAgeMin, int playerAgeMax, int matchPeriodeTime,
 			String description) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_LEAGUE_NAME, leagueName);
 		values.put(COLUMN_LEAGUE_GENDER, leagueGender);
 		values.put(COLUMN_LEAGUE_PLAYER_AGE_MIN, playerAgeMin);

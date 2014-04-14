@@ -18,8 +18,10 @@ import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
+import com.gunnarro.android.bandy.domain.activity.Match.MatchStatus;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
@@ -296,6 +298,10 @@ public class BandyServiceImpl implements BandyService {
 		return this.bandyRepository.createContact(contact);
 	}
 
+	public int createMatchEvent(MatchEvent matchEvent) {
+		return this.bandyRepository.createMatchEvent(matchEvent);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -359,6 +365,14 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public String[] getMatchTypes() {
 		return bandyRepository.getMatchTypes();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getMatchStatusList() {
+		return bandyRepository.getMatchStatusList();
 	}
 
 	/**
@@ -643,6 +657,36 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String[] getPlayerNames(int teamId) {
+		List<Item> playersAsItemList = bandyRepository.getPlayersAsItemList(teamId);
+		String[] list = new String[playersAsItemList.size()];
+		for (int i = 0; i < playersAsItemList.size(); i++) {
+			list[i] = playersAsItemList.get(i).getValue();
+		}
+		return list;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getPlayerNames(String teamName) {
+		Team team = bandyRepository.getTeam(teamName);
+		if (team != null) {
+			List<Item> playersAsItemList = bandyRepository.getPlayersAsItemList(team.getId());
+			String[] list = new String[playersAsItemList.size()];
+			for (int i = 0; i < playersAsItemList.size(); i++) {
+				list[i] = playersAsItemList.get(i).getValue();
+			}
+			return list;
+		}
+		return new String[] { "No registrered players" };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public List<Item> getContactsAsItemList(Integer teamId) {
 		return bandyRepository.getContactsAsItemList(teamId);
 	}
@@ -836,5 +880,37 @@ public class BandyServiceImpl implements BandyService {
 
 	public String[] getLeagueNames() {
 		return this.bandyRepository.getLeagueNames();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateGoalsHomeTeam(int matchId, int goals, int playerId) {
+		this.bandyRepository.updateGoals(matchId, goals, true);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateGoalsAwayTeam(int matchId, int goals, int playerId) {
+		this.bandyRepository.updateGoals(matchId, goals, false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<MatchEvent> getMatchEventList(int matchId) {
+		return bandyRepository.getMatchEventList(matchId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateMatchStatus(int matchId, MatchStatus status) {
+		bandyRepository.updateMatchStatus(matchId, status);
 	}
 }

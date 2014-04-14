@@ -38,7 +38,7 @@ public class StatusesTable {
 	}
 
 	public static ContentValues createContentValues(String statusName, Integer statusId) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_STATUS_ID, statusId);
 		values.put(COLUMN_STATUS_NAME, statusName);
 		return values;

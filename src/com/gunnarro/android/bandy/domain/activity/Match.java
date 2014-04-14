@@ -8,6 +8,10 @@ import com.gunnarro.android.bandy.utility.Utility;
 
 public class Match extends Activity {
 
+	public static enum MatchStatus {
+		PLAYED, NOT_PLAYED, CANCELLED, POSTPONED, ONGOING
+	}
+
 	public static enum MatchTypesEnum {
 		DEFAULT(0), LEAGUE(1), TRAINING(2), CUP(3);
 
@@ -46,6 +50,7 @@ public class Match extends Activity {
 	private Team homeTeam;
 	private Team awayTeam;
 	private String venue;
+	private MatchStatus matchStatus;
 	private Referee referee;
 	private Integer numberOfGoalsHome;
 	private Integer numberOfGoalsAway;
@@ -68,11 +73,11 @@ public class Match extends Activity {
 	}
 
 	public Match(Integer id, Season season, long startTime, Team team, Team homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer numberOfGoalsAway,
-			String venue, Referee referee, Integer matchTypeId) {
+			String venue, Referee referee, Integer matchTypeId, String matchStatus) {
 		this(id, season, startTime, team, homeTeam, awayTeam, venue, referee, matchTypeId);
 		this.numberOfGoalsHome = numberOfGoalsHome;
 		this.numberOfGoalsAway = numberOfGoalsAway;
-
+		this.matchStatus = MatchStatus.valueOf(matchStatus);
 	}
 
 	public Integer getId() {
@@ -115,8 +120,16 @@ public class Match extends Activity {
 		return this.homeTeam.getName() + " - " + this.awayTeam.getName();
 	}
 
+	public MatchStatus getMatchStatus() {
+		return matchStatus;
+	}
+
+	public void setMatchStatus(MatchStatus matchStatus) {
+		this.matchStatus = matchStatus;
+	}
+
 	public boolean isPlayed() {
-		return isFinished() && numberOfGoalsHome != null && numberOfGoalsAway != null;
+		return matchStatus.equals(MatchStatus.PLAYED);
 	}
 
 	public Integer getNumberOfGoalsHome() {
@@ -157,10 +170,12 @@ public class Match extends Activity {
 		sb.append(" [id=").append(id);
 		sb.append(", startDate=").append(Utility.formatTime(startTime, Utility.DATE_TIME_PATTERN));
 		sb.append(", versus=").append(getTeamVersus());
+		sb.append(", result=").append(getResult());
 		sb.append(", venue=").append(venue).append("]");
 		return sb.toString();
 	}
 
+	@Deprecated
 	@Override
 	public boolean isFinished() {
 		return new Date(startTime).before(new Date(System.currentTimeMillis()));

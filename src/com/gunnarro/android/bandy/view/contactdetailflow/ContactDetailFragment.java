@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -79,6 +80,7 @@ public class ContactDetailFragment extends Fragment {
 		// return true;
 		case R.id.action_delete:
 			delete(contactId);
+			Toast.makeText(getActivity().getApplicationContext(), "Deleted contact!", Toast.LENGTH_SHORT).show();
 			super.getActivity().onBackPressed();
 		default:
 			return false;

@@ -39,7 +39,7 @@ public class RolesTable {
 	}
 
 	public static ContentValues createContentValues(String role, Integer contactId) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_ROLE_NAME, role);
 		values.put(COLUMN_FK_CONTACT_ID, contactId);
 		return values;

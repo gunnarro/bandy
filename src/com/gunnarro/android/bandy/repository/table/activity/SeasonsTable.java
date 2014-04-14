@@ -41,7 +41,7 @@ public class SeasonsTable {
 	}
 
 	public static ContentValues createContentValues(String period, long startDate, long endDate) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_PERIOD, period);
 		values.put(COLUMN_START_DATE, (int) (startDate / 1000));
 		values.put(COLUMN_END_DATE, (int) (endDate / 1000));

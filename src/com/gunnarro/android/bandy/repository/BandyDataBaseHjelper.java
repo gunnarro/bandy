@@ -17,6 +17,9 @@ import com.gunnarro.android.bandy.repository.table.SettingsTable;
 import com.gunnarro.android.bandy.repository.table.TeamsTable;
 import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
 import com.gunnarro.android.bandy.repository.table.activity.LeaguesTable;
+import com.gunnarro.android.bandy.repository.table.activity.MatchEventTypesTable;
+import com.gunnarro.android.bandy.repository.table.activity.MatchEventsTable;
+import com.gunnarro.android.bandy.repository.table.activity.MatchStatusTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
 import com.gunnarro.android.bandy.repository.table.activity.PlayerPositionTypesTable;
@@ -52,8 +55,8 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	private static final boolean IS_LOAD_FROM_SCRIPT = false;
 	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
 	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
-	private static final String DATABASE_NAME = "sportsteamA.db";
-	public static final int DATABASE_VERSION = 2;
+	private static final String DATABASE_NAME = "sportsteamC.db";
+	public static final int DATABASE_VERSION = 1;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
 
@@ -121,6 +124,9 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			LeagueMatchLnkTable.onCreate(database);
 			LeagueTeamLnkTable.onCreate(database);
 			MatchesTable.onCreate(database);
+			MatchEventsTable.onCreate(database);
+			MatchEventTypesTable.onCreate(database);
+			MatchStatusTypesTable.onCreate(database);
 			MatchTypesTable.onCreate(database);
 			PlayersTable.onCreate(database);
 			PlayerContactLnkTable.onCreate(database);
@@ -128,7 +134,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			PlayerMatchLnkTable.onCreate(database);
 			PlayerPositionTypesTable.onCreate(database);
 			PlayerTrainingLnkTable.onCreate(database);
-//			RolesTable.onCreate(database);
+			// RolesTable.onCreate(database);
 			RoleTypesTable.onCreate(database);
 			SeasonsTable.onCreate(database);
 			SettingsTable.onCreate(database);
@@ -167,6 +173,9 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			LeagueMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
 			LeagueTeamLnkTable.onUpgrade(database, oldVersion, newVersion);
 			MatchesTable.onUpgrade(database, oldVersion, newVersion);
+			MatchEventsTable.onUpgrade(database, oldVersion, newVersion);
+			MatchEventTypesTable.onUpgrade(database, oldVersion, newVersion);
+			MatchStatusTypesTable.onUpgrade(database, oldVersion, newVersion);
 			MatchTypesTable.onUpgrade(database, oldVersion, newVersion);
 			PlayersTable.onUpgrade(database, oldVersion, newVersion);
 			PlayerContactLnkTable.onUpgrade(database, oldVersion, newVersion);
@@ -174,7 +183,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			PlayerMatchLnkTable.onUpgrade(database, oldVersion, newVersion);
 			PlayerPositionTypesTable.onUpgrade(database, oldVersion, newVersion);
 			PlayerTrainingLnkTable.onUpgrade(database, oldVersion, newVersion);
-//			RolesTable.onUpgrade(database, oldVersion, newVersion);
+			// RolesTable.onUpgrade(database, oldVersion, newVersion);
 			RoleTypesTable.onUpgrade(database, oldVersion, newVersion);
 			SeasonsTable.onUpgrade(database, oldVersion, newVersion);
 			SettingsTable.onUpgrade(database, oldVersion, newVersion);
@@ -235,6 +244,15 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(5, datetime(), 'CHAIRMAN', '')");
 		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(6, datetime(), 'DEPUTY_	CHAIRMAN', '')");
 		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(7, datetime(), 'BOARD_MEMBER', '')");
+		// Match status types
+		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(1, datetime(), 'NOT_PLAYED', '')");
+		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(2, datetime(), 'PLAYED', '')");
+		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(3, datetime(), 'CANCELLED', '')");
+		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(4, datetime(), 'POSTPONED', '')");
+		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(5, datetime(), 'ONGOING', '')");
+		// Match event types
+		database.execSQL("insert into match_event_types (_id, created_date_time, match_event_name, match_event_description) values(1, datetime(), 'GOAL', '')");
+		database.execSQL("insert into match_event_types (_id, created_date_time, match_event_name, match_event_description) values(2, datetime(), 'PENALTY', '')");
 
 		CustomLog.i(this.getClass(), "inserted default test data");
 	}

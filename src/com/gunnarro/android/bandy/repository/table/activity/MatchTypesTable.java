@@ -38,7 +38,7 @@ public class MatchTypesTable {
 	}
 
 	public static ContentValues createContentValues(int matchTypeId, String matchTypeName) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_MATCH_TYPE_ID, matchTypeId);
 		values.put(COLUMN_MATCH_TYPE_NAME, matchTypeName);
 		return values;

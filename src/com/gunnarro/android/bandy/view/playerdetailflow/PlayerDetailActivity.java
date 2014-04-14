@@ -52,16 +52,6 @@ public class PlayerDetailActivity extends FragmentActivity {
 		}
 	}
 
-//	/**
-//	 * {@inheritDoc}
-//	 */
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		MenuInflater inflater = getMenuInflater();
-//		inflater.inflate(R.menu.actionbar_menu_edit, menu);
-//		return true;
-//	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -82,7 +72,8 @@ public class PlayerDetailActivity extends FragmentActivity {
 			transaction.commit();
 			return true;
 		default:
-//			startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+			// startActivity(new Intent(getApplicationContext(),
+			// HomeActivity.class));
 			break;
 		}
 		CustomLog.d(this.getClass(), "clicked on: " + item.toString());

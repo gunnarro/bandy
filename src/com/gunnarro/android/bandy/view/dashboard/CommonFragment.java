@@ -33,12 +33,17 @@ public class CommonFragment extends Fragment {
 	}
 
 	protected void setInputValue(View rootView, int id, String value) {
+		setInputValue(rootView, id, value, true);
+	}
+
+	protected void setInputValue(View rootView, int id, String value, boolean isEditable) {
 		EditText inputView = (EditText) rootView.findViewById(id);
 		if (inputView != null) {
 			inputView.setText(value.trim());
 		} else {
 			CustomLog.e(this.getClass(), "No input field found for id: " + id + ", value: " + value);
 		}
+		inputView.setEnabled(isEditable);
 	}
 
 	protected String getSelectedGender() {

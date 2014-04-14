@@ -43,7 +43,7 @@ public class NotificationsTable {
 	}
 
 	public static ContentValues createContentValues(long createdDate, long sentDate, String recipients, String subject, String message, Integer status) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_SENT_DATE, (int) (sentDate / 1000));
 		values.put(COLUMN_RECIPIENTS, recipients);
 		values.put(COLUMN_SUBJECT, subject);

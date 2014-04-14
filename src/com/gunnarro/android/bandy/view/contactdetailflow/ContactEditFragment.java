@@ -1,15 +1,14 @@
 package com.gunnarro.android.bandy.view.contactdetailflow;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -18,9 +17,10 @@ import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
-public class ContactEditFragment extends Fragment {
+public class ContactEditFragment extends CommonFragment {
 
 	private BandyService bandyService;
 	private String teamName;
@@ -90,6 +90,7 @@ public class ContactEditFragment extends Fragment {
 			return true;
 		case R.id.action_save:
 			save();
+			Toast.makeText(getActivity().getApplicationContext(), "Saved contact!", Toast.LENGTH_SHORT).show();
 			super.getActivity().onBackPressed();
 			return true;
 		default:
@@ -137,32 +138,13 @@ public class ContactEditFragment extends Fragment {
 		Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
 		Team team = this.bandyService.getTeam(1);
 		Contact contact = new Contact(team, firstName, middleName, lastName, gender, address);
-		if (contactId > 0) {
+		if (contactId != null && contactId > 0) {
 			contact = new Contact(contactId, team, firstName, middleName, lastName, gender, address);
 		}
 		contact.setEmailAddress(emailAddress);
 		contact.setMobileNumber(mobileNumber);
 		int trainingId = bandyService.saveContact(contact);
 		CustomLog.e(this.getClass(), contact.toString());
-	}
-
-	private String getInputValue(int id) {
-		EditText inputView = (EditText) getView().findViewById(id);
-		if (inputView != null) {
-			return inputView.getText().toString();
-		} else {
-			CustomLog.e(this.getClass(), "No input field found for id: " + id);
-		}
-		return null;
-	}
-
-	private void setInputValue(View rootView, int id, String value) {
-		EditText inputView = (EditText) rootView.findViewById(id);
-		if (inputView != null) {
-			inputView.setText(value);
-		} else {
-			CustomLog.e(this.getClass(), "No input field found for id: " + id + ", value: " + value);
-		}
 	}
 
 }

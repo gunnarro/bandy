@@ -46,7 +46,7 @@ public class TrainingsTable {
 	}
 
 	public static ContentValues createContentValues(int seasonId, int fkTeamId, long startDate, long endTime, String place) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_FK_SEASON_ID, seasonId);
 		values.put(COLUMN_FK_TEAM_ID, fkTeamId);
 		values.put(COLUMN_START_DATE, (int) (startDate / 1000));

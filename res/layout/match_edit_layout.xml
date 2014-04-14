@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context=".MatchesActivity" >
+    android:layout_height="fill_parent" >
 
     <LinearLayout
         android:id="@+id/createMatchLayoutId"
@@ -52,14 +51,29 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/holo_blue_light" />
 
+            <LinearLayout
+		        android:layout_width="wrap_content"
+        		android:layout_height="wrap_content">
             <EditText
                 android:id="@+id/matchStartDateTxt"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:inputType="date"
                 android:padding="2dip"
-                android:text="18.02.2014"
+                android:text="@string/blank"
+                android:ems="8"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <EditText
+                android:id="@+id/matchStartTimeTxt"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:inputType="time"
+                android:padding="2dip"
+                android:text="@string/blank"
+                android:ems="5"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
         </TableRow>
 
         <TableRow
@@ -72,10 +86,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="time"
                 android:padding="2dip"
                 android:text="Time"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/holo_blue_light" />
 
             <EditText
                 android:id="@+id/matchStartTimeTxt"
@@ -83,106 +97,11 @@
                 android:gravity="center_horizontal"
                 android:inputType="time"
                 android:padding="2dip"
-                android:text="00:00"
+                android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home team"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_blue_light" />
-
-            <EditText
-                android:id="@+id/matchHomeTeamTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:gravity="center_vertical"
-                android:inputType="text"
-                android:text="Home tream" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:text="Away team"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_blue_light" />
-
-            <EditText
-                android:id="@+id/matchAwayTeamTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:gravity="center_vertical"
-                android:inputType="text"
-                android:text="Away tream" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:padding="2dip" >
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="2dip"
-                android:text="Goals Home"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_blue_light" />
-
-            <EditText
-                android:id="@+id/matchGoalsHomeTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="2"
-                android:gravity="center_vertical"
-                android:inputType="number"
-                android:text="0" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:padding="2dip" >
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="2dip"
-                android:text="Goals Away"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_blue_light" />
-
-            <EditText
-                android:id="@+id/matchGoalsAwayTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="2"
-                android:gravity="center_vertical"
-                android:inputType="number"
-                android:text="0" />
-        </TableRow>
-
-        <TableRow
+          <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal" >
@@ -202,7 +121,55 @@
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
+        
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
 
+            <EditText
+                android:id="@+id/matchHomeTeamTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:gravity="center_vertical"
+                android:inputType="text"
+                android:text="@string/blank" />
+
+            <EditText
+                android:id="@+id/matchAwayTeamTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:gravity="center_vertical"
+                android:inputType="text"
+                android:text="@string/blank" />
+        </TableRow>
+
+         <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <EditText
+                android:id="@+id/matchGoalsHomeTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:text="@string/blank" />
+
+            <EditText
+                android:id="@+id/matchGoalsAwayTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:text="@string/blank" />
+        </TableRow>
+      
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -211,7 +178,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Referee"
+                android:text="@string/referees"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/holo_blue_light" />
 

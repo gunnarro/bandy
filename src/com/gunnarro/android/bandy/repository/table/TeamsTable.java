@@ -47,7 +47,7 @@ public class TeamsTable {
 	}
 
 	public static ContentValues createContentValues(Team team) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_FK_CLUB_ID, team.getClub().getId());
 		if (team.getLeague() != null) {
 			values.put(COLUMN_FK_LEAGUE_ID, team.getLeague().getId());
@@ -59,7 +59,7 @@ public class TeamsTable {
 	}
 
 	public static ContentValues updateContentValues(String teamName) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_TEAM_NAME, teamName);
 		return values;
 	}

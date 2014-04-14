@@ -47,7 +47,7 @@ public class ClubsTable {
 	}
 
 	public static ContentValues createContentValues(Club club) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_FK_ADDRESS_ID, club.getAddress().getId());
 		values.put(COLUMN_CLUB_NAME, club.getName());
 		values.put(COLUMN_CLUB_DEPARTMENT_NAME, club.getDepartmentName());

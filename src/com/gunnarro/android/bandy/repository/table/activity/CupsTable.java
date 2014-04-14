@@ -47,7 +47,7 @@ public class CupsTable {
 	}
 
 	public static ContentValues createContentValues(int seasonId, long startDate, String cupName, String clubName, String venue, long deadlineDate) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_FK_SEASON_ID, seasonId);
 		values.put(COLUMN_START_DATE, (int) (startDate / 1000));
 		values.put(COLUMN_CUP_NAME, cupName);

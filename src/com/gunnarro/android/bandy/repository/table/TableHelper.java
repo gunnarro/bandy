@@ -62,7 +62,7 @@ public class TableHelper {
 		}
 	}
 
-	public static ContentValues createContentValues() {
+	public static ContentValues defaultContentValues() {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_LAST_MODIFIED_DATETIME, getCurrentDateTime());
 		return values;

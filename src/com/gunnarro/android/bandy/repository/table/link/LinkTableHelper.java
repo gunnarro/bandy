@@ -35,7 +35,7 @@ public class LinkTableHelper {
 	}
 
 	public static ContentValues createContentValues(String[] tableColumns, Integer[] ids) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(tableColumns[0], ids[0]);
 		values.put(tableColumns[1], ids[1]);
 		return values;

@@ -38,7 +38,7 @@ public class PlayerPositionTypesTable {
 	}
 
 	public static ContentValues createContentValues(int positionTypeId, String positionTypeName) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_POSITION_TYPE_ID, positionTypeId);
 		values.put(COLUMN_POSITION_TYPE_NAME, positionTypeName);
 		return values;

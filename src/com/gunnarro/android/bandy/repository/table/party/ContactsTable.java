@@ -65,7 +65,7 @@ public class ContactsTable {
 	}
 
 	public static ContentValues updateContentValues(Contact contact) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_FIRST_NAME, contact.getFirstName());
 		values.put(COLUMN_MIDDLE_NAME, contact.getMiddleName());
 		values.put(COLUMN_LAST_NAME, contact.getLastName());

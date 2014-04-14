@@ -60,6 +60,10 @@
         <item>Match</item>
         <item>Training</item>
     </string-array>
+    <string-array name="players_options">
+        <item>None</item>
+    </string-array>
+    
     <string-array name="home_team_options"></string-array>
     <string-array name="away_team_options"></string-array>
     <string-array name="referee_options"></string-array>

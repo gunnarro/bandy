@@ -347,7 +347,8 @@ public class XmlDocumentParser {
 		return new Match(null, season, Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), new Team(team.getId(), team.getName()), new Team(
 				getAttributeValue(matchNode, "homeTeam")), new Team(getAttributeValue(matchNode, "awayTeam")), Integer.parseInt(getAttributeValue(matchNode,
 				"goalsHomeTeam")), Integer.parseInt(getAttributeValue(matchNode, "goalsAwayTeam")), getAttributeValue(matchNode, "venue"), new Referee(
-				getAttributeValue(matchNode, "referee"), getAttributeValue(matchNode, "referee")), Integer.parseInt(getAttributeValue(matchNode, "typeId")));
+				getAttributeValue(matchNode, "referee"), getAttributeValue(matchNode, "referee")), Integer.parseInt(getAttributeValue(matchNode, "typeId")),
+				getAttributeValue(matchNode, "status"));
 	}
 
 	private List<Match> getCupMatchList(Team team, XPath xpath, Document doc, Season season, String cupName) throws XPathExpressionException {

@@ -70,7 +70,7 @@ public class PlayersTable {
 	}
 
 	public static ContentValues updateContentValues(Player player) {
-		ContentValues values = TableHelper.createContentValues();
+		ContentValues values = TableHelper.defaultContentValues();
 		values.put(COLUMN_STATUS, player.getStatus().name());
 		values.put(COLUMN_FIRST_NAME, player.getFirstName());
 		values.put(COLUMN_MIDDLE_NAME, player.getMiddleName());

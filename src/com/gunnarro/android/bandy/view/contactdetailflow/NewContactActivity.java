@@ -12,7 +12,7 @@ public class NewContactActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.contact_details_container_layout);
-		setTitle("Contact Details");
+		setTitle("New Contact");
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
