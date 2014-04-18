@@ -90,15 +90,15 @@ public class TeamListFragment extends ListFragment {
 		if (this.bandyService == null) {
 			this.bandyService = new BandyServiceImpl(getActivity());
 		}
-		String teamName = DashboardActivity.DEFAULT_TEAM_NAME;
+		String clubName = DashboardActivity.DEFAULT_CLUB_NAME;
 		if (savedInstanceState != null) {
-			teamName = savedInstanceState.getString(DashboardActivity.ARG_TEAM_NAME, null);
-		} else if (getArguments() != null && getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
-			teamName = getArguments().getString(DashboardActivity.ARG_TEAM_NAME, null);
+			clubName = savedInstanceState.getString(DashboardActivity.ARG_CLUB_NAME, null);
+		} else if (getArguments() != null && getArguments().containsKey(DashboardActivity.ARG_CLUB_NAME)) {
+			clubName = getArguments().getString(DashboardActivity.ARG_CLUB_NAME, null);
 		} else {
-			CustomLog.d(this.getClass(), "No team id argument found! use teamName=" + teamName);
+			CustomLog.d(this.getClass(), "No club name argument found! use clubName=" + clubName);
 		}
-		this.itemList = getItemList(teamName);
+		this.itemList = getTeamNamesItemList(clubName);
 		CustomLog.d(this.getClass(), "items:" + this.itemList.size());
 		setListAdapter(new ArrayAdapter<Item>(getActivity(), R.layout.custom_checked_list_item, android.R.id.text1, this.itemList));
 		// finally, update the action bar sub title with number of players for
@@ -196,21 +196,20 @@ public class TeamListFragment extends ListFragment {
 		getListView().setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
 
-	private List<Item> getItemList(String teamName) {
+	private List<Item> getTeamNamesItemList(String clubName) {
 		List<Item> list = new ArrayList<Item>();
-		if (teamName != null) {
+		if (clubName != null) {
 			try {
-				for (Team team : this.bandyService.getTeamList("%")) {
+				for (Team team : this.bandyService.getTeamList(clubName)) {
 					list.add(new Item(team.getId(), team.getName(), true));
 				}
-				return list;
 			} catch (ApplicationException ae) {
 				CustomLog.e(this.getClass(), ae.getMessage());
 			}
 		} else {
-			CustomLog.d(this.getClass(), "Team name is null!");
+			CustomLog.d(this.getClass(), "Club name is null!");
 		}
-		return new ArrayList<Item>();
+		return list;
 	}
 
 	private void setActivatedPosition(int position) {

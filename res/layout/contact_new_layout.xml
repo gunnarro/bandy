@@ -123,6 +123,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Role" />
+
+            <Spinner
+                android:id="@+id/contactRoleSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/street_name" />
 
             <EditText
@@ -171,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:ems="1"
                 android:gravity="left"
-                android:inputType="text"
+                android:inputType="number"
                 android:text="@string/blank" >
             </EditText>
         </TableRow>

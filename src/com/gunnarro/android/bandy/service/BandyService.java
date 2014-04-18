@@ -93,6 +93,8 @@ public interface BandyService {
 
 	public List<Item> getContactsAsItemList(Integer id);
 
+	public String[] getContactNames(int clubId);
+
 	public Player lookupPlayer(String mobileNr);
 
 	public boolean registrerOnTraining(Integer playerId, Integer trainingId);
@@ -134,8 +136,6 @@ public interface BandyService {
 
 	public Contact getContact(int contactId);
 
-	void listRelationsShips();
-
 	public SearchResult search(String sqlQuery);
 
 	// Methods for list operations
@@ -146,6 +146,8 @@ public interface BandyService {
 	public void createItem(String type, Item newItem);
 
 	public void deleteItem(Item item);
+
+	public void deleteTeam(int teamId);
 
 	public int signupForMatch(int playerId, int matchId);
 
@@ -209,7 +211,7 @@ public interface BandyService {
 
 	public void deleteContact(Integer contactId);
 
-	public int saveTeam(Team team);
+	public int saveTeam(Team team, Contact teamLeader, Contact coach);
 
 	public List<Team> getTeamList(String string);
 
@@ -217,9 +219,9 @@ public interface BandyService {
 
 	public League getLeague(String name);
 
-	public void updateGoalsAwayTeam(int matchId, int goals, int playerId);
+	public void updateGoalsAwayTeam(int matchId, int goals);
 
-	public void updateGoalsHomeTeam(int matchId, int goals, int playerId);
+	public void updateGoalsHomeTeam(int matchId, int goals);
 
 	public List<MatchEvent> getMatchEventList(int matchId);
 

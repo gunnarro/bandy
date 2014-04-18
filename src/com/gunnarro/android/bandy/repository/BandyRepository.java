@@ -110,6 +110,8 @@ public interface BandyRepository {
 
 	public List<Item> getContactsAsItemList(Integer teamId);
 
+	public List<Contact> getContactList(Integer clubId);
+
 	public List<Contact> getContactList(Integer teamId, String role);
 
 	public Contact getContact(String firstName, String lastName);
@@ -145,8 +147,6 @@ public interface BandyRepository {
 	public List<String> getSettings(String type);
 
 	public void updateSetting(String type, String value);
-
-	void listRelationsShips();
 
 	public SearchResult search(String sqlQuery);
 
@@ -208,5 +208,7 @@ public interface BandyRepository {
 	public int createMatchEvent(MatchEvent matchEvent);
 
 	public List<MatchEvent> getMatchEventList(Integer matchId);
+
+	public void deleteTeam(Integer teamId);
 
 }

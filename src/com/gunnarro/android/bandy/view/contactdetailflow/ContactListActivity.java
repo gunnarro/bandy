@@ -28,6 +28,7 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  */
 public class ContactListActivity extends DashboardActivity implements ContactListFragment.Callbacks {
 
+	private String clubName;
 	private String teamName;
 
 	/**
@@ -40,6 +41,10 @@ public class ContactListActivity extends DashboardActivity implements ContactLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.contact_item_list);
+		clubName = getIntent().getStringExtra(ARG_CLUB_NAME);
+		if (clubName == null) {
+			clubName = DashboardActivity.DEFAULT_TEAM_NAME;
+		}
 		teamName = getIntent().getStringExtra(ARG_TEAM_NAME);
 		if (teamName == null) {
 			teamName = DashboardActivity.DEFAULT_TEAM_NAME;
@@ -51,6 +56,7 @@ public class ContactListActivity extends DashboardActivity implements ContactLis
 		CustomLog.d(this.getClass(), "onCreate state: " + savedInstanceState);
 		if (savedInstanceState == null) {
 			Bundle arguments = new Bundle();
+			arguments.putString(ARG_CLUB_NAME, clubName);
 			arguments.putString(ARG_TEAM_NAME, teamName);
 			ContactListFragment fragment = new ContactListFragment();
 			fragment.setArguments(arguments);
@@ -71,8 +77,9 @@ public class ContactListActivity extends DashboardActivity implements ContactLis
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this, ContactDetailActivity.class);
+			detailIntent.putExtra(ARG_CLUB_NAME, clubName);
 			detailIntent.putExtra(ARG_TEAM_NAME, teamName);
-			detailIntent.putExtra(DashboardActivity.ARG_CONTACT_ID, id);
+			detailIntent.putExtra(ARG_CONTACT_ID, id);
 			startActivity(detailIntent);
 		}
 	}
@@ -94,6 +101,10 @@ public class ContactListActivity extends DashboardActivity implements ContactLis
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_new:
+			Intent newContactIntent = new Intent(getApplicationContext(), NewContactActivity.class);
+			newContactIntent.putExtra(ARG_CLUB_NAME, clubName);
+			newContactIntent.putExtra(ARG_TEAM_NAME, teamName);
+			startActivity(newContactIntent);
 			startActivity(new Intent(getApplicationContext(), NewContactActivity.class));
 			break;
 		default:

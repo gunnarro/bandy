@@ -28,8 +28,12 @@ public class NewContactActivity extends FragmentActivity {
 		if (savedInstanceState == null) {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
-			Bundle arguments = new Bundle();
+			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			String teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			setTitle(clubName);
+			getActionBar().setTitle(teamName);
+			Bundle arguments = new Bundle();
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
 			ContactEditFragment fragment = new ContactEditFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.contact_details_container_id, fragment).commit();

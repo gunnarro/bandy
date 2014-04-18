@@ -49,6 +49,18 @@ public class Team implements Serializable {
 		this.id = id;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setTeamYearOfBirth(int teamYearOfBirth) {
+		this.teamYearOfBirth = teamYearOfBirth;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	public Club getClub() {
 		return club;
 	}
@@ -133,15 +145,10 @@ public class Team implements Serializable {
 		this.league = league;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(this.getClass().getSimpleName());
-		sb.append(" [id=").append(id);
-		sb.append(", name=").append(name).append("]");
-		return sb.toString();
+		return "Team [id=" + id + ", name=" + name + ", teamYearOfBirth=" + teamYearOfBirth + ", gender=" + gender + ", club=" + club + ", league=" + league
+				+ ", playerList=" + playerList + ", coach=" + coach + ", teamLead=" + teamLead + "]";
 	}
+
 }

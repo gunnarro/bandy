@@ -50,7 +50,7 @@ public class Match extends Activity {
 	private Team homeTeam;
 	private Team awayTeam;
 	private String venue;
-	private MatchStatus matchStatus;
+	private MatchStatus matchStatus = MatchStatus.NOT_PLAYED;
 	private Referee referee;
 	private Integer numberOfGoalsHome;
 	private Integer numberOfGoalsAway;
@@ -77,7 +77,9 @@ public class Match extends Activity {
 		this(id, season, startTime, team, homeTeam, awayTeam, venue, referee, matchTypeId);
 		this.numberOfGoalsHome = numberOfGoalsHome;
 		this.numberOfGoalsAway = numberOfGoalsAway;
-		this.matchStatus = MatchStatus.valueOf(matchStatus);
+		if (matchStatus != null) {
+			this.matchStatus = MatchStatus.valueOf(matchStatus);
+		}
 	}
 
 	public Integer getId() {

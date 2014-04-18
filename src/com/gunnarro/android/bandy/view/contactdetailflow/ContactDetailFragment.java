@@ -51,8 +51,8 @@ public class ContactDetailFragment extends Fragment {
 			this.bandyService = new BandyServiceImpl(rootView.getContext());
 		}
 		Contact contact = this.bandyService.getContact(contactId);
-		getActivity().setTitle(contact.getFullName());
-		init(rootView, contact);
+		// getActivity().setTitle(contact.getFullName());
+		updateContactDetails(rootView, contact);
 		return rootView;
 	}
 
@@ -91,9 +91,12 @@ public class ContactDetailFragment extends Fragment {
 		this.bandyService.deleteContact(contactId);
 	}
 
-	private void init(View rootView, Contact contact) {
+	private void updateContactDetails(View rootView, Contact contact) {
 		if (contact != null) {
 			((TextView) rootView.findViewById(R.id.contactFullNameTxt)).setText(contact.getFullName());
+			if (contact.hasTeamRoles()) {
+				((TextView) rootView.findViewById(R.id.contactRolesTxt)).setText(contact.getRoles().toString());
+			}
 			((TextView) rootView.findViewById(R.id.contactMobileTxt)).setText(contact.getMobileNumber());
 			((TextView) rootView.findViewById(R.id.contactEmailTxt)).setText(contact.getEmailAddress());
 			if (contact.getAddress() != null) {

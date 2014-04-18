@@ -58,6 +58,10 @@ public class Player extends Contact {
 		return dateOfBirth;
 	}
 
+	public void setDateOfBirth(long dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
 	public String getSchoolName() {
 		return schoolName;
 	}

@@ -1,32 +1,41 @@
 package com.gunnarro.android.bandy.view.teamdetailflow;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.ImageButton;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.League;
 import com.gunnarro.android.bandy.domain.Team;
+import com.gunnarro.android.bandy.domain.party.Contact;
+import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.dialog.DialogSelection;
 
 public class TeamEditFragment extends CommonFragment {
 
+	public boolean isInitMode = true;
+
+	// Container Activity must implement this interface
+	public interface CustomOnItemSelectedListener {
+		public void onItemSelected(Item item);
+	}
+
 	private BandyService bandyService;
 	private Integer teamId;
-	private String selectedLeagueName;
+	private Team team;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -42,9 +51,6 @@ public class TeamEditFragment extends CommonFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setHasOptionsMenu(true);
-		if (getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
-			teamName = getArguments().getString(DashboardActivity.ARG_TEAM_NAME);
-		}
 		if (getArguments().containsKey(DashboardActivity.ARG_TEAM_ID)) {
 			teamId = getArguments().getInt(DashboardActivity.ARG_TEAM_ID);
 		}
@@ -61,8 +67,8 @@ public class TeamEditFragment extends CommonFragment {
 		}
 
 		if (teamId != null) {
-			Team team = this.bandyService.getTeam(teamId);
-			init(rootView, team);
+			team = this.bandyService.getTeam(teamId);
+			init(rootView);
 			getActivity().getActionBar().setSubtitle(team.getName());
 		}
 		setupEventHandlers(rootView);
@@ -100,41 +106,94 @@ public class TeamEditFragment extends CommonFragment {
 		}
 	}
 
-	private void setupEventHandlers(View rootView) {
-		// league spinner
-		String[] leagueNames = this.bandyService.getLeagueNames();
-		ArrayAdapter<CharSequence> leagueAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
-				leagueNames);
-		Spinner leagueSpinner = (Spinner) rootView.findViewById(R.id.teamLeagueSpinner);
-		leagueAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		leagueSpinner.setAdapter(leagueAdapter);
-		leagueSpinner.setOnItemSelectedListener(new LeagueOnItemSelectedListener());
+	public void updateSelectedField(String value, int fieldId) {
+		setInputValue(getView(), fieldId, value);
 	}
 
-	private void init(View rootView, Team team) {
+	private void setupEventHandlers(View rootView) {
+		ImageButton leagueBtn = (ImageButton) rootView.findViewById(R.id.selectLeagueBtn);
+		leagueBtn.setOnClickListener(new SelectDialogOnClickListener(bandyService.getLeagueNames(), R.id.teamleagueNameTxt));
+
+		ImageButton teamleaderBtn = (ImageButton) rootView.findViewById(R.id.selectTeamleaderBtn);
+		teamleaderBtn.setOnClickListener(new SelectDialogOnClickListener(bandyService.getContactNames(teamId == null ? -1 : teamId), R.id.teamTeamleaderTxt));
+
+		ImageButton coachBtn = (ImageButton) rootView.findViewById(R.id.selectCoachBtn);
+		coachBtn.setOnClickListener(new SelectDialogOnClickListener(bandyService.getContactNames(teamId == null ? -1 : teamId), R.id.teamCoachTxt));
+	}
+
+	private void init(View rootView) {
 		if (team != null) {
 			setInputValue(rootView, R.id.teamNameTxt, team.getName());
-			// setInputValue(rootView, R.id.teamGenderTxt, team.getGender());
-			// setInputValue(rootView, R.id.teamYearOfBirthTxt,
-			// team.getTeamYearOfBirth());
+			setInputValue(rootView, R.id.teamYearOfBirthTxt, team.getTeamYearOfBirth().toString());
+			if (team.getLeague() != null) {
+				setInputValue(rootView, R.id.teamleagueNameTxt, team.getLeague().getName());
+			}
+			if (team.getTeamLead() != null) {
+				setInputValue(rootView, R.id.teamTeamleaderTxt, team.getTeamLead().getFullName());
+			}
+			if (team.getCoach() != null) {
+				setInputValue(rootView, R.id.teamCoachTxt, team.getCoach().getFullName());
+			}
+			// setGender(rootView, team.getGender());
 		}
 	}
 
 	private void save() {
 		String teamName = getInputValue(R.id.teamNameTxt);
 		String teamYearOfBirth = getInputValue(R.id.teamYearOfBirthTxt);
+
 		Club club = bandyService.getClub("Ulle%", "Bandy");
 		if (club == null) {
 			throw new RuntimeException("Club is not found!");
 		}
-		Team team = new Team(teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
-		if (teamId != null && teamId.intValue() > 0) {
-			team = new Team(teamId, teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
+		if (team == null) {
+			team = new Team(teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
+		} else {
+			team.setName(teamName);
+			team.setTeamYearOfBirth(Integer.parseInt(teamYearOfBirth));
 		}
-		League league = bandyService.getLeague(selectedLeagueName);
-		team.setLeague(league);
-		int id = bandyService.saveTeam(team);
+		team.setGender(getSelectedGender());
+
+		String selectedLeagueName = getInputValue(R.id.teamleagueNameTxt);
+		if (selectedLeagueName != null) {
+			if (team.getLeague() == null || !team.getLeague().getName().equalsIgnoreCase(selectedLeagueName)) {
+				League league = bandyService.getLeague(selectedLeagueName);
+				team.setLeague(league);
+			}
+		}
+
+		Contact newTeamleader = null;
+		String selectedTeamleaderName = getInputValue(R.id.teamTeamleaderTxt);
+		if (selectedTeamleaderName != null) {
+			if (team.getTeamLead() == null) {
+				team.setTeamLead(Contact.createContact(selectedTeamleaderName));
+			} else if (!team.getTeamLead().getFullName().equalsIgnoreCase(selectedTeamleaderName)) {
+				newTeamleader = Contact.createContact(selectedTeamleaderName);
+			}
+		}
+
+		Contact newCoach = null;
+		String selectedCoachName = getInputValue(R.id.teamCoachTxt);
+		if (selectedCoachName != null) {
+			if (team.getCoach() == null) {
+				team.setCoach(Contact.createContact(selectedCoachName));
+			} else if (!team.getCoach().getFullName().equalsIgnoreCase(selectedCoachName)) {
+				newCoach = Contact.createContact(selectedCoachName);
+			}
+		}
+
+		int id = bandyService.saveTeam(team, newTeamleader, newCoach);
 		CustomLog.e(this.getClass(), team.toString());
+	}
+
+	public void showSelectionDialog(String[] items, int inputFieldId) {
+		// Create an instance of the dialog fragment and show it
+		DialogFragment dialogFragment = new DialogSelection();
+		Bundle arguments = new Bundle();
+		arguments.putStringArray(DialogSelection.DIALOG_ARG_ITEMS_KEY, items);
+		arguments.putInt(DialogSelection.DIALOG_ARG_NOTICE_FIELD_ID_KEY, inputFieldId);
+		dialogFragment.setArguments(arguments);
+		dialogFragment.show(getFragmentManager(), "SelectionDialogFragment");
 	}
 
 	/**
@@ -142,20 +201,23 @@ public class TeamEditFragment extends CommonFragment {
 	 * @author gunnarro
 	 * 
 	 */
-	public class LeagueOnItemSelectedListener implements OnItemSelectedListener {
+	public class SelectDialogOnClickListener implements OnClickListener {
+		private String[] items;
+		private int inputFieldId;
 
-		public LeagueOnItemSelectedListener() {
+		public SelectDialogOnClickListener(String[] items, int inputFieldId) {
+			this.items = items;
+			this.inputFieldId = inputFieldId;
+			isInitMode = true;
 		}
 
 		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			selectedLeagueName = parent.getItemAtPosition(pos).toString();
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-			// Do nothing.
+		public void onClick(View view) {
+			if (isInitMode) {
+				isInitMode = false;
+			} else {
+				showSelectionDialog(items, inputFieldId);
+			}
 		}
 	}
-
 }

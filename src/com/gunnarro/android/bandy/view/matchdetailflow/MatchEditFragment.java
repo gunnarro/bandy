@@ -1,12 +1,9 @@
 package com.gunnarro.android.bandy.view.matchdetailflow;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import android.os.Bundle;
-import android.text.util.Linkify.MatchFilter;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,16 +15,16 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Match.MatchStatus;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent.MatchEventTypesEnum;
-import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
@@ -40,8 +37,6 @@ public class MatchEditFragment extends CommonFragment {
 	private Integer matchId;
 	private Match match;
 
-	private List<MatchEvent> matchHomeEventList = new ArrayList<MatchEvent>();
-	private List<MatchEvent> matchAwayEventList = new ArrayList<MatchEvent>();
 	/**
 	 * Need this in order to prevent triggering the selection listeners upon gui
 	 * initialization.
@@ -73,12 +68,16 @@ public class MatchEditFragment extends CommonFragment {
 		if (this.bandyService == null) {
 			this.bandyService = new BandyServiceImpl(rootView.getContext());
 		}
-		if (matchId != null) {
-			match = this.bandyService.getMatch(matchId);
-			init(rootView);
-			getActivity().getActionBar().setSubtitle("Match online");
+		match = this.bandyService.getMatch(matchId);
+		if (match == null) {
+			throw new ApplicationException("No match found for id: " + matchId);
 		}
-		setupEventhandlers(rootView);
+		boolean isEditable = !match.isPlayed();
+		init(rootView, isEditable);
+		setupEventhandlers(rootView, isEditable);
+		updateMatchEventTable(rootView);
+		getActivity().getActionBar().setSubtitle(isEditable ? "Match online" : "Match Details");
+		super.setHasOptionsMenu(isEditable);
 		return rootView;
 	}
 
@@ -105,8 +104,8 @@ public class MatchEditFragment extends CommonFragment {
 			super.getActivity().onBackPressed();
 			return true;
 		case R.id.action_save:
-			save();
-			Toast.makeText(getActivity().getApplicationContext(), "Saved match!", Toast.LENGTH_SHORT).show();
+			updateMatchStatus(MatchStatus.PLAYED.name());
+			Toast.makeText(getActivity().getApplicationContext(), "Finished match!", Toast.LENGTH_SHORT).show();
 			super.getActivity().onBackPressed();
 			return true;
 		default:
@@ -114,56 +113,171 @@ public class MatchEditFragment extends CommonFragment {
 		}
 	}
 
-	private void init(View rootView) {
+	private void init(View rootView, boolean isEditable) {
 		if (match != null) {
-			setInputValue(rootView, R.id.matchStartDateTxt, Utility.formatTime(match.getStartTime(), Utility.DATE_PATTERN));
-			setInputValue(rootView, R.id.matchStartTimeTxt, Utility.formatTime(match.getStartTime(), Utility.TIME_PATTERN));
-			setInputValue(rootView, R.id.matchHomeTeamTxt, match.getHomeTeam().getName());
-			setInputValue(rootView, R.id.matchAwayTeamTxt, match.getAwayTeam().getName());
-			setInputValue(rootView, R.id.matchGoalsHomeTxt, match.getNumberOfGoalsHome().toString());
-			setInputValue(rootView, R.id.matchGoalsAwayTxt, match.getNumberOfGoalsAway().toString());
+			setInputValue(rootView, R.id.matchStartDateTxt, Utility.formatTime(match.getStartTime(), Utility.DATE_PATTERN), isEditable);
+			setInputValue(rootView, R.id.matchStartTimeTxt, Utility.formatTime(match.getStartTime(), Utility.TIME_PATTERN), isEditable);
+			setInputValue(rootView, R.id.matchVenueTxt, match.getVenue(), isEditable);
+			setInputValue(rootView, R.id.matchHomeTeamTxt, match.getHomeTeam().getName(), false);
+			setInputValue(rootView, R.id.matchAwayTeamTxt, match.getAwayTeam().getName(), false);
+			setInputValue(rootView, R.id.matchGoalsHomeTxt, match.getNumberOfGoalsHome().toString(), isEditable);
+			setInputValue(rootView, R.id.matchGoalsAwayTxt, match.getNumberOfGoalsAway().toString(), isEditable);
 		}
 	}
 
-	private void setupEventhandlers(View rootView) {
-	}
-
-	private void updateMatchEventTable() {
-//		TableLayout homeTable = (TableLayout) getView().findViewById(tableId);
-//		TableLayout awayTable = (TableLayout) getView().findViewById(tableId);
-//		List<MatchEvent> matchEventList = bandyService.getMatchEventList(matchId);
-//		for (MatchEvent event : matchEventList) {
-//			if (event.getTeamName().equals(match.getHomeTeam().getName())) {
-//				homeTable.addView(createTableRow(event, homeTable.getChildCount()));
-//			} else if (event.getTeamName().equals(match.getAwayTeam().getName())) {
-//				awayTable.addView(createTableRow(event, awayTable.getChildCount()));
-//			}
-//		}
-	}
-
-	private TableRow createTableRow(MatchEvent event, int rowNumber) {
-		TableRow row = new TableRow(getActivity().getApplicationContext());
-		int rowBgColor = getResources().getColor(R.color.black);
-		int txtColor = getResources().getColor(R.color.dark_green);
-		row.addView(ViewUtils.createTextView(getActivity().getApplicationContext(), event.getInfo(), rowBgColor, txtColor, Gravity.LEFT));
-		row.setPadding(1, 1, 1, 1);
-		return row;
-	}
-
-	private void save() {
-		String startDateStr = getInputValue(R.id.matchStartDateTxt);
-		String startTimeStr = getInputValue(R.id.matchStartTimeTxt);
-		// String goalsHome = getInputValue(R.id.matchGoalsHomeTxt);
-		// String goalsAway = getInputValue(R.id.matchGoalsAwayTxt);
-		if (!startDateStr.isEmpty() && !startTimeStr.isEmpty()) {
-			long startTime = Utility.timeToDate(startDateStr + " " + startTimeStr, Utility.DATE_TIME_PATTERN).getTime();
-			match.setStartTime(startTime);
+	private void setupEventhandlers(View rootView, boolean isEditable) {
+		isInitMode = true;
+		String[] matchStatusNames = bandyService.getMatchStatusList();
+		Spinner matchStatusSpinner = (Spinner) rootView.findViewById(R.id.matchStatusSpinnerId);
+		ArrayAdapter<CharSequence> matchStatusAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(),
+				android.R.layout.simple_spinner_item, matchStatusNames);
+		matchStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		matchStatusSpinner.setAdapter(matchStatusAdapter);
+		matchStatusSpinner.setOnItemSelectedListener(new MatchStatusOnItemSelectedListener());
+		for (int i = 0; i < matchStatusSpinner.getCount(); i++) {
+			if (matchStatusSpinner.getItemAtPosition(i).toString().equals(match.getMatchStatus().name())) {
+				matchStatusSpinner.setSelection(i);
+				CustomLog.e(this.getClass(), matchStatusSpinner.getItemAtPosition(i).toString());
+				break;
+			}
 		}
-		// match.setNumberOfGoalsHome(Integer.parseInt(goalsHome));
-		// match.setNumberOfGoalsAway(Integer.parseInt(goalsAway));
-		Referee referee = new Referee("", "");
-		match.setReferee(referee);
-		this.bandyService.saveMatch(match);
+
+		Spinner goalHomeSpinner = (Spinner) rootView.findViewById(R.id.matchGoalHomePlayersSpinnerId);
+		Spinner goalAwaySpinner = (Spinner) rootView.findViewById(R.id.matchGoalAwayPlayersSpinnerId);
+
+		if (!isEditable) {
+			// turn off status changes
+			matchStatusSpinner.setEnabled(false);
+			// Hide the spinners the match is not open for any changes
+			goalHomeSpinner.setVisibility(View.INVISIBLE);
+			goalAwaySpinner.setVisibility(View.INVISIBLE);
+		} else {
+			// Home team players spinner
+			isInitMode = true;
+			String[] homePlayerNames = bandyService.getPlayerNames(match.getHomeTeam().getName());
+			ArrayAdapter<CharSequence> goalHomeAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(),
+					android.R.layout.simple_spinner_item, homePlayerNames);
+			goalHomeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			goalHomeSpinner.setAdapter(goalHomeAdapter);
+			goalHomeSpinner.setOnItemSelectedListener(new GoalOnItemSelectedListener(match.getHomeTeam().getName(), MatchEventTypesEnum.GOAL_HOME));
+			isInitMode = true;
+			// Away team spinner
+			String[] awayPlayerNames = bandyService.getPlayerNames(match.getAwayTeam().getName());
+			ArrayAdapter<CharSequence> goalAwayAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(),
+					android.R.layout.simple_spinner_item, awayPlayerNames);
+			goalAwayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			goalAwaySpinner.setAdapter(goalAwayAdapter);
+			goalAwaySpinner.setOnItemSelectedListener(new GoalOnItemSelectedListener(match.getAwayTeam().getName(), MatchEventTypesEnum.GOAL_AWAY));
+		}
+	}
+
+	private void updateMatchEventTable(int tableId, MatchEvent event) {
+		TableLayout table = (TableLayout) getView().findViewById(tableId);
+		if (table == null) {
+			return;
+		}
+		table.addView(ViewUtils.createTableRow(getActivity().getApplicationContext(), event, table.getChildCount()));
+	}
+
+	private void updateMatchStatus(String status) {
+		bandyService.updateMatchStatus(matchId, MatchStatus.valueOf(status));
+	}
+
+	private void updateScore(int tableId, int goalTextViewId, String teamName, String playerName, MatchEventTypesEnum eventType) {
+		String goals = getInputValue(goalTextViewId);
+		Integer newGoals = Integer.parseInt(goals) + 1;
+		setInputValue(getView(), goalTextViewId, newGoals.toString());
+		MatchEvent matchEvent = createMatchEvent(teamName, playerName, eventType.name(), newGoals.toString());
+		updateMatchEventTable(tableId, matchEvent);
+		switch (eventType) {
+		case GOAL_AWAY:
+			bandyService.updateGoalsAwayTeam(matchId, newGoals);
+			break;
+		case GOAL_HOME:
+			bandyService.updateGoalsHomeTeam(matchId, newGoals);
+			break;
+		}
+		bandyService.createMatchEvent(matchEvent);
+	}
+
+	private MatchEvent createMatchEvent(String teamName, String playerName, String eventType, String value) {
+		return new MatchEvent(match.getId(), getPlayedMinutes(), teamName, playerName, eventType, value);
+	}
+
+	private int getPlayedMinutes() {
+		return Calendar.getInstance().get(Calendar.MINUTE);
+	}
+
+	private void updateMatchEventTable(View rootView) {
+		TableLayout homeTable = (TableLayout) rootView.findViewById(R.id.matchEventHomeTblId);
+		TableLayout awayTable = (TableLayout) rootView.findViewById(R.id.matchEventAwayTblId);
+		List<MatchEvent> matchEventList = bandyService.getMatchEventList(matchId);
+		CustomLog.e(this.getClass(), match.toString());
+		for (MatchEvent event : matchEventList) {
+			CustomLog.e(this.getClass(), event.toString());
+			if (event.getTeamName().equals(match.getHomeTeam().getName())) {
+				homeTable.addView(ViewUtils.createTableRow(rootView.getContext(), event, homeTable.getChildCount()));
+			} else if (event.getTeamName().equals(match.getAwayTeam().getName())) {
+				awayTable.addView(ViewUtils.createTableRow(rootView.getContext(), event, awayTable.getChildCount()));
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public class MatchStatusOnItemSelectedListener implements OnItemSelectedListener {
+
+		public MatchStatusOnItemSelectedListener() {
+		}
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+			if (!isInitMode) {
+				String status = parent.getItemAtPosition(pos).toString();
+				updateMatchStatus(status);
+			}
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			// Do nothing.
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public class GoalOnItemSelectedListener implements OnItemSelectedListener {
+		private String teamName;
+		private MatchEventTypesEnum eventType;
+
+		public GoalOnItemSelectedListener(String teamName, MatchEventTypesEnum eventType) {
+			this.teamName = teamName;
+			this.eventType = eventType;
+		}
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+			if (isInitMode) {
+				isInitMode = false;
+			} else {
+				String playerName = parent.getItemAtPosition(pos).toString();
+				switch (eventType) {
+				case GOAL_HOME:
+					updateScore(R.id.matchEventHomeTblId, R.id.matchGoalsHomeTxt, teamName, playerName, MatchEventTypesEnum.GOAL_HOME);
+					break;
+				case GOAL_AWAY:
+					updateScore(R.id.matchEventAwayTblId, R.id.matchGoalsAwayTxt, teamName, playerName, MatchEventTypesEnum.GOAL_AWAY);
+					break;
+				}
+			}
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			// Do nothing.
+		}
 	}
 
 }

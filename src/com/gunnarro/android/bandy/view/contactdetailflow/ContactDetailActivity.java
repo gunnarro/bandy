@@ -2,12 +2,15 @@ package com.gunnarro.android.bandy.view.contactdetailflow;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.dialog.DialogSelection;
 
 /**
  * An activity representing a single Item detail screen. This activity is only
@@ -43,7 +46,11 @@ public class ContactDetailActivity extends FragmentActivity {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
+			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			setTitle(clubName);
+			getActionBar().setTitle(teamName);
+
 			contactId = getIntent().getIntExtra(DashboardActivity.ARG_CONTACT_ID, -1);
 			arguments.putInt(DashboardActivity.ARG_CONTACT_ID, contactId);
 			ContactDetailFragment fragment = new ContactDetailFragment();
@@ -89,4 +96,5 @@ public class ContactDetailActivity extends FragmentActivity {
 		CustomLog.d(this.getClass(), "clicked on: " + item.toString());
 		return false;
 	}
+
 }

@@ -1,13 +1,17 @@
 package com.gunnarro.android.bandy.view.contactdetailflow;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
@@ -19,12 +23,13 @@ import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.dialog.DialogSelection;
 
 public class ContactEditFragment extends CommonFragment {
 
 	private BandyService bandyService;
-	private String teamName;
 	private Integer contactId;
+	private Contact contact;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -59,10 +64,10 @@ public class ContactEditFragment extends CommonFragment {
 		}
 
 		if (contactId != null) {
-			Contact contact = this.bandyService.getContact(contactId);
-			init(rootView, contact);
-			getActivity().getActionBar().setSubtitle(contact.getFullName());
+			contact = this.bandyService.getContact(contactId);
+			init(rootView);
 		}
+		setupEventhandlers(rootView);
 		return rootView;
 	}
 
@@ -98,7 +103,27 @@ public class ContactEditFragment extends CommonFragment {
 		}
 	}
 
-	private void init(View rootView, Contact contact) {
+	private void setupEventhandlers(View rootView) {
+		String[] activeRoles = { "select role", "selected role" };
+		Spinner roleSpinner = (Spinner) rootView.findViewById(R.id.contactRoleSpinner);
+		ArrayAdapter<CharSequence> roleAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
+				activeRoles);
+		roleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		roleSpinner.setAdapter(roleAdapter);
+		roleSpinner.setOnItemSelectedListener(new RoleOnItemSelectedListener());
+	}
+
+	/**
+	 * 
+	 * @param view
+	 */
+	public void onClickRoleSelection(View view) {
+		FragmentManager fragmentManager = getFragmentManager();
+		DialogSelection dialog = new DialogSelection();
+		dialog.show(fragmentManager, "tagSelection");
+	}
+
+	private void init(View rootView) {
 		if (contact != null) {
 			setInputValue(rootView, R.id.contactFirstNameTxt, contact.getFirstName());
 			setInputValue(rootView, R.id.contactMiddleNameTxt, contact.getMiddleName());
@@ -129,22 +154,44 @@ public class ContactEditFragment extends CommonFragment {
 		String mobileNumber = getInputValue(R.id.contactMobileNumberTxt);
 		String emailAddress = getInputValue(R.id.contactEmailAddressTxt);
 
-		String gender = "M";
-		boolean isFemale = ((RadioButton) getView().findViewById(R.id.femaleRadioBtn)).isSelected();
-		if (isFemale) {
-			gender = "F";
-		}
-
-		Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
-		Team team = this.bandyService.getTeam(1);
-		Contact contact = new Contact(team, firstName, middleName, lastName, gender, address);
-		if (contactId != null && contactId > 0) {
-			contact = new Contact(contactId, team, firstName, middleName, lastName, gender, address);
+		if (contact == null) {
+			Team team = this.bandyService.getTeam(1);
+			Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
+			contact = new Contact(team, firstName, middleName, lastName, getSelectedGender(), address);
+		} else {
+			contact.setFirstName(firstName);
+			contact.setMiddleName(middleName);
+			contact.setLastName(lastName);
+			contact.setGender(getSelectedGender());
+			contact.getAddress().setStreetName(streetName);
+			contact.getAddress().setStreetNumber(streetNumber);
+			contact.getAddress().setStreetNumberPrefix(streetNumberPostfix);
+			contact.getAddress().setCity(city);
+			contact.getAddress().setPostalCode(postalCode);
+			contact.getAddress().setCountry(country);
 		}
 		contact.setEmailAddress(emailAddress);
 		contact.setMobileNumber(mobileNumber);
-		int trainingId = bandyService.saveContact(contact);
+		int contactId = bandyService.saveContact(contact);
 		CustomLog.e(this.getClass(), contact.toString());
+	}
+
+	/**
+	 * 
+	 */
+	public class RoleOnItemSelectedListener implements OnItemSelectedListener {
+
+		public RoleOnItemSelectedListener() {
+		}
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+			onClickRoleSelection(view);
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+		}
 	}
 
 }

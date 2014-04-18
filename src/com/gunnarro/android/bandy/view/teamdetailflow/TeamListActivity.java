@@ -27,6 +27,7 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  */
 public class TeamListActivity extends DashboardActivity implements TeamListFragment.Callbacks {
 
+	private String clubName;
 	private String teamName;
 
 	/**
@@ -39,17 +40,24 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.team_item_list);
+		clubName = getIntent().getStringExtra(ARG_CLUB_NAME);
+		if (clubName == null) {
+			clubName = DashboardActivity.DEFAULT_CLUB_NAME;
+		}
+
 		teamName = getIntent().getStringExtra(ARG_TEAM_NAME);
 		if (teamName == null) {
 			teamName = DashboardActivity.DEFAULT_TEAM_NAME;
 		}
-		this.setTitle(teamName);
+
+		this.setTitle(clubName);
 
 		if (findViewById(R.id.item_detail_container) != null) {
 		}
 		CustomLog.d(this.getClass(), "onCreate state: " + savedInstanceState);
 		if (savedInstanceState == null) {
 			Bundle arguments = new Bundle();
+			arguments.putString(ARG_CLUB_NAME, clubName);
 			arguments.putString(ARG_TEAM_NAME, teamName);
 			TeamListFragment fragment = new TeamListFragment();
 			fragment.setArguments(arguments);
@@ -70,6 +78,7 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this, TeamDetailActivity.class);
+			detailIntent.putExtra(ARG_CLUB_NAME, clubName);
 			detailIntent.putExtra(ARG_TEAM_NAME, teamName);
 			detailIntent.putExtra(DashboardActivity.ARG_TEAM_ID, id);
 			startActivity(detailIntent);
@@ -93,7 +102,10 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_new:
-			startActivity(new Intent(getApplicationContext(), NewTeamActivity.class));
+			Intent newTeamIntent = new Intent(getApplicationContext(), NewTeamActivity.class);
+			newTeamIntent.putExtra(ARG_CLUB_NAME, clubName);
+			newTeamIntent.putExtra(ARG_TEAM_NAME, teamName);
+			startActivity(newTeamIntent);
 			break;
 		default:
 			// startActivity(new Intent(getApplicationContext(),

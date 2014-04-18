@@ -35,7 +35,6 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/contactFullNameLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/name"
@@ -49,6 +48,26 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/txt_value" />
         </TableRow>
+        
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Roles"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/contactRolesTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/txt_value" />
+        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
@@ -56,7 +75,6 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/contactStreetLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/street_name"
@@ -77,7 +95,6 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/contactCityLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/city"
@@ -98,7 +115,6 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/contactCountryLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/country"
@@ -119,7 +135,6 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/contactMobileLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mobile"
@@ -140,7 +155,6 @@
             android:gravity="center_horizontal" >
 
             <TextView
-                android:id="@+id/contactEmailLbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/email"
@@ -156,4 +170,32 @@
         </TableRow>
     </TableLayout>
 
+     <TextView
+        android:id="@+id/parentsHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/personaliaTable"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Relations"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <View
+        android:id="@+id/parentsSeparator"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/parentsHeader"
+        android:background="@drawable/line_separator" />
+
+    <ListView
+        android:id="@+id/player_parent_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/parentsSeparator"
+        android:choiceMode="none"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#aabbddcc" >
+    </ListView>
+    
 </RelativeLayout>

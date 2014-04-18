@@ -20,7 +20,6 @@ import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.service.BandyService;
-import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
@@ -58,29 +57,29 @@ public class NewMatchActivity extends FragmentActivity {
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
 			String teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
-			MatchEditFragment fragment = new MatchEditFragment();
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
+			MatchEditFragmentDeprecated fragment = new MatchEditFragmentDeprecated();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.match_details_container_id, fragment).commit();
 		}
 	}
 
-	
-//	/** Called when the activity is first created. */
-//	@Override
-//	public void onCreate(Bundle savedInstanceState) {
-//		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.match_new_layout);
-//		this.setTitle(selectedTeamName);
-//		// Show the Up button in the action bar.
-//		getActionBar().setDisplayHomeAsUpEnabled(true);
-//		
-//		
-//		this.getActionBar().setSubtitle("New match");
-//		this.bandyService = new BandyServiceImpl(getApplicationContext());
-//		setupEventHandlers();
-//		bundle = getIntent().getExtras();
-//		init();
-//	}
+	// /** Called when the activity is first created. */
+	// @Override
+	// public void onCreate(Bundle savedInstanceState) {
+	// super.onCreate(savedInstanceState);
+	// setContentView(R.layout.match_new_layout);
+	// this.setTitle(selectedTeamName);
+	// // Show the Up button in the action bar.
+	// getActionBar().setDisplayHomeAsUpEnabled(true);
+	//
+	//
+	// this.getActionBar().setSubtitle("New match");
+	// this.bandyService = new BandyServiceImpl(getApplicationContext());
+	// setupEventHandlers();
+	// bundle = getIntent().getExtras();
+	// init();
+	// }
 
 	/**
 	 * {@inheritDoc}

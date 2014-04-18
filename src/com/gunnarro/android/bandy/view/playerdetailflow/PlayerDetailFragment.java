@@ -8,11 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +56,7 @@ public class PlayerDetailFragment extends Fragment {
 			this.bandyService = new BandyServiceImpl(rootView.getContext());
 		}
 		Player player = this.bandyService.getPlayer(playerId);
-		getActivity().setTitle(player.getFullName());
+		// getActivity().getActionBar().setSubtitle(player.getFullName());
 		updatePlayerDetails(rootView, player);
 		Statistic playerStatistic = this.bandyService.getPlayerStatistic(player.getTeam().getId(), player.getId(), 1);
 		setupEventHandlers(rootView);
@@ -103,14 +100,6 @@ public class PlayerDetailFragment extends Fragment {
 	}
 
 	private void setupEventHandlers(View view) {
-		// Status type spinner
-		String[] statusTypeNames = bandyService.getPlayerStatusTypes();
-		Spinner statusTypeSpinner = (Spinner) view.findViewById(R.id.playerStatusSpinnerId);
-		ArrayAdapter<CharSequence> statusTypeAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(),
-				android.R.layout.simple_spinner_item, statusTypeNames);
-		statusTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		statusTypeSpinner.setAdapter(statusTypeAdapter);
-		statusTypeSpinner.setOnItemSelectedListener(new StatusOnItemSelectedListener());
 	}
 
 	private void updatePlayerDetails(View rootView, Player player) {
@@ -144,26 +133,4 @@ public class PlayerDetailFragment extends Fragment {
 		}
 	}
 
-	/**
-	 * Player status spinner listener
-	 * 
-	 * @author gunnarro
-	 * 
-	 */
-	public class StatusOnItemSelectedListener implements OnItemSelectedListener {
-
-		public StatusOnItemSelectedListener() {
-		}
-
-		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			String status = parent.getItemAtPosition(pos).toString();
-			bandyService.changePlayerStatus(playerId, status);
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-			// Do nothing.
-		}
-	}
 }

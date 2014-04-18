@@ -135,6 +135,21 @@ public class Contact {
 		return firstName + " " + (middleName != null ? middleName + " " : "") + lastName;
 	}
 
+	public boolean hasTeamRoles() {
+		return roles != null && roles.size() > 0 ? true : false;
+	}
+
+	public static Contact createContact(String fullName) {
+		String[] split = fullName.split(" ");
+		Contact contact = null;
+		if (split.length == 3) {
+			contact = new Contact(null, split[0], split[2], split[2], null);
+		} else if (split.length == 2) {
+			contact = new Contact(null, split[0], null, split[1], null);
+		}
+		return contact;
+	}
+
 	@Override
 	public String toString() {
 		return "Contact [id=" + id + ", team=" + team + ", roles=" + roles + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName="

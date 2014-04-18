@@ -11,23 +11,23 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
-import com.gunnarro.android.bandy.domain.view.list.MultiLineItem;
+import com.gunnarro.android.bandy.domain.view.list.Item;
 
-public class MultiLineArrayAdapter extends ArrayAdapter<MultiLineItem> {
+public class ItemArrayAdapter extends ArrayAdapter<Item> {
 	private final Activity context;
-	private final List<MultiLineItem> items;
+	private final List<Item> items;
 
 	/**
 	 * Use view holder in order to reduce number of calls to findViewById(),
 	 * which is a rather time consuming function.
 	 */
 	static class ViewHolder {
-		public TextView header;
-		public TextView subHeader1;
-		public TextView subHeader2;
+		public TextView id;
+		public TextView value;
+		public TextView isEnabled;
 	}
 
-	public MultiLineArrayAdapter(Activity context, List<MultiLineItem> items) {
+	public ItemArrayAdapter(Activity context, List<Item> items) {
 		super(context, R.layout.list_multi_line_layout, items);
 		this.context = context;
 		this.items = items;
@@ -40,28 +40,24 @@ public class MultiLineArrayAdapter extends ArrayAdapter<MultiLineItem> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View rowView = convertView;
 		if (items != null && items.size() > 0) {
-			MultiLineItem item = items.get(position);
+			Item item = items.get(position);
 			if (rowView == null) {
 				LayoutInflater inflater = context.getLayoutInflater();
-				rowView = inflater.inflate(R.layout.list_multi_line_layout, null);
+				rowView = inflater.inflate(R.layout.list_single_line_layout, null);
 				ViewHolder viewHolder = new ViewHolder();
-				viewHolder.header = (TextView) rowView.findViewById(R.id.lineHeaderId);
-				viewHolder.subHeader1 = (TextView) rowView.findViewById(R.id.lineSubHeader1Id);
-				viewHolder.subHeader2 = (TextView) rowView.findViewById(R.id.lineSubHeader2Id);
+				viewHolder.id = (TextView) rowView.findViewById(R.id.lineHeaderId);
 				if (!item.isEnabled()) {
-					viewHolder.header.setTextColor(Color.GRAY);
-					viewHolder.subHeader1.setTextColor(Color.GRAY);
-					viewHolder.subHeader2.setTextColor(Color.GRAY);
+					viewHolder.id.setTextColor(Color.GRAY);
+					viewHolder.value.setTextColor(Color.GRAY);
+					viewHolder.isEnabled.setTextColor(Color.GRAY);
 				}
 				rowView.setTag(viewHolder);
 			}
 
 			ViewHolder holder = (ViewHolder) rowView.getTag();
-			holder.header.setText(item.getValue());
-			holder.subHeader1.setText(item.getSubHeader1());
-			// if (!item.isEnabled()) {
-			holder.subHeader2.setText(item.getSubHeader2());
-			// }
+			holder.id.setText(item.getId());
+			holder.value.setText(item.getValue());
+			holder.isEnabled.setText(item.isEnabled().toString());
 		}
 		return rowView;
 	}

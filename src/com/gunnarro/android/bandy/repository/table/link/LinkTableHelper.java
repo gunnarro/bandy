@@ -41,6 +41,10 @@ public class LinkTableHelper {
 		return values;
 	}
 
+	/**
+	 * Use of ON DELETE CASCADE ensures that row(s) is also deleted from the
+	 * link table if id is deleted from the parent table
+	 */
 	private static String databaseCreateQuery(String tableName, String fkColumnNameId1, String fkColumnNameId2, String fkTableName1, String fkTableName2) {
 		StringBuffer databaseCreateQuery = new StringBuffer();
 		databaseCreateQuery.append("CREATE TABLE ");
@@ -50,9 +54,9 @@ public class LinkTableHelper {
 		databaseCreateQuery.append(",").append(fkColumnNameId2).append(" INTEGER NOT NULL");
 		databaseCreateQuery.append(",").append("UNIQUE (").append(fkColumnNameId1).append(",").append(fkColumnNameId2).append(") ON CONFLICT ABORT");
 		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId1).append(") REFERENCES ").append(fkTableName1).append("(")
-				.append(TableHelper.COLUMN_ID).append(")");
+				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE");
 		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId2).append(") REFERENCES ").append(fkTableName2).append("(")
-				.append(TableHelper.COLUMN_ID).append("));");
+				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE);");
 		return databaseCreateQuery.toString();
 	}
 }

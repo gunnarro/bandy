@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.dialog.ItemSelection;
+import com.gunnarro.android.bandy.view.dialog.DialogSelection.NoticeDialogListener;
 
 /**
  * An activity representing a single Item detail screen. This activity is only
@@ -17,10 +19,31 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  * This activity is mostly just a 'shell' activity containing nothing more than
  * a {@link TeamDetailFragment}.
  */
-public class TeamDetailActivity extends FragmentActivity {
+public class TeamDetailActivity extends FragmentActivity implements NoticeDialogListener {
 
 	private String teamName;
-	private Integer teamId = -9;
+	private Integer teamId;
+
+	// **********************************************************************
+	// NoticeDialogListener Methods
+	// **********************************************************************
+	// The dialog fragment receives a reference to this Activity through the
+	// Fragment.onAttach() callback, which it uses to call the following methods
+	// defined by the NoticeDialogFragment.NoticeDialogListener interface
+	@Override
+	public void onDialogPositiveClick(ItemSelection dialog) {
+		// User touched the dialog's positive button
+		// setInputValue(getView(), R.id.teamCoachTxt, dialog.getTag());
+		TeamEditFragment teamEditFragment = (TeamEditFragment) getSupportFragmentManager().findFragmentById(R.id.team_details_container_id);
+		teamEditFragment.updateSelectedField(dialog.getSelectedItem(), dialog.getInputFieldId());
+	}
+
+	@Override
+	public void onDialogNegativeClick(ItemSelection dialog) {
+		// User touched the dialog's negative button
+	}
+
+	// **********************************************************************
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +66,11 @@ public class TeamDetailActivity extends FragmentActivity {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
+			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			setTitle(clubName);
+			getActionBar().setTitle(teamName);
+
 			teamId = getIntent().getIntExtra(DashboardActivity.ARG_TEAM_ID, -1);
 			arguments.putInt(DashboardActivity.ARG_TEAM_ID, teamId);
 			TeamDetailFragment fragment = new TeamDetailFragment();
@@ -70,11 +97,11 @@ public class TeamDetailActivity extends FragmentActivity {
 		CustomLog.e(this.getClass(), item.toString());
 		switch (item.getItemId()) {
 		case R.id.action_edit:
-			Bundle arguments = new Bundle();
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			teamId = getIntent().getIntExtra(DashboardActivity.ARG_TEAM_ID, -1);
+			Bundle arguments = new Bundle();
 			arguments.putInt(DashboardActivity.ARG_TEAM_ID, teamId);
-			TeamDetailFragment fragment = new TeamDetailFragment();
+			TeamEditFragment fragment = new TeamEditFragment();
 			fragment.setArguments(arguments);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.team_details_container_id, fragment);

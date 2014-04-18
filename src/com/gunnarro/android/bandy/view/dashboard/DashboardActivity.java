@@ -42,11 +42,13 @@ import com.gunnarro.android.bandy.view.teamdetailflow.TeamListActivity;
  */
 public abstract class DashboardActivity extends FragmentActivity {
 
+	public static final String ARG_CLUB_NAME = "club_name";
 	public static final String ARG_TEAM_NAME = "team_name";
 	public static final String ARG_TEAM_ID = "team_id";
 	public static final String ARG_PLAYER_ID = "player_id";
 	public static final String ARG_CONTACT_ID = "contact_id";
 	public static final String ARG_MATCH_ID = "match_id";
+	public final static String DEFAULT_CLUB_NAME = "Ullevål Idretts Lag";
 	public final static String DEFAULT_TEAM_NAME = "UIL Knøtt 2003";
 
 	/**
@@ -70,7 +72,6 @@ public abstract class DashboardActivity extends FragmentActivity {
 		// getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		getActionBar().setDisplayShowTitleEnabled(true);
 		getActionBar().setDisplayUseLogoEnabled(true);
-		getActionBar().setSubtitle("SubTitle");
 		getActionBar().show();
 		// setContentView(R.layout.activity_default);
 	}
@@ -192,16 +193,10 @@ public abstract class DashboardActivity extends FragmentActivity {
 		argsBundle.putString(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
 		switch (v.getId()) {
 		case R.id.trainings_btn:
-			Intent trainingsIntent = new Intent(getApplicationContext(), TrainingsActivity.class);
-			trainingsIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
-			startActivity(trainingsIntent);
+			startActivity(createIntent(TrainingsActivity.class));
 			break;
 		case R.id.matches_btn:
-			Intent matchesIntent = new Intent(getApplicationContext(), MatchListActivity.class);
-			// Intent matchesIntent = new Intent(getApplicationContext(),
-			// MatchesActivity.class);
-			matchesIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
-			startActivity(matchesIntent);
+			startActivity(createIntent(MatchListActivity.class));
 			break;
 		case R.id.cups_btn:
 			Toast.makeText(this, "Cups view not implements", Toast.LENGTH_SHORT).show();
@@ -210,17 +205,13 @@ public abstract class DashboardActivity extends FragmentActivity {
 			Toast.makeText(this, "Clubs view not implements", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.teams_btn:
-			startActivity(new Intent(getApplicationContext(), TeamListActivity.class));
+			startActivity(createIntent(TeamListActivity.class));
 			break;
 		case R.id.players_btn:
-			Intent playerListIntent = new Intent(getApplicationContext(), PlayerListActivity.class);
-			playerListIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
-			startActivity(playerListIntent);
+			startActivity(createIntent(PlayerListActivity.class));
 			break;
 		case R.id.contacts_btn:
-			Intent contactListIntent = new Intent(getApplicationContext(), ContactListActivity.class);
-			contactListIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
-			startActivity(contactListIntent);
+			startActivity(createIntent(ContactListActivity.class));
 			break;
 		case R.id.referee_btn:
 			Toast.makeText(this, "Referee view not implements", Toast.LENGTH_SHORT).show();
@@ -232,9 +223,7 @@ public abstract class DashboardActivity extends FragmentActivity {
 			startActivity(new Intent(getApplicationContext(), SearchActivity.class));
 			break;
 		case R.id.statistic_btn:
-			Intent statisticIntent = new Intent(getApplicationContext(), StatisticActivity.class);
-			statisticIntent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
-			startActivity(statisticIntent);
+			startActivity(createIntent(StatisticActivity.class));
 			break;
 		case R.id.about_btn:
 			startActivity(new Intent(getApplicationContext(), AboutActivity.class));
@@ -242,6 +231,26 @@ public abstract class DashboardActivity extends FragmentActivity {
 		default:
 			break;
 		}
+	}
+
+	private Intent createIntent(Class<?> clazz) {
+		Intent intent = new Intent(getApplicationContext(), clazz);
+		intent.putExtra(ARG_CLUB_NAME, DEFAULT_CLUB_NAME);
+		intent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
+		return intent;
+	}
+
+	public static Bundle createDefaultArguments(Intent intent) {
+		Bundle arguments = new Bundle();
+		String clubName = intent.getStringExtra(DashboardActivity.ARG_CLUB_NAME);
+		String teamName = intent.getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+		if (clubName != null) {
+			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+		}
+		if (teamName != null) {
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
+		}
+		return arguments;
 	}
 
 	/**

@@ -128,14 +128,6 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void listRelationsShips() {
-		this.bandyRepository.listRelationsShips();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public int createClub(Club club) {
 		return this.bandyRepository.createClub(club);
 	}
@@ -164,12 +156,37 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int saveTeam(Team team) {
+	public int saveTeam(Team team, Contact newTeamleader, Contact newCoach) {
+		int teamId;
 		if (team.getId() == null) {
-			return bandyRepository.createTeam(team);
+			// This was a new team
+			teamId = bandyRepository.createTeam(team);
+			// Create team contact persons
+			if (team.getTeamLead() != null) {
+				Contact contact = bandyRepository.getContact(team.getTeamLead().getFirstName(), team.getTeamLead().getLastName());
+				bandyRepository.createContactRoleTypeLnk(contact.getId(), RoleTypesEnum.TEAMLEAD.getId());
+			}
+			if (team.getCoach() != null) {
+				Contact contact = bandyRepository.getContact(team.getCoach().getFirstName(), team.getCoach().getLastName());
+				bandyRepository.createContactRoleTypeLnk(contact.getId(), RoleTypesEnum.COACH.getId());
+			}
+			return teamId;
 		} else {
-			return bandyRepository.updateTeam(team);
+			teamId = bandyRepository.updateTeam(team);
+			// Change team contact persons
+			if (newTeamleader != null) {
+				bandyRepository.deleteContactRoleTypeLnk(team.getTeamLead().getId(), RoleTypesEnum.TEAMLEAD.getId());
+				Contact newContact = bandyRepository.getContact(newTeamleader.getFirstName(), newTeamleader.getLastName());
+				bandyRepository.createContactRoleTypeLnk(newContact.getId(), RoleTypesEnum.TEAMLEAD.getId());
+			}
+
+			if (newCoach != null) {
+				bandyRepository.deleteContactRoleTypeLnk(team.getCoach().getId(), RoleTypesEnum.COACH.getId());
+				Contact newContact = bandyRepository.getContact(newCoach.getFirstName(), newCoach.getLastName());
+				bandyRepository.createContactRoleTypeLnk(newContact.getId(), RoleTypesEnum.COACH.getId());
+			}
 		}
+		return teamId;
 	}
 
 	/**
@@ -235,6 +252,14 @@ public class BandyServiceImpl implements BandyService {
 			bandyRepository.updateAddress(contact.getAddress());
 			return bandyRepository.updateContact(contact);
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteTeam(int teamId) {
+		this.bandyRepository.deleteTeam(teamId);
 	}
 
 	/**
@@ -537,6 +562,27 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public List<Contact> getContactList(Integer teamId) {
 		return this.bandyRepository.getContactList(teamId, "%");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
+	@Override
+	public String[] getContactNames(int teamId) {
+		List<Contact> contactList;
+		if (teamId == -1) {
+			contactList = this.bandyRepository.getContactList(1);
+		} else {
+			contactList = this.bandyRepository.getContactList(teamId, "%");
+		}
+		String[] names = new String[contactList.size()];
+		for (int i = 0; i < contactList.size(); i++) {
+			if (!contactList.get(i).hasTeamRoles()) {
+				names[i] = contactList.get(i).getFullName();
+			}
+		}
+		return names;
 	}
 
 	/**
@@ -886,7 +932,7 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateGoalsHomeTeam(int matchId, int goals, int playerId) {
+	public void updateGoalsHomeTeam(int matchId, int goals) {
 		this.bandyRepository.updateGoals(matchId, goals, true);
 	}
 
@@ -894,7 +940,7 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateGoalsAwayTeam(int matchId, int goals, int playerId) {
+	public void updateGoalsAwayTeam(int matchId, int goals) {
 		this.bandyRepository.updateGoals(matchId, goals, false);
 	}
 

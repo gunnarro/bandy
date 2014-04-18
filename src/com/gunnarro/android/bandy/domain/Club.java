@@ -68,4 +68,10 @@ public class Club {
 		return homePageUrl;
 	}
 
+	@Override
+	public String toString() {
+		return "Club [id=" + id + ", name=" + name + ", departmentName=" + departmentName + ", stadiumName=" + stadiumName + ", clubNameAbbreviation="
+				+ clubNameAbbreviation + "]";
+	}
+
 }

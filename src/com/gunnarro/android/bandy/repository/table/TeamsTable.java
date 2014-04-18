@@ -31,7 +31,7 @@ public class TeamsTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_YEAR_OF_BIRTH).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_GENDER).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_CLUB_ID).append(") REFERENCES ").append(ClubsTable.TABLE_NAME).append("(")
-				.append(TableHelper.COLUMN_ID).append("));");
+				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE );");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {
@@ -58,9 +58,14 @@ public class TeamsTable {
 		return values;
 	}
 
-	public static ContentValues updateContentValues(String teamName) {
+	public static ContentValues updateContentValues(Team team) {
 		ContentValues values = TableHelper.defaultContentValues();
-		values.put(COLUMN_TEAM_NAME, teamName);
+		values.put(COLUMN_TEAM_NAME, team.getName());
+		values.put(COLUMN_TEAM_YEAR_OF_BIRTH, team.getTeamYearOfBirth());
+		values.put(COLUMN_TEAM_GENDER, team.getGender());
+		if (team.getLeague() != null) {
+			values.put(COLUMN_FK_LEAGUE_ID, team.getLeague().getId());
+		}
 		return values;
 	}
 

@@ -21,7 +21,7 @@ public class MatchesTable {
 	public static final String COLUMN_VENUE = "venue";
 	public static final String COLUMN_REFEREE = "referee";
 	public static final String COLUMN_MATCH_TYPE_ID = "match_type_id";
-	public static final String COLUMN_MATCH_STATUS_NAME = "match_status_NAME";
+	public static final String COLUMN_MATCH_STATUS_NAME = "match_status_name";
 
 	public static String[] TABLE_COLUMNS = TableHelper.createColumns(new String[] { COLUMN_FK_SEASON_ID, COLUMN_FK_TEAM_ID, COLUMN_START_DATE,
 			COLUMN_HOME_TEAM_NAME, COLUMN_AWAY_TEAM_NAME, COLUMN_NUMBER_OF_GOALS_HOME_TEAM, COLUMN_NUMBER_OF_GOALS_AWAY_TEAM, COLUMN_VENUE, COLUMN_REFEREE,
@@ -84,6 +84,7 @@ public class MatchesTable {
 		values.put(COLUMN_NUMBER_OF_GOALS_HOME_TEAM, match.getNumberOfGoalsHome());
 		values.put(COLUMN_NUMBER_OF_GOALS_AWAY_TEAM, match.getNumberOfGoalsAway());
 		values.put(COLUMN_REFEREE, match.getReferee().getFullName());
+		values.put(COLUMN_VENUE, match.getVenue());
 		return values;
 	}
 

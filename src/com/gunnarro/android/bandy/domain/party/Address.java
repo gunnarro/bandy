@@ -34,28 +34,52 @@ public class Address {
 		return streetName;
 	}
 
-	public String getFullStreetName() {
-		return streetName + " " + streetNumber + (streetNumberPrefix != null ? streetNumberPrefix : "");
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
 	}
 
 	public String getStreetNumber() {
 		return streetNumber;
 	}
 
+	public void setStreetNumber(String streetNumber) {
+		this.streetNumber = streetNumber;
+	}
+
 	public String getStreetNumberPrefix() {
 		return streetNumberPrefix;
+	}
+
+	public void setStreetNumberPrefix(String streetNumberPrefix) {
+		this.streetNumberPrefix = streetNumberPrefix;
 	}
 
 	public String getPostalCode() {
 		return postalCode;
 	}
 
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+
 	public String getCity() {
 		return city;
 	}
 
+	public void setCity(String city) {
+		this.city = city;
+	}
+
 	public String getCountry() {
 		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getFullStreetName() {
+		return id + ": " + streetName + " " + streetNumber + (streetNumberPrefix != null ? streetNumberPrefix : "");
 	}
 
 	public boolean isAddressValid() {
@@ -68,8 +92,8 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return "Address [isAddressValid=" + this.isAddressValid() + ", streetName=" + streetName + ", streetNumber=" + streetNumber + ", streetNumberPrefix="
-				+ streetNumberPrefix + ", postalCode=" + postalCode + ", city=" + city + ", country=" + country + "]";
+		return "Address [isAddressValid=" + this.isAddressValid() + ", id=" + id + ", streetName=" + streetName + ", streetNumber=" + streetNumber
+				+ ", streetNumberPrefix=" + streetNumberPrefix + ", postalCode=" + postalCode + ", city=" + city + ", country=" + country + "]";
 	}
 
 }

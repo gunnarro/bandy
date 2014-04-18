@@ -49,7 +49,7 @@ public class MatchDetailActivity extends FragmentActivity {
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			matchId = getIntent().getIntExtra(DashboardActivity.ARG_MATCH_ID, -1);
 			arguments.putInt(DashboardActivity.ARG_MATCH_ID, matchId);
-			MatchOnlineFragment fragment = new MatchOnlineFragment();
+			MatchEditFragment fragment = new MatchEditFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.match_details_container_id, fragment).commit();
 		}
@@ -66,7 +66,7 @@ public class MatchDetailActivity extends FragmentActivity {
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			matchId = getIntent().getIntExtra(DashboardActivity.ARG_MATCH_ID, -1);
 			arguments.putInt(DashboardActivity.ARG_MATCH_ID, matchId);
-			MatchOnlineFragment fragment = new MatchOnlineFragment();
+			MatchEditFragment fragment = new MatchEditFragment();
 			fragment.setArguments(arguments);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.match_details_container_id, fragment);

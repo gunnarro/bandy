@@ -23,6 +23,7 @@ public class PlayersTable {
 	public static final String COLUMN_MOBILE = "mobile";
 	public static final String COLUMN_COUNTRY_OF_BIRTH = "country_of_birth";
 	public static final String COLUMN_NATIONAL_TEAM = "national_team";
+	public static final String COLUMN_SCHOOL_NAME = "school_name";
 
 	public static String[] TABLE_COLUMNS = TableHelper.createColumns(new String[] { COLUMN_FK_TEAM_ID, COLUMN_FK_ADDRESS_ID, COLUMN_STATUS, COLUMN_FIRST_NAME,
 			COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_GENDER, COLUMN_DATE_OF_BIRTH, COLUMN_EMAIL, COLUMN_MOBILE });
@@ -75,6 +76,8 @@ public class PlayersTable {
 		values.put(COLUMN_FIRST_NAME, player.getFirstName());
 		values.put(COLUMN_MIDDLE_NAME, player.getMiddleName());
 		values.put(COLUMN_LAST_NAME, player.getLastName());
+		values.put(COLUMN_EMAIL, player.getEmailAddress());
+		values.put(COLUMN_MOBILE, player.getMobileNumber());
 		values.put(COLUMN_DATE_OF_BIRTH, (int) (player.getDateOfBirth() / 1000));
 		return values;
 	}

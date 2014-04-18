@@ -85,6 +85,25 @@
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
+        
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/league"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/teamleagueNameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </TableRow>
     </TableLayout>
 
     <TextView

@@ -22,4 +22,9 @@ public class League implements Serializable {
 		return name;
 	}
 
+	@Override
+	public String toString() {
+		return "League [id=" + id + ", name=" + name + "]";
+	}
+
 }

@@ -12,7 +12,6 @@ public class NewPlayerActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.player_details_container_layout);
-		setTitle("Player Details");
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -28,8 +27,12 @@ public class NewPlayerActivity extends FragmentActivity {
 		if (savedInstanceState == null) {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
-			Bundle arguments = new Bundle();
+			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			String teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			setTitle(clubName);
+			getActionBar().setTitle(teamName);
+			Bundle arguments = new Bundle();
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
 			PlayerEditFragment fragment = new PlayerEditFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.player_details_container_id, fragment).commit();

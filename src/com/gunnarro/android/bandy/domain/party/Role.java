@@ -1,5 +1,6 @@
 package com.gunnarro.android.bandy.domain.party;
 
+
 public class Role {
 
 	public enum RoleTypesEnum {
@@ -12,6 +13,14 @@ public class Role {
 
 		public int getId() {
 			return id;
+		}
+
+		public static String[] names() {
+			String[] names = new String[RoleTypesEnum.values().length];
+			for (int i = 0; i < RoleTypesEnum.values().length; i++) {
+				names[i] = RoleTypesEnum.values()[i].name();
+			}
+			return names;
 		}
 	}
 

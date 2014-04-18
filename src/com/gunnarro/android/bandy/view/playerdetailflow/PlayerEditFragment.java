@@ -24,8 +24,8 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 public class PlayerEditFragment extends CommonFragment {
 
 	private BandyService bandyService;
-	private String teamName;
 	private Integer playerId;
+	private Player player;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,9 +60,9 @@ public class PlayerEditFragment extends CommonFragment {
 		}
 
 		if (playerId != null) {
-			Player player = this.bandyService.getPlayer(playerId);
-			init(rootView, player);
-			getActivity().getActionBar().setSubtitle(player.getFullName());
+			player = this.bandyService.getPlayer(playerId);
+			init(rootView);
+			getActivity().getActionBar().setSubtitle(player.getTeam().getName());
 		}
 		return rootView;
 	}
@@ -99,7 +99,7 @@ public class PlayerEditFragment extends CommonFragment {
 		}
 	}
 
-	private void init(View rootView, Player player) {
+	private void init(View rootView) {
 		if (player != null) {
 			setInputValue(rootView, R.id.playerFirstNameTxt, player.getFirstName());
 			setInputValue(rootView, R.id.playerMiddleNameTxt, player.getMiddleName());
@@ -134,19 +134,27 @@ public class PlayerEditFragment extends CommonFragment {
 		String emailAddress = getInputValue(R.id.playerEmailAddressTxt);
 		String schoolName = getInputValue(R.id.playerSchoolNameTxt);
 
-		Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
-		Team team = this.bandyService.getTeam(1);
-		Player player = new Player(team, firstName, middleName, lastName, getSelectedGender(), PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth,
-				"dd.mm.yyyy").getTime(), address);
-		if (playerId != null && playerId > 0) {
-			player = new Player(playerId, team, firstName, middleName, lastName, getSelectedGender(), PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(
-					dateOfBirth, "dd.mm.yyyy").getTime(), address);
+		if (player == null) {
+			Team team = this.bandyService.getTeam(teamName, false);
+			Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
+			player = new Player(team, firstName, middleName, lastName, getSelectedGender(), PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth,
+					"dd.mm.yyyy").getTime(), address);
+		} else {
+			player.setFirstName(firstName);
+			player.setMiddleName(middleName);
+			player.setLastName(lastName);
+			player.setGender(getSelectedGender());
+			player.getAddress().setStreetName(streetName);
+			player.getAddress().setStreetNumber(streetNumber);
+			player.getAddress().setStreetNumberPrefix(streetNumberPostfix);
+			player.getAddress().setCity(city);
+			player.getAddress().setPostalCode(postalCode);
+			player.getAddress().setCountry(country);
 		}
 		player.setEmailAddress(emailAddress);
 		player.setMobileNumber(mobileNumber);
 		player.setSchoolName(schoolName);
-		int trainingId = bandyService.savePlayer(player);
+		int playerId = bandyService.savePlayer(player);
 		CustomLog.e(this.getClass(), player.toString());
 	}
-
 }
