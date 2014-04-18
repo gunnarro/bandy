@@ -211,7 +211,7 @@ public interface BandyService {
 
 	public void deleteContact(Integer contactId);
 
-	public int saveTeam(Team team, Contact teamLeader, Contact coach);
+	public int saveTeam(Team team, Contact newTeamleader, Contact newCoach);
 
 	public List<Team> getTeamList(String string);
 

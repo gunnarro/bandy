@@ -94,7 +94,6 @@ public class TeamDetailActivity extends FragmentActivity implements NoticeDialog
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		CustomLog.e(this.getClass(), item.toString());
 		switch (item.getItemId()) {
 		case R.id.action_edit:
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);

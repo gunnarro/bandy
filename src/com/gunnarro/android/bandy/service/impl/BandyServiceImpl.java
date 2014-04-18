@@ -175,15 +175,23 @@ public class BandyServiceImpl implements BandyService {
 			teamId = bandyRepository.updateTeam(team);
 			// Change team contact persons
 			if (newTeamleader != null) {
-				bandyRepository.deleteContactRoleTypeLnk(team.getTeamLead().getId(), RoleTypesEnum.TEAMLEAD.getId());
-				Contact newContact = bandyRepository.getContact(newTeamleader.getFirstName(), newTeamleader.getLastName());
-				bandyRepository.createContactRoleTypeLnk(newContact.getId(), RoleTypesEnum.TEAMLEAD.getId());
+				Contact newTeamleaderContact = bandyRepository.getContact(newTeamleader.getFirstName(), newTeamleader.getLastName());
+				if (newTeamleaderContact != null) {
+					bandyRepository.createContactRoleTypeLnk(newTeamleaderContact.getId(), RoleTypesEnum.TEAMLEAD.getId());
+					bandyRepository.deleteContactRoleTypeLnk(team.getTeamLead().getId(), RoleTypesEnum.TEAMLEAD.getId());
+				} else {
+					CustomLog.e(this.getClass(), "No contact found for: " + newTeamleader.getFirstName() + " " + newTeamleader.getLastName());
+				}
 			}
 
 			if (newCoach != null) {
-				bandyRepository.deleteContactRoleTypeLnk(team.getCoach().getId(), RoleTypesEnum.COACH.getId());
-				Contact newContact = bandyRepository.getContact(newCoach.getFirstName(), newCoach.getLastName());
-				bandyRepository.createContactRoleTypeLnk(newContact.getId(), RoleTypesEnum.COACH.getId());
+				Contact newCoachContact = bandyRepository.getContact(newCoach.getFirstName(), newCoach.getLastName());
+				if (newCoachContact != null) {
+					bandyRepository.createContactRoleTypeLnk(newCoachContact.getId(), RoleTypesEnum.COACH.getId());
+					bandyRepository.deleteContactRoleTypeLnk(team.getCoach().getId(), RoleTypesEnum.COACH.getId());
+				} else {
+					CustomLog.e(this.getClass(), "No contact found for: " + newCoach.getFirstName() + " " + newCoach.getLastName());
+				}
 			}
 		}
 		return teamId;
@@ -576,13 +584,16 @@ public class BandyServiceImpl implements BandyService {
 		} else {
 			contactList = this.bandyRepository.getContactList(teamId, "%");
 		}
-		String[] names = new String[contactList.size()];
-		for (int i = 0; i < contactList.size(); i++) {
-			if (!contactList.get(i).hasTeamRoles()) {
-				names[i] = contactList.get(i).getFullName();
+		List<String> names = new ArrayList<String>();
+		for (Contact contact : contactList) {
+			if (!contact.hasTeamRoles()) {
+				names.add(contact.getFullName());
 			}
 		}
-		return names;
+		// return new String[] { "Siri Paulen", "Trond Kiplesund",
+		// "Vemund Hartberg" };
+		String[] nameArray = names.toArray(new String[names.size()]);
+		return nameArray;
 	}
 
 	/**

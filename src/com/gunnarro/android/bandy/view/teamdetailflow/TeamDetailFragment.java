@@ -1,7 +1,6 @@
 package com.gunnarro.android.bandy.view.teamdetailflow;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +16,7 @@ import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
@@ -24,7 +24,7 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  * contained in a {@link TeamListActivity} in two-pane mode (on tablets) or a
  * {@link TeamDetailActivity} on handsets.
  */
-public class TeamDetailFragment extends Fragment {
+public class TeamDetailFragment extends CommonFragment {
 
 	private BandyService bandyService;
 	private int teamId;
@@ -100,20 +100,22 @@ public class TeamDetailFragment extends Fragment {
 
 	private void updateTeamDetails(View rootView, Team team) {
 		if (team != null) {
-			((TextView) rootView.findViewById(R.id.teamNameTxt)).setText(team.getName());
-			((TextView) rootView.findViewById(R.id.teamYearOfBirthTxt)).setText(team.getTeamYearOfBirth().toString());
-			((TextView) rootView.findViewById(R.id.teamGenderTxt)).setText(team.getGender());
-
+			setTextViewValue(rootView, R.id.teamNameTxt, team.getName());
+			setTextViewValue(rootView, R.id.teamYearOfBirthTxt, team.getTeamYearOfBirth().toString());
+			setTextViewValue(rootView, R.id.teamGenderTxt, team.getGender());
+			if (team.getLeague() != null) {
+				setTextViewValue(rootView, R.id.teamleagueNameTxt, team.getLeague().getName());
+			}
 			if (team.getTeamLead() != null) {
-				((TextView) rootView.findViewById(R.id.teamLeadTxt)).setText(team.getTeamLead().getFullName());
-				((TextView) rootView.findViewById(R.id.teamleadMobileTxt)).setText(team.getTeamLead().getMobileNumber());
-				((TextView) rootView.findViewById(R.id.teamleadEmailTxt)).setText(team.getTeamLead().getEmailAddress());
+				setTextViewValue(rootView, R.id.teamLeadTxt, team.getTeamLead().getFullName());
+				setTextViewValue(rootView, R.id.teamleadMobileTxt, team.getTeamLead().getMobileNumber());
+				setTextViewValue(rootView, R.id.teamleadEmailTxt, team.getTeamLead().getEmailAddress());
 			}
 
 			if (team.getCoach() != null) {
-				((TextView) rootView.findViewById(R.id.coachTxt)).setText(team.getCoach().getFullName());
-				((TextView) rootView.findViewById(R.id.coachMobileTxt)).setText(team.getCoach().getMobileNumber());
-				((TextView) rootView.findViewById(R.id.coachEmailTxt)).setText(team.getCoach().getEmailAddress());
+				setTextViewValue(rootView, R.id.coachTxt, team.getCoach().getFullName());
+				setTextViewValue(rootView, R.id.coachMobileTxt, team.getCoach().getMobileNumber());
+				setTextViewValue(rootView, R.id.coachEmailTxt, team.getCoach().getEmailAddress());
 			}
 		}
 	}

@@ -549,7 +549,6 @@ public class BandyRepositoryImpl implements BandyRepository {
 			}
 		}
 		if (cursor != null && !cursor.isClosed()) {
-			CustomLog.e(this.getClass(), "contacts=" + cursor.getCount());
 			cursor.close();
 		}
 		return list;
@@ -1134,6 +1133,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 			cursor.moveToFirst();
 			Team team = getTeam(cursor.getInt(cursor.getColumnIndex(ContactsTable.COLUMN_FK_TEAM_ID)));
 			contact = mapCursorToContact(cursor, team);
+			CustomLog.e(this.getClass(), contact.getFirstName() + " " + contact.getLastName() + " <> " + firstName + " " + lastName);
+		}
+		// FIXME Validate result, due to bug !
+		if (contact != null) {
+			if (!contact.getFirstName().equalsIgnoreCase(firstName) || !contact.getLastName().equalsIgnoreCase(lastName)) {
+				CustomLog.e(this.getClass(), contact.getFirstName() + " " + contact.getLastName() + " <> " + firstName + " " + lastName);
+			}
 		}
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
@@ -1811,7 +1817,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	}
 
 	private int deleteLink(String tableName, String[] colNames, String id1, String id2) {
-		String whereClause = colNames[1] + " LIKE ? AND " + colNames[2] + " LIKE ?";
+		String whereClause = colNames[0] + " LIKE ? AND " + colNames[1] + " LIKE ?";
 		String[] whereArgs = { id1, id2 };
 		this.database = dbHelper.getWritableDatabase();
 		int id = database.delete(tableName, whereClause, whereArgs);

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -49,6 +50,15 @@ public class CommonFragment extends Fragment {
 			inputView.setEnabled(isEditable);
 		} else {
 			CustomLog.e(this.getClass(), "No input field found or value is equal to null, for id: " + id + ", value: " + value);
+		}
+	}
+
+	protected void setTextViewValue(View rootView, int id, String value) {
+		TextView textView = (TextView) rootView.findViewById(id);
+		if (textView != null && value != null) {
+			textView.setText(value.trim());
+		} else {
+			CustomLog.e(this.getClass(), "No text view found or value is equal to null, for id: " + id + ", value: " + value);
 		}
 	}
 

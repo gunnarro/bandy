@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -99,6 +100,7 @@ public class TeamEditFragment extends CommonFragment {
 			return true;
 		case R.id.action_save:
 			save();
+			Toast.makeText(getActivity().getApplicationContext(), "Saved Team!", Toast.LENGTH_SHORT).show();
 			super.getActivity().onBackPressed();
 			return true;
 		default:
@@ -183,7 +185,6 @@ public class TeamEditFragment extends CommonFragment {
 		}
 
 		int id = bandyService.saveTeam(team, newTeamleader, newCoach);
-		CustomLog.e(this.getClass(), team.toString());
 	}
 
 	public void showSelectionDialog(String[] items, int inputFieldId) {
