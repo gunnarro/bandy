@@ -1,173 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:scrollbars="vertical" >
 
-    <LinearLayout
-        android:id="@+id/personaliaLayoutId"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/personaliaHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/personalia"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/white" />
-
-        <View
-            android:id="@+id/personaliaSeparatorId"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginBottom="3dp"
-            android:background="@drawable/line_separator" />
-    </LinearLayout>
-
-    <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/personaliaLayoutId"
-        android:layout_marginLeft="10dp"
-        android:shrinkColumns="*"
-        android:stretchColumns="*" >
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:id="@+id/nameLbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/name"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/nameTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Emilie Paulen"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:id="@+id/dateOfBirthLbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/birth"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/dateOfBirthTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="22.01.2002"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:id="@+id/addressLbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/address"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/addressTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bergslia 39, 0467 Oslo, Norway"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:id="@+id/mobileLbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mobile"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/mobileTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+47 55 22 00 00"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:id="@+id/emailLbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/email"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/emailTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="emilie.paulen@yahoo.no"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-    </TableLayout>
-
-    <LinearLayout
-        android:id="@+id/clubLayoutId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tableLayout"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/clubHeaderId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Club"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/white" />
-
-        <View
-            android:id="@+id/clubSeparatorId"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:background="@drawable/line_separator" />
+        android:textAppearance="?android:attr/textAppearanceMedium" >
 
         <TableLayout
-            android:id="@+id/clubTableLayout"
+            android:id="@+id/clubDetailsTblId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/personaliaLayoutId"
             android:layout_marginLeft="10dp"
             android:shrinkColumns="*"
-            android:stretchColumns="*" >
+            android:stretchColumns="*"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
 
             <TableRow
                 android:layout_width="match_parent"
@@ -175,118 +25,25 @@
                 android:gravity="center_horizontal" >
 
                 <TextView
-                    android:id="@+id/clubLbl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Club"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:text="@string/name" />
 
                 <TextView
-                    android:id="@+id/clubTxt"
+                    android:id="@+id/clubNameTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ullevål Idrettslag Bandy"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
-
-                <TextView
-                    android:id="@+id/teamLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Team"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/teamTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Knøtt 2003"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
-
-                <TextView
-                    android:id="@+id/coachLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Coach"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/coachTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Gunnar Rønneberg"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal" >
-
-                <TextView
-                    android:id="@+id/teamleadLbl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Teamlead"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/teamleadTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Gunnar Rønneberg"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:text="@string/blank" />
             </TableRow>
         </TableLayout>
 
-        <LinearLayout
-            android:id="@+id/parentsLayoutId"
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/addressInputId"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/clubLayoutId"
+            android:layout_below="@+id/clubDetailsTblId"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical" >
+            layout="@layout/address_input_layout" />
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/parentsHeaderId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Parents"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/white" />
-
-            <View
-                android:id="@+id/parentsSeparatorId"
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@drawable/line_separator" />
-
-            <TextView
-                android:id="@+id/parent1FullName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gunnar Rønneberg"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/parent2FullName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Siri Birgitte Paulen"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>
-    </LinearLayout>
-
-</RelativeLayout>
+</ScrollView>

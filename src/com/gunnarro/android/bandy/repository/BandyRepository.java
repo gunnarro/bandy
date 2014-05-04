@@ -217,4 +217,6 @@ public interface BandyRepository {
 
 	public int deleteTeam(Integer teamId);
 
+	public List<Club> getClubList();
+
 }

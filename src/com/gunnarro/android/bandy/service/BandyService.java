@@ -31,6 +31,8 @@ public interface BandyService {
 
 	public void loadData(String filePath);
 
+	public void saveClub(Club club);
+
 	public int createClub(Club club);
 
 	public int createTeam(Team team);
@@ -72,6 +74,8 @@ public interface BandyService {
 	public Team getTeam(Integer id);
 
 	public Club getClub(String name, String departmentName);
+
+	public List<Club> getClubList();
 
 	public Club getClub(Integer id);
 

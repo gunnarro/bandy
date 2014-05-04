@@ -68,6 +68,14 @@ public class Club {
 		return homePageUrl;
 	}
 
+	public void setStadiumName(String stadiumName) {
+		this.stadiumName = stadiumName;
+	}
+
+	public void setHomePageUrl(String homePageUrl) {
+		this.homePageUrl = homePageUrl;
+	}
+
 	@Override
 	public String toString() {
 		return "Club [id=" + id + ", name=" + name + ", departmentName=" + departmentName + ", stadiumName=" + stadiumName + ", clubNameAbbreviation="

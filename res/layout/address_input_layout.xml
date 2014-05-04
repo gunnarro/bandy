@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/addressTblId"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:baselineAligned="false"
+    android:shrinkColumns="*"
+    android:stretchColumns="*"
+    android:textAppearance="?android:attr/textAppearanceMedium" >
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/street_name" />
+
+        <EditText
+            android:id="@+id/streetNameTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:inputType="text"
+            android:text="@string/blank" >
+        </EditText>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/street_number" />
+
+        <EditText
+            android:id="@+id/streetNumberTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:inputType="number"
+            android:text="@string/blank" >
+        </EditText>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/street_number_postfix" />
+
+        <EditText
+            android:id="@+id/streetNumberPostfixTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="1"
+            android:gravity="left"
+            android:inputType="text"
+            android:text="@string/blank" >
+        </EditText>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/postal_code" />
+
+        <EditText
+            android:id="@+id/postalCodeTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="6"
+            android:gravity="left"
+            android:inputType="number"
+            android:text="@string/blank" >
+        </EditText>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/city" />
+
+        <EditText
+            android:id="@+id/cityTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:inputType="text"
+            android:text="@string/blank" >
+        </EditText>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/country" />
+
+        <EditText
+            android:id="@+id/countryTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:inputType="text"
+            android:text="@string/blank" >
+        </EditText>
+    </TableRow>
+
+</TableLayout>

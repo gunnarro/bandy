@@ -128,6 +128,18 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void saveClub(Club club) {
+		if (club.getId() == null) {
+			bandyRepository.createClub(club);
+		} else {
+			// BandyRepository.updateClub();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public int createClub(Club club) {
 		return this.bandyRepository.createClub(club);
 	}
@@ -501,6 +513,14 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public Club getClub(String name, String departmentName) {
 		return this.bandyRepository.getClub(name, departmentName);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Club> getClubList() {
+		return this.bandyRepository.getClubList();
 	}
 
 	/**

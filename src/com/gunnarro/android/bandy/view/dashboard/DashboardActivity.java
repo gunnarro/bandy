@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.view.clubdetailflow.ClubListActivity;
 import com.gunnarro.android.bandy.view.contactdetailflow.ContactListActivity;
 import com.gunnarro.android.bandy.view.matchdetailflow.MatchListActivity;
 import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
@@ -48,6 +49,7 @@ public abstract class DashboardActivity extends FragmentActivity {
 
 	public static final String ARG_CLUB_NAME = "club_name";
 	public static final String ARG_TEAM_NAME = "team_name";
+	public static final String ARG_CLUB_ID = "club_id";
 	public static final String ARG_TEAM_ID = "team_id";
 	public static final String ARG_SEASON_ID = "season_id";
 	public static final String ARG_PLAYER_ID = "player_id";
@@ -224,7 +226,7 @@ public abstract class DashboardActivity extends FragmentActivity {
 			Toast.makeText(this, "Cups view not implements", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.clubs_btn:
-			Toast.makeText(this, "Clubs view not implements", Toast.LENGTH_SHORT).show();
+			startActivity(createIntent(ClubListActivity.class));
 			break;
 		case R.id.teams_btn:
 			startActivity(createIntent(TeamListActivity.class));

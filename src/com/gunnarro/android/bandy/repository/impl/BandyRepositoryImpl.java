@@ -663,6 +663,31 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public List<Club> getClubList() {
+		List<Club> clubs = new ArrayList<Club>();
+		String selection = ClubsTable.COLUMN_CLUB_NAME + " LIKE ?";
+		String[] selectionArgs = new String[] { "%" };
+		String orderBy = ClubsTable.COLUMN_CLUB_NAME + "," + ClubsTable.COLUMN_CLUB_DEPARTMENT_NAME + " ASC";
+		this.database = getDatabase(false);
+		Cursor cursor = this.database.query(ClubsTable.TABLE_NAME, ClubsTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				clubs.add(mapCursorToClub(cursor));
+				cursor.moveToNext();
+			}
+		}
+		CustomLog.d(this.getClass(), "clubs=" + cursor.getCount());
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return clubs;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public String[] getClubNames() {
 		String[] clubNames = new String[] {};
 		String orderBy = ClubsTable.COLUMN_CLUB_NAME + "," + ClubsTable.COLUMN_CLUB_DEPARTMENT_NAME + " ASC";
@@ -889,8 +914,9 @@ public class BandyRepositoryImpl implements BandyRepository {
 		String[] roleTypeNames = new String[] {};
 		String selection = RoleTypesTable.COLUMN_ROLE_TYPE_NAME + " LIKE ?";
 		String[] selectionArgs = { "%" };
+		String orderBy = RoleTypesTable.COLUMN_ROLE_TYPE_NAME + " ASC";
 		this.database = getDatabase(false);
-		Cursor cursor = database.query(RoleTypesTable.TABLE_NAME, RoleTypesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
+		Cursor cursor = database.query(RoleTypesTable.TABLE_NAME, RoleTypesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
 		if (cursor != null && cursor.getCount() > 0) {
 			roleTypeNames = new String[cursor.getCount()];
 			int i = 0;

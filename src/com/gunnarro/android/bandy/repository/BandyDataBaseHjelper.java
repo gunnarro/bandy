@@ -288,10 +288,10 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(3, datetime(), 'TEAMLEAD', '')");
 		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(4, datetime(), 'COACH', '')");
 		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(5, datetime(), 'CHAIRMAN', '')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(6, datetime(), 'DEPUTY_CHAIRMAN', '')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(7, datetime(), 'BOARD_MEMBER', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(6, datetime(), 'DEPUTY CHAIRMAN', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(7, datetime(), 'BOARD MEMBER', '')");
 		// Match status types
-		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(1, datetime(), 'NOT_PLAYED', '')");
+		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(1, datetime(), 'NOT PLAYED', '')");
 		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(2, datetime(), 'PLAYED', '')");
 		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(3, datetime(), 'CANCELLED', '')");
 		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(4, datetime(), 'POSTPONED', '')");

@@ -152,6 +152,27 @@
                 android:value="com.gunnarro.android.bandy.view.teamdetailflow.TeamListActivity" />
         </activity>
 
+         <!-- Club detail flow configuration -->
+        <activity
+            android:name="com.gunnarro.android.bandy.view.clubdetailflow.NewClubActivity"
+            android:label="New Club"
+            android:parentActivityName="com.gunnarro.android.bandy.view.clubdetailflow.ClubListActivity" >
+        </activity>
+        <activity
+            android:name="com.gunnarro.android.bandy.view.clubdetailflow.ClubListActivity"
+            android:label="Teams"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" >
+        </activity>
+        <activity
+            android:name="com.gunnarro.android.bandy.view.clubdetailflow.ClubDetailActivity"
+            android:label="Team details"
+            android:parentActivityName="com.gunnarro.android.bandy.view.clubdetailflow.ClubListActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gunnarro.android.bandy.view.clubdetailflow.ClubListActivity" />
+        </activity>
+        
         <service android:name="com.gunnarro.android.bandy.service.impl.DownloadService" />
         <!--
 		<receiver

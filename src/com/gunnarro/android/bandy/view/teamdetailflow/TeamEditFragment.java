@@ -185,39 +185,4 @@ public class TeamEditFragment extends CommonFragment {
 		int id = bandyService.saveTeam(team, newTeamleader, newCoach);
 	}
 
-	// /**
-	// *
-	// * @author gunnarro
-	// *
-	// */
-	// public class SelectDialogOnClickListener implements OnClickListener {
-	// private String[] items;
-	// private int inputFieldId;
-	//
-	// public SelectDialogOnClickListener(String[] items, int inputFieldId) {
-	// this.items = items;
-	// this.inputFieldId = inputFieldId;
-	// isInitMode = true;
-	// }
-	//
-	// @Override
-	// public void onClick(View view) {
-	// if (isInitMode) {
-	// isInitMode = false;
-	// } else {
-	// showSelectionDialog(items, inputFieldId);
-	// }
-	// }
-	//
-	// private void showSelectionDialog(String[] items, int inputFieldId) {
-	// // Create an instance of the dialog fragment and show it
-	// DialogFragment dialogFragment = new DialogSelection();
-	// Bundle arguments = new Bundle();
-	// arguments.putStringArray(DialogSelection.DIALOG_ARG_ITEMS_KEY, items);
-	// arguments.putInt(DialogSelection.DIALOG_ARG_NOTICE_FIELD_ID_KEY,
-	// inputFieldId);
-	// dialogFragment.setArguments(arguments);
-	// dialogFragment.show(getFragmentManager(), "SelectionDialogFragment");
-	// }
-	// }
 }

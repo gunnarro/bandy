@@ -25,8 +25,4 @@ public class UtilityTest extends TestCase {
 		assertEquals("22.02.2014 22:23", Utility.formatTime(date.getTime(), Utility.DATE_TIME_PATTERN));
 	}
 
-	// @Test
-	public void isInActiveTimePeriode() {
-		assertTrue(Utility.isInActiveTimePeriode("01:00", "24:00"));
-	}
 }
