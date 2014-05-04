@@ -2,47 +2,66 @@ package com.gunnarro.android.bandy.view.matchdetailflow;
 
 import java.util.Calendar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.dialog.DialogSelection.NoticeDialogListener;
+import com.gunnarro.android.bandy.view.dialog.ItemSelection;
+import com.gunnarro.android.bandy.view.dialog.SelectDialogOnClickListener;
 
-public class NewMatchActivity extends FragmentActivity {
+public class NewMatchActivity extends FragmentActivity implements NoticeDialogListener {
 
 	private String selectedSeasonPeriod = "2013/2014";
-	private String selectedTeamName = "Kn%tt 2003";
+	private String teamName;
 	private String selectedVenue = "Bergbanen";
 	private String selectedHomeTeamName = "";
 	private String selectedAwayTeamName = "";
 	private String selectedRefereeName = "";
 	private String selectedMatchTypeName = "";
 	private BandyService bandyService;
-	private Bundle bundle;
+
+	// The dialog fragment receives a reference to this Activity through the
+	// Fragment.onAttach() callback, which it uses to call the following methods
+	// defined by the NoticeDialogFragment.NoticeDialogListener interface
+	@Override
+	public void onDialogPositiveClick(ItemSelection dialog) {
+		// User touched the dialog's positive button
+		setInputValue(dialog.getInputFieldId(), dialog.getSelectedItem());
+	}
+
+	@Override
+	public void onDialogNegativeClick(ItemSelection dialog) {
+		// User touched the dialog's negative button
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.match_details_container_layout);
-		setTitle("New Match");
+		setContentView(R.layout.match_new_layout);
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
+		if (this.bandyService == null) {
+			this.bandyService = new BandyServiceImpl(getApplicationContext());
+		}
 		// savedInstanceState is non-null when there is fragment state
 		// saved from previous configurations of this activity
 		// (e.g. when rotating the screen from portrait to landscape).
@@ -55,31 +74,54 @@ public class NewMatchActivity extends FragmentActivity {
 		if (savedInstanceState == null) {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
-			Bundle arguments = new Bundle();
-			String teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
-			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
-			MatchEditFragmentDeprecated fragment = new MatchEditFragmentDeprecated();
-			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.match_details_container_id, fragment).commit();
+			// Bundle arguments = new Bundle();
+			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
+			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			this.setTitle(clubName);
+			this.getActionBar().setSubtitle(teamName);
+			// arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+			// arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
+			// MatchEditFragment fragment = new MatchEditFragment();
+			// fragment.setArguments(arguments);
+			// getSupportFragmentManager().beginTransaction().add(R.id.match_details_container_id,
+			// fragment).commit();
 		}
+		init();
+		setupEventHandlers();
 	}
 
-	// /** Called when the activity is first created. */
-	// @Override
-	// public void onCreate(Bundle savedInstanceState) {
-	// super.onCreate(savedInstanceState);
-	// setContentView(R.layout.match_new_layout);
-	// this.setTitle(selectedTeamName);
-	// // Show the Up button in the action bar.
-	// getActionBar().setDisplayHomeAsUpEnabled(true);
-	//
-	//
-	// this.getActionBar().setSubtitle("New match");
-	// this.bandyService = new BandyServiceImpl(getApplicationContext());
-	// setupEventHandlers();
-	// bundle = getIntent().getExtras();
-	// init();
-	// }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.actionbar_menu_save, menu);
+		return true;
+	}
+
+	/**
+	 * Note that the parent Activity’s onOptionsItemSelected() method is called
+	 * first. Your fragment’s method is called only, when the Activity didn’t
+	 * consume the event! {@inheritDoc}
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// handle item selection
+		CustomLog.e(this.getClass(), item.toString());
+		switch (item.getItemId()) {
+		case R.id.action_cancel:
+			super.onBackPressed();
+			return true;
+		case R.id.action_save:
+			save();
+			Toast.makeText(getApplicationContext(), "Saved Match!", Toast.LENGTH_SHORT).show();
+			super.onBackPressed();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -97,64 +139,46 @@ public class NewMatchActivity extends FragmentActivity {
 		super.onPause();
 	}
 
-	private void setupEventHandlers() {
-		// Match type spinner
-		String[] matchTypeNames = bandyService.getMatchTypes();
-		Spinner matchTypeSpinner = (Spinner) findViewById(R.id.matchTypeSpinnerId);
-		ArrayAdapter<CharSequence> matchTypeAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item,
-				matchTypeNames);
-		matchTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		matchTypeSpinner.setAdapter(matchTypeAdapter);
-		matchTypeSpinner.setOnItemSelectedListener(new MatchTypeOnItemSelectedListener());
-
-		// Home Team spinner
-		String[] homeTeamNames = this.bandyService.getTeamNames("%");
-		Spinner homeTeamsSpinner = (Spinner) findViewById(R.id.matchHomeTeamSpinnerId);
-		ArrayAdapter<CharSequence> homeTeamsAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item,
-				homeTeamNames);
-		homeTeamsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		homeTeamsSpinner.setAdapter(homeTeamsAdapter);
-		homeTeamsSpinner.setOnItemSelectedListener(new HomeTeamOnItemSelectedListener());
-
-		// Away Team spinner
-		String[] awayTeamNames = this.bandyService.getTeamNames("%");
-		Spinner awayTeamsSpinner = (Spinner) findViewById(R.id.matchAwayTeamSpinnerId);
-		ArrayAdapter<CharSequence> awayTeamsAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item,
-				awayTeamNames);
-		awayTeamsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		awayTeamsSpinner.setAdapter(awayTeamsAdapter);
-		awayTeamsSpinner.setOnItemSelectedListener(new AwayTeamOnItemSelectedListener());
-
-		// Referee spinner
-		String[] refereeNames = this.bandyService.getRefereeNames();
-		Spinner refereeSpinner = (Spinner) findViewById(R.id.matchRefereeSpinnerId);
-		ArrayAdapter<CharSequence> refereeAdapter = new ArrayAdapter<CharSequence>(getApplicationContext(), android.R.layout.simple_spinner_item, refereeNames);
-		refereeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		refereeSpinner.setAdapter(refereeAdapter);
-		refereeSpinner.setOnItemSelectedListener(new RefereeOnItemSelectedListener());
-
-		findViewById(R.id.cancel_create_activity_btn).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				returnToParentView();
-			}
-		});
-
-		findViewById(R.id.create_activity_btn).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				createMatch();
-				Toast.makeText(getApplicationContext(), "Created new match!", Toast.LENGTH_SHORT).show();
-				returnToParentView();
-			}
-		});
-
+	private void setInputValue(int id, String value) {
+		EditText inputView = (EditText) findViewById(id);
+		if (inputView != null && value != null) {
+			inputView.setText(value.trim());
+		} else {
+			CustomLog.e(this.getClass(), "No input field found or value is equal to null, for id: " + id + ", value: " + value);
+		}
 	}
 
-	private void returnToParentView() {
-		Intent matchIntent = new Intent(getApplicationContext(), MatchListActivity.class);
-		matchIntent.putExtra(DashboardActivity.ARG_TEAM_NAME, DashboardActivity.DEFAULT_TEAM_NAME);
-		startActivity(matchIntent);
+	protected String getInputValue(int id) {
+		EditText inputView = (EditText) findViewById(id);
+		if (inputView != null) {
+			return inputView.getText().toString().trim();
+		} else {
+			CustomLog.e(this.getClass(), "No input field found for id: " + id);
+		}
+		return null;
+	}
+
+	private void setupEventHandlers() {
+		// Match type
+		String[] matchTypeNames = bandyService.getMatchTypes();
+		ImageButton typeBtn = (ImageButton) findViewById(R.id.matchSelectTypeBtnId);
+		typeBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), matchTypeNames, R.id.matchTypeTxt, false));
+
+		String[] teamNames = this.bandyService.getTeamNames("%");
+		// Home Team
+		ImageButton homeBtn = (ImageButton) findViewById(R.id.matchSelectHomeTeamBtnId);
+		homeBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), teamNames, R.id.matchHomeTeamTxt, false));
+		// Away team
+		ImageButton awayBtn = (ImageButton) findViewById(R.id.matchSelectAwayTeamBtnId);
+		awayBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), teamNames, R.id.matchAwayTeamTxt, false));
+		// Venue
+		String[] venueNames = new String[] { "Bergbanen", "Voldsløkka" };
+		ImageButton venueBtn = (ImageButton) findViewById(R.id.matchSelectVenueBtnId);
+		venueBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), venueNames, R.id.matchVenueTxt, false));
+		// Referee spinner
+		String[] refereeNames = this.bandyService.getRefereeNames();
+		ImageButton refereeBtn = (ImageButton) findViewById(R.id.matchSelectRefereeBtnId);
+		refereeBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), refereeNames, R.id.matchRefereeNameTxt, false));
 	}
 
 	private void init() {
@@ -164,135 +188,28 @@ public class NewMatchActivity extends FragmentActivity {
 		startTime.set(Calendar.MILLISECOND, 0);
 		startTime.set(Calendar.SECOND, 0);
 		startTime.set(Calendar.MINUTE, 0);
-		TextView dateTxtView = (TextView) findViewById(R.id.matchStartDateId);
+		TextView dateTxtView = (TextView) findViewById(R.id.matchStartDateTxt);
 		dateTxtView.setText(Utility.formatTime(System.currentTimeMillis(), "dd.MM.yyy"));
-		TextView startTimeTxtView = (TextView) findViewById(R.id.matchStartTimeId);
+		TextView startTimeTxtView = (TextView) findViewById(R.id.matchStartTimeTxt);
 		startTimeTxtView.setText(Utility.formatTime(startTime.getTimeInMillis(), "HH:mm"));
 	}
 
-	private void createMatch() {
-		TextView startDateTxtView = (TextView) findViewById(R.id.matchStartDateId);
-		String startDate = startDateTxtView.getText().toString();
-		TextView startTimeTxtView = (TextView) findViewById(R.id.matchStartTimeId);
-		Team homeTeam = bandyService.getTeam(selectedHomeTeamName, false);
-		Team awayTeam = bandyService.getTeam(selectedAwayTeamName, false);
+	private void save() {
+		String startDate = getInputValue(R.id.matchStartDateTxt);
+		String startTime = getInputValue(R.id.matchStartTimeTxt);
+		Team team = bandyService.getTeam(teamName, false);
+		Team homeTeam = bandyService.getTeam(getInputValue(R.id.matchHomeTeamTxt), false);
+		Team awayTeam = bandyService.getTeam(getInputValue(R.id.matchAwayTeamTxt), false);
 		Season season = bandyService.getSeason(selectedSeasonPeriod);
-		Match match = new Match(null, season, Utility.timeToDate(startDate + " " + startTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(),
-				homeTeam, homeTeam, awayTeam, selectedVenue, new Referee(this.selectedRefereeName, this.selectedRefereeName), 1);
-
-		int matchId = bandyService.createMatch(match);
-	}
-
-	/**
-	 * Season spinner listener
-	 * 
-	 * @author gunnarro
-	 * 
-	 */
-	public class SeasonOnItemSelectedListener implements OnItemSelectedListener {
-
-		public SeasonOnItemSelectedListener() {
+		MatchTypesEnum matchType = MatchTypesEnum.valueOf(getInputValue(R.id.matchTypeTxt));
+		Referee referee = null;
+		if (getInputValue(R.id.matchRefereeNameTxt) != null) {
+			referee = new Referee(getInputValue(R.id.matchRefereeNameTxt), getInputValue(R.id.matchRefereeNameTxt));
 		}
+		Match match = new Match(null, null, Utility.timeToDate(startDate + " " + startTime, "dd.MM.yyyy hh:mm").getTime(), team, homeTeam, awayTeam,
+				getInputValue(R.id.matchVenueTxt), referee, matchType);
 
-		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			selectedSeasonPeriod = parent.getItemAtPosition(pos).toString();
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-			// Do nothing.
-		}
-	}
-
-	/**
-	 * Team spinner listener
-	 * 
-	 * @author gunnarro
-	 * 
-	 */
-	public class MatchTypeOnItemSelectedListener implements OnItemSelectedListener {
-
-		public MatchTypeOnItemSelectedListener() {
-		}
-
-		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			selectedMatchTypeName = parent.getItemAtPosition(pos).toString();
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-			// Do nothing.
-		}
-	}
-
-	/**
-	 * Team spinner listener
-	 * 
-	 * @author gunnarro
-	 * 
-	 */
-	public class RefereeOnItemSelectedListener implements OnItemSelectedListener {
-
-		public RefereeOnItemSelectedListener() {
-		}
-
-		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			selectedRefereeName = parent.getItemAtPosition(pos).toString();
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-			// Do nothing.
-		}
-	}
-
-	/**
-	 * Team spinner listener
-	 * 
-	 * @author gunnarro
-	 * 
-	 */
-	public class HomeTeamOnItemSelectedListener implements OnItemSelectedListener {
-
-		public HomeTeamOnItemSelectedListener() {
-		}
-
-		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			selectedHomeTeamName = parent.getItemAtPosition(pos).toString();
-			Team team = bandyService.getTeam(selectedHomeTeamName, false);
-			TextView venueeView = (TextView) findViewById(R.id.venueTxtId);
-			venueeView.setText(team.getClub().getStadiumName());
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-			// Do nothing.
-		}
-	}
-
-	/**
-	 * Team spinner listener
-	 * 
-	 * @author gunnarro
-	 * 
-	 */
-	public class AwayTeamOnItemSelectedListener implements OnItemSelectedListener {
-
-		public AwayTeamOnItemSelectedListener() {
-		}
-
-		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			selectedAwayTeamName = parent.getItemAtPosition(pos).toString();
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-			// Do nothing.
-		}
+		int matchId = bandyService.saveMatch(match);
+		CustomLog.d(this.getClass(), "created new match with id : " + matchId);
 	}
 }

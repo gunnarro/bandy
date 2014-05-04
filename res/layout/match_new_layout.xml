@@ -2,217 +2,214 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context=".MatchesActivity" >
-
-    <LinearLayout
-        android:id="@+id/createMatchLayoutId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/matchHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New match"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/holo_blue_dark" />
-
-        <View
-            android:id="@+id/matchSeparatorId"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginBottom="3dp"
-            android:background="@drawable/line_separator" />
-    </LinearLayout>
+    android:layout_height="fill_parent" >
 
     <TableLayout
-        android:id="@+id/tableLayout"
+        android:id="@+id/matchTblId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/createMatchLayoutId"
         android:layout_marginLeft="10dp"
         android:shrinkColumns="*"
         android:stretchColumns="*" >
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
+            android:gravity="left"
+            android:padding="2dip" >
 
             <TextView
-                android:id="@+id/matchTypelbl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Match type"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_blue_light" />
-
-            <Spinner
-                android:id="@+id/matchTypeSpinnerId"
-                android:layout_width="fill_parent"
-                android:layout_gravity="left"
-                android:prompt="@array/match_type_options"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-        
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:id="@+id/matchHomeTeamlbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home team"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_blue_light" />
-
-            <Spinner
-                android:id="@+id/matchHomeTeamSpinnerId"
-                android:layout_width="fill_parent"
-                android:layout_gravity="left"
-                android:prompt="@array/home_team_options"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:id="@+id/matchAwayTeamLbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Away team"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_blue_light" />
-
-            <Spinner
-                android:id="@+id/matchAwayTeamSpinnerId"
-                android:layout_width="fill_parent"
-                android:layout_gravity="left"
-                android:prompt="@array/away_team_options"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:id="@+id/refereeLbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Referee"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_blue_light" />
-
-            <Spinner
-                android:id="@+id/matchRefereeSpinnerId"
-                android:layout_width="fill_parent"
-                android:layout_gravity="left"
-                android:prompt="@array/referee_options"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <TextView
-                android:id="@+id/venuelbl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Venue"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/holo_blue_light" />
-
-            <TextView
-                android:id="@+id/venueTxtId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="none"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:padding="2dip" >
-
-            <TextView
-                android:layout_weight="1"
-                android:maxWidth="25dip"
-                android:padding="2dip"
-                android:text="Date"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/holo_blue_light" />
 
             <EditText
-                android:id="@+id/matchStartDateId"
+                android:id="@+id/matchTypeTxt"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:inputType="text"
+                android:padding="2dip"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/matchSelectTypeBtnId"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:padding="2dip" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/holo_blue_light" />
+
+            <EditText
+                android:id="@+id/matchStartDateTxt"
+                android:layout_width="wrap_content"
                 android:layout_weight="1"
+                android:ems="8"
                 android:gravity="center_horizontal"
                 android:inputType="date"
                 android:padding="2dip"
-                android:text="18.02.2014"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/matchStartTimeTxt"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:ems="5"
+                android:gravity="center_horizontal"
+                android:inputType="time"
+                android:padding="2dip"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
 
         <TableRow
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:padding="2dip" >
+            android:gravity="center_horizontal" >
 
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="2dip"
-                android:text="Start"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Home"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/holo_blue_light" />
 
-            <TextView
-                android:id="@+id/matchStartTimeId"
-                android:layout_width="fill_parent"
+            <EditText
+                android:id="@+id/matchHomeTeamTxt"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/matchSelectHomeTeamBtnId"
+                android:layout_width="wrap_content"
                 android:gravity="center_horizontal"
-                android:onClick="showTimePickerDlg"
-                android:padding="2dip"
-                android:text="1630"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:src="@drawable/arrow_right" />
         </TableRow>
 
         <TableRow
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:padding="2dip" >
+            android:gravity="center_horizontal" >
 
-            <ImageButton
-                android:id="@+id/cancel_create_activity_btn"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/na"
-                android:src="@drawable/table_delete" />
+                android:text="Away"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/holo_blue_light" />
 
-            <ImageButton
-                android:id="@+id/create_activity_btn"
+            <EditText
+                android:id="@+id/matchAwayTeamTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/na"
-                android:src="@drawable/table_add" />
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/matchSelectAwayTeamBtnId"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Venue"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/holo_blue_light" />
+
+            <EditText
+                android:id="@+id/matchVenueTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+           <ImageButton
+                android:id="@+id/matchSelectVenueBtnId"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/referees"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/holo_blue_light" />
+
+            <EditText
+                android:id="@+id/matchRefereeNameTxt"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:inputType="text"
+                android:padding="2dip"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/matchSelectRefereeBtnId"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registered Players"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/holo_blue_light" />
+
+            <EditText
+                android:id="@+id/matchRegisteredPlayersTxt"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:inputType="text"
+                android:padding="2dip"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/matchRegistrerPlayersBtnId"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
         </TableRow>
     </TableLayout>
 

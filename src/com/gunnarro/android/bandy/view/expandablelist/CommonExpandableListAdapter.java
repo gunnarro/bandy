@@ -150,7 +150,7 @@ public class CommonExpandableListAdapter extends BaseExpandableListAdapter {
 		if (!group.isEnabled()) {
 			// ((TableLayout)
 			// convertView.findViewById(R.id.expandableTableLayout)).setBackgroundColor(Color.DKGRAY);
-			((TextView) convertView.findViewById(R.id.activityCompletedId)).setText(ActivityStatusEnum.COMPLETED.toString());
+			((TextView) convertView.findViewById(R.id.activityCompletedId)).setText("X");
 			// ((CheckedTextView)
 			// convertView.findViewById(R.id.rowGroupId)).setBackgroundResource(R.drawable.icon_bandy);
 			// ((TextView)
@@ -161,6 +161,8 @@ public class CommonExpandableListAdapter extends BaseExpandableListAdapter {
 			// convertView.setEnabled(false);
 			// convertView.setActivated(false);
 			CustomLog.e(this.getClass(), "disable: " + group.getHeader());
+		} else {
+			((TextView) convertView.findViewById(R.id.activityCompletedId)).setText("");
 		}
 	}
 

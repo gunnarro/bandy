@@ -20,7 +20,7 @@ public class Club {
 	}
 
 	public Club(String name, String departmentName, String clubNameAbbreviation, String stadiumName, Address address, String homePageUrl) {
-		this(stadiumName, departmentName);
+		this(name, departmentName);
 		this.clubNameAbbreviation = clubNameAbbreviation;
 		this.stadiumName = stadiumName;
 		this.address = address;
@@ -71,7 +71,7 @@ public class Club {
 	@Override
 	public String toString() {
 		return "Club [id=" + id + ", name=" + name + ", departmentName=" + departmentName + ", stadiumName=" + stadiumName + ", clubNameAbbreviation="
-				+ clubNameAbbreviation + "]";
+				+ clubNameAbbreviation + ", homePageUrl=" + homePageUrl + "]";
 	}
 
 }

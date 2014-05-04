@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
@@ -40,16 +41,7 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.team_item_list);
-		clubName = getIntent().getStringExtra(ARG_CLUB_NAME);
-		if (clubName == null) {
-			clubName = DashboardActivity.DEFAULT_CLUB_NAME;
-		}
-
-		teamName = getIntent().getStringExtra(ARG_TEAM_NAME);
-		if (teamName == null) {
-			teamName = DashboardActivity.DEFAULT_TEAM_NAME;
-		}
-
+		getArgs(savedInstanceState);
 		this.setTitle(clubName);
 
 		if (findViewById(R.id.item_detail_container) != null) {
@@ -65,6 +57,23 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 		}
 		// TODO: If exposing deep links into your app, handle intents here.
 		CustomLog.d(this.getClass(), "is Two Pane layout : " + mTwoPane);
+	}
+
+	private void getArgs(Bundle bundle) {
+		if (bundle != null) {
+			clubName = bundle.getString(ARG_CLUB_NAME, null);
+			teamName = bundle.getString(ARG_TEAM_NAME, null);
+		} else {
+			clubName = getIntent().getStringExtra(ARG_CLUB_NAME);
+			teamName = getIntent().getStringExtra(ARG_TEAM_NAME);
+		}
+		if (clubName == null) {
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing club name arg!");
+		}
+		if (teamName == null) {
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing team name arg!");
+		}
+		CustomLog.e(this.getClass(), clubName + "" + teamName);
 	}
 
 	/**

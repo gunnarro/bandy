@@ -19,20 +19,26 @@
             android:padding="2dip" >
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Status"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/holo_blue_light" />
 
-            <Spinner
-                android:id="@+id/matchStatusSpinnerId"
-                android:layout_width="fill_parent"
-                android:layout_gravity="left"
+            <EditText
+                android:id="@+id/matchStatusTxt"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:inputType="text"
+                android:padding="2dip"
+                android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <TextView
+            <ImageButton
+                android:id="@+id/matchSelectStatusBtnId"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-            </TextView>
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
         </TableRow>
 
         <TableRow
@@ -42,6 +48,8 @@
             android:padding="2dip" >
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Start"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/holo_blue_light" />
@@ -90,6 +98,8 @@
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
@@ -106,16 +116,48 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/holo_blue_light" />
 
-            <Spinner
-                android:id="@+id/matchRefereeSpinnerId"
-                android:layout_width="fill_parent"
-                android:layout_gravity="left"
-                android:prompt="@array/referee_options"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <TextView
+            <EditText
+                android:id="@+id/matchRefereeNameTxt"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:inputType="text"
+                android:padding="2dip"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/matchSelectRefereeBtnId"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
+        </TableRow>
+        
+         <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registered Players"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/holo_blue_light" />
+
+            <EditText
+                android:id="@+id/matchRegisteredPlayersTxt"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:inputType="text"
+                android:padding="2dip"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/matchRegistrerPlayersBtnId"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
         </TableRow>
     </TableLayout>
 
@@ -170,7 +212,7 @@
 
             <EditText
                 android:id="@+id/matchGoalsHomeTxt"
-                android:layout_width="wrap_content"
+                android:layout_width="20sp"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:gravity="center_vertical"
@@ -178,18 +220,15 @@
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <TextView
-                android:layout_width="10sp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+            <ImageButton
+                android:id="@+id/matchSelectHomeGoalScorerBtnId"
+                android:layout_width="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="-"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/holo_blue_dark" />
+                android:src="@drawable/table_add" />
 
             <EditText
                 android:id="@+id/matchGoalsAwayTxt"
-                android:layout_width="wrap_content"
+                android:layout_width="10sp"
                 android:layout_height="wrap_content"
                 android:ems="3"
                 android:enabled="false"
@@ -197,35 +236,12 @@
                 android:inputType="number"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
-        </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
-
-            <Spinner
-                android:id="@+id/matchGoalHomePlayersSpinnerId"
-                android:layout_width="fill_parent"
-                android:layout_gravity="left"
-                android:prompt="@array/players_options"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <TextView
-                android:layout_width="10sp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+            <ImageButton
+                android:id="@+id/matchSelectAwayGoalScorerBtnId"
+                android:layout_width="wrap_content"
                 android:gravity="center_horizontal"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/holo_blue_dark" />
-
-            <Spinner
-                android:id="@+id/matchGoalAwayPlayersSpinnerId"
-                android:layout_width="fill_parent"
-                android:layout_gravity="left"
-                android:prompt="@array/players_options"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:src="@drawable/table_add" />
         </TableRow>
     </TableLayout>
 

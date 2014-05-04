@@ -8,8 +8,8 @@ import android.view.MenuItem;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
-import com.gunnarro.android.bandy.view.dialog.ItemSelection;
 import com.gunnarro.android.bandy.view.dialog.DialogSelection.NoticeDialogListener;
+import com.gunnarro.android.bandy.view.dialog.ItemSelection;
 
 /**
  * An activity representing a single Item detail screen. This activity is only
@@ -21,6 +21,7 @@ import com.gunnarro.android.bandy.view.dialog.DialogSelection.NoticeDialogListen
  */
 public class TeamDetailActivity extends FragmentActivity implements NoticeDialogListener {
 
+	private String clubName;
 	private String teamName;
 	private Integer teamId;
 
@@ -49,7 +50,6 @@ public class TeamDetailActivity extends FragmentActivity implements NoticeDialog
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.team_details_container_layout);
-		setTitle("Team Details");
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -66,12 +66,11 @@ public class TeamDetailActivity extends FragmentActivity implements NoticeDialog
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
+			clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
-			setTitle(clubName);
-			getActionBar().setTitle(teamName);
-
 			teamId = getIntent().getIntExtra(DashboardActivity.ARG_TEAM_ID, -1);
+			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
 			arguments.putInt(DashboardActivity.ARG_TEAM_ID, teamId);
 			TeamDetailFragment fragment = new TeamDetailFragment();
 			fragment.setArguments(arguments);
@@ -96,9 +95,12 @@ public class TeamDetailActivity extends FragmentActivity implements NoticeDialog
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit:
+			clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			teamId = getIntent().getIntExtra(DashboardActivity.ARG_TEAM_ID, -1);
 			Bundle arguments = new Bundle();
+			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
 			arguments.putInt(DashboardActivity.ARG_TEAM_ID, teamId);
 			TeamEditFragment fragment = new TeamEditFragment();
 			fragment.setArguments(arguments);

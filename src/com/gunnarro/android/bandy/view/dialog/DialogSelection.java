@@ -1,7 +1,5 @@
 package com.gunnarro.android.bandy.view.dialog;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,17 +14,18 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 
 	public final static String DIALOG_ARG_ITEMS_KEY = "dialog_items";
 	public final static String DIALOG_ARG_NOTICE_FIELD_ID_KEY = "notice_field_id";
+	public final static String DIALOG_ARG_IS_MULTI_SELECTION_KEY = "dialog_is_multi_selection";
 	private boolean isMultiSelection = false;
 	private String[] items = null;
 	private int noticeFieldId;
-	private String selectedItem;
+	private String[] selectedItems = new String[1];
 
 	public String getSelectedItem() {
-		return selectedItem;
+		return selectedItems[0];
 	}
 
-	public List<String> getSelectedItems() {
-		return null;
+	public String[] getSelectedItems() {
+		return selectedItems;
 	}
 
 	public int getInputFieldId() {
@@ -45,7 +44,7 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 	}
 
 	// Use this instance of the interface to deliver action events
-	NoticeDialogListener mListener;
+	private NoticeDialogListener noticeDlgListener;
 
 	/**
 	 * Default constructor
@@ -62,7 +61,7 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 		try {
 			// Instantiate the NoticeDialogListener so we can send events to the
 			// host
-			mListener = (NoticeDialogListener) activity;
+			noticeDlgListener = (NoticeDialogListener) activity;
 		} catch (ClassCastException e) {
 			// The activity doesn't implement the interface, throw exception
 			throw new ClassCastException(activity.toString() + " must implement NoticeDialogListener");
@@ -85,13 +84,20 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 		}
 		noticeFieldId = getArguments().getInt(DIALOG_ARG_NOTICE_FIELD_ID_KEY);
 
+		if (getArguments().containsKey(DIALOG_ARG_IS_MULTI_SELECTION_KEY)) {
+			isMultiSelection = true;
+		}
+		selectedItems = new String[items.length];
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
 		if (isMultiSelection) {
-			builder.setTitle("Selection").setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+			boolean[] selected = new boolean[items.length];
+			for (int i = 0; i < items.length - 1; i++) {
+				selected[i] = true;
+			}
+			builder.setTitle("Selection").setMultiChoiceItems(items, selected, new DialogInterface.OnMultiChoiceClickListener() {
 				public void onClick(DialogInterface dialog, int pos, boolean isChecked) {
 					CustomLog.e(this.getClass(), items[pos]);
-					selectedItem = items[pos];
+					selectedItems[pos] = items[pos];
 				}
 			});
 
@@ -99,19 +105,19 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 			builder.setTitle("Selection").setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int pos) {
-					selectedItem = items[pos];
+					selectedItems[0] = items[pos];
 				}
 			});
 		}
 
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				mListener.onDialogPositiveClick(DialogSelection.this);
+				noticeDlgListener.onDialogPositiveClick(DialogSelection.this);
 			}
 		});
 		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				mListener.onDialogNegativeClick(DialogSelection.this);
+				noticeDlgListener.onDialogNegativeClick(DialogSelection.this);
 			}
 		});
 

@@ -49,7 +49,7 @@ public class TrainingExpandableListAdapter extends CommonExpandableListAdapter {
 					} else {
 						bandyService.unRegistrerTraining(childItem.getId(), group.getId());
 					}
-					notifyDataSetChanged();
+					// notifyDataSetChanged();
 				} catch (ApplicationException ae) {
 					CustomLog.e(this.getClass(), "exception=" + ae.getMessage());
 				}

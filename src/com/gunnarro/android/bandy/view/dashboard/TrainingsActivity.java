@@ -17,7 +17,6 @@ import android.widget.ExpandableListView;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.activity.Activity.ActivityTypesEnum;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.view.list.Group;
 import com.gunnarro.android.bandy.domain.view.list.Item;
@@ -45,10 +44,12 @@ public class TrainingsActivity extends DashboardActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.training_list_layout);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
-		this.setTitle(ActivityTypesEnum.Training.name() + " " + teamName);
+		this.setTitle(teamName);
 		this.bandyService = new BandyServiceImpl(getApplicationContext());
-		populateList(teamName);
+		int size = populateList(teamName);
+		getActionBar().setSubtitle("Number of trainings: " + size);
 		ExpandableListView listView = (ExpandableListView) findViewById(R.id.training_expandable_listView);
 		adapter = new TrainingExpandableListAdapter(this, groups, bandyService, MIN_NUMBER_OF_SIGNED_PLAYERS);
 		listView.setAdapter(adapter);
@@ -81,31 +82,36 @@ public class TrainingsActivity extends DashboardActivity {
 		return true;
 	}
 
-	private void populateList(String teamName) {
-		Team team = bandyService.getTeam(teamName, true);
-		List<Training> trainingList = this.bandyService.getTrainingList(team.getId(), null);
-		List<Item> playerList = this.bandyService.getPlayersAsItemList(team.getId());
-		int i = 0;
-		for (Training training : trainingList) {
-			// List<Item> playerSignedList =
-			// bandyService.getTrainingRegistreredPlayerList(team.getId(),
-			// training.getId());
-			Set<Item> itemSet = new HashSet<Item>();
-			// itemSet.addAll(playerSignedList);
-			itemSet.addAll(playerList);
-			ArrayList<Item> players = new ArrayList<Item>(itemSet);
-			Collections.sort(players);
-			String header = Utility.formatTime(training.getStartTime(), Utility.DATE_TIME_PATTERN) + " - "
-					+ Utility.formatTime(training.getEndTime(), Utility.TIME_PATTERN);
-			Group group = new Group(training.getId(), header, !training.isFinished(), players);
-			group.setSubHeader1(training.getName());
-			group.setSubHeader2(training.getVenue());
-			groups.append(i, group);
-			i++;
+	private int populateList(String teamName) {
+		List<Training> trainingList = new ArrayList<Training>();
+		try {
+			Team team = bandyService.getTeam(teamName, true);
+			trainingList = this.bandyService.getTrainingList(team.getId(), null);
+			List<Item> playerList = this.bandyService.getPlayersAsItemList(team.getId());
+			int i = 0;
+			for (Training training : trainingList) {
+				// List<Item> playerSignedList =
+				// bandyService.getTrainingRegistreredPlayerList(team.getId(),
+				// training.getId());
+				Set<Item> itemSet = new HashSet<Item>();
+				// itemSet.addAll(playerSignedList);
+				itemSet.addAll(playerList);
+				ArrayList<Item> players = new ArrayList<Item>(itemSet);
+				Collections.sort(players);
+				String header = Utility.formatTime(training.getStartTime(), Utility.DATE_TIME_PATTERN) + " - "
+						+ Utility.formatTime(training.getEndTime(), Utility.TIME_PATTERN) + " " + !training.isFinished();
+				Group group = new Group(training.getId(), header, !training.isFinished(), players);
+				group.setSubHeader1(training.getName());
+				group.setSubHeader2(training.getVenue());
+				groups.append(i, group);
+				i++;
+			}
+		} catch (Exception e) {
+			CustomLog.e(this.getClass(), e.getMessage());
 		}
 		// finally, update the action bar sub title with number of players for
 		// selected team
-		getActionBar().setSubtitle("Number of trainings: " + trainingList.size());
+		return trainingList.size();
 	}
 
 } // end class

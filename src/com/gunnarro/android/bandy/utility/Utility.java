@@ -68,19 +68,6 @@ public class Utility {
 		return Integer.valueOf(time.split(":")[1]);
 	}
 
-	public static String createSearch(String value) {
-		if (value == null || value.isEmpty()) {
-			return "";
-		}
-		String filter = "^" + value.replace("*", "") + ".*";
-		if (value.startsWith("+")) {
-			filter = "^\\" + value.replace("*", "") + ".*";
-		} else if (value.startsWith("hidden")) {
-			filter = "[0-9,+]{8,19}";
-		}
-		return filter;
-	}
-
 	public static String formatTime(long time, String pattern) {
 		String p = pattern;
 		if (p == null) {

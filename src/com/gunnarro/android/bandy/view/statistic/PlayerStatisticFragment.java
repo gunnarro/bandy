@@ -43,6 +43,7 @@ public class PlayerStatisticFragment extends Fragment {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.player_statistic_layout, container, false);
 		this.bandyService = new BandyServiceImpl(getActivity());
+
 		Team team = bandyService.getTeam(DashboardActivity.DEFAULT_TEAM_NAME, false);
 		updateData(view, team);
 		return view;

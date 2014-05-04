@@ -19,6 +19,7 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  */
 public class PlayerDetailActivity extends FragmentActivity {
 
+	private String clubName;
 	private String teamName;
 	private Integer playerId;
 
@@ -43,12 +44,11 @@ public class PlayerDetailActivity extends FragmentActivity {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
+			clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
-			setTitle(clubName);
-			getActionBar().setTitle(teamName);
-
 			playerId = getIntent().getIntExtra(DashboardActivity.ARG_PLAYER_ID, -1);
+			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
 			arguments.putInt(DashboardActivity.ARG_PLAYER_ID, playerId);
 			PlayerDetailFragment fragment = new PlayerDetailFragment();
 			fragment.setArguments(arguments);
@@ -64,9 +64,12 @@ public class PlayerDetailActivity extends FragmentActivity {
 		CustomLog.e(this.getClass(), item.toString());
 		switch (item.getItemId()) {
 		case R.id.action_edit:
+			Bundle arguments = new Bundle();
+			clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			playerId = getIntent().getIntExtra(DashboardActivity.ARG_PLAYER_ID, -1);
-			Bundle arguments = new Bundle();
+			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
 			arguments.putInt(DashboardActivity.ARG_PLAYER_ID, playerId);
 			PlayerEditFragment fragment = new PlayerEditFragment();
 			fragment.setArguments(arguments);

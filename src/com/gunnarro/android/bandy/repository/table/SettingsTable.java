@@ -7,7 +7,6 @@ public class SettingsTable {
 
 	public static String DATA_FILE_URL_KEY = "data_file_url";
 	public static String DATA_FILE_VERSION_KEY = "data_file_version";
-	public static String DATA_FILE_RELEASE_DATE_KEY = "data_file_release_date";
 	public static String DATA_FILE_LAST_UPDATED_KEY = "data_file_last_updated";
 	public static String MAIL_ACCOUNT_KEY = "mail_account";
 	public static String MAIL_ACCOUNT_PWD_KEY = "mail_account_pwd";

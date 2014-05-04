@@ -183,33 +183,5 @@
         android:stretchColumns="*" >
     </TableLayout>
 
-</RelativeLayout><!--
-    <TextView
-        android:id="@+id/matchPlayersHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/matchTable"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/players"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white" />
-
-    <View
-        android:id="@+id/matchPlayersSeparator"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_below="@+id/matchPlayersHeader"
-        android:background="@drawable/line_separator" />
-
-    <ListView
-        android:id="@+id/matchPlayerList"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/matchPlayersSeparator"
-        android:choiceMode="none"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#aabbddcc" >
-    </ListView>
--->
+</RelativeLayout>
 

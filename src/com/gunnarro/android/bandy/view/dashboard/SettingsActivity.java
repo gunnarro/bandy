@@ -1,13 +1,7 @@
 package com.gunnarro.android.bandy.view.dashboard;
 
-import java.net.URI;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -16,12 +10,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
-import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.service.impl.DataLoader;
-import com.gunnarro.android.bandy.service.impl.DownloadService;
-import com.gunnarro.android.bandy.utility.DownloadFileTask;
 import com.gunnarro.android.bandy.utility.Utility;
 
 public class SettingsActivity extends DashboardActivity {

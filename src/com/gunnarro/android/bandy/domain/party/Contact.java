@@ -1,5 +1,6 @@
 package com.gunnarro.android.bandy.domain.party;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.gunnarro.android.bandy.domain.Team;
@@ -81,6 +82,15 @@ public class Contact {
 
 	public List<RoleTypesEnum> getRoles() {
 		return roles;
+	}
+
+	public void addRole(RoleTypesEnum newRole) {
+		if (newRole != null) {
+			if (roles == null) {
+				roles = new ArrayList<RoleTypesEnum>();
+			}
+			roles.add(newRole);
+		}
 	}
 
 	public String getFirstName() {

@@ -41,9 +41,6 @@ public class PlayerEditFragment extends CommonFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setHasOptionsMenu(true);
-		if (getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
-			teamName = getArguments().getString(DashboardActivity.ARG_TEAM_NAME);
-		}
 		if (getArguments().containsKey(DashboardActivity.ARG_PLAYER_ID)) {
 			playerId = getArguments().getInt(DashboardActivity.ARG_PLAYER_ID);
 		}
@@ -62,7 +59,6 @@ public class PlayerEditFragment extends CommonFragment {
 		if (playerId != null) {
 			player = this.bandyService.getPlayer(playerId);
 			init(rootView);
-			getActivity().getActionBar().setSubtitle(player.getTeam().getName());
 		}
 		return rootView;
 	}
@@ -108,6 +104,7 @@ public class PlayerEditFragment extends CommonFragment {
 			setInputValue(rootView, R.id.playerMobileNumberTxt, player.getMobileNumber());
 			setInputValue(rootView, R.id.playerEmailAddressTxt, player.getEmailAddress());
 			setInputValue(rootView, R.id.playerSchoolNameTxt, player.getSchoolName());
+			setGender(rootView, player.getGender());
 			if (player.getAddress() != null) {
 				setInputValue(rootView, R.id.playerStreetNameTxt, player.getAddress().getStreetName());
 				setInputValue(rootView, R.id.playerStreetNumberTxt, player.getAddress().getStreetNumber());
@@ -116,6 +113,8 @@ public class PlayerEditFragment extends CommonFragment {
 				setInputValue(rootView, R.id.playerCityTxt, player.getAddress().getCity());
 				setInputValue(rootView, R.id.playerCountryTxt, player.getAddress().getCountry());
 			}
+		} else {
+			setGender(rootView, "Male");
 		}
 	}
 

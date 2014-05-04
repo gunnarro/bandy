@@ -1,7 +1,6 @@
 package com.gunnarro.android.bandy.view.contactdetailflow;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,17 +18,18 @@ import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
+import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
-import com.gunnarro.android.bandy.view.dialog.DialogSelection;
 
 public class ContactEditFragment extends CommonFragment {
 
 	private BandyService bandyService;
 	private Integer contactId;
 	private Contact contact;
+	private String selectedRoleName;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -45,9 +45,6 @@ public class ContactEditFragment extends CommonFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setHasOptionsMenu(true);
-		if (getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
-			teamName = getArguments().getString(DashboardActivity.ARG_TEAM_NAME);
-		}
 		if (getArguments().containsKey(DashboardActivity.ARG_CONTACT_ID)) {
 			contactId = getArguments().getInt(DashboardActivity.ARG_CONTACT_ID);
 		}
@@ -104,23 +101,13 @@ public class ContactEditFragment extends CommonFragment {
 	}
 
 	private void setupEventhandlers(View rootView) {
-		String[] activeRoles = { "select role", "selected role" };
+		String[] activeRoles = bandyService.getRoleTypeNames();
 		Spinner roleSpinner = (Spinner) rootView.findViewById(R.id.contactRoleSpinner);
 		ArrayAdapter<CharSequence> roleAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
 				activeRoles);
 		roleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		roleSpinner.setAdapter(roleAdapter);
 		roleSpinner.setOnItemSelectedListener(new RoleOnItemSelectedListener());
-	}
-
-	/**
-	 * 
-	 * @param view
-	 */
-	public void onClickRoleSelection(View view) {
-		FragmentManager fragmentManager = getFragmentManager();
-		DialogSelection dialog = new DialogSelection();
-		dialog.show(fragmentManager, "tagSelection");
 	}
 
 	private void init(View rootView) {
@@ -130,6 +117,7 @@ public class ContactEditFragment extends CommonFragment {
 			setInputValue(rootView, R.id.contactLastNameTxt, contact.getLastName());
 			setInputValue(rootView, R.id.contactMobileNumberTxt, contact.getMobileNumber());
 			setInputValue(rootView, R.id.contactEmailAddressTxt, contact.getEmailAddress());
+			setGender(rootView, contact.getGender());
 			if (contact.getAddress() != null) {
 				setInputValue(rootView, R.id.contactStreetNameTxt, contact.getAddress().getStreetName());
 				setInputValue(rootView, R.id.contactStreetNumberTxt, contact.getAddress().getStreetNumber());
@@ -138,6 +126,8 @@ public class ContactEditFragment extends CommonFragment {
 				setInputValue(rootView, R.id.contactCityTxt, contact.getAddress().getCity());
 				setInputValue(rootView, R.id.contactCountryTxt, contact.getAddress().getCountry());
 			}
+		} else {
+			setGender(rootView, "Male");
 		}
 	}
 
@@ -169,6 +159,7 @@ public class ContactEditFragment extends CommonFragment {
 			contact.getAddress().setCity(city);
 			contact.getAddress().setPostalCode(postalCode);
 			contact.getAddress().setCountry(country);
+			contact.addRole(RoleTypesEnum.valueOf(selectedRoleName));
 		}
 		contact.setEmailAddress(emailAddress);
 		contact.setMobileNumber(mobileNumber);
@@ -186,7 +177,7 @@ public class ContactEditFragment extends CommonFragment {
 
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			onClickRoleSelection(view);
+			selectedRoleName = parent.getItemAtPosition(pos).toString();
 		}
 
 		@Override

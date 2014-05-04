@@ -48,7 +48,7 @@ public class MultiLineArrayAdapter extends ArrayAdapter<MultiLineItem> {
 				viewHolder.header = (TextView) rowView.findViewById(R.id.lineHeaderId);
 				viewHolder.subHeader1 = (TextView) rowView.findViewById(R.id.lineSubHeader1Id);
 				viewHolder.subHeader2 = (TextView) rowView.findViewById(R.id.lineSubHeader2Id);
-				if (!item.isEnabled()) {
+				if (item.isEnabled()) {
 					viewHolder.header.setTextColor(Color.GRAY);
 					viewHolder.subHeader1.setTextColor(Color.GRAY);
 					viewHolder.subHeader2.setTextColor(Color.GRAY);

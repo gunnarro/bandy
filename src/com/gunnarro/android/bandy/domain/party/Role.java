@@ -1,6 +1,5 @@
 package com.gunnarro.android.bandy.domain.party;
 
-
 public class Role {
 
 	public enum RoleTypesEnum {
@@ -22,6 +21,7 @@ public class Role {
 			}
 			return names;
 		}
+
 	}
 
 	private int id;

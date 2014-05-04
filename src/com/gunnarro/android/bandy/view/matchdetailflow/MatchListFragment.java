@@ -15,6 +15,7 @@ import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.view.list.MultiLineItem;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.adapter.MultiLineArrayAdapter;
@@ -91,20 +92,20 @@ public class MatchListFragment extends ListFragment {
 		if (this.bandyService == null) {
 			this.bandyService = new BandyServiceImpl(getActivity());
 		}
-		String teamName = DashboardActivity.DEFAULT_TEAM_NAME;
+		String teamName = null;
 		if (savedInstanceState != null) {
 			teamName = savedInstanceState.getString(DashboardActivity.ARG_TEAM_NAME, null);
 		} else if (getArguments() != null && getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
 			teamName = getArguments().getString(DashboardActivity.ARG_TEAM_NAME, null);
 		} else {
-			CustomLog.d(this.getClass(), "No team id argument found! use teamName=" + teamName);
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing team name attribute!");
 		}
 		this.itemList = getMatchItemList(teamName);
 		CustomLog.d(this.getClass(), "items:" + this.itemList.size());
 		setListAdapter(new MultiLineArrayAdapter(getActivity(), this.itemList));
-		// finally, update the action bar sub title with number of players for
+		// finally, update the action bar sub title with number of matches for
 		// selected team
-		getActivity().getActionBar().setSubtitle("Number of matches: " + itemList.size());
+		getActivity().getActionBar().setSubtitle(teamName + ", Matches: " + itemList.size());
 	}
 
 	/**
@@ -113,18 +114,6 @@ public class MatchListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		// Must be done before setAdapter, and after the content view is created
-		// View header =
-		// getActivity().getLayoutInflater().inflate(R.layout.list_header,
-		// null);
-		// View footer =
-		// getActivity().getLayoutInflater().inflate(R.layout.list_footer,
-		// null);
-		// getListView().addHeaderView(header);
-		// getListView().addFooterView(footer);
-		// setListAdapter(new ArrayAdapter<Item>(getActivity(),
-		// android.R.layout.simple_list_item_activated_1, android.R.id.text1,
-		// this.itemList));
 	}
 
 	/**
@@ -198,13 +187,21 @@ public class MatchListFragment extends ListFragment {
 	}
 
 	private List<MultiLineItem> getMatchItemList(String teamName) {
-		Team team = bandyService.getTeam(teamName, true);
-		List<Match> matchList = this.bandyService.getMatchList(team.getId(), Calendar.YEAR);
 		List<MultiLineItem> matches = new ArrayList<MultiLineItem>();
-		for (Match match : matchList) {
-			MultiLineItem item = new MultiLineItem(match.getId(), Utility.formatTime(match.getStartTime(), Utility.DATE_TIME_PATTERN), match.getTeamVersus(),
-					match.getResult(), match.isPlayed());
-			matches.add(item);
+		try {
+			Team team = bandyService.getTeam(teamName, true);
+			List<Match> matchList = this.bandyService.getMatchList(team.getId(), Calendar.YEAR);
+			for (Match match : matchList) {
+				String matchInfo = match.getResult();
+				if (!match.isPlayed()) {
+					matchInfo = match.getVenue() + " (" + match.getNumberOfSignedPlayers() + "/" + team.getPlayerItemList().size() + ")";
+				}
+				MultiLineItem item = new MultiLineItem(match.getId(), Utility.formatTime(match.getStartTime(), Utility.DATE_TIME_PATTERN),
+						match.getTeamVersus(), matchInfo, match.isPlayed());
+				matches.add(item);
+			}
+		} catch (Exception e) {
+			CustomLog.e(this.getClass(), e.getMessage());
 		}
 		return matches;
 	}

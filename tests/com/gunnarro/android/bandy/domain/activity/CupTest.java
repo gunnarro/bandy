@@ -14,6 +14,5 @@ public class CupTest extends TestCase {
 		assertEquals(ActivityTypesEnum.Cup.name(), cup.getType());
 		assertEquals("2013/2014", cup.getSeason().getPeriod());
 		assertEquals(ActivityStatusEnum.BEGIN, cup.getStatus());
-		assertFalse(cup.isFinished());
 	}
 }

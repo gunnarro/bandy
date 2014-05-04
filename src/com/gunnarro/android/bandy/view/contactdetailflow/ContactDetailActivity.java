@@ -2,15 +2,12 @@ package com.gunnarro.android.bandy.view.contactdetailflow;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
-import com.gunnarro.android.bandy.view.dialog.DialogSelection;
 
 /**
  * An activity representing a single Item detail screen. This activity is only
@@ -22,6 +19,7 @@ import com.gunnarro.android.bandy.view.dialog.DialogSelection;
  */
 public class ContactDetailActivity extends FragmentActivity {
 
+	private String clubName;
 	private String teamName;
 	private Integer contactId;
 
@@ -29,7 +27,6 @@ public class ContactDetailActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.contact_details_container_layout);
-		setTitle("Contact Details");
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -46,12 +43,11 @@ public class ContactDetailActivity extends FragmentActivity {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
+			clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
-			setTitle(clubName);
-			getActionBar().setTitle(teamName);
-
 			contactId = getIntent().getIntExtra(DashboardActivity.ARG_CONTACT_ID, -1);
+			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
 			arguments.putInt(DashboardActivity.ARG_CONTACT_ID, contactId);
 			ContactDetailFragment fragment = new ContactDetailFragment();
 			fragment.setArguments(arguments);
@@ -78,8 +74,11 @@ public class ContactDetailActivity extends FragmentActivity {
 		switch (item.getItemId()) {
 		case R.id.action_edit:
 			Bundle arguments = new Bundle();
+			clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			contactId = getIntent().getIntExtra(DashboardActivity.ARG_CONTACT_ID, -1);
+			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
 			arguments.putInt(DashboardActivity.ARG_CONTACT_ID, contactId);
 			ContactEditFragment fragment = new ContactEditFragment();
 			fragment.setArguments(arguments);

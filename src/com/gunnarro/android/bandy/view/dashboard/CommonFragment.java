@@ -25,6 +25,8 @@ public class CommonFragment extends Fragment {
 		if (getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
 			teamName = getArguments().getString(DashboardActivity.ARG_TEAM_NAME);
 		}
+		getActivity().getActionBar().setTitle(clubName);
+		getActivity().getActionBar().setSubtitle(teamName);
 	}
 
 	protected String getInputValue(int id) {
@@ -75,11 +77,15 @@ public class CommonFragment extends Fragment {
 			RadioButton femaleRadioBtn = (RadioButton) rootView.findViewById(R.id.femaleRadioBtn);
 			RadioButton maleRadioBtn = (RadioButton) rootView.findViewById(R.id.maleRadioBtn);
 			if (gender.startsWith("F")) {
+				femaleRadioBtn.setSelected(true);
 				femaleRadioBtn.setChecked(true);
 				maleRadioBtn.setChecked(false);
+				maleRadioBtn.setSelected(false);
 			} else {
+				femaleRadioBtn.setSelected(false);
 				femaleRadioBtn.setChecked(false);
 				maleRadioBtn.setChecked(true);
+				maleRadioBtn.setSelected(true);
 			}
 		}
 	}

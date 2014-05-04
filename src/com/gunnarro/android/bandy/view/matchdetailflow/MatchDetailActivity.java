@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.dialog.DialogSelection.NoticeDialogListener;
+import com.gunnarro.android.bandy.view.dialog.ItemSelection;
 
 /**
  * An activity representing a single Item detail screen. This activity is only
@@ -17,10 +19,31 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  * This activity is mostly just a 'shell' activity containing nothing more than
  * a {@link MatchDetailFragment}.
  */
-public class MatchDetailActivity extends FragmentActivity {
+public class MatchDetailActivity extends FragmentActivity implements NoticeDialogListener {
 
 	private String teamName;
 	private Integer matchId;
+
+	// **********************************************************************
+	// NoticeDialogListener Methods
+	// **********************************************************************
+	// The dialog fragment receives a reference to this Activity through the
+	// Fragment.onAttach() callback, which it uses to call the following methods
+	// defined by the NoticeDialogFragment.NoticeDialogListener interface
+	@Override
+	public void onDialogPositiveClick(ItemSelection dialog) {
+		// User touched the dialog's positive button
+		// setInputValue(getView(), R.id.teamCoachTxt, dialog.getTag());
+		MatchEditFragment matchEditFragment = (MatchEditFragment) getSupportFragmentManager().findFragmentById(R.id.match_details_container_id);
+		matchEditFragment.updateSelectedField(dialog.getSelectedItems(), dialog.getInputFieldId());
+	}
+
+	@Override
+	public void onDialogNegativeClick(ItemSelection dialog) {
+		// User touched the dialog's negative button
+	}
+
+	// **********************************************************************
 
 	/**
 	 * {@inheritDoc}
@@ -46,8 +69,13 @@ public class MatchDetailActivity extends FragmentActivity {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
+			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			setTitle(clubName);
+			getActionBar().setSubtitle(teamName);
 			matchId = getIntent().getIntExtra(DashboardActivity.ARG_MATCH_ID, -1);
+			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
 			arguments.putInt(DashboardActivity.ARG_MATCH_ID, matchId);
 			MatchEditFragment fragment = new MatchEditFragment();
 			fragment.setArguments(arguments);

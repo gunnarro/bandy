@@ -46,11 +46,10 @@ public class NewTeamActivity extends FragmentActivity implements NoticeDialogLis
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
-			setTitle(clubName);
-			getActionBar().setTitle("New Team");
 			Bundle arguments = new Bundle();
 			TeamEditFragment fragment = new TeamEditFragment();
 			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+			arguments.putString(DashboardActivity.ARG_TEAM_NAME, "New Team");
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.team_details_container_id, fragment).commit();
 		}

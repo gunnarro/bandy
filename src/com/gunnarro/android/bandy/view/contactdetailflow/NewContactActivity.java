@@ -4,15 +4,20 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 public class NewContactActivity extends FragmentActivity {
+
+	private String clubName;
+	private String teamName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.contact_details_container_layout);
-		setTitle("New Contact");
+		getArgs(savedInstanceState);
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -25,19 +30,40 @@ public class NewContactActivity extends FragmentActivity {
 		//
 		// http://developer.android.com/guide/components/fragments.html
 		//
-		if (savedInstanceState == null) {
-			// Create the detail fragment and add it to the activity
-			// using a fragment transaction.
-			String clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
-			String teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
-			setTitle(clubName);
-			getActionBar().setTitle(teamName);
-			Bundle arguments = new Bundle();
-			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
-			ContactEditFragment fragment = new ContactEditFragment();
-			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.contact_details_container_id, fragment).commit();
-		}
+		// if (savedInstanceState == null) {
+		// Create the detail fragment and add it to the activity
+		// using a fragment transaction.
+		// String clubName =
+		// getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
+		// String teamName =
+		// getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+		Bundle arguments = new Bundle();
+		arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+		arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
+		ContactEditFragment fragment = new ContactEditFragment();
+		fragment.setArguments(arguments);
+		getSupportFragmentManager().beginTransaction().replace(R.id.contact_details_container_id, fragment).commit();
+		// }
 	}
 
+	private void getArgs(Bundle bundle) {
+		if (bundle != null) {
+			clubName = bundle.getString(DashboardActivity.ARG_CLUB_NAME, null);
+			teamName = bundle.getString(DashboardActivity.ARG_TEAM_NAME, null);
+			CustomLog.e(this.getClass(), clubName + ", " + teamName);
+		}
+
+		if (clubName == null || teamName == null) {
+			clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
+			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			CustomLog.e(this.getClass(), clubName + ", " + teamName);
+		}
+		CustomLog.e(this.getClass(), clubName + ", " + teamName);
+		if (clubName == null) {
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing club name arg!");
+		}
+		if (teamName == null) {
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing team name arg!");
+		}
+	}
 }

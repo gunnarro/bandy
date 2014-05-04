@@ -14,20 +14,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.activity.Match;
-import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
-import com.gunnarro.android.bandy.view.dashboard.ViewUtils;
 
 /**
  * A fragment representing a single Item detail screen. This fragment is either
@@ -62,7 +59,6 @@ public class MatchDetailFragment extends Fragment {
 			this.bandyService = new BandyServiceImpl(rootView.getContext());
 		}
 		Match match = this.bandyService.getMatch(matchId);
-		getActivity().setTitle(match.getTeamVersus());
 		updateMatchDetails(rootView, match);
 		// Do not show the edit options menu if the match is finished.
 		// FIXME

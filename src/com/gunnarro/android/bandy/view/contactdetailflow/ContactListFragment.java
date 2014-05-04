@@ -90,20 +90,21 @@ public class ContactListFragment extends ListFragment {
 		if (this.bandyService == null) {
 			this.bandyService = new BandyServiceImpl(getActivity());
 		}
-		String teamName = DashboardActivity.DEFAULT_TEAM_NAME;
+		String teamName = null;
 		if (savedInstanceState != null) {
 			teamName = savedInstanceState.getString(DashboardActivity.ARG_TEAM_NAME, null);
 		} else if (getArguments() != null && getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
 			teamName = getArguments().getString(DashboardActivity.ARG_TEAM_NAME, null);
 		} else {
-			CustomLog.d(this.getClass(), "No team id argument found! use teamName=" + teamName);
+			CustomLog.e(this.getClass(), "No team id argument found! use teamName=" + teamName);
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing team name attribute!");
 		}
 		this.itemList = getContactNamesAsItemList(teamName);
 		CustomLog.d(this.getClass(), "items:" + this.itemList.size());
 		setListAdapter(new ArrayAdapter<Item>(getActivity(), R.layout.custom_checked_list_item, android.R.id.text1, this.itemList));
 		// finally, update the action bar sub title with number of players for
 		// selected team
-		getActivity().getActionBar().setSubtitle("Number of contacts: " + itemList.size());
+		getActivity().getActionBar().setSubtitle(teamName + ", contacts: " + itemList.size());
 	}
 
 	/**

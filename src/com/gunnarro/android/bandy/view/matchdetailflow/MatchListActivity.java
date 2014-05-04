@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
-import com.gunnarro.android.bandy.domain.activity.Activity.ActivityTypesEnum;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
@@ -28,6 +28,7 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  */
 public class MatchListActivity extends DashboardActivity implements MatchListFragment.Callbacks {
 
+	private String clubName;
 	private String teamName;
 
 	/**
@@ -40,15 +41,13 @@ public class MatchListActivity extends DashboardActivity implements MatchListFra
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.match_item_list);
-		teamName = getIntent().getStringExtra(ARG_TEAM_NAME);
-		if (teamName == null) {
-			teamName = DashboardActivity.DEFAULT_TEAM_NAME;
-		}
-		this.setTitle(ActivityTypesEnum.Match.name() + " " + teamName);
+		getArgs(savedInstanceState);
+		this.setTitle(clubName);
 
 		CustomLog.d(this.getClass(), "onCreate state: " + savedInstanceState);
 		if (savedInstanceState == null) {
 			Bundle arguments = new Bundle();
+			arguments.putString(ARG_CLUB_NAME, clubName);
 			arguments.putString(ARG_TEAM_NAME, teamName);
 			MatchListFragment fragment = new MatchListFragment();
 			fragment.setArguments(arguments);
@@ -58,6 +57,22 @@ public class MatchListActivity extends DashboardActivity implements MatchListFra
 		CustomLog.d(this.getClass(), "is Two Pane layout : " + mTwoPane);
 	}
 
+	private void getArgs(Bundle bundle) {
+		if (bundle != null) {
+			clubName = bundle.getString(ARG_CLUB_NAME, null);
+			teamName = bundle.getString(ARG_TEAM_NAME, null);
+		} else {
+			clubName = getIntent().getStringExtra(ARG_CLUB_NAME);
+			teamName = getIntent().getStringExtra(ARG_TEAM_NAME);
+		}
+		if (clubName == null) {
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing club name arg!");
+		}
+		if (teamName == null) {
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing team name arg!");
+		}
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -75,7 +90,10 @@ public class MatchListActivity extends DashboardActivity implements MatchListFra
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_new:
-			startActivity(new Intent(getApplicationContext(), NewMatchActivity.class));
+			Intent detailIntent = new Intent(this, NewMatchActivity.class);
+			detailIntent.putExtra(ARG_CLUB_NAME, clubName);
+			detailIntent.putExtra(ARG_TEAM_NAME, teamName);
+			startActivity(detailIntent);
 			return true;
 		default:
 			// startActivity(new Intent(getApplicationContext(),
@@ -97,6 +115,7 @@ public class MatchListActivity extends DashboardActivity implements MatchListFra
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this, MatchDetailActivity.class);
+			detailIntent.putExtra(ARG_CLUB_NAME, clubName);
 			detailIntent.putExtra(ARG_TEAM_NAME, teamName);
 			detailIntent.putExtra(DashboardActivity.ARG_MATCH_ID, id);
 			startActivity(detailIntent);

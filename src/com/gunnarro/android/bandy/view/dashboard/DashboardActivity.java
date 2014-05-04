@@ -39,17 +39,39 @@ import com.gunnarro.android.bandy.view.teamdetailflow.TeamListActivity;
  * onClick methods for clicks on home, search, feature 1, feature 2, etc. (3) a
  * method for displaying a message to the screen via the Toast class.
  * 
+ * Make sure the Activity is changed to extend from FragmentActivity which adds
+ * support for the fragment manager to all Android versions. Any activity using
+ * fragments should make sure to extend from FragmentActivity:
+ * 
  */
 public abstract class DashboardActivity extends FragmentActivity {
 
 	public static final String ARG_CLUB_NAME = "club_name";
 	public static final String ARG_TEAM_NAME = "team_name";
 	public static final String ARG_TEAM_ID = "team_id";
+	public static final String ARG_SEASON_ID = "season_id";
 	public static final String ARG_PLAYER_ID = "player_id";
 	public static final String ARG_CONTACT_ID = "contact_id";
 	public static final String ARG_MATCH_ID = "match_id";
 	public final static String DEFAULT_CLUB_NAME = "Ullevål Idretts Lag";
 	public final static String DEFAULT_TEAM_NAME = "UIL Knøtt 2003";
+	protected final static String DEFAULT_SEASON_PERIOD = "2013/2014";
+
+	private static String selectedClubName = DEFAULT_CLUB_NAME;
+	private static String selectedTeamName = DEFAULT_TEAM_NAME;
+	private static String selectedSeasonPeriod = DEFAULT_SEASON_PERIOD;
+
+	public static void setClubName(String name) {
+		selectedClubName = name;
+	}
+
+	public static void setTeamName(String name) {
+		selectedTeamName = name;
+	}
+
+	public static void setSeasonPeriode(String seasonPeriod) {
+		selectedSeasonPeriod = seasonPeriod;
+	}
 
 	/**
 	 * onCreate - called when the activity is first created.
@@ -235,12 +257,12 @@ public abstract class DashboardActivity extends FragmentActivity {
 
 	private Intent createIntent(Class<?> clazz) {
 		Intent intent = new Intent(getApplicationContext(), clazz);
-		intent.putExtra(ARG_CLUB_NAME, DEFAULT_CLUB_NAME);
-		intent.putExtra(ARG_TEAM_NAME, DEFAULT_TEAM_NAME);
+		intent.putExtra(ARG_CLUB_NAME, selectedClubName);
+		intent.putExtra(ARG_TEAM_NAME, selectedTeamName);
 		return intent;
 	}
 
-	public static Bundle createDefaultArguments(Intent intent) {
+	private static Bundle createDefaultArguments(Intent intent) {
 		Bundle arguments = new Bundle();
 		String clubName = intent.getStringExtra(DashboardActivity.ARG_CLUB_NAME);
 		String teamName = intent.getStringExtra(DashboardActivity.ARG_TEAM_NAME);

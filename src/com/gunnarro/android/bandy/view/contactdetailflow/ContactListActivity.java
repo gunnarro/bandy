@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
@@ -38,32 +39,47 @@ public class ContactListActivity extends DashboardActivity implements ContactLis
 	private boolean mTwoPane = false;
 
 	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		// getArgs(outState);
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.contact_item_list);
-		clubName = getIntent().getStringExtra(ARG_CLUB_NAME);
-		if (clubName == null) {
-			clubName = DashboardActivity.DEFAULT_TEAM_NAME;
-		}
-		teamName = getIntent().getStringExtra(ARG_TEAM_NAME);
-		if (teamName == null) {
-			teamName = DashboardActivity.DEFAULT_TEAM_NAME;
-		}
-		this.setTitle(teamName);
-
-		if (findViewById(R.id.item_detail_container) != null) {
-		}
+		getArgs(savedInstanceState);
+		this.setTitle(clubName);
+		// if (findViewById(R.id.item_detail_container) != null) {
+		// }
 		CustomLog.d(this.getClass(), "onCreate state: " + savedInstanceState);
-		if (savedInstanceState == null) {
-			Bundle arguments = new Bundle();
-			arguments.putString(ARG_CLUB_NAME, clubName);
-			arguments.putString(ARG_TEAM_NAME, teamName);
-			ContactListFragment fragment = new ContactListFragment();
-			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.contact_item_list_id, fragment).commit();
-		}
+		// if (savedInstanceState == null) {
+		Bundle arguments = new Bundle();
+		arguments.putString(ARG_CLUB_NAME, clubName);
+		arguments.putString(ARG_TEAM_NAME, teamName);
+		ContactListFragment fragment = new ContactListFragment();
+		fragment.setArguments(arguments);
+		getSupportFragmentManager().beginTransaction().replace(R.id.contact_item_list_id, fragment).commit();
+		// }
 		// TODO: If exposing deep links into your app, handle intents here.
 		CustomLog.d(this.getClass(), "is Two Pane layout : " + mTwoPane);
+	}
+
+	private void getArgs(Bundle bundle) {
+		if (bundle != null) {
+			clubName = bundle.getString(ARG_CLUB_NAME, null);
+			teamName = bundle.getString(ARG_TEAM_NAME, null);
+		} else {
+			clubName = getIntent().getStringExtra(ARG_CLUB_NAME);
+			teamName = getIntent().getStringExtra(ARG_TEAM_NAME);
+		}
+		if (clubName == null) {
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing club name arg!");
+		}
+		if (teamName == null) {
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing team name arg!");
+		}
+		CustomLog.e(this.getClass(), clubName + "" + teamName);
 	}
 
 	/**
@@ -105,7 +121,6 @@ public class ContactListActivity extends DashboardActivity implements ContactLis
 			newContactIntent.putExtra(ARG_CLUB_NAME, clubName);
 			newContactIntent.putExtra(ARG_TEAM_NAME, teamName);
 			startActivity(newContactIntent);
-			startActivity(new Intent(getApplicationContext(), NewContactActivity.class));
 			break;
 		default:
 			// startActivity(new Intent(getApplicationContext(),

@@ -20,11 +20,6 @@ public class UtilityTest extends TestCase {
 	}
 
 	// @Test
-	public void createSearch() {
-		assertEquals("22:23", Utility.createSearch("23233456"));
-	}
-
-	// @Test
 	public void testToDate() {
 		Date date = Utility.timeToDate("22.02.2014 22:23", Utility.DATE_TIME_PATTERN);
 		assertEquals("22.02.2014 22:23", Utility.formatTime(date.getTime(), Utility.DATE_TIME_PATTERN));

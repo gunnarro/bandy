@@ -63,7 +63,6 @@ public class CreateTrainingActivity extends Activity {
 	}
 
 	private void setupEventHandlers() {
-
 		// Season spinner
 		String[] seasonPeriods = bandyService.getSeasonPeriodes();
 		Spinner seasonSpinner = (Spinner) findViewById(R.id.activity_season_spinner);

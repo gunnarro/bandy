@@ -1,7 +1,6 @@
 package com.gunnarro.android.bandy.view.contactdetailflow;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +15,7 @@ import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
@@ -23,7 +23,7 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  * contained in a {@link ContactListActivity} in two-pane mode (on tablets) or a
  * {@link ContactDetailActivity} on handsets.
  */
-public class ContactDetailFragment extends Fragment {
+public class ContactDetailFragment extends CommonFragment {
 
 	private BandyService bandyService;
 	private int contactId;

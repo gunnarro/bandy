@@ -65,6 +65,8 @@ public interface BandyService {
 
 	public String[] getTeamNames(String clubName);
 
+	public String[] getRoleTypeNames();
+
 	public Team getTeam(String name, boolean isIncludeAll);
 
 	public Team getTeam(Integer id);
@@ -230,5 +232,7 @@ public interface BandyService {
 	public String[] getMatchStatusList();
 
 	public int createMatchEvent(MatchEvent matchEvent);
+
+	public String[] getClubNames();
 
 }

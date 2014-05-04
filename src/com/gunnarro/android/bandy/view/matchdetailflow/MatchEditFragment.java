@@ -10,10 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
@@ -24,12 +21,12 @@ import com.gunnarro.android.bandy.domain.activity.Match.MatchStatus;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent.MatchEventTypesEnum;
 import com.gunnarro.android.bandy.service.BandyService;
-import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 import com.gunnarro.android.bandy.view.dashboard.ViewUtils;
+import com.gunnarro.android.bandy.view.dialog.SelectDialogOnClickListener;
 
 public class MatchEditFragment extends CommonFragment {
 
@@ -38,45 +35,41 @@ public class MatchEditFragment extends CommonFragment {
 	private Match match;
 
 	/**
-	 * Need this in order to prevent triggering the selection listeners upon gui
-	 * initialization.
-	 */
-	private boolean isInitMode = true;
-
-	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
 	 */
 	public MatchEditFragment() {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setHasOptionsMenu(true);
-		if (getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
-			teamName = getArguments().getString(DashboardActivity.ARG_TEAM_NAME);
-		}
 		if (getArguments().containsKey(DashboardActivity.ARG_MATCH_ID)) {
 			matchId = getArguments().getInt(DashboardActivity.ARG_MATCH_ID);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.match_edit_layout, container, false);
 		if (this.bandyService == null) {
 			this.bandyService = new BandyServiceImpl(rootView.getContext());
 		}
-		match = this.bandyService.getMatch(matchId);
-		if (match == null) {
-			throw new ApplicationException("No match found for id: " + matchId);
+		boolean isEditable = true;
+		if (matchId != null) {
+			match = this.bandyService.getMatch(matchId);
+			isEditable = !match.isPlayed();
+			init(rootView, isEditable);
 		}
-		boolean isEditable = !match.isPlayed();
-		init(rootView, isEditable);
 		setupEventhandlers(rootView, isEditable);
 		updateMatchEventTable(rootView);
-		getActivity().getActionBar().setSubtitle(isEditable ? "Match online" : "Match Details");
 		super.setHasOptionsMenu(isEditable);
 		return rootView;
 	}
@@ -115,6 +108,7 @@ public class MatchEditFragment extends CommonFragment {
 
 	private void init(View rootView, boolean isEditable) {
 		if (match != null) {
+			setInputValue(rootView, R.id.matchStatusTxt, match.getMatchStatus().name(), isEditable);
 			setInputValue(rootView, R.id.matchStartDateTxt, Utility.formatTime(match.getStartTime(), Utility.DATE_PATTERN), isEditable);
 			setInputValue(rootView, R.id.matchStartTimeTxt, Utility.formatTime(match.getStartTime(), Utility.TIME_PATTERN), isEditable);
 			setInputValue(rootView, R.id.matchVenueTxt, match.getVenue(), isEditable);
@@ -122,52 +116,49 @@ public class MatchEditFragment extends CommonFragment {
 			setInputValue(rootView, R.id.matchAwayTeamTxt, match.getAwayTeam().getName(), false);
 			setInputValue(rootView, R.id.matchGoalsHomeTxt, match.getNumberOfGoalsHome().toString(), isEditable);
 			setInputValue(rootView, R.id.matchGoalsAwayTxt, match.getNumberOfGoalsAway().toString(), isEditable);
+			setInputValue(rootView, R.id.matchRegisteredPlayersTxt, match.getNumberOfSignedPlayers().toString(), isEditable);
 		}
 	}
 
 	private void setupEventhandlers(View rootView, boolean isEditable) {
-		isInitMode = true;
-		String[] matchStatusNames = bandyService.getMatchStatusList();
-		Spinner matchStatusSpinner = (Spinner) rootView.findViewById(R.id.matchStatusSpinnerId);
-		ArrayAdapter<CharSequence> matchStatusAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(),
-				android.R.layout.simple_spinner_item, matchStatusNames);
-		matchStatusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		matchStatusSpinner.setAdapter(matchStatusAdapter);
-		matchStatusSpinner.setOnItemSelectedListener(new MatchStatusOnItemSelectedListener());
-		for (int i = 0; i < matchStatusSpinner.getCount(); i++) {
-			if (matchStatusSpinner.getItemAtPosition(i).toString().equals(match.getMatchStatus().name())) {
-				matchStatusSpinner.setSelection(i);
-				CustomLog.e(this.getClass(), matchStatusSpinner.getItemAtPosition(i).toString());
-				break;
+		ImageButton statusBtn = (ImageButton) rootView.findViewById(R.id.matchSelectStatusBtnId);
+		statusBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getMatchStatusList(), R.id.matchStatusTxt, false));
+
+		ImageButton refereeBtn = (ImageButton) rootView.findViewById(R.id.matchSelectRefereeBtnId);
+		refereeBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getRefereeNames(), R.id.matchRefereeNameTxt, false));
+
+		ImageButton registrerPlayersBtn = (ImageButton) rootView.findViewById(R.id.matchRegistrerPlayersBtnId);
+		registrerPlayersBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getPlayerNames(match.getTeam().getName()),
+				R.id.matchRegisteredPlayersTxt, true));
+
+		ImageButton goalHomeBtn = (ImageButton) rootView.findViewById(R.id.matchSelectHomeGoalScorerBtnId);
+		goalHomeBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getPlayerNames(match.getHomeTeam().getName()),
+				R.id.matchGoalsHomeTxt, false));
+
+		ImageButton goalAwayBtn = (ImageButton) rootView.findViewById(R.id.matchSelectAwayGoalScorerBtnId);
+		goalAwayBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getPlayerNames(match.getAwayTeam().getName()),
+				R.id.matchGoalsAwayTxt, false));
+
+	}
+
+	public void updateSelectedField(String[] values, int fieldId) {
+		if (fieldId == R.id.matchGoalsHomeTxt) {
+			updateScore(R.id.matchEventHomeTblId, R.id.matchGoalsHomeTxt, teamName, values[0], MatchEventTypesEnum.GOAL_HOME);
+		} else if (fieldId == R.id.matchGoalsAwayTxt) {
+			updateScore(R.id.matchEventAwayTblId, R.id.matchGoalsAwayTxt, teamName, values[0], MatchEventTypesEnum.GOAL_AWAY);
+		} else if (fieldId == R.id.matchStatusTxt) {
+			setInputValue(getView(), fieldId, values[0]);
+			updateMatchStatus(values[0]);
+		} else if (fieldId == R.id.matchRegisteredPlayersTxt) {
+			int numRegPlayers = Integer.parseInt(getInputValue(R.id.matchRegisteredPlayersTxt));
+			for (String player : values) {
+				if (player != null)
+					numRegPlayers = bandyService.signupForMatch(Integer.parseInt(player.split(":")[0]), match.getId());
 			}
-		}
-
-		Spinner goalHomeSpinner = (Spinner) rootView.findViewById(R.id.matchGoalHomePlayersSpinnerId);
-		Spinner goalAwaySpinner = (Spinner) rootView.findViewById(R.id.matchGoalAwayPlayersSpinnerId);
-
-		if (!isEditable) {
-			// turn off status changes
-			matchStatusSpinner.setEnabled(false);
-			// Hide the spinners the match is not open for any changes
-			goalHomeSpinner.setVisibility(View.INVISIBLE);
-			goalAwaySpinner.setVisibility(View.INVISIBLE);
+			setInputValue(getView(), fieldId, Integer.toString(numRegPlayers));
 		} else {
-			// Home team players spinner
-			isInitMode = true;
-			String[] homePlayerNames = bandyService.getPlayerNames(match.getHomeTeam().getName());
-			ArrayAdapter<CharSequence> goalHomeAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(),
-					android.R.layout.simple_spinner_item, homePlayerNames);
-			goalHomeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			goalHomeSpinner.setAdapter(goalHomeAdapter);
-			goalHomeSpinner.setOnItemSelectedListener(new GoalOnItemSelectedListener(match.getHomeTeam().getName(), MatchEventTypesEnum.GOAL_HOME));
-			isInitMode = true;
-			// Away team spinner
-			String[] awayPlayerNames = bandyService.getPlayerNames(match.getAwayTeam().getName());
-			ArrayAdapter<CharSequence> goalAwayAdapter = new ArrayAdapter<CharSequence>(getActivity().getApplicationContext(),
-					android.R.layout.simple_spinner_item, awayPlayerNames);
-			goalAwayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			goalAwaySpinner.setAdapter(goalAwayAdapter);
-			goalAwaySpinner.setOnItemSelectedListener(new GoalOnItemSelectedListener(match.getAwayTeam().getName(), MatchEventTypesEnum.GOAL_AWAY));
+			CustomLog.e(this.getClass(), fieldId + " <> " + R.id.matchGoalsHomeTxt);
+			setInputValue(getView(), fieldId, values[0]);
 		}
 	}
 
@@ -190,11 +181,11 @@ public class MatchEditFragment extends CommonFragment {
 		MatchEvent matchEvent = createMatchEvent(teamName, playerName, eventType.name(), newGoals.toString());
 		updateMatchEventTable(tableId, matchEvent);
 		switch (eventType) {
-		case GOAL_AWAY:
-			bandyService.updateGoalsAwayTeam(matchId, newGoals);
-			break;
 		case GOAL_HOME:
 			bandyService.updateGoalsHomeTeam(matchId, newGoals);
+			break;
+		case GOAL_AWAY:
+			bandyService.updateGoalsAwayTeam(matchId, newGoals);
 			break;
 		}
 		bandyService.createMatchEvent(matchEvent);
@@ -212,7 +203,6 @@ public class MatchEditFragment extends CommonFragment {
 		TableLayout homeTable = (TableLayout) rootView.findViewById(R.id.matchEventHomeTblId);
 		TableLayout awayTable = (TableLayout) rootView.findViewById(R.id.matchEventAwayTblId);
 		List<MatchEvent> matchEventList = bandyService.getMatchEventList(matchId);
-		CustomLog.e(this.getClass(), match.toString());
 		for (MatchEvent event : matchEventList) {
 			CustomLog.e(this.getClass(), event.toString());
 			if (event.getTeamName().equals(match.getHomeTeam().getName())) {
@@ -222,62 +212,4 @@ public class MatchEditFragment extends CommonFragment {
 			}
 		}
 	}
-
-	/**
-	 * 
-	 */
-	public class MatchStatusOnItemSelectedListener implements OnItemSelectedListener {
-
-		public MatchStatusOnItemSelectedListener() {
-		}
-
-		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			if (!isInitMode) {
-				String status = parent.getItemAtPosition(pos).toString();
-				updateMatchStatus(status);
-			}
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-			// Do nothing.
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public class GoalOnItemSelectedListener implements OnItemSelectedListener {
-		private String teamName;
-		private MatchEventTypesEnum eventType;
-
-		public GoalOnItemSelectedListener(String teamName, MatchEventTypesEnum eventType) {
-			this.teamName = teamName;
-			this.eventType = eventType;
-		}
-
-		@Override
-		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-			if (isInitMode) {
-				isInitMode = false;
-			} else {
-				String playerName = parent.getItemAtPosition(pos).toString();
-				switch (eventType) {
-				case GOAL_HOME:
-					updateScore(R.id.matchEventHomeTblId, R.id.matchGoalsHomeTxt, teamName, playerName, MatchEventTypesEnum.GOAL_HOME);
-					break;
-				case GOAL_AWAY:
-					updateScore(R.id.matchEventAwayTblId, R.id.matchGoalsAwayTxt, teamName, playerName, MatchEventTypesEnum.GOAL_AWAY);
-					break;
-				}
-			}
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-			// Do nothing.
-		}
-	}
-
 }

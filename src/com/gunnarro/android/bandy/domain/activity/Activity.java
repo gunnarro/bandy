@@ -2,15 +2,15 @@ package com.gunnarro.android.bandy.domain.activity;
 
 public abstract class Activity {
 
+	public static enum ActivityStatusEnum {
+		COMPLETED, CANCELLED, BEGIN;
+	}
+
 	private ActivityStatusEnum status = ActivityStatusEnum.BEGIN;
 	private Season season;
 
 	public Activity(Season season) {
 		this.season = season;
-	}
-
-	public static enum ActivityStatusEnum {
-		COMPLETED, CANCELLED, BEGIN;
 	}
 
 	public static enum ActivityTypesEnum {

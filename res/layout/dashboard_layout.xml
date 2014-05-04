@@ -14,25 +14,83 @@
         android:contentDescription="@string/activities_period"
         android:src="@drawable/uil_logo_top" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+    <TableLayout
+        android:id="@+id/clubTeamTblId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
 
-        <Spinner
-            android:id="@+id/club_spinner"
-            android:layout_width="wrap_content"
+        <TableRow
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="left" >
-        </Spinner>
+            android:gravity="left"
+            android:padding="2dip" >
 
-        <Spinner
-            android:id="@+id/team_spinner"
-            android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/clubNameTxt"
+                android:layout_width="wrap_content"
+                android:enabled="false"
+                android:gravity="center_horizontal"
+                android:inputType="text"
+                android:padding="2dip"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/selectClubBtnId"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/club_spinner"
-            android:gravity="right" >
-        </Spinner>
-    </RelativeLayout>
+            android:gravity="left"
+            android:padding="2dip" >
+
+            <EditText
+                android:id="@+id/teamNameTxt"
+                android:layout_width="wrap_content"
+                android:enabled="false"
+                android:gravity="center_horizontal"
+                android:inputType="text"
+                android:padding="2dip"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/selectTeamBtnId"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
+        </TableRow>
+        
+         <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:padding="2dip" >
+
+            <EditText
+                android:id="@+id/seasonPeriodTxt"
+                android:layout_width="wrap_content"
+                android:enabled="false"
+                android:gravity="center_horizontal"
+                android:inputType="text"
+                android:padding="2dip"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/selectSeasonBtnId"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:src="@drawable/arrow_right" />
+        </TableRow>
+    </TableLayout>
 
     <GridLayout
         android:layout_width="wrap_content"

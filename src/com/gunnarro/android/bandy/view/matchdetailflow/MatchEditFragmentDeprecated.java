@@ -1,11 +1,9 @@
 package com.gunnarro.android.bandy.view.matchdetailflow;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import android.os.Bundle;
-import android.text.util.Linkify.MatchFilter;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,11 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
@@ -25,7 +18,6 @@ import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent;
-import com.gunnarro.android.bandy.domain.activity.MatchEvent.MatchEventTypesEnum;
 import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;

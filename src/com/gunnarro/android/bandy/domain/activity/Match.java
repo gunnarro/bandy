@@ -1,7 +1,5 @@
 package com.gunnarro.android.bandy.domain.activity;
 
-import java.util.Date;
-
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.utility.Utility;
@@ -54,7 +52,8 @@ public class Match extends Activity {
 	private Referee referee;
 	private Integer numberOfGoalsHome;
 	private Integer numberOfGoalsAway;
-	private Integer matchTypeId;
+	private Integer numberOfSignedPlayers;
+	private MatchTypesEnum matchType = MatchTypesEnum.LEAGUE;
 
 	public Match(Season season, long startTime, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee) {
 		super(season);
@@ -66,15 +65,15 @@ public class Match extends Activity {
 		this.referee = referee;
 	}
 
-	public Match(Integer id, Season season, long startDate, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee, Integer matchTypeId) {
+	public Match(Integer id, Season season, long startDate, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee, MatchTypesEnum matchType) {
 		this(season, startDate, team, homeTeam, awayTeam, venue, referee);
 		this.id = id;
-		this.matchTypeId = matchTypeId;
+		this.matchType = matchType;
 	}
 
 	public Match(Integer id, Season season, long startTime, Team team, Team homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer numberOfGoalsAway,
-			String venue, Referee referee, Integer matchTypeId, String matchStatus) {
-		this(id, season, startTime, team, homeTeam, awayTeam, venue, referee, matchTypeId);
+			String venue, Referee referee, MatchTypesEnum matchType, String matchStatus) {
+		this(id, season, startTime, team, homeTeam, awayTeam, venue, referee, matchType);
 		this.numberOfGoalsHome = numberOfGoalsHome;
 		this.numberOfGoalsAway = numberOfGoalsAway;
 		if (matchStatus != null) {
@@ -150,6 +149,14 @@ public class Match extends Activity {
 		this.numberOfGoalsAway = numberOfGoalsAway;
 	}
 
+	public Integer getNumberOfSignedPlayers() {
+		return numberOfSignedPlayers;
+	}
+
+	public void setNumberOfSignedPlayers(int numberOfSignedPlayers) {
+		this.numberOfSignedPlayers = numberOfSignedPlayers;
+	}
+
 	public String getResult() {
 		if (numberOfGoalsHome != null && numberOfGoalsAway != null) {
 			return numberOfGoalsHome + " - " + numberOfGoalsAway;
@@ -159,7 +166,7 @@ public class Match extends Activity {
 	}
 
 	public MatchTypesEnum getMatchType() {
-		return MatchTypesEnum.toType(matchTypeId);
+		return matchType;
 	}
 
 	/**
@@ -177,15 +184,9 @@ public class Match extends Activity {
 		return sb.toString();
 	}
 
-	@Deprecated
-	@Override
-	public boolean isFinished() {
-		return new Date(startTime).before(new Date(System.currentTimeMillis()));
-	}
-
 	@Override
 	public String getName() {
-		return getType();
+		return getTeamVersus();
 	}
 
 	@Override

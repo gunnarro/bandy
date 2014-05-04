@@ -90,13 +90,15 @@ public class TeamListFragment extends ListFragment {
 		if (this.bandyService == null) {
 			this.bandyService = new BandyServiceImpl(getActivity());
 		}
-		String clubName = DashboardActivity.DEFAULT_CLUB_NAME;
+		String clubName = null;
 		if (savedInstanceState != null) {
 			clubName = savedInstanceState.getString(DashboardActivity.ARG_CLUB_NAME, null);
 		} else if (getArguments() != null && getArguments().containsKey(DashboardActivity.ARG_CLUB_NAME)) {
 			clubName = getArguments().getString(DashboardActivity.ARG_CLUB_NAME, null);
 		} else {
-			CustomLog.d(this.getClass(), "No club name argument found! use clubName=" + clubName);
+			// CustomLog.d(this.getClass(),
+			// "No club name argument found! use clubName=" + clubName);
+			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing club name attribute!");
 		}
 		this.itemList = getTeamNamesItemList(clubName);
 		CustomLog.d(this.getClass(), "items:" + this.itemList.size());

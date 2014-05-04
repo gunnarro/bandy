@@ -24,6 +24,8 @@
     <string name="label_total">Total</string>
     <string name="tab_team">Team</string>
     <string name="tab_player">Player</string>
+    <string name="jersey_number">Jersey</string>
+	<string name="role">Role</string>
 
     <string-array name="date_peroid_options">
         <item>All</item>

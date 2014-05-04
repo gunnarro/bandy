@@ -17,14 +17,42 @@
 package com.gunnarro.android.bandy.view.dashboard;
 
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.view.dialog.DialogSelection.NoticeDialogListener;
+import com.gunnarro.android.bandy.view.dialog.ItemSelection;
+import com.gunnarro.android.bandy.view.dialog.SelectDialogOnClickListener;
 
 /**
  * Application staring point view
  * 
  */
-public class HomeActivity extends DashboardActivity {
+public class HomeActivity extends DashboardActivity implements NoticeDialogListener {
+
+	private BandyService bandyService;
+
+	// **********************************************************************
+	// NoticeDialogListener Methods
+	// **********************************************************************
+	// The dialog fragment receives a reference to this Activity through the
+	// Fragment.onAttach() callback, which it uses to call the following methods
+	// defined by the NoticeDialogFragment.NoticeDialogListener interface
+	@Override
+	public void onDialogPositiveClick(ItemSelection dialog) {
+		// User touched the dialog's positive button
+		setInputValue(dialog.getInputFieldId(), dialog.getSelectedItem());
+	}
+
+	@Override
+	public void onDialogNegativeClick(ItemSelection dialog) {
+		// User touched the dialog's negative button
+	}
+
+	// **********************************************************************
 
 	/**
 	 * onCreate - called when the activity is first created. Called when the
@@ -41,6 +69,9 @@ public class HomeActivity extends DashboardActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard_layout);
 		super.getActionBar().hide();
+		this.bandyService = new BandyServiceImpl(getApplicationContext());
+		init();
+		setupEventhandlers();
 	}
 
 	/**
@@ -115,6 +146,35 @@ public class HomeActivity extends DashboardActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
+	}
+
+	private void setupEventhandlers() {
+		ImageButton clubBtn = (ImageButton) findViewById(R.id.selectClubBtnId);
+		clubBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), bandyService.getClubNames(), R.id.clubNameTxt, false));
+
+		ImageButton teamBtn = (ImageButton) findViewById(R.id.selectTeamBtnId);
+		teamBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), bandyService.getTeamNames("%"), R.id.teamNameTxt, false));
+
+		ImageButton seasonBtn = (ImageButton) findViewById(R.id.selectSeasonBtnId);
+		seasonBtn
+				.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), bandyService.getSeasonPeriodes(), R.id.seasonPeriodTxt, false));
+	}
+
+	private void init() {
+		setInputValue(R.id.clubNameTxt, DEFAULT_CLUB_NAME);
+		setInputValue(R.id.teamNameTxt, DEFAULT_TEAM_NAME);
+		setInputValue(R.id.seasonPeriodTxt, bandyService.getCurrentSeason().getPeriod());
+	}
+
+	private void setInputValue(int id, String value) {
+		((EditText) findViewById(id)).setText(value);
+		if (id == R.id.clubNameTxt) {
+			super.setClubName(((EditText) findViewById(R.id.clubNameTxt)).getText().toString());
+		} else if (id == R.id.teamNameTxt) {
+			super.setTeamName(((EditText) findViewById(R.id.teamNameTxt)).getText().toString());
+		} else if (id == R.id.seasonPeriodTxt) {
+			super.setSeasonPeriode(((EditText) findViewById(R.id.seasonPeriodTxt)).getText().toString());
+		}
 	}
 
 	/**

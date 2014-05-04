@@ -55,7 +55,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	private static final boolean IS_LOAD_FROM_SCRIPT = false;
 	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
 	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
-	private static final String DATABASE_NAME = "sportsteamX.db";
+	private static final String DATABASE_NAME = "sportsteam-test2.db";
 	public static final int DATABASE_VERSION = 1;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
@@ -92,8 +92,8 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		try {
 			if (IS_LOAD_FROM_SCRIPT) {
-				dbCreate = getQuery(context, DATABASE_CREATE);
 				dbDrop = getQuery(context, DATABASE_DROP);
+				dbCreate = getQuery(context, DATABASE_CREATE);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -114,41 +114,11 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		if (IS_LOAD_FROM_SCRIPT) {
 			executeMultipleQueries(database, dbCreate);
 		} else {
-			AddressTable.onCreate(database);
-			ClubsTable.onCreate(database);
-			ContactsTable.onCreate(database);
-			ContactRoleTypeLnkTable.onCreate(database);
-			CupsTable.onCreate(database);
-			CupMatchLnkTable.onCreate(database);
-			LeaguesTable.onCreate(database);
-			LeagueMatchLnkTable.onCreate(database);
-			LeagueTeamLnkTable.onCreate(database);
-			MatchesTable.onCreate(database);
-			MatchEventsTable.onCreate(database);
-			MatchEventTypesTable.onCreate(database);
-			MatchStatusTypesTable.onCreate(database);
-			MatchTypesTable.onCreate(database);
-			PlayersTable.onCreate(database);
-			PlayerContactLnkTable.onCreate(database);
-			PlayerCupLnkTable.onCreate(database);
-			PlayerMatchLnkTable.onCreate(database);
-			PlayerPositionTypesTable.onCreate(database);
-			PlayerTrainingLnkTable.onCreate(database);
-			// RolesTable.onCreate(database);
-			RoleTypesTable.onCreate(database);
-			SeasonsTable.onCreate(database);
-			SettingsTable.onCreate(database);
-			StatusesTable.onCreate(database);
-			TeamsTable.onCreate(database);
-			TeamContactLnkTable.onCreate(database);
-			TrainingsTable.onCreate(database);
-			NotificationsTable.onCreate(database);
-			MatchResultView.onCreate(database);
+			createTables(database);
 		}
 		// init data
 		insertDefaultData(database);
 		insertTestData(database);
-
 		database.isDatabaseIntegrityOk();
 		// database.execSQL("PRAGMA integrity_check;");
 		CustomLog.i(this.getClass(), "created and initialized DB tables");
@@ -197,7 +167,83 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		CustomLog.i(this.getClass(), "upgraded DB tables");
 	}
 
-	public void insertDefaultData(SQLiteDatabase database) {
+	public static void createTables(SQLiteDatabase database) {
+		AddressTable.onCreate(database);
+		ClubsTable.onCreate(database);
+		ContactsTable.onCreate(database);
+		ContactRoleTypeLnkTable.onCreate(database);
+		CupsTable.onCreate(database);
+		CupMatchLnkTable.onCreate(database);
+		LeaguesTable.onCreate(database);
+		LeagueMatchLnkTable.onCreate(database);
+		LeagueTeamLnkTable.onCreate(database);
+		MatchesTable.onCreate(database);
+		MatchEventsTable.onCreate(database);
+		MatchEventTypesTable.onCreate(database);
+		MatchStatusTypesTable.onCreate(database);
+		MatchTypesTable.onCreate(database);
+		PlayersTable.onCreate(database);
+		PlayerContactLnkTable.onCreate(database);
+		PlayerCupLnkTable.onCreate(database);
+		PlayerMatchLnkTable.onCreate(database);
+		PlayerPositionTypesTable.onCreate(database);
+		PlayerTrainingLnkTable.onCreate(database);
+		// RolesTable.onCreate(database);
+		RoleTypesTable.onCreate(database);
+		SeasonsTable.onCreate(database);
+		SettingsTable.onCreate(database);
+		StatusesTable.onCreate(database);
+		TeamsTable.onCreate(database);
+		TeamContactLnkTable.onCreate(database);
+		TrainingsTable.onCreate(database);
+		NotificationsTable.onCreate(database);
+		MatchResultView.onCreate(database);
+		CustomLog.i(BandyDataBaseHjelper.class, "Created all tables");
+	}
+
+	private static String createTableQuery(String tableName, boolean isDrop) {
+		if (isDrop) {
+			return "DROP TABLE " + tableName + ";";
+		} else {
+			return "DELETE FROM " + tableName + ";";
+		}
+	}
+
+	public static void deleteAllTableData(SQLiteDatabase database, boolean isDrop) {
+		database.execSQL(createTableQuery(AddressTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(ClubsTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(ContactsTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(ContactRoleTypeLnkTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(CupsTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(CupMatchLnkTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(LeagueMatchLnkTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(LeagueTeamLnkTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(MatchesTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(MatchEventsTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(PlayersTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(PlayerContactLnkTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(PlayerCupLnkTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(PlayerMatchLnkTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(PlayerTrainingLnkTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(TeamsTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(TeamContactLnkTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(TrainingsTable.TABLE_NAME, isDrop));
+
+		database.execSQL(MatchResultView.dropViewQuery());
+		// Do not delete constants
+//		database.execSQL(createTableQuery(SettingsTable.TABLE_NAME, isDrop));
+//		database.execSQL(createTableQuery(MatchTypesTable.TABLE_NAME, isDrop));
+//		database.execSQL(createTableQuery(MatchEventTypesTable.TABLE_NAME, isDrop));
+//		database.execSQL(createTableQuery(MatchStatusTypesTable.TABLE_NAME, isDrop));
+//		database.execSQL(createTableQuery(PlayerPositionTypesTable.TABLE_NAME, isDrop));
+//		database.execSQL(createTableQuery(SeasonsTable.TABLE_NAME, isDrop));
+//		database.execSQL(createTableQuery(StatusesTable.TABLE_NAME, isDrop));
+//		database.execSQL(createTableQuery(RoleTypesTable.TABLE_NAME, isDrop));
+//		database.execSQL(createTableQuery(LeaguesTable.TABLE_NAME, isDrop));
+		CustomLog.i(BandyDataBaseHjelper.class, "Dropped all tabels");
+	}
+
+	public static void insertDefaultData(SQLiteDatabase database) {
 		// init settings
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(1, datetime(), '" + SettingsTable.DATA_FILE_URL_KEY + "','"
 				+ DataLoader.TEAM_XML_URL + "/uil.xml')");
@@ -242,7 +288,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(3, datetime(), 'TEAMLEAD', '')");
 		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(4, datetime(), 'COACH', '')");
 		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(5, datetime(), 'CHAIRMAN', '')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(6, datetime(), 'DEPUTY_	CHAIRMAN', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(6, datetime(), 'DEPUTY_CHAIRMAN', '')");
 		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(7, datetime(), 'BOARD_MEMBER', '')");
 		// Match status types
 		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(1, datetime(), 'NOT_PLAYED', '')");
@@ -254,7 +300,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL("insert into match_event_types (_id, created_date_time, match_event_name, match_event_description) values(1, datetime(), 'GOAL', '')");
 		database.execSQL("insert into match_event_types (_id, created_date_time, match_event_name, match_event_description) values(2, datetime(), 'PENALTY', '')");
 
-		CustomLog.i(this.getClass(), "inserted default test data");
+		CustomLog.i(BandyDataBaseHjelper.class, "inserted default test data");
 	}
 
 	/**

@@ -65,7 +65,9 @@ public class MatchesTable {
 
 	public static ContentValues createContentValues(Match match) {
 		ContentValues values = TableHelper.defaultContentValues();
-		values.put(COLUMN_FK_SEASON_ID, match.getSeason().getId());
+		if (match.getSeason() != null) {
+			values.put(COLUMN_FK_SEASON_ID, match.getSeason().getId());
+		}
 		values.put(COLUMN_FK_TEAM_ID, match.getTeam().getId());
 		values.put(COLUMN_START_DATE, (int) (match.getStartTime() / 1000));
 		values.put(COLUMN_HOME_TEAM_NAME, match.getHomeTeam().getName());
@@ -73,7 +75,9 @@ public class MatchesTable {
 		values.put(COLUMN_NUMBER_OF_GOALS_HOME_TEAM, match.getNumberOfGoalsHome());
 		values.put(COLUMN_NUMBER_OF_GOALS_AWAY_TEAM, match.getNumberOfGoalsAway());
 		values.put(COLUMN_VENUE, match.getVenue());
-		values.put(COLUMN_REFEREE, match.getReferee().getFullName());
+		if (match.getReferee() != null) {
+			values.put(COLUMN_REFEREE, match.getReferee().getFullName());
+		}
 		values.put(COLUMN_MATCH_TYPE_ID, match.getMatchType().getCode());
 		return values;
 	}

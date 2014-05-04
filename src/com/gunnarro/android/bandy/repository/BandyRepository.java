@@ -10,10 +10,10 @@ import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
+import com.gunnarro.android.bandy.domain.activity.Match.MatchStatus;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
-import com.gunnarro.android.bandy.domain.activity.Match.MatchStatus;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
@@ -52,6 +52,8 @@ public interface BandyRepository {
 
 	public int createClub(Club club);
 
+	public int deleteClub(Integer clubId);
+
 	public int createSeason(Season season);
 
 	public int createTeam(Team team);
@@ -72,15 +74,21 @@ public interface BandyRepository {
 
 	public String[] getTeamNames(String clubName);
 
+	public String[] getRoleTypeNames();
+
 	public Team getTeam(String name);
 
 	public Team getTeam(Integer id);
 
 	public Contact getTeamContactPerson(int teamId, String role);
 
+	public String[] getClubNames();
+
 	public Club getClub(String name, String departmentName);
 
 	public Club getClub(Integer id);
+
+	public Address getAddress(int addressId);
 
 	// ---------------------------------------------------------------------------
 	// Match table operations
@@ -132,11 +140,11 @@ public interface BandyRepository {
 
 	public void createPlayerLink(PlayerLinkTableTypeEnum type, int playerId, int id);
 
-	public void deletePlayerLink(PlayerLinkTableTypeEnum type, Integer playerId, Integer id);
+	public int deletePlayerLink(PlayerLinkTableTypeEnum type, Integer playerId, Integer id);
 
 	public long createContactRoleTypeLnk(int contactId, int roleTypeIdId);
 
-	public long deleteContactRoleTypeLnk(int contactId, int roleTypeIdId);
+	public int deleteContactRoleTypeLnk(int contactId, int roleTypeIdId);
 
 	// ---------------------------------------------------------------------------
 	// Settings table operations
@@ -179,15 +187,13 @@ public interface BandyRepository {
 
 	public int updateMatchStatus(Integer matchId, MatchStatus status);
 
-	public void deletePlayer(Integer playerId);
+	public int deletePlayer(Integer playerId);
 
-	public void deleteMatch(Integer matchId);
+	public int deleteMatch(Integer matchId);
 
-	public void deleteTraining(Integer trainingId);
+	public int deleteTraining(Integer trainingId);
 
-	public void deleteRelationship(Integer playerId);
-
-	public void deleteContact(Integer contactId);
+	public int deleteContact(Integer contactId);
 
 	public int updateContact(Contact contact);
 
@@ -209,6 +215,6 @@ public interface BandyRepository {
 
 	public List<MatchEvent> getMatchEventList(Integer matchId);
 
-	public void deleteTeam(Integer teamId);
+	public int deleteTeam(Integer teamId);
 
 }

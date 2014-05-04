@@ -1,13 +1,11 @@
 package com.gunnarro.android.bandy.view.teamdetailflow;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -23,7 +21,7 @@ import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
-import com.gunnarro.android.bandy.view.dialog.DialogSelection;
+import com.gunnarro.android.bandy.view.dialog.SelectDialogOnClickListener;
 
 public class TeamEditFragment extends CommonFragment {
 
@@ -70,7 +68,6 @@ public class TeamEditFragment extends CommonFragment {
 		if (teamId != null) {
 			team = this.bandyService.getTeam(teamId);
 			init(rootView);
-			getActivity().getActionBar().setSubtitle(team.getName());
 		}
 		setupEventHandlers(rootView);
 		return rootView;
@@ -114,19 +111,22 @@ public class TeamEditFragment extends CommonFragment {
 
 	private void setupEventHandlers(View rootView) {
 		ImageButton leagueBtn = (ImageButton) rootView.findViewById(R.id.selectLeagueBtn);
-		leagueBtn.setOnClickListener(new SelectDialogOnClickListener(bandyService.getLeagueNames(), R.id.teamleagueNameTxt));
+		leagueBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getLeagueNames(), R.id.teamleagueNameTxt, false));
 
 		ImageButton teamleaderBtn = (ImageButton) rootView.findViewById(R.id.selectTeamleaderBtn);
-		teamleaderBtn.setOnClickListener(new SelectDialogOnClickListener(bandyService.getContactNames(teamId == null ? -1 : teamId), R.id.teamTeamleaderTxt));
+		teamleaderBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getContactNames(teamId == null ? -1 : teamId),
+				R.id.teamTeamleaderTxt, false));
 
 		ImageButton coachBtn = (ImageButton) rootView.findViewById(R.id.selectCoachBtn);
-		coachBtn.setOnClickListener(new SelectDialogOnClickListener(bandyService.getContactNames(teamId == null ? -1 : teamId), R.id.teamCoachTxt));
+		coachBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getContactNames(teamId == null ? -1 : teamId),
+				R.id.teamCoachTxt, false));
 	}
 
 	private void init(View rootView) {
 		if (team != null) {
 			setInputValue(rootView, R.id.teamNameTxt, team.getName());
 			setInputValue(rootView, R.id.teamYearOfBirthTxt, team.getTeamYearOfBirth().toString());
+			setGender(rootView, team.getGender());
 			if (team.getLeague() != null) {
 				setInputValue(rootView, R.id.teamleagueNameTxt, team.getLeague().getName());
 			}
@@ -136,7 +136,6 @@ public class TeamEditFragment extends CommonFragment {
 			if (team.getCoach() != null) {
 				setInputValue(rootView, R.id.teamCoachTxt, team.getCoach().getFullName());
 			}
-			// setGender(rootView, team.getGender());
 		}
 	}
 
@@ -183,42 +182,42 @@ public class TeamEditFragment extends CommonFragment {
 				newCoach = Contact.createContact(selectedCoachName);
 			}
 		}
-
 		int id = bandyService.saveTeam(team, newTeamleader, newCoach);
 	}
 
-	public void showSelectionDialog(String[] items, int inputFieldId) {
-		// Create an instance of the dialog fragment and show it
-		DialogFragment dialogFragment = new DialogSelection();
-		Bundle arguments = new Bundle();
-		arguments.putStringArray(DialogSelection.DIALOG_ARG_ITEMS_KEY, items);
-		arguments.putInt(DialogSelection.DIALOG_ARG_NOTICE_FIELD_ID_KEY, inputFieldId);
-		dialogFragment.setArguments(arguments);
-		dialogFragment.show(getFragmentManager(), "SelectionDialogFragment");
-	}
-
-	/**
-	 * 
-	 * @author gunnarro
-	 * 
-	 */
-	public class SelectDialogOnClickListener implements OnClickListener {
-		private String[] items;
-		private int inputFieldId;
-
-		public SelectDialogOnClickListener(String[] items, int inputFieldId) {
-			this.items = items;
-			this.inputFieldId = inputFieldId;
-			isInitMode = true;
-		}
-
-		@Override
-		public void onClick(View view) {
-			if (isInitMode) {
-				isInitMode = false;
-			} else {
-				showSelectionDialog(items, inputFieldId);
-			}
-		}
-	}
+	// /**
+	// *
+	// * @author gunnarro
+	// *
+	// */
+	// public class SelectDialogOnClickListener implements OnClickListener {
+	// private String[] items;
+	// private int inputFieldId;
+	//
+	// public SelectDialogOnClickListener(String[] items, int inputFieldId) {
+	// this.items = items;
+	// this.inputFieldId = inputFieldId;
+	// isInitMode = true;
+	// }
+	//
+	// @Override
+	// public void onClick(View view) {
+	// if (isInitMode) {
+	// isInitMode = false;
+	// } else {
+	// showSelectionDialog(items, inputFieldId);
+	// }
+	// }
+	//
+	// private void showSelectionDialog(String[] items, int inputFieldId) {
+	// // Create an instance of the dialog fragment and show it
+	// DialogFragment dialogFragment = new DialogSelection();
+	// Bundle arguments = new Bundle();
+	// arguments.putStringArray(DialogSelection.DIALOG_ARG_ITEMS_KEY, items);
+	// arguments.putInt(DialogSelection.DIALOG_ARG_NOTICE_FIELD_ID_KEY,
+	// inputFieldId);
+	// dialogFragment.setArguments(arguments);
+	// dialogFragment.show(getFragmentManager(), "SelectionDialogFragment");
+	// }
+	// }
 }

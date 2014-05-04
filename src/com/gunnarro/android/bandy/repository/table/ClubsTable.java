@@ -48,11 +48,14 @@ public class ClubsTable {
 
 	public static ContentValues createContentValues(Club club) {
 		ContentValues values = TableHelper.defaultContentValues();
+		System.out.println(COLUMN_CLUB_NAME + " = " + club.getName());
+		System.out.println(COLUMN_CLUB_STADIUM_NAME + " = " + club.getStadiumName());
 		values.put(COLUMN_FK_ADDRESS_ID, club.getAddress().getId());
 		values.put(COLUMN_CLUB_NAME, club.getName());
 		values.put(COLUMN_CLUB_DEPARTMENT_NAME, club.getDepartmentName());
 		values.put(COLUMN_CLUB_NAME_ABBREVIATION, club.getClubNameAbbreviation());
 		values.put(COLUMN_CLUB_STADIUM_NAME, club.getStadiumName());
+		values.put(COLUMN_CLUB_URL_HOME_PAGE, club.getHomePageUrl());
 		return values;
 	}
 

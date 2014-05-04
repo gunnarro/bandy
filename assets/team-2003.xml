@@ -255,5 +255,20 @@
 		        <training date="24.02.2014" fromTime="16:30" toTime="18:00" place="Bergbanen" />
 		    </trainings>
 	    </season>
+	    <season period="2014/2015" startDate="01.09.2013" endDate="01.04.2014" >
+		    <matches leagueId="1">
+		        <match typeId="1" date="26.11.2014" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="Røa 03 2" goalsHomeTeam="0" goalsAwayTeam="0" venue="Bergbanen" referee="" />
+		        <match typeId="1" date="10.12.2014" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="Ready 01 4" goalsHomeTeam="0" goalsAwayTeam="0" venue="Bergbanen" referee="" />
+		        <match typeId="1" date="17.12.2014" startTime="17:00" homeTeam="Ready 01 3 Jenter" awayTeam="UIL Knøtt 2003" goalsHomeTeam="0" goalsAwayTeam="0" venue="Gressbanen" referee="" />
+		        <match typeId="1" date="07.01.2015" startTime="18:00" homeTeam="UIL Knøtt 2003" awayTeam="Sarpsborg" goalsHomeTeam="0" goalsAwayTeam="0" venue="Bergbanen" referee="" />
+		        <match typeId="1" date="14.01.2015" startTime="18:00" homeTeam="Ullern" awayTeam="UIL Knøtt 2003" goalsHomeTeam="0" goalsAwayTeam="0" venue="Ullernbanen" referee="" />
+		        <match typeId="1" date="21.01.2015" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="Røa 03 1" goalsHomeTeam="0" goalsAwayTeam="0" venue="Bergbanen" referee="" />
+		        <match typeId="1" date="04.02.2015" startTime="17:00" homeTeam="Ready 01 2" awayTeam="UIL Knøtt 2003" goalsHomeTeam="0" goalsAwayTeam="0" venue="Gressbanen" referee="" />
+		        <match typeId="1" date="11.02.2015" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="Ready 01" goalsHomeTeam="0" goalsAwayTeam="0" venue="Bergbanen" referee="" />
+		        <match typeId="1" date="26.02.2015" startTime="18:00" homeTeam="Sagene 03" awayTeam="UIL Knøtt 2003" goalsHomeTeam="0" goalsAwayTeam="0" venue="Voldsløkka" referee="" />
+		        <match typeId="2" date="12.02.2015" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="Ullevål 2004" goalsHomeTeam="0" goalsAwayTeam="0" venue="Bergbanen" referee="" />
+		        <match typeId="2" date="05.03.2015" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="Ullevål 2002" goalsHomeTeam="0" goalsAwayTeam="0" venue="Bergbanen" referee="" />
+		    </matches>
+		</season>
     </seasons>
   </team>

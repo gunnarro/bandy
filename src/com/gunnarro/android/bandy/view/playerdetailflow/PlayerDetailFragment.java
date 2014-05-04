@@ -1,7 +1,6 @@
 package com.gunnarro.android.bandy.view.playerdetailflow;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +20,7 @@ import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
+import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
@@ -28,7 +28,7 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  * contained in a {@link PlayerListActivity} in two-pane mode (on tablets) or a
  * {@link PlayerDetailActivity} on handsets.
  */
-public class PlayerDetailFragment extends Fragment {
+public class PlayerDetailFragment extends CommonFragment {
 
 	private BandyService bandyService;
 	private int playerId;

@@ -79,7 +79,7 @@ public class Address {
 	}
 
 	public String getFullStreetName() {
-		return id + ": " + streetName + " " + streetNumber + (streetNumberPrefix != null ? streetNumberPrefix : "");
+		return streetName + " " + streetNumber + (streetNumberPrefix != null ? streetNumberPrefix : "");
 	}
 
 	public boolean isAddressValid() {
