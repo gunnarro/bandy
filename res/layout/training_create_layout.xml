@@ -5,35 +5,10 @@
     android:layout_height="fill_parent"
     tools:context=".TrainingsActivity" >
 
-    <LinearLayout
-        android:id="@+id/createTrainingLayoutId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/personaliaHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New training"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/holo_blue_dark" />
-
-        <View
-            android:id="@+id/personaliaSeparatorId"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginBottom="3dp"
-            android:background="@drawable/line_separator" />
-    </LinearLayout>
-
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/createTrainingLayoutId"
         android:layout_marginLeft="10dp"
         android:shrinkColumns="*"
         android:stretchColumns="*" >
@@ -198,27 +173,6 @@
                 android:padding="2dip"
                 android:text="18:00"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:padding="2dip" >
-
-            <ImageButton
-                android:id="@+id/cancel_create_activity_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/na"
-                android:src="@drawable/table_delete" />
-
-            <ImageButton
-                android:id="@+id/create_activity_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/na"
-                android:src="@drawable/table_add" />
         </TableRow>
     </TableLayout>
 

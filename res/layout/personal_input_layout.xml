@@ -51,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:hint="@string/first_name"
                 android:inputType="textPersonName"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceMedium" >
@@ -74,6 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:hint="@string/middle_name"
                 android:inputType="textPersonName"
                 android:text="@string/blank" >
             </EditText>
@@ -94,6 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:hint="@string/last_name"
                 android:inputType="textPersonName"
                 android:text="@string/blank" >
             </EditText>
@@ -132,6 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:hint="@string/birth"
                 android:inputType="date"
                 android:text="@string/blank" >
             </EditText>
@@ -152,6 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:hint="@string/street_name"
                 android:inputType="text"
                 android:text="@string/blank" >
             </EditText>
