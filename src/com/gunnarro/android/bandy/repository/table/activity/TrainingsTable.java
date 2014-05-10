@@ -3,6 +3,7 @@ package com.gunnarro.android.bandy.repository.table.activity;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.repository.table.TableHelper;
 
 public class TrainingsTable {
@@ -45,13 +46,13 @@ public class TrainingsTable {
 		TableHelper.checkColumnNames(projection, TABLE_COLUMNS);
 	}
 
-	public static ContentValues createContentValues(int seasonId, int fkTeamId, long startDate, long endTime, String place) {
+	public static ContentValues createContentValues(Training training) {
 		ContentValues values = TableHelper.defaultContentValues();
-		values.put(COLUMN_FK_SEASON_ID, seasonId);
-		values.put(COLUMN_FK_TEAM_ID, fkTeamId);
-		values.put(COLUMN_START_DATE, (int) (startDate / 1000));
-		values.put(COLUMN_END_TIME, (int) (endTime / 1000));
-		values.put(COLUMN_PLACE, place);
+		values.put(COLUMN_FK_SEASON_ID, training.getSeason().getId());
+		values.put(COLUMN_FK_TEAM_ID, training.getTeam().getId());
+		values.put(COLUMN_START_DATE, (int) (training.getStartTime() / 1000));
+		values.put(COLUMN_END_TIME, (int) (training.getEndTime() / 1000));
+		values.put(COLUMN_PLACE, training.getVenue());
 		return values;
 	}
 

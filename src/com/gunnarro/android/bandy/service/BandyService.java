@@ -33,6 +33,8 @@ public interface BandyService {
 
 	public void saveClub(Club club);
 
+	public int deleteClub(Integer clubId);
+
 	public int createClub(Club club);
 
 	public int createTeam(Team team);

@@ -1,12 +1,15 @@
 package com.gunnarro.android.bandy.view.teamdetailflow;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -18,7 +21,9 @@ import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ValidationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.utility.Validator;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 import com.gunnarro.android.bandy.view.dialog.SelectDialogOnClickListener;
@@ -120,6 +125,21 @@ public class TeamEditFragment extends CommonFragment {
 		ImageButton coachBtn = (ImageButton) rootView.findViewById(R.id.selectCoachBtn);
 		coachBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getContactNames(teamId == null ? -1 : teamId),
 				R.id.teamCoachTxt, false));
+
+		// Input validation
+		final EditText nameTxt = (EditText) rootView.findViewById(R.id.teamNameTxt);
+		// TextWatcher would let us check validation error on the fly
+		nameTxt.addTextChangedListener(new TextWatcher() {
+			public void afterTextChanged(Editable s) {
+				Validator.hasText(nameTxt);
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+		});
 	}
 
 	private void init(View rootView) {
@@ -140,10 +160,17 @@ public class TeamEditFragment extends CommonFragment {
 	}
 
 	private void save() {
+		try {
+			validateInput();
+		} catch (ValidationException ve) {
+			CustomLog.e(this.getClass(), ve.getMessage());
+			return;
+		}
+
 		String teamName = getInputValue(R.id.teamNameTxt);
 		String teamYearOfBirth = getInputValue(R.id.teamYearOfBirthTxt);
 
-		Club club = bandyService.getClub("Ulle%", "Bandy");
+		Club club = bandyService.getClub(clubName, "%");
 		if (club == null) {
 			throw new RuntimeException("Club is not found!");
 		}
@@ -185,4 +212,9 @@ public class TeamEditFragment extends CommonFragment {
 		int id = bandyService.saveTeam(team, newTeamleader, newCoach);
 	}
 
+	private void validateInput() throws ValidationException {
+		if (!Validator.hasText(getEditText(R.id.nameTxt))) {
+			throw new ValidationException("Invalid name!");
+		}
+	}
 }

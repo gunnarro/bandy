@@ -28,6 +28,7 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  */
 public class TeamListActivity extends DashboardActivity implements TeamListFragment.Callbacks {
 
+	private Integer clubId;
 	private String clubName;
 	private String teamName;
 
@@ -49,6 +50,7 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 		CustomLog.d(this.getClass(), "onCreate state: " + savedInstanceState);
 		if (savedInstanceState == null) {
 			Bundle arguments = new Bundle();
+			arguments.putInt(ARG_CLUB_ID, clubId);
 			arguments.putString(ARG_CLUB_NAME, clubName);
 			arguments.putString(ARG_TEAM_NAME, teamName);
 			TeamListFragment fragment = new TeamListFragment();
@@ -61,9 +63,11 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 
 	private void getArgs(Bundle bundle) {
 		if (bundle != null) {
+			clubId = bundle.getInt(ARG_CLUB_ID);
 			clubName = bundle.getString(ARG_CLUB_NAME, null);
 			teamName = bundle.getString(ARG_TEAM_NAME, null);
 		} else {
+			clubId = getIntent().getIntExtra(ARG_CLUB_ID, -1);
 			clubName = getIntent().getStringExtra(ARG_CLUB_NAME);
 			teamName = getIntent().getStringExtra(ARG_TEAM_NAME);
 		}
@@ -112,6 +116,7 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 		switch (item.getItemId()) {
 		case R.id.action_new:
 			Intent newTeamIntent = new Intent(getApplicationContext(), NewTeamActivity.class);
+			newTeamIntent.putExtra(ARG_CLUB_ID, clubId);
 			newTeamIntent.putExtra(ARG_CLUB_NAME, clubName);
 			newTeamIntent.putExtra(ARG_TEAM_NAME, teamName);
 			startActivity(newTeamIntent);

@@ -74,6 +74,5 @@ public class SearchActivity extends DashboardActivity {
 		SearchResult search = bandyService.search(sqlQuery);
 		((TextView) findViewById(R.id.search_result_txt)).setText(search.getResult());
 		CustomLog.d(this.getClass(), search.getResult());
-		System.out.println(search.getResult());
 	}
 } // end class

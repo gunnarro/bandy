@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
-import com.gunnarro.android.bandy.domain.activity.Activity.ActivityStatusEnum;
 import com.gunnarro.android.bandy.domain.view.list.Group;
 import com.gunnarro.android.bandy.service.BandyService;
 

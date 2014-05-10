@@ -5,15 +5,19 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Activity.ActivityTypesEnum;
 import com.gunnarro.android.bandy.domain.activity.Season;
@@ -36,6 +40,8 @@ public class CreateTrainingActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.training_create_layout);
+		// Show the Up button in the action bar.
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		// selectedTeamName =
 		// getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 		this.setTitle(ActivityTypesEnum.Training.name() + " " + selectedTeamName);
@@ -60,6 +66,39 @@ public class CreateTrainingActivity extends Activity {
 	@Override
 	public void onPause() {
 		super.onPause();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.actionbar_menu_save, menu);
+		return true;
+	}
+
+	/**
+	 * Note that the parent Activity’s onOptionsItemSelected() method is called
+	 * first. Your fragment’s method is called only, when the Activity didn’t
+	 * consume the event! {@inheritDoc}
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// handle item selection
+		CustomLog.e(this.getClass(), item.toString());
+		switch (item.getItemId()) {
+		case R.id.action_cancel:
+			super.onBackPressed();
+			return true;
+		case R.id.action_save:
+			save();
+			Toast.makeText(getApplicationContext(), "Save Training!", Toast.LENGTH_SHORT).show();
+			super.onBackPressed();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	private void setupEventHandlers() {
@@ -95,20 +134,22 @@ public class CreateTrainingActivity extends Activity {
 		venueSpinner.setAdapter(venueAdapter);
 		venueSpinner.setOnItemSelectedListener(new VenueOnItemSelectedListener());
 
-		findViewById(R.id.cancel_create_activity_btn).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				returnToParentView();
-			}
-		});
-
-		findViewById(R.id.create_activity_btn).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				createTraining();
-				returnToParentView();
-			}
-		});
+		// findViewById(R.id.cancel_create_activity_btn).setOnClickListener(new
+		// OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// returnToParentView();
+		// }
+		// });
+		//
+		// findViewById(R.id.create_activity_btn).setOnClickListener(new
+		// OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// createTraining();
+		// returnToParentView();
+		// }
+		// });
 
 	}
 
@@ -134,7 +175,7 @@ public class CreateTrainingActivity extends Activity {
 		toTimeTxtView.setText(Utility.formatTime(endTime, "HH:mm"));
 	}
 
-	private void createTraining() {
+	private void save() {
 		TextView dateTxtView = (TextView) findViewById(R.id.trainingDateId);
 		String date = dateTxtView.getText().toString();
 		TextView fromTimeTxtView = (TextView) findViewById(R.id.trainingFromTimeId);
@@ -144,6 +185,7 @@ public class CreateTrainingActivity extends Activity {
 		Training training = new Training(season, Utility.timeToDate(date + " " + fromTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(), Utility
 				.timeToDate(date + " " + toTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(), team, this.selectedVenue);
 		int trainingId = bandyService.createTraining(training);
+		CustomLog.e(this.getClass(), "trainigid=" + trainingId);
 	}
 
 	/**

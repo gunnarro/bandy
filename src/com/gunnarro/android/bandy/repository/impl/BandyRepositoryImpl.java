@@ -194,7 +194,6 @@ public class BandyRepositoryImpl implements BandyRepository {
 		this.database = getDatabase(true);
 		long id = database.insert(ClubsTable.TABLE_NAME, null, values);
 		CustomLog.d(this.getClass(), "Created club: " + club);
-		System.out.println("Created club: id=" + id + " " + club);
 		return Long.valueOf(id).intValue();
 	}
 
@@ -220,7 +219,6 @@ public class BandyRepositoryImpl implements BandyRepository {
 				throw new ApplicationException("Club must be set for creating new Team!");
 			}
 			ContentValues values = TeamsTable.createContentValues(team);
-			System.out.println(team.toString());
 			this.database = getDatabase(true);
 			long id = database.insert(TeamsTable.TABLE_NAME, null, values);
 			return Long.valueOf(id).intValue();
@@ -274,8 +272,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int createTraining(Training training) {
-		ContentValues values = TrainingsTable.createContentValues(training.getSeason().getId(), training.getTeam().getId(), training.getStartTime(),
-				training.getEndTime(), training.getVenue());
+		ContentValues values = TrainingsTable.createContentValues(training);
 		this.database = getDatabase(true);
 		long id = database.insert(TrainingsTable.TABLE_NAME, null, values);
 		CustomLog.d(this.getClass(), training);
@@ -1286,6 +1283,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		query.append(" ORDER BY ").append(TrainingsTable.COLUMN_START_DATE).append(" ASC");
 		CustomLog.d(this.getClass(), "query=" + query.toString());
 		this.database = getDatabase(false);
+		CustomLog.e(this.getClass(), query.toString());
 		Cursor cursor = this.database.rawQuery(query.toString(), null);
 		Team team = getTeam(teamId);
 		if (cursor != null && cursor.getCount() > 0) {
@@ -1678,11 +1676,9 @@ public class BandyRepositoryImpl implements BandyRepository {
 		Calendar cal = Calendar.getInstance();
 		// Period equal to null, then select all time
 		if (period == null) {
-			cal.set(Calendar.HOUR, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.MILLISECOND, 0);
 			// only those newer than today
-			selectClause = "start_date < " + Long.toString(cal.getTimeInMillis());
+			cal.setTimeInMillis(System.currentTimeMillis());
+			selectClause = "start_date > " + (int) (cal.getTimeInMillis() / 1000);
 		} else if (period == Calendar.YEAR) {
 			int year = cal.get(Calendar.YEAR);
 			selectClause = "strftime('%Y', datetime(start_date, 'unixepoch')) LIKE '" + year + "'";
@@ -1733,7 +1729,6 @@ public class BandyRepositoryImpl implements BandyRepository {
 	}
 
 	private Club mapCursorToClub(Cursor cursor) {
-		System.out.println(cursor.getString(cursor.getColumnIndex(ClubsTable.COLUMN_CLUB_NAME)));
 		Address address = getAddress(cursor.getInt(cursor.getColumnIndex(ClubsTable.COLUMN_FK_ADDRESS_ID)));
 		return new Club(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), cursor.getString(cursor.getColumnIndex(ClubsTable.COLUMN_CLUB_NAME)),
 				cursor.getString(cursor.getColumnIndex(ClubsTable.COLUMN_CLUB_DEPARTMENT_NAME)), cursor.getString(cursor

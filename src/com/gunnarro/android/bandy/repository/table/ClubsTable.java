@@ -27,11 +27,12 @@ public class ClubsTable {
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
 		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_ADDRESS_ID).append(" INTEGER");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME).append(" TEXT NOT NULL UNIQUE");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_DEPARTMENT_NAME).append(" TEXT NOT NULL UNIQUE");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME).append(" TEXT NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_DEPARTMENT_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME_ABBREVIATION).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_STADIUM_NAME).append(" TEXT");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_URL_HOME_PAGE).append(" TEXT);");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_URL_HOME_PAGE).append(" TEXT");
+		DATABASE_CREATE_QUERY.append(",UNIQUE (").append(COLUMN_CLUB_NAME).append(",").append(COLUMN_CLUB_DEPARTMENT_NAME).append("));");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

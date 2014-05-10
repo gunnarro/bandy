@@ -12,6 +12,7 @@ import com.gunnarro.android.bandy.custom.CustomLog;
 
 public class CommonFragment extends Fragment {
 
+	protected Integer clubId;
 	protected String clubName;
 	protected String teamName;
 
@@ -19,6 +20,9 @@ public class CommonFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setHasOptionsMenu(true);
+		if (getArguments().containsKey(DashboardActivity.ARG_CLUB_ID)) {
+			clubId = getArguments().getInt(DashboardActivity.ARG_CLUB_ID);
+		}
 		if (getArguments().containsKey(DashboardActivity.ARG_CLUB_NAME)) {
 			clubName = getArguments().getString(DashboardActivity.ARG_CLUB_NAME);
 		}
@@ -29,8 +33,12 @@ public class CommonFragment extends Fragment {
 		getActivity().getActionBar().setSubtitle(teamName);
 	}
 
+	protected EditText getEditText(int id) {
+		return (EditText) getView().findViewById(id);
+	}
+
 	protected String getInputValue(int id) {
-		EditText inputView = (EditText) getView().findViewById(id);
+		EditText inputView = getEditText(id);
 		if (inputView != null) {
 			return inputView.getText().toString().trim();
 		} else {

@@ -128,6 +128,14 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public int deleteClub(Integer clubId) {
+		return bandyRepository.deleteClub(clubId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void saveClub(Club club) {
 		if (club.getId() == null) {
 			bandyRepository.createClub(club);

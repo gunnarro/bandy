@@ -17,6 +17,7 @@ import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.view.listener.ReloadListener;
 import com.gunnarro.android.bandy.view.teamdetailflow.TeamDetailFragment;
 
 /**
@@ -28,7 +29,7 @@ import com.gunnarro.android.bandy.view.teamdetailflow.TeamDetailFragment;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ClubListFragment extends ListFragment {
+public class ClubListFragment extends ListFragment implements ReloadListener {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -38,6 +39,7 @@ public class ClubListFragment extends ListFragment {
 
 	private BandyService bandyService;
 	private List<Item> itemList;
+	private ArrayAdapter<Item> adapter;
 
 	/**
 	 * The fragment's current callback object, which is notified of list item
@@ -66,11 +68,25 @@ public class ClubListFragment extends ListFragment {
 	 * A dummy implementation of the {@link Callbacks} interface that does
 	 * nothing. Used only when this fragment is not attached to an activity.
 	 */
-	private static Callbacks sDummyCallbacks = new Callbacks() {
+	public static Callbacks sDummyCallbacks = new Callbacks() {
 		@Override
 		public void onItemSelected(int id) {
+			CustomLog.e(getClass(), "clicked on: " + id);
 		}
 	};
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void reloadData() {
+		CustomLog.e(getClass(), "reload  data... ");
+		adapter.clear();
+		itemList = getClubItemList();
+		adapter.addAll(itemList);
+		adapter.notifyDataSetChanged();
+		getActivity().getActionBar().setSubtitle("Number of clubs: " + itemList.size());
+	}
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -90,12 +106,12 @@ public class ClubListFragment extends ListFragment {
 		if (this.bandyService == null) {
 			this.bandyService = new BandyServiceImpl(getActivity());
 		}
-
 		this.itemList = getClubItemList();
-		CustomLog.d(this.getClass(), "items:" + this.itemList.size());
-		setListAdapter(new ArrayAdapter<Item>(getActivity(), R.layout.custom_checked_list_item, android.R.id.text1, this.itemList));
+		CustomLog.e(this.getClass(), "items:" + this.itemList.size());
+		adapter = new ArrayAdapter<Item>(getActivity(), R.layout.custom_checked_list_item, android.R.id.text1, this.itemList);
+		setListAdapter(adapter);
 		// finally, update the action bar sub title with number of players for
-		// selected team
+		// selected club
 		getActivity().getActionBar().setSubtitle("Number of clubs: " + itemList.size());
 	}
 
@@ -105,18 +121,7 @@ public class ClubListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		// Must be done before setAdapter, and after the content view is created
-		// View header =
-		// getActivity().getLayoutInflater().inflate(R.layout.list_header,
-		// null);
-		// View footer =
-		// getActivity().getLayoutInflater().inflate(R.layout.list_footer,
-		// null);
-		// getListView().addHeaderView(header);
-		// getListView().addFooterView(footer);
-		// setListAdapter(new ArrayAdapter<Item>(getActivity(),
-		// android.R.layout.simple_list_item_activated_1, android.R.id.text1,
-		// this.itemList));
+		CustomLog.e(this.getClass(), "tracing call...");
 	}
 
 	/**
@@ -129,7 +134,9 @@ public class ClubListFragment extends ListFragment {
 		// Restore the previously serialized activated item position.
 		if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
 			setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+			CustomLog.e(this.getClass(), "tracing call, saves state...");
 		}
+		CustomLog.e(this.getClass(), "tracing call...");
 	}
 
 	/**
@@ -143,6 +150,7 @@ public class ClubListFragment extends ListFragment {
 			throw new IllegalStateException("Activity must implement fragment's callbacks.");
 		}
 		mCallbacks = (Callbacks) activity;
+		CustomLog.e(this.getClass(), "tracing call...activity: " + activity.getLocalClassName());
 	}
 
 	/**
@@ -153,6 +161,7 @@ public class ClubListFragment extends ListFragment {
 		super.onDetach();
 		// Reset the active callbacks interface to the dummy implementation.
 		mCallbacks = sDummyCallbacks;
+		CustomLog.e(this.getClass(), "tracing call...");
 	}
 
 	/**

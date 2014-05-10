@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.gunnarro.android.bandy.R;
+import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 import com.gunnarro.android.bandy.view.dialog.DialogSelection.NoticeDialogListener;
 import com.gunnarro.android.bandy.view.dialog.ItemSelection;
 
-public class NewClubActivity extends FragmentActivity implements NoticeDialogListener {
+public class NewClubActivity extends FragmentActivity implements NoticeDialogListener, ClubListFragment.Callbacks {
 
 	// The dialog fragment receives a reference to this Activity through the
 	// Fragment.onAttach() callback, which it uses to call the following methods
@@ -24,10 +25,19 @@ public class NewClubActivity extends FragmentActivity implements NoticeDialogLis
 		// User touched the dialog's negative button
 	}
 
+	/**
+	 * Callback method from {@link ClubListFragment.Callbacks} indicating that
+	 * the item with the given ID was selected.
+	 */
+	@Override
+	public void onItemSelected(int id) {
+		CustomLog.e(this.getClass(), "tracing only...id:" + id);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.team_details_container_layout);
+		setContentView(R.layout.club_details_container_layout);
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -49,7 +59,7 @@ public class NewClubActivity extends FragmentActivity implements NoticeDialogLis
 			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
 			arguments.putString(DashboardActivity.ARG_TEAM_NAME, "New Club");
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.team_details_container_id, fragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.club_details_container_id, fragment).commit();
 		}
 	}
 

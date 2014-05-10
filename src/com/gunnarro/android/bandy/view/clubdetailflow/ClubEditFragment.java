@@ -1,5 +1,6 @@
 package com.gunnarro.android.bandy.view.clubdetailflow;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,8 +16,10 @@ import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.view.clubdetailflow.ClubListFragment.Callbacks;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.listener.ReloadListener;
 
 public class ClubEditFragment extends CommonFragment {
 
@@ -30,6 +33,7 @@ public class ClubEditFragment extends CommonFragment {
 	private BandyService bandyService;
 	private Integer clubId;
 	private Club club;
+	private Callbacks callback;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -88,15 +92,20 @@ public class ClubEditFragment extends CommonFragment {
 		CustomLog.e(this.getClass(), item.toString());
 		switch (item.getItemId()) {
 		case R.id.action_cancel:
+			callback.onItemSelected(1000);
 			super.getActivity().onBackPressed();
 			return true;
 		case R.id.action_save:
 			save();
-			Toast.makeText(getActivity().getApplicationContext(), "Saved club!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity().getApplicationContext(), "Saved club! " +  getActivity().getLocalClassName(), Toast.LENGTH_SHORT).show();
+			// Have to refresh the list in order to reflect changes
+//			ReloadListener listener = (ReloadListener) getActivity().getSupportFragmentManager().findFragmentById(R.id.club_item_list_id);
+//			listener.reloadData();
+			callback.onItemSelected(9999);
 			super.getActivity().onBackPressed();
 			return true;
 		default:
-			return super.onOptionsItemSelected(item);
+			return super.getActivity().onOptionsItemSelected(item);
 		}
 	}
 
@@ -134,4 +143,28 @@ public class ClubEditFragment extends CommonFragment {
 		bandyService.saveClub(club);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		// Reset the active callbacks interface to the dummy implementation.
+		callback = ClubListFragment.sDummyCallbacks;
+		CustomLog.e(this.getClass(), "tracing call...");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		// Activities containing this fragment must implement its callbacks.
+		if (!(activity instanceof Callbacks)) {
+			throw new IllegalStateException("Activity must implement fragment's callbacks.");
+		}
+		callback = (Callbacks) activity;
+		CustomLog.e(this.getClass(), "tracing call...activity: " + activity.getLocalClassName());
+	}
 }

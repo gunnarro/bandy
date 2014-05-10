@@ -16,13 +16,12 @@ import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
-import com.gunnarro.android.bandy.view.teamdetailflow.TeamDetailActivity;
 import com.gunnarro.android.bandy.view.teamdetailflow.TeamListActivity;
 
 /**
  * A fragment representing a single Item detail screen. This fragment is either
  * contained in a {@link TeamListActivity} in two-pane mode (on tablets) or a
- * {@link TeamDetailActivity} on handsets.
+ * {@link ClubDetailActivity} on handsets.
  */
 public class ClubDetailFragment extends CommonFragment {
 
@@ -89,8 +88,8 @@ public class ClubDetailFragment extends CommonFragment {
 		}
 	}
 
-	private void delete(Integer teamId) {
-		this.bandyService.deleteTeam(teamId);
+	private void delete(Integer clubId) {
+		this.bandyService.deleteClub(clubId);
 	}
 
 	private void setupEventHandlers(View view) {
@@ -98,11 +97,15 @@ public class ClubDetailFragment extends CommonFragment {
 
 	private void updateClubDetails(View rootView, Club club) {
 		if (club != null) {
-			setInputValue(rootView, R.id.clubNameTxt, club.getFullName(), false);
-//			setInputValue(rootView, R.id.streetNameTxt, club.getAddress().getFullStreetName(), false);
-//			setInputValue(rootView, R.id.postalCodeTxt, club.getAddress().getPostalCode(), false);
-//			setInputValue(rootView, R.id.cityTxt, club.getAddress().getCity(), false);
-//			setInputValue(rootView, R.id.countryTxt, club.getAddress().getCountry(), false);
+			setTextViewValue(rootView, R.id.clubNameTxt, club.getFullName());
+			// setInputValue(rootView, R.id.streetNameTxt,
+			// club.getAddress().getFullStreetName(), false);
+			// setInputValue(rootView, R.id.postalCodeTxt,
+			// club.getAddress().getPostalCode(), false);
+			// setInputValue(rootView, R.id.cityTxt,
+			// club.getAddress().getCity(), false);
+			// setInputValue(rootView, R.id.countryTxt,
+			// club.getAddress().getCountry(), false);
 		}
 	}
 

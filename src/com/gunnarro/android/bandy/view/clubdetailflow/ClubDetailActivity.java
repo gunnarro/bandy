@@ -14,12 +14,12 @@ import com.gunnarro.android.bandy.view.dialog.ItemSelection;
 /**
  * An activity representing a single Item detail screen. This activity is only
  * used on handset devices. On tablet-size devices, item details are presented
- * side-by-side with a list of items in a {@link TeamListActivity}.
+ * side-by-side with a list of items in a {@link ClubListActivity}.
  * <p>
  * This activity is mostly just a 'shell' activity containing nothing more than
  * a {@link ClubDetailFragment}.
  */
-public class ClubDetailActivity extends FragmentActivity implements NoticeDialogListener {
+public class ClubDetailActivity extends FragmentActivity implements NoticeDialogListener, ClubListFragment.Callbacks {
 
 	private int clubId;
 
@@ -41,6 +41,15 @@ public class ClubDetailActivity extends FragmentActivity implements NoticeDialog
 	}
 
 	// **********************************************************************
+
+	/**
+	 * Callback method from {@link ClubListFragment.Callbacks} indicating that
+	 * the item with the given ID was selected.
+	 */
+	@Override
+	public void onItemSelected(int id) {
+		CustomLog.e(this.getClass(), "tracing only...id:" + id);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
