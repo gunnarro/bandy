@@ -59,4 +59,8 @@ public class Validator {
 		}
 		return hasText;
 	}
+
+	public static void setErrorMessage(EditText editText, String msg) {
+		editText.setError(msg);
+	}
 }

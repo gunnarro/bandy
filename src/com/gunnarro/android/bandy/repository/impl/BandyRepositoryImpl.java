@@ -180,7 +180,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public int createMatchEvent(MatchEvent matchEvent) {
 		ContentValues values = MatchEventsTable.createContentValues(matchEvent);
 		this.database = getDatabase(true);
-		long id = database.insert(MatchEventsTable.TABLE_NAME, null, values);
+		long id = database.insertOrThrow(MatchEventsTable.TABLE_NAME, null, values);
 		CustomLog.d(this.getClass(), "Created: " + matchEvent);
 		return Long.valueOf(id).intValue();
 	}
@@ -192,7 +192,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public int createClub(Club club) {
 		ContentValues values = ClubsTable.createContentValues(club);
 		this.database = getDatabase(true);
-		long id = database.insert(ClubsTable.TABLE_NAME, null, values);
+		long id = database.insertOrThrow(ClubsTable.TABLE_NAME, null, values);
 		CustomLog.d(this.getClass(), "Created club: " + club);
 		return Long.valueOf(id).intValue();
 	}
@@ -220,11 +220,10 @@ public class BandyRepositoryImpl implements BandyRepository {
 			}
 			ContentValues values = TeamsTable.createContentValues(team);
 			this.database = getDatabase(true);
-			long id = database.insert(TeamsTable.TABLE_NAME, null, values);
+			long id = database.insertOrThrow(TeamsTable.TABLE_NAME, null, values);
 			return Long.valueOf(id).intValue();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return -11;
+		} catch (SQLException sqle) {
+			throw new ApplicationException(sqle.getMessage());
 		}
 	}
 
@@ -239,7 +238,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		CustomLog.d(this.getClass(), match.toString());
 		ContentValues values = MatchesTable.createContentValues(match);
 		this.database = getDatabase(true);
-		long id = database.insert(MatchesTable.TABLE_NAME, null, values);
+		long id = database.insertOrThrow(MatchesTable.TABLE_NAME, null, values);
 		return Long.valueOf(id).intValue();
 	}
 
@@ -251,7 +250,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		ContentValues values = CupsTable.createContentValues(cup.getSeason().getId(), cup.getStartDate(), cup.getCupName(), cup.getClubName(), cup.getVenue(),
 				cup.getDeadlineDate());
 		this.database = getDatabase(true);
-		long id = database.insert(CupsTable.TABLE_NAME, null, values);
+		long id = database.insertOrThrow(CupsTable.TABLE_NAME, null, values);
 		return Long.valueOf(id).intValue();
 	}
 
@@ -262,7 +261,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public int createSeason(Season season) {
 		ContentValues values = SeasonsTable.createContentValues(season.getPeriod(), season.getStartTime(), season.getEndTime());
 		this.database = getDatabase(true);
-		long id = database.insert(SeasonsTable.TABLE_NAME, null, values);
+		long id = database.insertOrThrow(SeasonsTable.TABLE_NAME, null, values);
 		CustomLog.d(this.getClass(), season);
 		return Long.valueOf(id).intValue();
 	}
@@ -274,7 +273,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public int createTraining(Training training) {
 		ContentValues values = TrainingsTable.createContentValues(training);
 		this.database = getDatabase(true);
-		long id = database.insert(TrainingsTable.TABLE_NAME, null, values);
+		long id = database.insertOrThrow(TrainingsTable.TABLE_NAME, null, values);
 		CustomLog.d(this.getClass(), training);
 		return Long.valueOf(id).intValue();
 	}
@@ -453,7 +452,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		long addressId = createAddress(player.getAddress());
 		ContentValues playerValues = PlayersTable.createContentValues(addressId, player);
 		this.database = getDatabase(true);
-		long playerId = database.insert(PlayersTable.TABLE_NAME, null, playerValues);
+		long playerId = database.insertOrThrow(PlayersTable.TABLE_NAME, null, playerValues);
 		if (player.getParents() != null) {
 			for (Contact parent : player.getParents()) {
 				Contact contact = getContact(parent.getFirstName(), parent.getLastName());
@@ -476,7 +475,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		long addressId = createAddress(contact.getAddress());
 		ContentValues contactValues = ContactsTable.createContentValues(addressId, contact);
 		this.database = getDatabase(true);
-		long contactId = database.insert(ContactsTable.TABLE_NAME, null, contactValues);
+		long contactId = database.insertOrThrow(ContactsTable.TABLE_NAME, null, contactValues);
 		if (contact.getRoles() != null) {
 			for (RoleTypesEnum role : contact.getRoles()) {
 				createContactRoleTypeLnk(Long.valueOf(contactId).intValue(), role.getId());
@@ -493,7 +492,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public long createAddress(Address address) {
 		ContentValues contactValues = AddressTable.createContentValues(address);
 		this.database = getDatabase(true);
-		long addressId = database.insert(AddressTable.TABLE_NAME, null, contactValues);
+		long addressId = database.insertOrThrow(AddressTable.TABLE_NAME, null, contactValues);
 		// Check if this was an existing address, in that case return that
 		// address id
 		if (addressId == -1) {
@@ -1132,7 +1131,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), "team=" + team);
+		CustomLog.e(this.getClass(), "team=" + team);
 		return team;
 	}
 
@@ -1888,7 +1887,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	private long createLink(String tableName, ContentValues contentValues) {
 		this.database = getDatabase(true);
-		long id = database.insert(tableName, null, contentValues);
+		long id = database.insertOrThrow(tableName, null, contentValues);
 		CustomLog.d(this.getClass(), "created=" + tableName + ", values=" + contentValues.toString());
 		return id;
 	}
@@ -1918,7 +1917,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public int createCupMatchLnk(int cupId, int matchId) {
 		this.database = getDatabase(true);
 		ContentValues contentValues = CupMatchLnkTable.createContentValues(cupId, matchId);
-		long id = database.insert(CupMatchLnkTable.TABLE_NAME, null, contentValues);
+		long id = database.insertOrThrow(CupMatchLnkTable.TABLE_NAME, null, contentValues);
 		CustomLog.d(this.getClass(), "created=" + CupMatchLnkTable.TABLE_NAME + ", values=" + contentValues.toString());
 		return Long.valueOf(id).intValue();
 	}

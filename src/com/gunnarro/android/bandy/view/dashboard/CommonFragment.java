@@ -35,10 +35,6 @@ public class CommonFragment extends Fragment {
 		getActivity().getActionBar().setSubtitle(teamName);
 	}
 
-	private void validateInput() throws ValidationException {
-
-	}
-
 	protected EditText getEditText(int id) {
 		return (EditText) getView().findViewById(id);
 	}

@@ -133,6 +133,9 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 			CustomLog.e(this.getClass(), "action: " + item.getTitle());
 			// showReload(findViewById(R.id.club_item_list));
 			reloadListData();
+		case android.R.id.home:
+			super.finish();
+			return true;
 		default:
 			// startActivity(new Intent(getApplicationContext(),
 			// HomeActivity.class));

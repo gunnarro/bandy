@@ -21,6 +21,7 @@ import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.exception.ValidationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl.SelectionListType;
@@ -181,51 +182,66 @@ public class TeamEditFragment extends CommonFragment {
 			String teamName = getInputValue(R.id.teamNameTxt, true);
 			String teamYearOfBirth = getInputValue(R.id.teamYearOfBirthTxt, false);
 
-			Club club = bandyService.getClub(clubName, "%");
+			Club club = this.bandyService.getClub(clubName, "%");
 			if (club == null) {
 				throw new RuntimeException("Club is not found!");
 			}
-			if (team == null) {
-				team = new Team(teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
+			if (this.team == null) {
+				this.team = new Team(teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
 			} else {
-				team.setName(teamName);
-				team.setTeamYearOfBirth(Integer.parseInt(teamYearOfBirth));
+				this.team.setName(teamName);
+				this.team.setTeamYearOfBirth(Integer.parseInt(teamYearOfBirth));
 			}
-			team.setGender(getSelectedGender());
+			this.team.setGender(getSelectedGender());
 		} catch (ValidationException ve) {
 			CustomLog.e(this.getClass(), ve.getMessage());
 			return false;
 		}
 
-		String selectedLeagueName = getInputValue(R.id.teamleagueNameTxt, false);
-		if (selectedLeagueName != null) {
-			if (team.getLeague() == null || !team.getLeague().getName().equalsIgnoreCase(selectedLeagueName)) {
-				League league = bandyService.getLeague(selectedLeagueName);
-				team.setLeague(league);
-			}
+		// Check if team name already exist
+		try {
+			this.bandyService.getTeam(this.team.getName(), false);
+			Validator.setErrorMessage(getEditText(R.id.teamNameTxt), "Team name already exist!");
+			return false;
+		} catch (ValidationException ve) {
+			// Ignore, team name do not exist in the DB.
 		}
 
-		Contact newTeamleader = null;
-		String selectedTeamleaderName = getInputValue(R.id.teamTeamleaderTxt, false);
-		if (selectedTeamleaderName != null) {
-			if (team.getTeamLead() == null) {
-				team.setTeamLead(Contact.createContact(selectedTeamleaderName));
-			} else if (!team.getTeamLead().getFullName().equalsIgnoreCase(selectedTeamleaderName)) {
-				newTeamleader = Contact.createContact(selectedTeamleaderName);
+		try {
+			String selectedLeagueName = getInputValue(R.id.teamleagueNameTxt, false);
+			if (selectedLeagueName != null) {
+				if (this.team.getLeague() == null || !this.team.getLeague().getName().equalsIgnoreCase(selectedLeagueName)) {
+					League league = this.bandyService.getLeague(selectedLeagueName);
+					this.team.setLeague(league);
+				}
 			}
-		}
 
-		Contact newCoach = null;
-		String selectedCoachName = getInputValue(R.id.teamCoachTxt, false);
-		if (selectedCoachName != null) {
-			if (team.getCoach() == null) {
-				team.setCoach(Contact.createContact(selectedCoachName));
-			} else if (!team.getCoach().getFullName().equalsIgnoreCase(selectedCoachName)) {
-				newCoach = Contact.createContact(selectedCoachName);
+			Contact newTeamleader = null;
+			String selectedTeamleaderName = getInputValue(R.id.teamTeamleaderTxt, false);
+			if (selectedTeamleaderName != null) {
+				if (this.team.getTeamLead() == null) {
+					this.team.setTeamLead(Contact.createContact(selectedTeamleaderName));
+				} else if (!this.team.getTeamLead().getFullName().equalsIgnoreCase(selectedTeamleaderName)) {
+					newTeamleader = Contact.createContact(selectedTeamleaderName);
+				}
 			}
+
+			Contact newCoach = null;
+			String selectedCoachName = getInputValue(R.id.teamCoachTxt, false);
+			if (selectedCoachName != null) {
+				if (this.team.getCoach() == null) {
+					this.team.setCoach(Contact.createContact(selectedCoachName));
+				} else if (!this.team.getCoach().getFullName().equalsIgnoreCase(selectedCoachName)) {
+					newCoach = Contact.createContact(selectedCoachName);
+				}
+			}
+			this.bandyService.saveTeam(this.team, newTeamleader, newCoach);
+			return true;
+		} catch (ApplicationException ae) {
+			String errorMsg = "Failed creating new Team: " + ae.getMessage();
+			Toast.makeText(getActivity().getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+			return false;
 		}
-		int id = bandyService.saveTeam(team, newTeamleader, newCoach);
-		return true;
 	}
 
 }

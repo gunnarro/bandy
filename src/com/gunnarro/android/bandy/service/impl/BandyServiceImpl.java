@@ -207,44 +207,49 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public int saveTeam(Team team, Contact newTeamleader, Contact newCoach) {
-		int teamId;
-		if (team.getId() == null) {
-			// This was a new team
-			teamId = bandyRepository.createTeam(team);
-			// Create team contact persons
-			if (team.getTeamLead() != null) {
-				Contact contact = bandyRepository.getContact(team.getTeamLead().getFirstName(), team.getTeamLead().getLastName());
-				bandyRepository.createContactRoleTypeLnk(contact.getId(), RoleTypesEnum.TEAMLEAD.getId());
-			}
-			if (team.getCoach() != null) {
-				Contact contact = bandyRepository.getContact(team.getCoach().getFirstName(), team.getCoach().getLastName());
-				bandyRepository.createContactRoleTypeLnk(contact.getId(), RoleTypesEnum.COACH.getId());
+		try {
+			int teamId;
+			if (team.getId() == null) {
+				// This was a new team
+				teamId = bandyRepository.createTeam(team);
+				// Create team contact persons
+				if (team.getTeamLead() != null) {
+					Contact contact = bandyRepository.getContact(team.getTeamLead().getFirstName(), team.getTeamLead().getLastName());
+					bandyRepository.createContactRoleTypeLnk(contact.getId(), RoleTypesEnum.TEAMLEAD.getId());
+				}
+				if (team.getCoach() != null) {
+					Contact contact = bandyRepository.getContact(team.getCoach().getFirstName(), team.getCoach().getLastName());
+					bandyRepository.createContactRoleTypeLnk(contact.getId(), RoleTypesEnum.COACH.getId());
+				}
+				return teamId;
+			} else {
+				teamId = bandyRepository.updateTeam(team);
+				// Change team contact persons
+				if (newTeamleader != null) {
+					Contact newTeamleaderContact = bandyRepository.getContact(newTeamleader.getFirstName(), newTeamleader.getLastName());
+					if (newTeamleaderContact != null) {
+						bandyRepository.createContactRoleTypeLnk(newTeamleaderContact.getId(), RoleTypesEnum.TEAMLEAD.getId());
+						bandyRepository.deleteContactRoleTypeLnk(team.getTeamLead().getId(), RoleTypesEnum.TEAMLEAD.getId());
+					} else {
+						CustomLog.e(this.getClass(), "No contact found for: " + newTeamleader.getFirstName() + " " + newTeamleader.getLastName());
+					}
+				}
+
+				if (newCoach != null) {
+					Contact newCoachContact = bandyRepository.getContact(newCoach.getFirstName(), newCoach.getLastName());
+					if (newCoachContact != null) {
+						bandyRepository.createContactRoleTypeLnk(newCoachContact.getId(), RoleTypesEnum.COACH.getId());
+						bandyRepository.deleteContactRoleTypeLnk(team.getCoach().getId(), RoleTypesEnum.COACH.getId());
+					} else {
+						CustomLog.e(this.getClass(), "No contact found for: " + newCoach.getFirstName() + " " + newCoach.getLastName());
+					}
+				}
 			}
 			return teamId;
-		} else {
-			teamId = bandyRepository.updateTeam(team);
-			// Change team contact persons
-			if (newTeamleader != null) {
-				Contact newTeamleaderContact = bandyRepository.getContact(newTeamleader.getFirstName(), newTeamleader.getLastName());
-				if (newTeamleaderContact != null) {
-					bandyRepository.createContactRoleTypeLnk(newTeamleaderContact.getId(), RoleTypesEnum.TEAMLEAD.getId());
-					bandyRepository.deleteContactRoleTypeLnk(team.getTeamLead().getId(), RoleTypesEnum.TEAMLEAD.getId());
-				} else {
-					CustomLog.e(this.getClass(), "No contact found for: " + newTeamleader.getFirstName() + " " + newTeamleader.getLastName());
-				}
-			}
-
-			if (newCoach != null) {
-				Contact newCoachContact = bandyRepository.getContact(newCoach.getFirstName(), newCoach.getLastName());
-				if (newCoachContact != null) {
-					bandyRepository.createContactRoleTypeLnk(newCoachContact.getId(), RoleTypesEnum.COACH.getId());
-					bandyRepository.deleteContactRoleTypeLnk(team.getCoach().getId(), RoleTypesEnum.COACH.getId());
-				} else {
-					CustomLog.e(this.getClass(), "No contact found for: " + newCoach.getFirstName() + " " + newCoach.getLastName());
-				}
-			}
+		} catch (Exception e) {
+			CustomLog.e(this.getClass(), e.getMessage());
+			throw new ApplicationException(e.getMessage());
 		}
-		return teamId;
 	}
 
 	/**
@@ -515,7 +520,7 @@ public class BandyServiceImpl implements BandyService {
 		try {
 			Team team = this.bandyRepository.getTeam(name);
 			if (team == null) {
-				throw new ApplicationException("Team not found, team name=" + name);
+				throw new ValidationException("Team not found, team name=" + name);
 			}
 			if (isIncludeAll) {
 				team.setTeamLead(this.getTeamLead(team.getId()));
@@ -523,7 +528,7 @@ public class BandyServiceImpl implements BandyService {
 				team.setPlayerList(this.getPlayerList(team.getId()));
 			}
 			return team;
-		} catch (ValidationException ve) {
+		} catch (ApplicationException ve) {
 			CustomLog.e(this.getClass(), ve.getMessage());
 			return null;
 		}
