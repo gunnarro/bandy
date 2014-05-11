@@ -15,11 +15,11 @@ import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ValidationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.view.clubdetailflow.ClubListFragment.Callbacks;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
-import com.gunnarro.android.bandy.view.listener.ReloadListener;
 
 public class ClubEditFragment extends CommonFragment {
 
@@ -96,14 +96,17 @@ public class ClubEditFragment extends CommonFragment {
 			super.getActivity().onBackPressed();
 			return true;
 		case R.id.action_save:
-			save();
-			Toast.makeText(getActivity().getApplicationContext(), "Saved club! " +  getActivity().getLocalClassName(), Toast.LENGTH_SHORT).show();
-			// Have to refresh the list in order to reflect changes
-//			ReloadListener listener = (ReloadListener) getActivity().getSupportFragmentManager().findFragmentById(R.id.club_item_list_id);
-//			listener.reloadData();
-			callback.onItemSelected(9999);
-			super.getActivity().onBackPressed();
-			return true;
+			boolean isSaved = save();
+			if (isSaved) {
+				Toast.makeText(getActivity().getApplicationContext(), "Saved club! " + getActivity().getLocalClassName(), Toast.LENGTH_SHORT).show();
+				// Have to refresh the list in order to reflect changes
+				// ReloadListener listener = (ReloadListener)
+				// getActivity().getSupportFragmentManager().findFragmentById(R.id.club_item_list_id);
+				// listener.reloadData();
+				callback.onItemSelected(9999);
+				super.getActivity().onBackPressed();
+				return true;
+			}
 		default:
 			return super.getActivity().onOptionsItemSelected(item);
 		}
@@ -130,17 +133,23 @@ public class ClubEditFragment extends CommonFragment {
 		}
 	}
 
-	private void save() {
-		String clubName = getInputValue(R.id.clubNameTxt);
-		String department = getInputValue(R.id.clubDepartmentTxt);
-		if (club == null) {
-			club = new Club(clubName, department);
+	private boolean save() {
+		try {
+			String clubName = getInputValue(R.id.clubNameTxt, true);
+			String department = getInputValue(R.id.clubDepartmentTxt, true);
+			if (club == null) {
+				club = new Club(clubName, department);
+			}
+			if (getInputValue(R.id.clubHomepageTxt, false) != null) {
+				club.setHomePageUrl(getInputValue(R.id.clubHomepageTxt, false));
+			}
+			// club.setStadiumName(null);
+			bandyService.saveClub(club);
+			return true;
+		} catch (ValidationException ve) {
+			CustomLog.e(this.getClass(), ve.getMessage());
+			return false;
 		}
-		if (getInputValue(R.id.clubHomepageTxt) != null) {
-			club.setHomePageUrl(getInputValue(R.id.clubHomepageTxt));
-		}
-		// club.setStadiumName(null);
-		bandyService.saveClub(club);
 	}
 
 	/**

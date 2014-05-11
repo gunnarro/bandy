@@ -18,6 +18,7 @@ import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.listener.ReloadListener;
 
 /**
  * A list fragment representing a list of Items. This fragment also supports
@@ -28,7 +29,7 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class TeamListFragment extends ListFragment {
+public class TeamListFragment extends ListFragment implements ReloadListener {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -38,6 +39,8 @@ public class TeamListFragment extends ListFragment {
 
 	private BandyService bandyService;
 	private List<Item> itemList;
+	private ArrayAdapter<Item> adapter;
+	private String clubName;
 
 	/**
 	 * The fragment's current callback object, which is notified of list item
@@ -73,6 +76,19 @@ public class TeamListFragment extends ListFragment {
 	};
 
 	/**
+	 * ReloadListener Implementation see {@link ReloadListener} {@inheritDoc}
+	 */
+	@Override
+	public void reloadData() {
+		CustomLog.e(getClass(), "reload  data... ");
+		adapter.clear();
+		itemList = getTeamNamesItemList(clubName);
+		adapter.addAll(itemList);
+		adapter.notifyDataSetChanged();
+		getActivity().getActionBar().setSubtitle("Number of teams: " + itemList.size());
+	}
+
+	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
 	 */
@@ -90,19 +106,19 @@ public class TeamListFragment extends ListFragment {
 		if (this.bandyService == null) {
 			this.bandyService = new BandyServiceImpl(getActivity());
 		}
-		String clubName = null;
 		if (savedInstanceState != null) {
-			clubName = savedInstanceState.getString(DashboardActivity.ARG_CLUB_NAME, null);
+			this.clubName = savedInstanceState.getString(DashboardActivity.ARG_CLUB_NAME, null);
 		} else if (getArguments() != null && getArguments().containsKey(DashboardActivity.ARG_CLUB_NAME)) {
-			clubName = getArguments().getString(DashboardActivity.ARG_CLUB_NAME, null);
+			this.clubName = getArguments().getString(DashboardActivity.ARG_CLUB_NAME, null);
 		} else {
 			// CustomLog.d(this.getClass(),
 			// "No club name argument found! use clubName=" + clubName);
 			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing club name attribute!");
 		}
-		this.itemList = getTeamNamesItemList(clubName);
+		this.itemList = getTeamNamesItemList(this.clubName);
 		CustomLog.d(this.getClass(), "items:" + this.itemList.size());
-		setListAdapter(new ArrayAdapter<Item>(getActivity(), R.layout.custom_checked_list_item, android.R.id.text1, this.itemList));
+		this.adapter = new ArrayAdapter<Item>(getActivity(), R.layout.custom_checked_list_item, android.R.id.text1, this.itemList);
+		setListAdapter(this.adapter);
 		// finally, update the action bar sub title with number of players for
 		// selected team
 		getActivity().getActionBar().setSubtitle("Number of teams: " + itemList.size());

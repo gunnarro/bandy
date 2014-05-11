@@ -38,6 +38,10 @@ import com.gunnarro.android.bandy.service.exception.ValidationException;
 
 public class BandyServiceImpl implements BandyService {
 
+	public static enum SelectionListType {
+		CLUB_NAMES, TEAM_NAMES, PLAYER_NAMES, CONTACT_NAMES;
+	};
+
 	private static Map<String, Integer> datePeriodeMap = new HashMap<String, Integer>();
 	{
 		datePeriodeMap.put("Year", Calendar.YEAR);
@@ -122,6 +126,32 @@ public class BandyServiceImpl implements BandyService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getSeletionList(int id, SelectionListType type) {
+		String[] list = null;
+		switch (type) {
+		case CLUB_NAMES:
+			list = getClubNames();
+			break;
+		case CONTACT_NAMES:
+			list = getContactNames(id);
+			break;
+		case PLAYER_NAMES:
+			list = getPlayerNames(id);
+			break;
+		case TEAM_NAMES:
+			list = getTeamNames(id);
+			break;
+		default:
+			list = new String[] {};
+		}
+		CustomLog.e(this.getClass(), "type=" + type + ", id=" + id + ", hits=" + list.length);
+		return list;
 	}
 
 	/**
@@ -411,6 +441,14 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public String[] getTeamNames(String clubName) {
 		return bandyRepository.getTeamNames(clubName);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getTeamNames(int clubId) {
+		return bandyRepository.getTeamNames(clubId);
 	}
 
 	/**

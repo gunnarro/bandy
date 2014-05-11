@@ -10,6 +10,7 @@ import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.listener.ReloadListener;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -28,6 +29,11 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  */
 public class TeamListActivity extends DashboardActivity implements TeamListFragment.Callbacks {
 
+	public final static int REQUEST_CODE_TEAM_NEW = 100;
+	public final static int REQUEST_CODE_TEAM_DETAIL = 101;
+	public final static int REQUEST_CODE_TEAM_DELET = 102;
+	public final static int RESULT_CODE_TEAM_CHANGED = 1;
+	public final static int RESULT_CODE_TEAM_UNCHANGED = 0;
 	private Integer clubId;
 	private String clubName;
 	private String teamName;
@@ -77,7 +83,7 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 		if (teamName == null) {
 			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing team name arg!");
 		}
-		CustomLog.e(this.getClass(), clubName + "" + teamName);
+		CustomLog.e(this.getClass(), clubName + " " + teamName);
 	}
 
 	/**
@@ -94,7 +100,8 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 			detailIntent.putExtra(ARG_CLUB_NAME, clubName);
 			detailIntent.putExtra(ARG_TEAM_NAME, teamName);
 			detailIntent.putExtra(DashboardActivity.ARG_TEAM_ID, id);
-			startActivity(detailIntent);
+			startActivityForResult(detailIntent, REQUEST_CODE_TEAM_DETAIL);
+			// startActivity(detailIntent);
 		}
 	}
 
@@ -119,8 +126,13 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 			newTeamIntent.putExtra(ARG_CLUB_ID, clubId);
 			newTeamIntent.putExtra(ARG_CLUB_NAME, clubName);
 			newTeamIntent.putExtra(ARG_TEAM_NAME, teamName);
-			startActivity(newTeamIntent);
+			startActivityForResult(newTeamIntent, REQUEST_CODE_TEAM_NEW);
+			// startActivity(newTeamIntent);
 			break;
+		case R.id.action_reload:
+			CustomLog.e(this.getClass(), "action: " + item.getTitle());
+			// showReload(findViewById(R.id.club_item_list));
+			reloadListData();
 		default:
 			// startActivity(new Intent(getApplicationContext(),
 			// HomeActivity.class));
@@ -128,5 +140,42 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 		}
 		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
 		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (resultCode) {
+		case RESULT_CODE_TEAM_CHANGED:
+			reloadListData();
+			// read the bundle and get the country object
+			// Bundle bundle = data.getExtras();
+			// Country country = bundle.getParcelable("country");
+
+			// update the country object in the ArrayAdapter
+			// int listPosition = country.getListPosition();
+			// dataAdapter.setCountry(country, listPosition);
+
+			// update the country name in the ListView
+			// currentView.setTag(country);
+			// TextView name = (TextView)
+			// currentView.findViewById(R.id.name);
+			// name.setText(country.getName());
+			break;
+		case RESULT_CODE_TEAM_UNCHANGED:
+			// do nothing
+			break;
+		default:
+			CustomLog.e(this.getClass(), "Unkown result code: " + resultCode);
+			break;
+		}
+		CustomLog.e(getClass(), "requestCode=" + requestCode + ", resultCode=" + resultCode);
+	}
+
+	private void reloadListData() {
+		ReloadListener listener = (ReloadListener) getSupportFragmentManager().findFragmentById(R.id.team_item_list_id);
+		listener.reloadData();
 	}
 }

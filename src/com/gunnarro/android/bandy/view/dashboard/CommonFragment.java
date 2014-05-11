@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.service.exception.ValidationException;
+import com.gunnarro.android.bandy.utility.Validator;
 
 public class CommonFragment extends Fragment {
 
@@ -33,12 +35,21 @@ public class CommonFragment extends Fragment {
 		getActivity().getActionBar().setSubtitle(teamName);
 	}
 
+	private void validateInput() throws ValidationException {
+
+	}
+
 	protected EditText getEditText(int id) {
 		return (EditText) getView().findViewById(id);
 	}
 
-	protected String getInputValue(int id) {
+	protected String getInputValue(int id, boolean isRequired) {
 		EditText inputView = getEditText(id);
+		if (isRequired) {
+			if (!Validator.hasText(inputView)) {
+				throw new ValidationException("Invalid name!");
+			}
+		}
 		if (inputView != null) {
 			return inputView.getText().toString().trim();
 		} else {

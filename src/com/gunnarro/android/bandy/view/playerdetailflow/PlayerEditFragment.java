@@ -16,6 +16,7 @@ import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ValidationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
@@ -86,10 +87,12 @@ public class PlayerEditFragment extends CommonFragment {
 			super.getActivity().onBackPressed();
 			return true;
 		case R.id.action_save:
-			save();
-			Toast.makeText(getActivity().getApplicationContext(), "Saved player!", Toast.LENGTH_SHORT).show();
-			super.getActivity().onBackPressed();
-			return true;
+			boolean isSaved = save();
+			if (isSaved) {
+				Toast.makeText(getActivity().getApplicationContext(), "Saved player!", Toast.LENGTH_SHORT).show();
+				super.getActivity().onBackPressed();
+				return true;
+			}
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -118,42 +121,48 @@ public class PlayerEditFragment extends CommonFragment {
 		}
 	}
 
-	private void save() {
-		String firstName = getInputValue(R.id.playerFirstNameTxt);
-		String middleName = getInputValue(R.id.playerMiddleNameTxt);
-		String lastName = getInputValue(R.id.playerLastNameTxt);
-		String dateOfBirth = getInputValue(R.id.playerDateOfBirthTxt);
-		String streetName = getInputValue(R.id.playerStreetNameTxt);
-		String streetNumber = getInputValue(R.id.playerStreetNumberTxt);
-		String streetNumberPostfix = getInputValue(R.id.playerStreetNumberPostfixTxt);
-		String postalCode = getInputValue(R.id.playerPostalCodeTxt);
-		String city = getInputValue(R.id.playerCityTxt);
-		String country = getInputValue(R.id.playerCountryTxt);
-		String mobileNumber = getInputValue(R.id.playerMobileNumberTxt);
-		String emailAddress = getInputValue(R.id.playerEmailAddressTxt);
-		String schoolName = getInputValue(R.id.playerSchoolNameTxt);
+	private boolean save() {
+		try {
+			String firstName = getInputValue(R.id.playerFirstNameTxt, true);
+			String middleName = getInputValue(R.id.playerMiddleNameTxt, false);
+			String lastName = getInputValue(R.id.playerLastNameTxt, true);
+			String dateOfBirth = getInputValue(R.id.playerDateOfBirthTxt, false);
+			String streetName = getInputValue(R.id.playerStreetNameTxt, false);
+			String streetNumber = getInputValue(R.id.playerStreetNumberTxt, false);
+			String streetNumberPostfix = getInputValue(R.id.playerStreetNumberPostfixTxt, false);
+			String postalCode = getInputValue(R.id.playerPostalCodeTxt, false);
+			String city = getInputValue(R.id.playerCityTxt, false);
+			String country = getInputValue(R.id.playerCountryTxt, false);
+			String mobileNumber = getInputValue(R.id.playerMobileNumberTxt, false);
+			String emailAddress = getInputValue(R.id.playerEmailAddressTxt, false);
+			String schoolName = getInputValue(R.id.playerSchoolNameTxt, false);
 
-		if (player == null) {
-			Team team = this.bandyService.getTeam(teamName, false);
-			Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
-			player = new Player(team, firstName, middleName, lastName, getSelectedGender(), PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth,
-					"dd.mm.yyyy").getTime(), address);
-		} else {
-			player.setFirstName(firstName);
-			player.setMiddleName(middleName);
-			player.setLastName(lastName);
-			player.setGender(getSelectedGender());
-			player.getAddress().setStreetName(streetName);
-			player.getAddress().setStreetNumber(streetNumber);
-			player.getAddress().setStreetNumberPrefix(streetNumberPostfix);
-			player.getAddress().setCity(city);
-			player.getAddress().setPostalCode(postalCode);
-			player.getAddress().setCountry(country);
+			if (player == null) {
+				Team team = this.bandyService.getTeam(teamName, false);
+				Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
+				player = new Player(team, firstName, middleName, lastName, getSelectedGender(), PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth,
+						"dd.mm.yyyy").getTime(), address);
+			} else {
+				player.setFirstName(firstName);
+				player.setMiddleName(middleName);
+				player.setLastName(lastName);
+				player.setGender(getSelectedGender());
+				player.getAddress().setStreetName(streetName);
+				player.getAddress().setStreetNumber(streetNumber);
+				player.getAddress().setStreetNumberPrefix(streetNumberPostfix);
+				player.getAddress().setCity(city);
+				player.getAddress().setPostalCode(postalCode);
+				player.getAddress().setCountry(country);
+			}
+			player.setEmailAddress(emailAddress);
+			player.setMobileNumber(mobileNumber);
+			player.setSchoolName(schoolName);
+			int playerId = bandyService.savePlayer(player);
+			CustomLog.e(this.getClass(), player.toString());
+			return true;
+		} catch (ValidationException ve) {
+			CustomLog.e(getClass(), ve.toString());
+			return false;
 		}
-		player.setEmailAddress(emailAddress);
-		player.setMobileNumber(mobileNumber);
-		player.setSchoolName(schoolName);
-		int playerId = bandyService.savePlayer(player);
-		CustomLog.e(this.getClass(), player.toString());
 	}
 }

@@ -993,6 +993,20 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String[] getTeamNames(Integer clubId) {
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT t.").append(TeamsTable.COLUMN_TEAM_NAME);
+		query.append(" FROM ").append(TeamsTable.TABLE_NAME).append(" t, ").append(ClubsTable.TABLE_NAME).append(" c");
+		query.append(" WHERE t.").append(TeamsTable.COLUMN_FK_CLUB_ID).append(" = c.").append(TableHelper.COLUMN_ID);
+		query.append(" AND c.").append(TableHelper.COLUMN_ID).append(" = ?");
+		query.append(" ORDER BY t.").append(TeamsTable.COLUMN_TEAM_NAME).append(" ASC");
+		return getTeamNames(query.toString(), new String[] { clubId.toString() });
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public String[] getTeamNames(String clubName) {
 		if (clubName == null) {
 			throw new ValidationException(this.getClass().getName() + ".getTeam() arg clubName is null!");
@@ -1002,11 +1016,16 @@ public class BandyRepositoryImpl implements BandyRepository {
 		query.append("SELECT t.").append(TeamsTable.COLUMN_TEAM_NAME);
 		query.append(" FROM ").append(TeamsTable.TABLE_NAME).append(" t, ").append(ClubsTable.TABLE_NAME).append(" c");
 		query.append(" WHERE t.").append(TeamsTable.COLUMN_FK_CLUB_ID).append(" = c.").append(TableHelper.COLUMN_ID);
-		query.append(" AND c.").append(ClubsTable.COLUMN_CLUB_NAME).append(" LIKE '").append(clubName).append("'");
+		query.append(" AND c.").append(ClubsTable.COLUMN_CLUB_NAME).append(" LIKE ?");
 		query.append(" ORDER BY t.").append(TeamsTable.COLUMN_TEAM_NAME).append(" ASC");
-		CustomLog.d(this.getClass(), "sqlQuery=" + query.toString());
+		return getTeamNames(query.toString(), new String[] { clubName });
+	}
+
+	private String[] getTeamNames(String sqlQuery, String[] selectionArgs) {
+		String[] teamNames = new String[] {};
+		CustomLog.d(this.getClass(), "sqlQuery=" + sqlQuery);
 		this.database = getDatabase(false);
-		Cursor cursor = this.database.rawQuery(query.toString(), null);
+		Cursor cursor = this.database.rawQuery(sqlQuery, selectionArgs);
 		if (cursor != null && cursor.getCount() > 0) {
 			teamNames = new String[cursor.getCount()];
 			int i = 0;
@@ -1022,6 +1041,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 			cursor.close();
 		}
 		return teamNames;
+
 	}
 
 	/**

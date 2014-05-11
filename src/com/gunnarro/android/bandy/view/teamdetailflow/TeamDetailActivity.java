@@ -1,5 +1,6 @@
 package com.gunnarro.android.bandy.view.teamdetailflow;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -66,11 +67,13 @@ public class TeamDetailActivity extends FragmentActivity implements NoticeDialog
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			clubName = getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
-			teamName = getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
+			// clubName =
+			// getIntent().getStringExtra(DashboardActivity.ARG_CLUB_NAME);
+			// teamName =
+			// getIntent().getStringExtra(DashboardActivity.ARG_TEAM_NAME);
 			teamId = getIntent().getIntExtra(DashboardActivity.ARG_TEAM_ID, -1);
-			arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
-			arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
+			// arguments.putString(DashboardActivity.ARG_CLUB_NAME, clubName);
+			// arguments.putString(DashboardActivity.ARG_TEAM_NAME, teamName);
 			arguments.putInt(DashboardActivity.ARG_TEAM_ID, teamId);
 			TeamDetailFragment fragment = new TeamDetailFragment();
 			fragment.setArguments(arguments);
@@ -109,12 +112,32 @@ public class TeamDetailActivity extends FragmentActivity implements NoticeDialog
 			transaction.addToBackStack(null);
 			transaction.commit();
 			return true;
+		case android.R.id.home:
+			// Clicked on the navigate back button
+			super.finish();
+			return true;
 		default:
-			// startActivity(new Intent(getApplicationContext(),
-			// HomeActivity.class));
 			break;
 		}
-		CustomLog.d(this.getClass(), "clicked on: " + item.toString());
+		CustomLog.d(this.getClass(), "clicked on: " + item);
 		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (resultCode) {
+		case TeamListActivity.RESULT_CODE_TEAM_CHANGED:
+			break;
+		case TeamListActivity.RESULT_CODE_TEAM_UNCHANGED:
+			// do nothing
+			break;
+		default:
+			CustomLog.e(this.getClass(), "Unkown result code: " + resultCode);
+			break;
+		}
+		CustomLog.e(getClass(), "requestCode=" + requestCode + ", resultCode=" + resultCode);
 	}
 }

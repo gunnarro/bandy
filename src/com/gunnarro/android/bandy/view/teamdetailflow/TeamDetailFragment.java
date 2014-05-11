@@ -52,7 +52,8 @@ public class TeamDetailFragment extends CommonFragment {
 			this.bandyService = new BandyServiceImpl(rootView.getContext());
 		}
 		Team team = this.bandyService.getTeam(teamId);
-		getActivity().setTitle(team.getName());
+		getActivity().setTitle(team.getClub().getName());
+		getActivity().getActionBar().setSubtitle(team.getClub().getDepartmentName());
 		updateTeamDetails(rootView, team);
 		setupEventHandlers(rootView);
 		Statistic teamStatistic = this.bandyService.getTeamStatistic(team.getId(), 1);
@@ -85,7 +86,8 @@ public class TeamDetailFragment extends CommonFragment {
 		case R.id.action_delete:
 			delete(teamId);
 			Toast.makeText(getActivity().getApplicationContext(), "Deleted team!", Toast.LENGTH_SHORT).show();
-			super.getActivity().onBackPressed();
+			super.getActivity().setResult(TeamListActivity.RESULT_CODE_TEAM_CHANGED);
+			super.getActivity(). finish();
 		default:
 			return false;
 		}
@@ -101,6 +103,7 @@ public class TeamDetailFragment extends CommonFragment {
 	private void updateTeamDetails(View rootView, Team team) {
 		if (team != null) {
 			setTextViewValue(rootView, R.id.teamNameTxt, team.getName());
+			setTextViewValue(rootView, R.id.teamPlayersTxt, Integer.toString(team.getPlayerItemList().size()));
 			setTextViewValue(rootView, R.id.teamYearOfBirthTxt, team.getTeamYearOfBirth().toString());
 			setTextViewValue(rootView, R.id.teamGenderTxt, team.getGender());
 			if (team.getLeague() != null) {

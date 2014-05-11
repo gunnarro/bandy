@@ -219,4 +219,6 @@ public interface BandyRepository {
 
 	public List<Club> getClubList();
 
+	String[] getTeamNames(Integer clubId);
+
 }

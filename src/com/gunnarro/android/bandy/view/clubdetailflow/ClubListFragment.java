@@ -76,7 +76,7 @@ public class ClubListFragment extends ListFragment implements ReloadListener {
 	};
 
 	/**
-	 * {@inheritDoc}
+	 * ReloadListener Implementation see {@link ReloadListener} {@inheritDoc}
 	 */
 	@Override
 	public void reloadData() {

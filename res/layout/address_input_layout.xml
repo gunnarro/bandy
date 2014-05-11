@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:hint="@string/street_name"
-            android:inputType="text"
+            android:inputType="textNoSuggestions"
             android:text="@string/blank" >
         </EditText>
     </TableRow>
@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:hint="@string/city"
-            android:inputType="text"
+            android:inputType="textNoSuggestions"
             android:text="@string/blank" >
         </EditText>
     </TableRow>
@@ -132,7 +132,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:hint="@string/country"
-            android:inputType="text"
+            android:inputType="textNoSuggestions"
             android:text="@string/blank" >
         </EditText>
     </TableRow>

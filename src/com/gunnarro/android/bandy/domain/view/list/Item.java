@@ -1,16 +1,54 @@
 package com.gunnarro.android.bandy.domain.view.list;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Class for holding list items.
  * 
  * @author gunnarro
  * 
  */
-public class Item implements Comparable<Item> {
+public class Item implements Parcelable, Comparable<Item> {
 
 	private Integer id;
 	private String value;
 	private boolean isEnabled;
+
+	// -------------------------------------------------------------------------
+	// Parcelable Interface
+	// -------------------------------------------------------------------------
+
+	private Item(Parcel in) {
+		this.id = in.readInt();
+		this.value = in.readString();
+		this.isEnabled = Boolean.valueOf(in.readString());
+	}
+
+	public static final Parcelable.Creator<Item> CREATOR = new Creator<Item>() {
+		public Item createFromParcel(Parcel in) {
+			return new Item(in);
+		}
+
+		@Override
+		public Item[] newArray(int size) {
+			return new Item[size];
+		}
+	};
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel parcel, int flags) {
+		parcel.writeInt(id);
+		parcel.writeString(value);
+		parcel.writeString(Boolean.toString(isEnabled));
+	}
+
+	// -------------------------------------------------------------------------
 
 	public Item(Integer id, String value, boolean isEnabled) {
 		this.id = id;

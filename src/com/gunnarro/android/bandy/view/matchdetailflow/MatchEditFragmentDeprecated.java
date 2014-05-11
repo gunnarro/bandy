@@ -143,8 +143,8 @@ public class MatchEditFragmentDeprecated extends CommonFragment {
 	}
 
 	private void save() {
-		String startDateStr = getInputValue(R.id.matchStartDateTxt);
-		String startTimeStr = getInputValue(R.id.matchStartTimeTxt);
+		String startDateStr = getInputValue(R.id.matchStartDateTxt, false);
+		String startTimeStr = getInputValue(R.id.matchStartTimeTxt, false);
 		// String goalsHome = getInputValue(R.id.matchGoalsHomeTxt);
 		// String goalsAway = getInputValue(R.id.matchGoalsAwayTxt);
 		if (!startDateStr.isEmpty() && !startTimeStr.isEmpty()) {

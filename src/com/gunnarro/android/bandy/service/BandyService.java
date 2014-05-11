@@ -18,6 +18,7 @@ import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
+import com.gunnarro.android.bandy.service.impl.BandyServiceImpl.SelectionListType;
 
 public interface BandyService {
 
@@ -66,6 +67,8 @@ public interface BandyService {
 	public Season getSeason(Integer seasonId);
 
 	public Season getSeason(String period);
+
+	public String[] getTeamNames(int clubId);
 
 	public String[] getTeamNames(String clubName);
 
@@ -240,5 +243,7 @@ public interface BandyService {
 	public int createMatchEvent(MatchEvent matchEvent);
 
 	public String[] getClubNames();
+
+	String[] getSeletionList(int id, SelectionListType type);
 
 }

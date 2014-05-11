@@ -1,10 +1,17 @@
 package com.gunnarro.android.bandy.domain;
 
-import java.util.List;
-
 import com.gunnarro.android.bandy.domain.party.Address;
 
 public class Club {
+
+	public static enum DepartmentNamesEnum {
+		Bandy, Baseball, Hockey, Soccer, Volleyball, Other;
+
+		public String[] asArray() {
+			return new String[] { Bandy.name(), Baseball.name(), Hockey.name(), Soccer.name(), Volleyball.name(), Other.name() };
+		}
+	}
+
 	private Integer id;
 	private String name;
 	private String departmentName;
@@ -12,7 +19,6 @@ public class Club {
 	private String clubNameAbbreviation;
 	private Address address;
 	private String homePageUrl;
-	private List<Team> teams;
 
 	public Club(String name, String departmentName) {
 		this.name = name;

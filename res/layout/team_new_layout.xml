@@ -44,6 +44,7 @@
                 android:id="@+id/teamNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
@@ -77,12 +78,14 @@
                 android:id="@+id/maleRadioBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="@string/male" />
 
             <RadioButton
                 android:id="@+id/femaleRadioBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="false"
                 android:text="@string/female" />
         </TableRow>
 
@@ -101,7 +104,7 @@
                 android:id="@+id/teamleagueNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -109,7 +112,7 @@
                 android:id="@+id/selectLeagueBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="none"
+                android:contentDescription="@string/blank"
                 android:src="@drawable/arrow_right" />
         </TableRow>
 
@@ -128,7 +131,7 @@
                 android:id="@+id/teamTeamleaderTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -136,7 +139,7 @@
                 android:id="@+id/selectTeamleaderBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="none"
+                android:contentDescription="@string/blank"
                 android:src="@drawable/arrow_right" />
         </TableRow>
 
@@ -155,7 +158,7 @@
                 android:id="@+id/teamCoachTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -163,7 +166,34 @@
                 android:id="@+id/selectCoachBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="none"
+                android:contentDescription="@string/blank"
+                android:src="@drawable/arrow_right" />
+        </TableRow>
+        
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/players"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/teamPlayersTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions"
+                android:text="@string/blank"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageButton
+                android:id="@+id/selectPlayersBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/blank"
                 android:src="@drawable/arrow_right" />
         </TableRow>
     </TableLayout>

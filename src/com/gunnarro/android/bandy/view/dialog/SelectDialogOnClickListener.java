@@ -1,17 +1,27 @@
 package com.gunnarro.android.bandy.view.dialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.gunnarro.android.bandy.domain.view.list.Item;
+import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.impl.BandyServiceImpl.SelectionListType;
+
 public class SelectDialogOnClickListener implements OnClickListener {
-	private boolean isInitMode = true;
+	private static boolean isInitMode = true;
 	private String[] items;
 	private int inputFieldId;
 	boolean isMultiSelection = false;
 	private FragmentManager fragmentManager;
+	private BandyService bandyService;
+	private SelectionListType type;
+	private Integer id;
 
 	public SelectDialogOnClickListener(FragmentManager fragmentManager, String[] items, int inputFieldId, boolean isMultiSelection) {
 		this.fragmentManager = fragmentManager;
@@ -19,6 +29,14 @@ public class SelectDialogOnClickListener implements OnClickListener {
 		this.inputFieldId = inputFieldId;
 		this.isMultiSelection = isMultiSelection;
 		isInitMode = true;
+	}
+
+	public SelectDialogOnClickListener(FragmentManager fragmentManager, BandyService bandyService, SelectionListType type, int id, int inputFieldId,
+			boolean isMultiSelection) {
+		this(fragmentManager, new String[] {}, inputFieldId, isMultiSelection);
+		this.bandyService = bandyService;
+		this.type = type;
+		this.id = id;
 	}
 
 	@Override
@@ -32,6 +50,10 @@ public class SelectDialogOnClickListener implements OnClickListener {
 
 	private void showSelectionDialog() {
 		// Create an instance of the dialog fragment and show it
+		if (bandyService != null && type != null) {
+			items = bandyService.getSeletionList(id, type);
+		}
+
 		DialogFragment dialogFragment = new DialogSelection();
 		Bundle arguments = new Bundle();
 		arguments.putStringArray(DialogSelection.DIALOG_ARG_ITEMS_KEY, items);
@@ -41,5 +63,13 @@ public class SelectDialogOnClickListener implements OnClickListener {
 		}
 		dialogFragment.setArguments(arguments);
 		dialogFragment.show(fragmentManager, "SelectionDialogFragment");
+	}
+
+	public static void turnOnInitMode() {
+		isInitMode = true;
+	}
+
+	public static void turnOffInitMode() {
+		isInitMode = false;
 	}
 }

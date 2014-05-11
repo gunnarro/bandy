@@ -20,6 +20,7 @@ import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ValidationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
@@ -91,10 +92,12 @@ public class ContactEditFragment extends CommonFragment {
 			super.getActivity().onBackPressed();
 			return true;
 		case R.id.action_save:
-			save();
-			Toast.makeText(getActivity().getApplicationContext(), "Saved contact!", Toast.LENGTH_SHORT).show();
-			super.getActivity().onBackPressed();
-			return true;
+			boolean isSaved = save();
+			if (isSaved) {
+				Toast.makeText(getActivity().getApplicationContext(), "Saved contact!", Toast.LENGTH_SHORT).show();
+				super.getActivity().onBackPressed();
+				return true;
+			}
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -131,40 +134,46 @@ public class ContactEditFragment extends CommonFragment {
 		}
 	}
 
-	private void save() {
-		String firstName = getInputValue(R.id.contactFirstNameTxt);
-		String middleName = getInputValue(R.id.contactMiddleNameTxt);
-		String lastName = getInputValue(R.id.contactLastNameTxt);
-		String streetName = getInputValue(R.id.contactStreetNameTxt);
-		String streetNumber = getInputValue(R.id.contactStreetNumberTxt);
-		String streetNumberPostfix = getInputValue(R.id.contactStreetNumberPostfixTxt);
-		String postalCode = getInputValue(R.id.contactPostalCodeTxt);
-		String city = getInputValue(R.id.contactCityTxt);
-		String country = getInputValue(R.id.contactCountryTxt);
-		String mobileNumber = getInputValue(R.id.contactMobileNumberTxt);
-		String emailAddress = getInputValue(R.id.contactEmailAddressTxt);
+	private boolean save() {
+		try {
+			String firstName = getInputValue(R.id.contactFirstNameTxt, true);
+			String middleName = getInputValue(R.id.contactMiddleNameTxt, false);
+			String lastName = getInputValue(R.id.contactLastNameTxt, true);
+			String streetName = getInputValue(R.id.contactStreetNameTxt, false);
+			String streetNumber = getInputValue(R.id.contactStreetNumberTxt, false);
+			String streetNumberPostfix = getInputValue(R.id.contactStreetNumberPostfixTxt, false);
+			String postalCode = getInputValue(R.id.contactPostalCodeTxt, false);
+			String city = getInputValue(R.id.contactCityTxt, false);
+			String country = getInputValue(R.id.contactCountryTxt, false);
+			String mobileNumber = getInputValue(R.id.contactMobileNumberTxt, false);
+			String emailAddress = getInputValue(R.id.contactEmailAddressTxt, false);
 
-		if (contact == null) {
-			Team team = this.bandyService.getTeam(1);
-			Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
-			contact = new Contact(team, firstName, middleName, lastName, getSelectedGender(), address);
-		} else {
-			contact.setFirstName(firstName);
-			contact.setMiddleName(middleName);
-			contact.setLastName(lastName);
-			contact.setGender(getSelectedGender());
-			contact.getAddress().setStreetName(streetName);
-			contact.getAddress().setStreetNumber(streetNumber);
-			contact.getAddress().setStreetNumberPrefix(streetNumberPostfix);
-			contact.getAddress().setCity(city);
-			contact.getAddress().setPostalCode(postalCode);
-			contact.getAddress().setCountry(country);
-			contact.addRole(RoleTypesEnum.valueOf(selectedRoleName));
+			if (contact == null) {
+				Team team = this.bandyService.getTeam(1);
+				Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
+				contact = new Contact(team, firstName, middleName, lastName, getSelectedGender(), address);
+			} else {
+				contact.setFirstName(firstName);
+				contact.setMiddleName(middleName);
+				contact.setLastName(lastName);
+				contact.setGender(getSelectedGender());
+				contact.getAddress().setStreetName(streetName);
+				contact.getAddress().setStreetNumber(streetNumber);
+				contact.getAddress().setStreetNumberPrefix(streetNumberPostfix);
+				contact.getAddress().setCity(city);
+				contact.getAddress().setPostalCode(postalCode);
+				contact.getAddress().setCountry(country);
+				contact.addRole(RoleTypesEnum.valueOf(selectedRoleName));
+			}
+			contact.setEmailAddress(emailAddress);
+			contact.setMobileNumber(mobileNumber);
+			int contactId = bandyService.saveContact(contact);
+			CustomLog.e(this.getClass(), contact.toString());
+			return true;
+		} catch (ValidationException ve) {
+			CustomLog.e(this.getClass(), ve.toString());
+			return false;
 		}
-		contact.setEmailAddress(emailAddress);
-		contact.setMobileNumber(mobileNumber);
-		int contactId = bandyService.saveContact(contact);
-		CustomLog.e(this.getClass(), contact.toString());
 	}
 
 	/**

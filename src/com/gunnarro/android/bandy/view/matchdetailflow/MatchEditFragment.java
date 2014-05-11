@@ -150,7 +150,7 @@ public class MatchEditFragment extends CommonFragment {
 			setInputValue(getView(), fieldId, values[0]);
 			updateMatchStatus(values[0]);
 		} else if (fieldId == R.id.matchRegisteredPlayersTxt) {
-			int numRegPlayers = Integer.parseInt(getInputValue(R.id.matchRegisteredPlayersTxt));
+			int numRegPlayers = Integer.parseInt(getInputValue(R.id.matchRegisteredPlayersTxt, false));
 			for (String player : values) {
 				if (player != null)
 					numRegPlayers = bandyService.signupForMatch(Integer.parseInt(player.split(":")[0]), match.getId());
@@ -175,7 +175,7 @@ public class MatchEditFragment extends CommonFragment {
 	}
 
 	private void updateScore(int tableId, int goalTextViewId, String teamName, String playerName, MatchEventTypesEnum eventType) {
-		String goals = getInputValue(goalTextViewId);
+		String goals = getInputValue(goalTextViewId, false);
 		Integer newGoals = Integer.parseInt(goals) + 1;
 		setInputValue(getView(), goalTextViewId, newGoals.toString());
 		MatchEvent matchEvent = createMatchEvent(teamName, playerName, eventType.name(), newGoals.toString());

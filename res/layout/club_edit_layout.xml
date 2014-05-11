@@ -26,6 +26,7 @@
                 android:id="@+id/clubNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>

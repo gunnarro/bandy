@@ -157,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:hint="@string/street_name"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank" >
             </EditText>
         </TableRow>
@@ -198,7 +198,7 @@
                 android:layout_height="wrap_content"
                 android:ems="1"
                 android:gravity="left"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank" >
             </EditText>
         </TableRow>
@@ -239,7 +239,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank" >
             </EditText>
         </TableRow>
@@ -259,7 +259,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank" >
             </EditText>
         </TableRow>
@@ -319,7 +319,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank" >
             </EditText>
         </TableRow>

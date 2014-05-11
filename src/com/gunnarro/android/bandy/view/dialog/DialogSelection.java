@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 
 public class DialogSelection extends DialogFragment implements ItemSelection {
@@ -21,7 +20,10 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 	private String[] selectedItems = new String[1];
 
 	public String getSelectedItem() {
-		return selectedItems[0];
+		if (selectedItems != null && selectedItems.length > 0) {
+			return selectedItems[0];
+		}
+		return null;
 	}
 
 	public String[] getSelectedItems() {
@@ -92,11 +94,10 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 		if (isMultiSelection) {
 			boolean[] selected = new boolean[items.length];
 			for (int i = 0; i < items.length - 1; i++) {
-				selected[i] = true;
+				selected[i] = false;
 			}
 			builder.setTitle("Selection").setMultiChoiceItems(items, selected, new DialogInterface.OnMultiChoiceClickListener() {
 				public void onClick(DialogInterface dialog, int pos, boolean isChecked) {
-					CustomLog.e(this.getClass(), items[pos]);
 					selectedItems[pos] = items[pos];
 				}
 			});

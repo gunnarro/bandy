@@ -29,7 +29,7 @@
                 android:id="@+id/matchStatusTxt"
                 android:layout_width="wrap_content"
                 android:gravity="center_horizontal"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:padding="2dip"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -120,7 +120,7 @@
                 android:id="@+id/matchRefereeNameTxt"
                 android:layout_width="wrap_content"
                 android:gravity="center_horizontal"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:padding="2dip"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -148,7 +148,7 @@
                 android:id="@+id/matchRegisteredPlayersTxt"
                 android:layout_width="wrap_content"
                 android:gravity="center_horizontal"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:padding="2dip"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -181,7 +181,7 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:gravity="center_vertical"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -200,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:gravity="center_vertical"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:text="@string/blank"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>

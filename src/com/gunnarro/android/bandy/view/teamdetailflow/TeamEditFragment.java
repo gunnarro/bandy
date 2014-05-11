@@ -23,6 +23,7 @@ import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ValidationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
+import com.gunnarro.android.bandy.service.impl.BandyServiceImpl.SelectionListType;
 import com.gunnarro.android.bandy.utility.Validator;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
@@ -73,6 +74,8 @@ public class TeamEditFragment extends CommonFragment {
 		if (teamId != null) {
 			team = this.bandyService.getTeam(teamId);
 			init(rootView);
+			getActivity().getActionBar().setTitle(team.getClub().getName());
+			getActivity().getActionBar().setSubtitle(team.getClub().getDepartmentName());
 		}
 		setupEventHandlers(rootView);
 		return rootView;
@@ -98,13 +101,17 @@ public class TeamEditFragment extends CommonFragment {
 		CustomLog.e(this.getClass(), item.toString());
 		switch (item.getItemId()) {
 		case R.id.action_cancel:
+			super.getActivity().setResult(TeamListActivity.RESULT_CODE_TEAM_UNCHANGED);
 			super.getActivity().onBackPressed();
 			return true;
 		case R.id.action_save:
-			save();
-			Toast.makeText(getActivity().getApplicationContext(), "Saved Team!", Toast.LENGTH_SHORT).show();
-			super.getActivity().onBackPressed();
-			return true;
+			boolean isSaved = save();
+			if (isSaved) {
+				Toast.makeText(getActivity().getApplicationContext(), "Saved Team!", Toast.LENGTH_SHORT).show();
+				super.getActivity().setResult(TeamListActivity.RESULT_CODE_TEAM_CHANGED);
+				super.getActivity().onBackPressed();
+				return true;
+			}
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -115,16 +122,23 @@ public class TeamEditFragment extends CommonFragment {
 	}
 
 	private void setupEventHandlers(View rootView) {
+		SelectDialogOnClickListener.turnOnInitMode();
+		int tmpTeamId = teamId == null ? -1 : teamId;
 		ImageButton leagueBtn = (ImageButton) rootView.findViewById(R.id.selectLeagueBtn);
 		leagueBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getLeagueNames(), R.id.teamleagueNameTxt, false));
 
 		ImageButton teamleaderBtn = (ImageButton) rootView.findViewById(R.id.selectTeamleaderBtn);
-		teamleaderBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getContactNames(teamId == null ? -1 : teamId),
-				R.id.teamTeamleaderTxt, false));
+		teamleaderBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getContactNames(tmpTeamId), R.id.teamTeamleaderTxt,
+				false));
 
 		ImageButton coachBtn = (ImageButton) rootView.findViewById(R.id.selectCoachBtn);
-		coachBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getContactNames(teamId == null ? -1 : teamId),
-				R.id.teamCoachTxt, false));
+		coachBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getContactNames(tmpTeamId), R.id.teamCoachTxt, false));
+
+		ImageButton playersBtn = (ImageButton) rootView.findViewById(R.id.selectPlayersBtn);
+		playersBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService, SelectionListType.PLAYER_NAMES, tmpTeamId,
+				R.id.teamCoachTxt, true));
+
+		SelectDialogOnClickListener.turnOffInitMode();
 
 		// Input validation
 		final EditText nameTxt = (EditText) rootView.findViewById(R.id.teamNameTxt);
@@ -156,33 +170,34 @@ public class TeamEditFragment extends CommonFragment {
 			if (team.getCoach() != null) {
 				setInputValue(rootView, R.id.teamCoachTxt, team.getCoach().getFullName());
 			}
+			if (team.getPlayerItemList() != null) {
+				setInputValue(rootView, R.id.teamPlayersTxt, Integer.toBinaryString(team.getPlayerItemList().size()));
+			}
 		}
 	}
 
-	private void save() {
+	private boolean save() {
 		try {
-			validateInput();
+			String teamName = getInputValue(R.id.teamNameTxt, true);
+			String teamYearOfBirth = getInputValue(R.id.teamYearOfBirthTxt, false);
+
+			Club club = bandyService.getClub(clubName, "%");
+			if (club == null) {
+				throw new RuntimeException("Club is not found!");
+			}
+			if (team == null) {
+				team = new Team(teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
+			} else {
+				team.setName(teamName);
+				team.setTeamYearOfBirth(Integer.parseInt(teamYearOfBirth));
+			}
+			team.setGender(getSelectedGender());
 		} catch (ValidationException ve) {
 			CustomLog.e(this.getClass(), ve.getMessage());
-			return;
+			return false;
 		}
 
-		String teamName = getInputValue(R.id.teamNameTxt);
-		String teamYearOfBirth = getInputValue(R.id.teamYearOfBirthTxt);
-
-		Club club = bandyService.getClub(clubName, "%");
-		if (club == null) {
-			throw new RuntimeException("Club is not found!");
-		}
-		if (team == null) {
-			team = new Team(teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
-		} else {
-			team.setName(teamName);
-			team.setTeamYearOfBirth(Integer.parseInt(teamYearOfBirth));
-		}
-		team.setGender(getSelectedGender());
-
-		String selectedLeagueName = getInputValue(R.id.teamleagueNameTxt);
+		String selectedLeagueName = getInputValue(R.id.teamleagueNameTxt, false);
 		if (selectedLeagueName != null) {
 			if (team.getLeague() == null || !team.getLeague().getName().equalsIgnoreCase(selectedLeagueName)) {
 				League league = bandyService.getLeague(selectedLeagueName);
@@ -191,7 +206,7 @@ public class TeamEditFragment extends CommonFragment {
 		}
 
 		Contact newTeamleader = null;
-		String selectedTeamleaderName = getInputValue(R.id.teamTeamleaderTxt);
+		String selectedTeamleaderName = getInputValue(R.id.teamTeamleaderTxt, false);
 		if (selectedTeamleaderName != null) {
 			if (team.getTeamLead() == null) {
 				team.setTeamLead(Contact.createContact(selectedTeamleaderName));
@@ -201,7 +216,7 @@ public class TeamEditFragment extends CommonFragment {
 		}
 
 		Contact newCoach = null;
-		String selectedCoachName = getInputValue(R.id.teamCoachTxt);
+		String selectedCoachName = getInputValue(R.id.teamCoachTxt, false);
 		if (selectedCoachName != null) {
 			if (team.getCoach() == null) {
 				team.setCoach(Contact.createContact(selectedCoachName));
@@ -210,11 +225,7 @@ public class TeamEditFragment extends CommonFragment {
 			}
 		}
 		int id = bandyService.saveTeam(team, newTeamleader, newCoach);
+		return true;
 	}
 
-	private void validateInput() throws ValidationException {
-		if (!Validator.hasText(getEditText(R.id.nameTxt))) {
-			throw new ValidationException("Invalid name!");
-		}
-	}
 }
