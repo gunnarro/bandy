@@ -12,15 +12,18 @@ public class MatchEventsTable {
 	// Database table
 	public static final String TABLE_NAME = "match_events";
 	public static final String COLUMN_FK_MATCH_ID = "fk_match_id";
-	public static final String COLUMN_PLAYED_MINUTES = "played_minutes";
-	public static final String COLUMN_TEAM_NAME = "fk_team_name";
+	// Use player name, since we don not have all teams registered
+	public static final String COLUMN_TEAM_NAME = "team_name";
+	// Use player name, since we don not have all player names for foriegn teams
+	// registered
 	public static final String COLUMN_PLAYER_NAME = "player_name";
+	public static final String COLUMN_PLAYED_MINUTES = "played_minutes";
 	public static final String COLUMN_MATCH_EVENT_TYPE_NAME = "match_event_type_name";
 	public static final String COLUMN_KEY = "key";
 	public static final String COLUMN_VALUE = "value";
 	public static final String COLUMN_DESCRIPTION = "description";
 
-	public static String[] TABLE_COLUMNS = TableHelper.createColumns(new String[] { COLUMN_FK_MATCH_ID, COLUMN_TEAM_NAME, COLUMN_PLAYED_MINUTES,
+	public static String[] TABLE_COLUMNS = TableHelper.createColumns(new String[] { COLUMN_FK_MATCH_ID, COLUMN_PLAYED_MINUTES, COLUMN_TEAM_NAME,
 			COLUMN_PLAYER_NAME, COLUMN_MATCH_EVENT_TYPE_NAME, COLUMN_KEY, COLUMN_VALUE, COLUMN_DESCRIPTION });
 
 	// Database creation SQL statement
@@ -37,7 +40,9 @@ public class MatchEventsTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MATCH_EVENT_TYPE_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_KEY).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_VALUE).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DESCRIPTION).append(" TEXT);");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DESCRIPTION).append(" TEXT");
+		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_MATCH_ID).append(") REFERENCES ").append(MatchesTable.TABLE_NAME).append("(")
+				.append(TableHelper.COLUMN_ID).append("));");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

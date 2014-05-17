@@ -118,8 +118,15 @@ public class TeamEditFragment extends CommonFragment {
 		}
 	}
 
-	public void updateSelectedField(String value, int fieldId) {
-		setInputValue(getView(), fieldId, value);
+	public void updateSelectedField(Item[] items, int fieldId) {
+		StringBuffer value = new StringBuffer();
+		if (items != null) {
+			for (Item i : items) {
+				CustomLog.e(this.getClass(), "" + i);
+				value.append(i != null ? i.getId() + "," : "");
+			}
+			setInputValue(getView(), fieldId, value.toString());
+		}
 	}
 
 	private void setupEventHandlers(View rootView) {

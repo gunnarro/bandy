@@ -241,14 +241,16 @@ public interface BandyService {
 
 	public List<MatchEvent> getMatchEventList(int matchId);
 
-	public void updateMatchStatus(int matchId, MatchStatus matchStatus);
-
 	public String[] getMatchStatusList();
 
 	public int createMatchEvent(MatchEvent matchEvent);
 
 	public String[] getClubNames();
 
-	String[] getSeletionList(int id, SelectionListType type);
+	public String[] getSeletionList(int id, SelectionListType type);
+
+	public void registrerRefereeForMatch(int refereeId, int matchId);
+
+	public void updateMatchStatus(int matchId, int statusId);
 
 }

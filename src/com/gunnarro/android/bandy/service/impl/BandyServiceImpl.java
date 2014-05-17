@@ -18,7 +18,6 @@ import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
-import com.gunnarro.android.bandy.domain.activity.Match.MatchStatus;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Training;
@@ -356,6 +355,7 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public void deleteMatch(Integer matchId) {
+		this.bandyRepository.deleteMatchEvents(matchId);
 		this.bandyRepository.deleteMatch(matchId);
 	}
 
@@ -773,6 +773,14 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void registrerRefereeForMatch(int refereeId, int matchId) {
+		bandyRepository.registrerRefereeForMatch(refereeId, matchId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public boolean registrerOnTraining(Integer playerId, Integer trainingId) {
 		Integer id = trainingId;
 		if (id == null) {
@@ -1069,7 +1077,7 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateMatchStatus(int matchId, MatchStatus status) {
-		bandyRepository.updateMatchStatus(matchId, status);
+	public void updateMatchStatus(int matchId, int statusId) {
+		bandyRepository.updateMatchStatus(matchId, statusId);
 	}
 }

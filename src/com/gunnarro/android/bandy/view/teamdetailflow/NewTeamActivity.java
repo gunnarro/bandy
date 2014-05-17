@@ -18,7 +18,7 @@ public class NewTeamActivity extends FragmentActivity implements NoticeDialogLis
 		// User touched the dialog's positive button
 		// setInputValue(getView(), R.id.teamCoachTxt, dialog.getTag());
 		TeamEditFragment teamEditFragment = (TeamEditFragment) getSupportFragmentManager().findFragmentById(R.id.team_details_container_id);
-		teamEditFragment.updateSelectedField(dialog.getSelectedItem(), dialog.getInputFieldId());
+		teamEditFragment.updateSelectedField(dialog.getSelectedItemList(), dialog.getInputFieldId());
 	}
 
 	@Override

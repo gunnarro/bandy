@@ -61,6 +61,9 @@ public class RefereesTable {
 
 	public static ContentValues createContentValues(Long addressId, Referee referee) {
 		ContentValues values = updateContentValues(referee);
+		if (referee.getClub() != null) {
+			values.put(COLUMN_FK_CLUB_ID, referee.getClub().getId());
+		}
 		values.put(COLUMN_FK_ADDRESS_ID, addressId);
 		values.put(COLUMN_GENDER, referee.getGender());
 		return values;

@@ -1,11 +1,17 @@
 package com.gunnarro.android.bandy.view.dialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl.SelectionListType;
 
@@ -52,6 +58,8 @@ public class SelectDialogOnClickListener implements OnClickListener {
 
 		DialogFragment dialogFragment = new DialogSelection();
 		Bundle arguments = new Bundle();
+		Item[] list = new Item[] { new Item(1, "item1", false), new Item(2, "item2", false), new Item(3, "item3", false), new Item(4, "item4", false) };
+		arguments.putParcelableArray(DialogSelection.DIALOG_ARG_ITEMS_KEY + "_test", list);
 		arguments.putStringArray(DialogSelection.DIALOG_ARG_ITEMS_KEY, items);
 		arguments.putInt(DialogSelection.DIALOG_ARG_NOTICE_FIELD_ID_KEY, inputFieldId);
 		if (isMultiSelection) {

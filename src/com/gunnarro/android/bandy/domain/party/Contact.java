@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gunnarro.android.bandy.domain.BaseDomain;
+import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 import com.gunnarro.android.bandy.utility.Utility;
 
 public class Contact extends BaseDomain {
 
+	private Club club;
 	private Team team;
 	private List<RoleTypesEnum> roles;
 	private String firstName;
@@ -65,6 +67,14 @@ public class Contact extends BaseDomain {
 		this.mobileNumber = mobileNumber;
 		this.emailAddress = emailAddress;
 		this.address = address;
+	}
+
+	public Club getClub() {
+		return club;
+	}
+
+	public void setClub(Club club) {
+		this.club = club;
 	}
 
 	public Address getAddress() {

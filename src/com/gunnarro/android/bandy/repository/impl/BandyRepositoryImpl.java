@@ -20,10 +20,10 @@ import com.gunnarro.android.bandy.domain.Setting;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
-import com.gunnarro.android.bandy.domain.activity.Match.MatchStatus;
 import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.Season;
+import com.gunnarro.android.bandy.domain.activity.Status;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
@@ -358,7 +358,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		int id = database.delete(RefereesTable.TABLE_NAME, whereClause, whereArgs);
 		return id;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -367,6 +367,17 @@ public class BandyRepositoryImpl implements BandyRepository {
 		String whereClause = TableHelper.COLUMN_ID + " = ?";
 		String[] whereArgs = { matchId.toString() };
 		int id = database.delete(MatchesTable.TABLE_NAME, whereClause, whereArgs);
+		return id;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int deleteMatchEvents(Integer matchId) {
+		String whereClause = MatchEventsTable.COLUMN_FK_MATCH_ID + " = ?";
+		String[] whereArgs = { matchId.toString() };
+		int id = database.delete(MatchEventsTable.TABLE_NAME, whereClause, whereArgs);
 		return id;
 	}
 
@@ -463,14 +474,45 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int updateMatchStatus(Integer matchId, MatchStatus status) {
+	public Status getMatchStatus(Integer statusName) {
+		Status status = null;
+		String selection = MatchStatusTypesTable.COLUMN_MATCH_STATUS_NAME + " LIKE ?";
+		String[] selectionArgs = { statusName.toString() };
+		this.database = getDatabase(false);
+		Cursor cursor = database.query(MatchStatusTypesTable.TABLE_NAME, MatchStatusTypesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			status = new Status(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), cursor.getString(cursor
+					.getColumnIndex(MatchStatusTypesTable.COLUMN_MATCH_STATUS_NAME)));
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return status;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int updateMatchStatus(Integer matchId, Integer statusId) {
 		ContentValues values = TableHelper.defaultContentValues();
-		values.put(MatchesTable.COLUMN_MATCH_STATUS_NAME, status.name());
+		values.put(MatchesTable.COLUMN_FK_MATCH_STATUS_ID, statusId.toString());
 		String whereClause = TableHelper.COLUMN_ID + " = ?";
 		String[] whereArgs = { matchId.toString() };
 		long id = database.update(MatchesTable.TABLE_NAME, values, whereClause, whereArgs);
-		CustomLog.e(this.getClass(), "updated match status to: " + status);
+		CustomLog.e(this.getClass(), "updated match status to: " + statusId);
 		return Long.valueOf(id).intValue();
+	}
+
+	@Override
+	public void registrerRefereeForMatch(int refereeId, int matchId) {
+		ContentValues values = TableHelper.defaultContentValues();
+		values.put(MatchesTable.COLUMN_FK_REFEREE_ID, Integer.toString(refereeId));
+		String whereClause = TableHelper.COLUMN_ID + " = ?";
+		String[] whereArgs = { Integer.toString(matchId) };
+		database.update(MatchesTable.TABLE_NAME, values, whereClause, whereArgs);
+		CustomLog.e(this.getClass(), "updated match referee to: " + refereeId);
 	}
 
 	/**
@@ -629,6 +671,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 			match = mapCursorToMatch(cursor, team, season);
 			int numberOfSignedPlayers = getNumberOfSignedPlayers(PlayerLinkTableTypeEnum.MATCH, match.getId());
 			match.setNumberOfSignedPlayers(numberOfSignedPlayers);
+			Referee referee = getReferee(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_TEAM_ID)));
+			match.setReferee(referee);
 		}
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
@@ -1400,6 +1444,29 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return list;
 	}
 
+	@Override
+	public Training getTraining(int id) {
+		Training training = null;
+		StringBuffer selection = new StringBuffer();
+		selection.append(TableHelper.COLUMN_ID + " = ?");
+		String[] selectionArgs = { Integer.toString(id) };
+		this.database = getDatabase(false);
+		Cursor cursor = database.query(TrainingsTable.TABLE_NAME, TrainingsTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			Team team = getTeam(cursor.getInt(cursor.getColumnIndex(TrainingsTable.COLUMN_FK_TEAM_ID)));
+			Season season = getSeason(cursor.getInt(cursor.getColumnIndex(TrainingsTable.COLUMN_FK_SEASON_ID)));
+			training = mapCursorToTraining(cursor, team, season);
+			int numberOfSignedPlayers = getNumberOfSignedPlayers(PlayerLinkTableTypeEnum.TRAINING, training.getId());
+			training.setNumberOfParticipatedPlayers(numberOfSignedPlayers);
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), "Id=" + id + ", " + training);
+		return training;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -1812,11 +1879,16 @@ public class BandyRepositoryImpl implements BandyRepository {
 		long start_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(MatchesTable.COLUMN_START_DATE))) * 1000L;
 		MatchTypesEnum matchType = MatchTypesEnum.toType(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_MATCH_TYPE_ID)));
 		Referee referee = getReferee(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_REFEREE_ID)));
-		return new Match(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), season, start_date_ms, team, new Team(cursor.getString(cursor
+		Match match = new Match(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), season, start_date_ms, team, new Team(cursor.getString(cursor
 				.getColumnIndex(MatchesTable.COLUMN_HOME_TEAM_NAME))), new Team(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_AWAY_TEAM_NAME))),
 				cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_HOME_TEAM)), cursor.getInt(cursor
 						.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_AWAY_TEAM)), cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_VENUE)),
 				referee, matchType, cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_MATCH_STATUS_NAME)));
+
+		cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_MATCH_TYPE_ID));
+		Status matchStatus = getMatchStatus(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_MATCH_STATUS_ID)));
+		match.setStatus(matchStatus);
+		return match;
 	}
 
 	private Training mapCursorToTraining(Cursor cursor, Team team, Season season) {
@@ -1880,9 +1952,10 @@ public class BandyRepositoryImpl implements BandyRepository {
 		Address address = getAddress(cursor.getInt(cursor.getColumnIndex(RefereesTable.COLUMN_FK_ADDRESS_ID)));
 		Referee referee = new Referee(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), cursor.getString(cursor
 				.getColumnIndex(RefereesTable.COLUMN_FIRST_NAME)), cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_MIDDLE_NAME)),
-				cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_LAST_NAME)), cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_GENDER)),
-				address, cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_MOBILE)), cursor.getString(cursor
-						.getColumnIndex(RefereesTable.COLUMN_EMAIL)));
+				cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_LAST_NAME)), cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_GENDER)));
+		referee.setAddress(address);
+		referee.setEmailAddress(cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_EMAIL)));
+		referee.setMobileNumber(cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_MOBILE)));
 		return referee;
 	}
 

@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.activity.Match;
-import com.gunnarro.android.bandy.domain.activity.Match.MatchStatus;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent.MatchEventTypesEnum;
 import com.gunnarro.android.bandy.service.BandyService;
@@ -97,7 +96,6 @@ public class MatchEditFragment extends CommonFragment {
 			super.getActivity().onBackPressed();
 			return true;
 		case R.id.action_save:
-			updateMatchStatus(MatchStatus.PLAYED.name());
 			Toast.makeText(getActivity().getApplicationContext(), "Finished match!", Toast.LENGTH_SHORT).show();
 			super.getActivity().onBackPressed();
 			return true;
@@ -148,7 +146,8 @@ public class MatchEditFragment extends CommonFragment {
 			updateScore(R.id.matchEventAwayTblId, R.id.matchGoalsAwayTxt, teamName, values[0], MatchEventTypesEnum.GOAL_AWAY);
 		} else if (fieldId == R.id.matchStatusTxt) {
 			setInputValue(getView(), fieldId, values[0]);
-			updateMatchStatus(values[0]);
+			// FIXME
+			updateMatchStatus(0);
 		} else if (fieldId == R.id.matchRegisteredPlayersTxt) {
 			int numRegPlayers = Integer.parseInt(getInputValue(R.id.matchRegisteredPlayersTxt, false));
 			for (String player : values) {
@@ -156,6 +155,8 @@ public class MatchEditFragment extends CommonFragment {
 					numRegPlayers = bandyService.signupForMatch(Integer.parseInt(player.split(":")[0]), match.getId());
 			}
 			setInputValue(getView(), fieldId, Integer.toString(numRegPlayers));
+		} else if (fieldId == R.id.matchSelectRefereeBtnId) {
+			bandyService.registrerRefereeForMatch(1, matchId);
 		} else {
 			CustomLog.e(this.getClass(), fieldId + " <> " + R.id.matchGoalsHomeTxt);
 			setInputValue(getView(), fieldId, values[0]);
@@ -170,8 +171,8 @@ public class MatchEditFragment extends CommonFragment {
 		table.addView(ViewUtils.createTableRow(getActivity().getApplicationContext(), event, table.getChildCount()));
 	}
 
-	private void updateMatchStatus(String status) {
-		bandyService.updateMatchStatus(matchId, MatchStatus.valueOf(status));
+	private void updateMatchStatus(int statusId) {
+		bandyService.updateMatchStatus(matchId, statusId);
 	}
 
 	private void updateScore(int tableId, int goalTextViewId, String teamName, String playerName, MatchEventTypesEnum eventType) {

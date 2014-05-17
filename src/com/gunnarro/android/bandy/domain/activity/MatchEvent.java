@@ -2,6 +2,19 @@ package com.gunnarro.android.bandy.domain.activity;
 
 public class MatchEvent {
 
+//	 Goal
+//	 Own Goal
+//	 Penalty
+//	 Penalty Missed
+//	 Assist
+//	 Penalty Shootout Goal
+//	 Penalty Shootout Miss
+//	 Yellow Card
+//	 Red Card
+//	 Substitution IN
+//	 Substitution OUT
+//	 Injury
+	 
 	public enum MatchEventTypesEnum {
 		GOAL_HOME, GOAL_AWAY;
 	}

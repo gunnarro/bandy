@@ -68,6 +68,10 @@ public class Item implements Parcelable, Comparable<Item> {
 		this.isEnabled = isEnabled;
 	}
 
+	public void toggleEnabled() {
+		this.isEnabled = !this.isEnabled;
+	}
+
 	public String getValue() {
 		return value;
 	}

@@ -6,8 +6,9 @@ public abstract class Activity {
 		COMPLETED, CANCELLED, BEGIN;
 	}
 
-	private ActivityStatusEnum status = ActivityStatusEnum.BEGIN;
+	private Status status = null;
 	private Season season;
+	private int numberOfParticipatedPlayers;
 
 	public Activity(Season season) {
 		this.season = season;
@@ -17,12 +18,20 @@ public abstract class Activity {
 		Training, Match, Cup;
 	}
 
-	public ActivityStatusEnum getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(ActivityStatusEnum status) {
+	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public Integer getNumberOfParticipatedPlayers() {
+		return numberOfParticipatedPlayers;
+	}
+
+	public void setNumberOfParticipatedPlayers(int numberOfParticipatedPlayers) {
+		this.numberOfParticipatedPlayers = numberOfParticipatedPlayers;
 	}
 
 	public Season getSeason() {

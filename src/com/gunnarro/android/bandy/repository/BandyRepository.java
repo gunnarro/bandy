@@ -10,9 +10,9 @@ import com.gunnarro.android.bandy.domain.SearchResult;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
-import com.gunnarro.android.bandy.domain.activity.Match.MatchStatus;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.Season;
+import com.gunnarro.android.bandy.domain.activity.Status;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
@@ -190,11 +190,13 @@ public interface BandyRepository {
 
 	public int updateMatch(Match match);
 
-	public int updateMatchStatus(Integer matchId, MatchStatus status);
+	public int updateMatchStatus(Integer matchId, Integer statusId);
 
 	public int deletePlayer(Integer playerId);
 
 	public int deleteMatch(Integer matchId);
+
+	public int deleteMatchEvents(Integer matchId);
 
 	public int deleteTraining(Integer trainingId);
 
@@ -226,6 +228,12 @@ public interface BandyRepository {
 
 	public List<Club> getClubList();
 
-	String[] getTeamNames(Integer clubId);
+	public String[] getTeamNames(Integer clubId);
+
+	public Training getTraining(int id);
+
+	public void registrerRefereeForMatch(int refereeId, int matchId);
+
+	public Status getMatchStatus(Integer statusName);
 
 }

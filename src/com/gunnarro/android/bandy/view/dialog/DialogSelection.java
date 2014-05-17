@@ -1,5 +1,7 @@
 package com.gunnarro.android.bandy.view.dialog;
 
+import java.util.Arrays;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,6 +9,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
+import com.gunnarro.android.bandy.custom.CustomLog;
+import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 
 public class DialogSelection extends DialogFragment implements ItemSelection {
@@ -15,9 +19,12 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 	public final static String DIALOG_ARG_NOTICE_FIELD_ID_KEY = "notice_field_id";
 	public final static String DIALOG_ARG_IS_MULTI_SELECTION_KEY = "dialog_is_multi_selection";
 	private boolean isMultiSelection = false;
-	private String[] items = null;
+	private String[] itemsx = null;
 	private int noticeFieldId;
 	private String[] selectedItems = new String[1];
+
+	private Item[] itemList;
+	private Item[] selectedItemList = new Item[1];;
 
 	public String getSelectedItem() {
 		if (selectedItems != null && selectedItems.length > 0) {
@@ -28,6 +35,13 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 
 	public String[] getSelectedItems() {
 		return selectedItems;
+	}
+
+	public Item[] getSelectedItemList() {
+		if (selectedItemList != null && selectedItemList.length > 0) {
+			return selectedItemList;
+		}
+		return null;
 	}
 
 	public int getInputFieldId() {
@@ -76,10 +90,17 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 			throw new ApplicationException("Missing argument! dialog_items must be passesd in as fragment arguments.");
 		}
 
-		items = getArguments().getStringArray(DIALOG_ARG_ITEMS_KEY);
-		if (items == null) {
+		itemList = (Item[]) getArguments().getParcelableArray(DIALOG_ARG_ITEMS_KEY + "_test");
+		if (itemList == null) {
 			throw new ApplicationException("Argument equal to null! dialog_items must be passesd in as fragment arguments.");
 		}
+		CustomLog.e(this.getClass(), "" + itemList);
+
+		// items = getArguments().getStringArray(DIALOG_ARG_ITEMS_KEY);
+		// if (items == null) {
+		// throw new
+		// ApplicationException("Argument equal to null! dialog_items must be passesd in as fragment arguments.");
+		// }
 
 		if (!getArguments().containsKey(DIALOG_ARG_NOTICE_FIELD_ID_KEY)) {
 			throw new ApplicationException("Missing argument! notice_field_id must be passesd in as fragment arguments.");
@@ -89,24 +110,45 @@ public class DialogSelection extends DialogFragment implements ItemSelection {
 		if (getArguments().containsKey(DIALOG_ARG_IS_MULTI_SELECTION_KEY)) {
 			isMultiSelection = true;
 		}
-		selectedItems = new String[items.length];
+		// selectedItems = new String[items.length];
+		selectedItemList = new Item[itemList.length];
+
+		boolean[] selected = new boolean[itemList.length];
+		String[] tmpItems = new String[itemList.length];
+		for (int i = 0; i < itemList.length; i++) {
+			selected[i] = itemList[i].isEnabled();
+			tmpItems[i] = itemList[i].getValue();
+			CustomLog.e(this.getClass(), itemList[i].toString());
+		}
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		if (isMultiSelection) {
-			boolean[] selected = new boolean[items.length];
-			for (int i = 0; i < items.length - 1; i++) {
-				selected[i] = false;
-			}
-			builder.setTitle("Selection").setMultiChoiceItems(items, selected, new DialogInterface.OnMultiChoiceClickListener() {
+			// boolean[] selected = new boolean[items.length];
+			// for (int i = 0; i < items.length - 1; i++) {
+			// selected[i] = false;
+			// }
+			// builder.setTitle("Selection").setMultiChoiceItems(items,
+			// selected, new DialogInterface.OnMultiChoiceClickListener() {
+			// public void onClick(DialogInterface dialog, int pos, boolean
+			// isChecked) {
+			// selectedItems[pos] = items[pos];
+			// }
+			// });
+
+			builder.setTitle("Selection").setMultiChoiceItems(tmpItems, selected, new DialogInterface.OnMultiChoiceClickListener() {
 				public void onClick(DialogInterface dialog, int pos, boolean isChecked) {
-					selectedItems[pos] = items[pos];
+					// itemList[pos].setEnabled(isChecked);
+					selectedItemList[pos] = itemList[pos];
 				}
 			});
 
 		} else {
-			builder.setTitle("Selection").setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+			selectedItemList = new Item[1];
+			builder.setTitle("Selection").setSingleChoiceItems(tmpItems, 0, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int pos) {
-					selectedItems[0] = items[pos];
+					// itemList[pos].toggleEnabled();
+					selectedItemList[0] = itemList[pos];
 				}
 			});
 		}
