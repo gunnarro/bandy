@@ -17,6 +17,7 @@ import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
+import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl.PlayerLinkTableTypeEnum;
@@ -71,6 +72,12 @@ public interface BandyRepository {
 	public int createContact(Contact contact);
 
 	public long createAddress(Address address);
+
+	public int createReferee(Referee referee);
+
+	public Referee getReferee(int refereeId);
+
+	public String[] getRefereeNames();
 
 	public String[] getTeamNames(String clubName);
 
@@ -171,8 +178,6 @@ public interface BandyRepository {
 
 	public String getSqlQuery(String id, String type);
 
-	public String[] getRefereeNames();
-
 	public String[] getMatchTypes();
 
 	public String[] getSeasonPeriodes();
@@ -194,6 +199,8 @@ public interface BandyRepository {
 	public int deleteTraining(Integer trainingId);
 
 	public int deleteContact(Integer contactId);
+
+	public int deleteReferee(Integer refereeId);
 
 	public int updateContact(Contact contact);
 

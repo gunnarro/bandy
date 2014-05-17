@@ -82,7 +82,8 @@ public class ClubDetailFragment extends CommonFragment {
 		case R.id.action_delete:
 			delete(clubId);
 			Toast.makeText(getActivity().getApplicationContext(), "Deleted club!", Toast.LENGTH_SHORT).show();
-			super.getActivity().onBackPressed();
+			super.getActivity().setResult(ClubListActivity.RESULT_CODE_CLUB_CHANGED);
+			super.getActivity().finish();
 		default:
 			return false;
 		}

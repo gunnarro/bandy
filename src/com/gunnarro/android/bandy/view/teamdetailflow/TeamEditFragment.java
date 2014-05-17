@@ -129,15 +129,16 @@ public class TeamEditFragment extends CommonFragment {
 		leagueBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getLeagueNames(), R.id.teamleagueNameTxt, false));
 
 		ImageButton teamleaderBtn = (ImageButton) rootView.findViewById(R.id.selectTeamleaderBtn);
-		teamleaderBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getContactNames(tmpTeamId), R.id.teamTeamleaderTxt,
-				false));
+		teamleaderBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService, SelectionListType.CONTACT_NAMES, tmpTeamId,
+				R.id.teamTeamleaderTxt, false));
 
 		ImageButton coachBtn = (ImageButton) rootView.findViewById(R.id.selectCoachBtn);
-		coachBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService.getContactNames(tmpTeamId), R.id.teamCoachTxt, false));
+		coachBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService, SelectionListType.CONTACT_NAMES, tmpTeamId,
+				R.id.teamCoachTxt, false));
 
 		ImageButton playersBtn = (ImageButton) rootView.findViewById(R.id.selectPlayersBtn);
 		playersBtn.setOnClickListener(new SelectDialogOnClickListener(getFragmentManager(), bandyService, SelectionListType.PLAYER_NAMES, tmpTeamId,
-				R.id.teamCoachTxt, true));
+				R.id.teamPlayersTxt, true));
 
 		SelectDialogOnClickListener.turnOffInitMode();
 
@@ -172,37 +173,49 @@ public class TeamEditFragment extends CommonFragment {
 				setInputValue(rootView, R.id.teamCoachTxt, team.getCoach().getFullName());
 			}
 			if (team.getPlayerItemList() != null) {
-				setInputValue(rootView, R.id.teamPlayersTxt, Integer.toBinaryString(team.getPlayerItemList().size()));
+				setInputValue(rootView, R.id.teamPlayersTxt, team.getPlayerItemList().toString());
 			}
 		}
 	}
 
 	private boolean save() {
+		String newTeamName = null;
+		String teamYearOfBirth = null;
 		try {
-			String teamName = getInputValue(R.id.teamNameTxt, true);
-			String teamYearOfBirth = getInputValue(R.id.teamYearOfBirthTxt, false);
-
-			Club club = this.bandyService.getClub(clubName, "%");
-			if (club == null) {
-				throw new RuntimeException("Club is not found!");
-			}
-			if (this.team == null) {
-				this.team = new Team(teamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
-			} else {
-				this.team.setName(teamName);
-				this.team.setTeamYearOfBirth(Integer.parseInt(teamYearOfBirth));
-			}
-			this.team.setGender(getSelectedGender());
+			newTeamName = getInputValue(R.id.teamNameTxt, true);
+			teamYearOfBirth = getInputValue(R.id.teamYearOfBirthTxt, false);
 		} catch (ValidationException ve) {
 			CustomLog.e(this.getClass(), ve.getMessage());
 			return false;
 		}
 
-		// Check if team name already exist
+		Club club = this.bandyService.getClub(clubName, "%");
+		if (club == null) {
+			throw new ApplicationException("Club is not found!");
+		}
+
+		boolean hasChangedTeamName = false;
+		if (this.team == null) {
+			this.team = new Team(newTeamName, club, Integer.parseInt(teamYearOfBirth), getSelectedGender());
+		} else {
+			// Only update team name if changed
+			if (!team.getName().equalsIgnoreCase(newTeamName)) {
+				this.team.setName(newTeamName);
+				hasChangedTeamName = true;
+			}
+			this.team.setTeamYearOfBirth(Integer.parseInt(teamYearOfBirth));
+		}
+		this.team.setGender(getSelectedGender());
+
+		// Validate team name
 		try {
-			this.bandyService.getTeam(this.team.getName(), false);
-			Validator.setErrorMessage(getEditText(R.id.teamNameTxt), "Team name already exist!");
-			return false;
+			// Check that chosen team name do not conflict
+			// with a existing one
+			if (this.team.isNew() || hasChangedTeamName) {
+				this.bandyService.getTeam(newTeamName, false);
+				Validator.setErrorMessage(getEditText(R.id.teamNameTxt), "Team name already exist!");
+				return false;
+			}
 		} catch (ValidationException ve) {
 			// Ignore, team name do not exist in the DB.
 		}

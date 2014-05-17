@@ -1,13 +1,15 @@
 package com.gunnarro.android.bandy.view.clubdetailflow;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gunnarro.android.bandy.R;
@@ -15,9 +17,10 @@ import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.exception.ValidationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
-import com.gunnarro.android.bandy.view.clubdetailflow.ClubListFragment.Callbacks;
+import com.gunnarro.android.bandy.utility.Validator;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
@@ -33,7 +36,6 @@ public class ClubEditFragment extends CommonFragment {
 	private BandyService bandyService;
 	private Integer clubId;
 	private Club club;
-	private Callbacks callback;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -92,23 +94,19 @@ public class ClubEditFragment extends CommonFragment {
 		CustomLog.e(this.getClass(), item.toString());
 		switch (item.getItemId()) {
 		case R.id.action_cancel:
-			callback.onItemSelected(1000);
+			super.getActivity().setResult(ClubListActivity.RESULT_CODE_CLUB_UNCHANGED);
 			super.getActivity().onBackPressed();
 			return true;
 		case R.id.action_save:
 			boolean isSaved = save();
 			if (isSaved) {
 				Toast.makeText(getActivity().getApplicationContext(), "Saved club! " + getActivity().getLocalClassName(), Toast.LENGTH_SHORT).show();
-				// Have to refresh the list in order to reflect changes
-				// ReloadListener listener = (ReloadListener)
-				// getActivity().getSupportFragmentManager().findFragmentById(R.id.club_item_list_id);
-				// listener.reloadData();
-				callback.onItemSelected(9999);
+				super.getActivity().setResult(ClubListActivity.RESULT_CODE_CLUB_CHANGED);
 				super.getActivity().onBackPressed();
 				return true;
 			}
 		default:
-			return super.getActivity().onOptionsItemSelected(item);
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -117,13 +115,34 @@ public class ClubEditFragment extends CommonFragment {
 	}
 
 	private void setupEventHandlers(View rootView) {
-		// ImageButton leagueBtn = (ImageButton)
-		// rootView.findViewById(R.id.selectLeagueBtn);
-		// leagueBtn.setOnClickListener(new
-		// SelectDialogOnClickListener(getFragmentManager(),
-		// bandyService.getLeagueNames(), R.id.teamleagueNameTxt, false));
-		//
+		// Input validation
+		final EditText nameTxt = (EditText) rootView.findViewById(R.id.clubNameTxt);
+		// TextWatcher would let us check validation error on the fly
+		nameTxt.addTextChangedListener(new TextWatcher() {
+			public void afterTextChanged(Editable s) {
+				Validator.hasText(nameTxt);
+			}
 
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+		});
+
+		final EditText departmentTxt = (EditText) rootView.findViewById(R.id.clubDepartmentTxt);
+		// TextWatcher would let us check validation error on the fly
+		departmentTxt.addTextChangedListener(new TextWatcher() {
+			public void afterTextChanged(Editable s) {
+				Validator.hasText(nameTxt);
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+		});
 	}
 
 	private void init(View rootView) {
@@ -134,46 +153,35 @@ public class ClubEditFragment extends CommonFragment {
 	}
 
 	private boolean save() {
+		String newClubName = null;
+		String newDepartmentName = null;
 		try {
-			String clubName = getInputValue(R.id.clubNameTxt, true);
-			String department = getInputValue(R.id.clubDepartmentTxt, true);
-			if (club == null) {
-				club = new Club(clubName, department);
-			}
-			if (getInputValue(R.id.clubHomepageTxt, false) != null) {
-				club.setHomePageUrl(getInputValue(R.id.clubHomepageTxt, false));
-			}
-			// club.setStadiumName(null);
-			bandyService.saveClub(club);
-			return true;
+			newClubName = getInputValue(R.id.clubNameTxt, true);
+			newDepartmentName = getInputValue(R.id.clubDepartmentTxt, true);
 		} catch (ValidationException ve) {
 			CustomLog.e(this.getClass(), ve.getMessage());
 			return false;
 		}
-	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		// Reset the active callbacks interface to the dummy implementation.
-		callback = ClubListFragment.sDummyCallbacks;
-		CustomLog.e(this.getClass(), "tracing call...");
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		// Activities containing this fragment must implement its callbacks.
-		if (!(activity instanceof Callbacks)) {
-			throw new IllegalStateException("Activity must implement fragment's callbacks.");
+		if (club == null) {
+			club = new Club(newClubName, newDepartmentName);
+		} else {
+			club.setName(newClubName);
+			club.setDepartmentName(newDepartmentName);
 		}
-		callback = (Callbacks) activity;
-		CustomLog.e(this.getClass(), "tracing call...activity: " + activity.getLocalClassName());
+
+		if (getInputValue(R.id.clubHomepageTxt, false) != null) {
+			club.setHomePageUrl(getInputValue(R.id.clubHomepageTxt, false));
+		}
+		// club.setStadiumName(null);
+		try {
+			bandyService.saveClub(club);
+			return true;
+		} catch (ApplicationException ae) {
+			String errorMsg = "Failed creating new Club: " + ae.getMessage();
+			Toast.makeText(getActivity().getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+			return false;
+		}
 	}
+
 }

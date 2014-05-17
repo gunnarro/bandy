@@ -10,6 +10,7 @@ import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
+import com.gunnarro.android.bandy.view.listener.ReloadListener;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -28,6 +29,13 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  */
 public class PlayerListActivity extends DashboardActivity implements PlayerListFragment.Callbacks {
 
+	public final static int REQUEST_CODE_PLAYER_NEW = 300;
+	public final static int REQUEST_CODE_PLAYER_DETAIL = 301;
+	public final static int REQUEST_CODE_PLAYER_DELET = 302;
+	public final static int RESULT_CODE_PLAYER_CHANGED = 1;
+	public final static int RESULT_CODE_PLAYER_UNCHANGED = 0;
+
+	private Integer teamId;
 	private String clubName;
 	private String teamName;
 
@@ -58,7 +66,7 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 		// TODO: If exposing deep links into your app, handle intents here.
 		CustomLog.d(this.getClass(), "is Two Pane layout : " + mTwoPane);
 	}
-	
+
 	private void getArgs(Bundle bundle) {
 		if (bundle != null) {
 			clubName = bundle.getString(ARG_CLUB_NAME, null);
@@ -76,7 +84,6 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 		CustomLog.e(this.getClass(), clubName + "" + teamName);
 	}
 
-
 	/**
 	 * Callback method from {@link PlayerListFragment.Callbacks} indicating that
 	 * the item with the given ID was selected.
@@ -91,7 +98,7 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 			detailIntent.putExtra(ARG_CLUB_NAME, clubName);
 			detailIntent.putExtra(ARG_TEAM_NAME, teamName);
 			detailIntent.putExtra(ARG_PLAYER_ID, id);
-			startActivity(detailIntent);
+			startActivityForResult(detailIntent, REQUEST_CODE_PLAYER_DETAIL);
 		}
 	}
 
@@ -115,14 +122,42 @@ public class PlayerListActivity extends DashboardActivity implements PlayerListF
 			Intent newPlayerIntent = new Intent(getApplicationContext(), NewPlayerActivity.class);
 			newPlayerIntent.putExtra(ARG_CLUB_NAME, clubName);
 			newPlayerIntent.putExtra(ARG_TEAM_NAME, teamName);
-			startActivity(newPlayerIntent);
+			startActivityForResult(newPlayerIntent, REQUEST_CODE_PLAYER_NEW);
 			break;
+		case R.id.action_reload:
+			CustomLog.e(this.getClass(), "action: " + item.getTitle());
+			reloadListData();
+		case android.R.id.home:
+			super.finish();
+			return true;
 		default:
-			// startActivity(new Intent(getApplicationContext(),
-			// HomeActivity.class));
 			break;
 		}
 		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
 		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (resultCode) {
+		case RESULT_CODE_PLAYER_CHANGED:
+			reloadListData();
+			break;
+		case RESULT_CODE_PLAYER_UNCHANGED:
+			// do nothing
+			break;
+		default:
+			CustomLog.e(this.getClass(), "Unkown result code: " + resultCode);
+			break;
+		}
+		CustomLog.e(getClass(), "requestCode=" + requestCode + ", resultCode=" + resultCode);
+	}
+
+	private void reloadListData() {
+		ReloadListener listener = (ReloadListener) getSupportFragmentManager().findFragmentById(R.id.player_item_list_id);
+		listener.reloadData();
 	}
 }

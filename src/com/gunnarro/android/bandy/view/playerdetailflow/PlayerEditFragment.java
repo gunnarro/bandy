@@ -16,7 +16,7 @@ import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.service.BandyService;
-import com.gunnarro.android.bandy.service.exception.ValidationException;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.utility.Utility;
 import com.gunnarro.android.bandy.view.dashboard.CommonFragment;
@@ -60,6 +60,8 @@ public class PlayerEditFragment extends CommonFragment {
 		if (playerId != null) {
 			player = this.bandyService.getPlayer(playerId);
 			init(rootView);
+			getActivity().getActionBar().setTitle(player.getTeam().getClub().getName());
+			getActivity().getActionBar().setSubtitle(player.getTeam().getClub().getDepartmentName());
 		}
 		return rootView;
 	}
@@ -84,12 +86,14 @@ public class PlayerEditFragment extends CommonFragment {
 		CustomLog.e(this.getClass(), item.toString());
 		switch (item.getItemId()) {
 		case R.id.action_cancel:
+			super.getActivity().setResult(PlayerListActivity.RESULT_CODE_PLAYER_UNCHANGED);
 			super.getActivity().onBackPressed();
 			return true;
 		case R.id.action_save:
 			boolean isSaved = save();
 			if (isSaved) {
 				Toast.makeText(getActivity().getApplicationContext(), "Saved player!", Toast.LENGTH_SHORT).show();
+				super.getActivity().setResult(PlayerListActivity.RESULT_CODE_PLAYER_CHANGED);
 				super.getActivity().onBackPressed();
 				return true;
 			}
@@ -119,6 +123,10 @@ public class PlayerEditFragment extends CommonFragment {
 		} else {
 			setGender(rootView, "Male");
 		}
+	}
+
+	private void setupEventHandlers(View rootView) {
+
 	}
 
 	private boolean save() {
@@ -160,8 +168,9 @@ public class PlayerEditFragment extends CommonFragment {
 			int playerId = bandyService.savePlayer(player);
 			CustomLog.e(this.getClass(), player.toString());
 			return true;
-		} catch (ValidationException ve) {
-			CustomLog.e(getClass(), ve.toString());
+		} catch (ApplicationException ae) {
+			String errorMsg = "Failed creating new Team: " + ae.getMessage();
+			Toast.makeText(getActivity().getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
 			return false;
 		}
 	}

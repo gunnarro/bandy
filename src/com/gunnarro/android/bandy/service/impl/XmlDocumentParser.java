@@ -45,6 +45,7 @@ import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable.GenderEnum;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
+import com.gunnarro.android.bandy.service.exception.ValidationException;
 import com.gunnarro.android.bandy.utility.Utility;
 
 public class XmlDocumentParser {
@@ -226,7 +227,7 @@ public class XmlDocumentParser {
 		CustomLog.d(this.getClass(), team.toString());
 		try {
 			bandyService.getTeam(team.getName(), false);
-		} catch (ApplicationException ae) {
+		} catch (ValidationException ae) {
 			bandyService.createTeam(team);
 		}
 		bandyService.updateDataFileVersion(getAttributeValue(nodeList.item(0), "version"));
@@ -349,7 +350,7 @@ public class XmlDocumentParser {
 		return new Match(null, season, Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), new Team(team.getId(), team.getName()), new Team(
 				getAttributeValue(matchNode, "homeTeam")), new Team(getAttributeValue(matchNode, "awayTeam")), Integer.parseInt(getAttributeValue(matchNode,
 				"goalsHomeTeam")), Integer.parseInt(getAttributeValue(matchNode, "goalsAwayTeam")), getAttributeValue(matchNode, "venue"), new Referee(
-				getAttributeValue(matchNode, "referee"), getAttributeValue(matchNode, "referee")), matchType, getAttributeValue(matchNode, "status"));
+				getAttributeValue(matchNode, "referee"), null, getAttributeValue(matchNode, "referee")), matchType, getAttributeValue(matchNode, "status"));
 	}
 
 	private List<Match> getCupMatchList(Team team, XPath xpath, Document doc, Season season, String cupName) throws XPathExpressionException {

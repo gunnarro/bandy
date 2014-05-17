@@ -2,7 +2,6 @@ package com.gunnarro.android.bandy.utility;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -25,6 +24,17 @@ public class Utility {
 			dateFormatter = new SimpleDateFormat(DATE_DEFAULT_PATTERN, Locale.UK);
 		}
 		return dateFormatter;
+	}
+
+	public static String capitalizationWord(String s) {
+		if (s == null || s.isEmpty()) {
+			return null;
+		}
+		StringBuffer sb = new StringBuffer();
+		for (String w : s.toLowerCase().split(" ")) {
+			sb.append(w.substring(0, 1).toUpperCase()).append(w.substring(1, w.length())).append(" ");
+		}
+		return sb.toString().trim();
 	}
 
 	public static String formatTime(int hour, int minute) {

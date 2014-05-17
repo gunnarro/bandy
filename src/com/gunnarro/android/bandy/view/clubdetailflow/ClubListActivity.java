@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -28,6 +27,12 @@ import com.gunnarro.android.bandy.view.listener.ReloadListener;
  * interface to listen for item selections.
  */
 public class ClubListActivity extends DashboardActivity implements ClubListFragment.Callbacks {
+
+	public final static int REQUEST_CODE_CLUB_NEW = 200;
+	public final static int REQUEST_CODE_CLUB_DETAIL = 201;
+	public final static int REQUEST_CODE_CLUB_DELET = 202;
+	public final static int RESULT_CODE_CLUB_CHANGED = 1;
+	public final static int RESULT_CODE_CLUB_UNCHANGED = 0;
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -72,15 +77,6 @@ public class ClubListActivity extends DashboardActivity implements ClubListFragm
 	}
 
 	/**
-	 * 
-	 */
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		CustomLog.e(this.getClass(), "onBackPressed");
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -97,20 +93,38 @@ public class ClubListActivity extends DashboardActivity implements ClubListFragm
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_new:
-			startActivity(new Intent(getApplicationContext(), NewClubActivity.class));
+			startActivityForResult(new Intent(getApplicationContext(), NewClubActivity.class), REQUEST_CODE_CLUB_NEW);
 			break;
 		case R.id.action_reload:
 			CustomLog.e(this.getClass(), "action: " + item.getTitle());
-			// showReload(findViewById(R.id.club_item_list));
 			reloadListData();
+		case android.R.id.home:
+			super.finish();
+			return true;
 		default:
-			// startActivity(new Intent(getApplicationContext(),
-			// HomeActivity.class));
 			break;
 		}
-		CustomLog.e(this.getClass(), "tracing call...");
 		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
 		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (resultCode) {
+		case RESULT_CODE_CLUB_CHANGED:
+			reloadListData();
+			break;
+		case RESULT_CODE_CLUB_UNCHANGED:
+			// do nothing
+			break;
+		default:
+			CustomLog.e(this.getClass(), "Unkown result code: " + resultCode);
+			break;
+		}
+		CustomLog.e(getClass(), "requestCode=" + requestCode + ", resultCode=" + resultCode);
 	}
 
 	private void reloadListData() {
@@ -118,16 +132,4 @@ public class ClubListActivity extends DashboardActivity implements ClubListFragm
 		listener.reloadData();
 	}
 
-	public static void showReload(final View viewContainer) {
-		viewContainer.setVisibility(View.VISIBLE);
-		viewContainer.setAlpha(1);
-		viewContainer.animate().alpha(0.4f).setDuration(5000).withEndAction(new Runnable() {
-
-			@Override
-			public void run() {
-				viewContainer.setVisibility(View.GONE);
-			}
-		});
-
-	}
 }

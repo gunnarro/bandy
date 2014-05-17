@@ -13,12 +13,12 @@ public class Address {
 	private String country;
 
 	public Address(String streetName, String streetNumber, String streetNumberPrefix, String postalCode, String city, String country) {
-		this.streetName = streetName;
+		this.streetName = streetName.toUpperCase();
 		this.streetNumber = streetNumber;
-		this.streetNumberPrefix = streetNumberPrefix;
+		this.streetNumberPrefix = streetNumberPrefix != null ? streetNumberPrefix.toUpperCase() : null;
 		this.postalCode = postalCode;
-		this.city = city;
-		this.country = country;
+		this.city = city.toUpperCase();
+		this.country = country.toUpperCase();
 	}
 
 	public Address(int id, String streetName, String streetNumber, String streetNumberPrefix, String postalCode, String city, String country) {
@@ -31,11 +31,11 @@ public class Address {
 	}
 
 	public String getStreetName() {
-		return streetName;
+		return Utility.capitalizationWord(streetName);
 	}
 
 	public void setStreetName(String streetName) {
-		this.streetName = streetName;
+		this.streetName = streetName.toUpperCase();
 	}
 
 	public String getStreetNumber() {
@@ -47,11 +47,11 @@ public class Address {
 	}
 
 	public String getStreetNumberPrefix() {
-		return streetNumberPrefix;
+		return Utility.capitalizationWord(streetNumberPrefix);
 	}
 
 	public void setStreetNumberPrefix(String streetNumberPrefix) {
-		this.streetNumberPrefix = streetNumberPrefix;
+		this.streetNumberPrefix = streetNumberPrefix.toUpperCase();
 	}
 
 	public String getPostalCode() {
@@ -63,23 +63,31 @@ public class Address {
 	}
 
 	public String getCity() {
-		return city;
+		return Utility.capitalizationWord(city);
 	}
 
 	public void setCity(String city) {
-		this.city = city;
+		this.city = city.toUpperCase();
 	}
 
 	public String getCountry() {
-		return country;
+		return Utility.capitalizationWord(country);
 	}
 
 	public void setCountry(String country) {
-		this.country = country;
+		this.country = country.toUpperCase();
 	}
 
 	public String getFullStreetName() {
-		return streetName + " " + streetNumber + (streetNumberPrefix != null ? streetNumberPrefix : "");
+		return getStreetName() + " " + streetNumber + (streetNumberPrefix != null ? getStreetNumberPrefix() : "");
+	}
+
+	public String getFullAddress() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(getFullStreetName()).append("\n");
+		sb.append(getPostalCode()).append(" ").append(getCity()).append("\n");
+		sb.append(getCountry());
+		return sb.toString();
 	}
 
 	public boolean isAddressValid() {

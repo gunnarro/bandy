@@ -8,11 +8,10 @@ import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 
-public class Team implements Serializable {
+public class Team extends BaseDomain implements Serializable {
 
 	private static final long serialVersionUID = -7342682849751732634L;
 
-	private Integer id;
 	private String name;
 	private int teamYearOfBirth;
 	private String gender;
@@ -23,13 +22,13 @@ public class Team implements Serializable {
 	private Contact coach;
 	private Contact teamLead;
 
-	public Team(String name) {
+	public Team(Integer id, String name) {
+		super(id);
 		this.name = name;
 	}
 
-	public Team(int id, String name) {
-		this(name);
-		this.id = id;
+	public Team(String name) {
+		this(null, name);
 	}
 
 	public Team(int id, String name, Club club) {
@@ -46,7 +45,6 @@ public class Team implements Serializable {
 
 	public Team(int id, String name, Club club, int teamYearOfBirth, String gender) {
 		this(name, club, teamYearOfBirth, gender);
-		this.id = id;
 	}
 
 	public void setName(String name) {
@@ -71,10 +69,6 @@ public class Team implements Serializable {
 
 	public void setCoach(Contact coach) {
 		this.coach = coach;
-	}
-
-	public Integer getId() {
-		return id;
 	}
 
 	public String getName() {
@@ -147,8 +141,8 @@ public class Team implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Team [id=" + id + ", name=" + name + ", teamYearOfBirth=" + teamYearOfBirth + ", gender=" + gender + ", club=" + club + ", league=" + league
-				+ ", playerList=" + playerList + ", coach=" + coach + ", teamLead=" + teamLead + "]";
+		return "Team [id=" + getId() + ", name=" + name + ", teamYearOfBirth=" + teamYearOfBirth + ", gender=" + gender + ", club=" + club + ", league="
+				+ league + ", playerList=" + playerList + ", coach=" + coach + ", teamLead=" + teamLead + "]";
 	}
 
 }

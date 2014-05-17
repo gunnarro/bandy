@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.repository.table.TableHelper;
-import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
-import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
+import com.gunnarro.android.bandy.repository.table.TeamsTable;
+import com.gunnarro.android.bandy.repository.table.activity.LeaguesTable;
 
 public class LeagueTeamLnkTable {
 
@@ -15,11 +15,11 @@ public class LeagueTeamLnkTable {
 	public static final String COLUMN_FK_TEAM_ID = "fk_team_id";
 
 	public static void onCreate(SQLiteDatabase database) {
-		LinkTableHelper.onCreate(database, TABLE_NAME, COLUMN_FK_LEAGUE_ID, COLUMN_FK_TEAM_ID, PlayersTable.TABLE_NAME, CupsTable.TABLE_NAME);
+		LinkTableHelper.onCreate(database, TABLE_NAME, COLUMN_FK_LEAGUE_ID, COLUMN_FK_TEAM_ID, LeaguesTable.TABLE_NAME, TeamsTable.TABLE_NAME);
 	}
 
 	public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-		LinkTableHelper.onUpgrade(database, TABLE_NAME, COLUMN_FK_LEAGUE_ID, COLUMN_FK_TEAM_ID, PlayersTable.TABLE_NAME, CupsTable.TABLE_NAME, oldVersion,
+		LinkTableHelper.onUpgrade(database, TABLE_NAME, COLUMN_FK_LEAGUE_ID, COLUMN_FK_TEAM_ID, LeaguesTable.TABLE_NAME, TeamsTable.TABLE_NAME, oldVersion,
 				newVersion);
 	}
 
@@ -27,7 +27,7 @@ public class LeagueTeamLnkTable {
 		return TableHelper.createColumns(new String[] { COLUMN_FK_LEAGUE_ID, COLUMN_FK_TEAM_ID });
 	}
 
-	public static ContentValues createContentValues(Integer playerId, Integer cupId) {
-		return LinkTableHelper.createContentValues(new String[] { COLUMN_FK_LEAGUE_ID, COLUMN_FK_TEAM_ID }, new Integer[] { playerId, cupId });
+	public static ContentValues createContentValues(Integer leagueId, Integer teamId) {
+		return LinkTableHelper.createContentValues(new String[] { COLUMN_FK_LEAGUE_ID, COLUMN_FK_TEAM_ID }, new Integer[] { leagueId, teamId });
 	}
 }

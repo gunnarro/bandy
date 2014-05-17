@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.gunnarro.android.bandy.service.BandyService;
 
 public class DataLoader extends Service {
-	public final static String TEAM_XML_URL = "https://raw.github.com/gunnarro/bandy/master/assets/";
+	public final static String TEAM_XML_URL = "https://raw.github.com/gunnarro/bandy/master/assets";
 	private BandyService bandyService;
 	private XmlDocumentParser xmlParser;
 

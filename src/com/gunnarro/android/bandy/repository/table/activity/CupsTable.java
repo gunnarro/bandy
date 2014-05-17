@@ -28,10 +28,12 @@ public class CupsTable {
 		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_SEASON_ID).append(" INTEGER NOT NULL DEFAULT 1");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_START_DATE).append(" INTEGER");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CUP_NAME).append(" TEXT NOT NULL UNIQUE");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CUP_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_VENUE).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DEADLINE_DATE).append(" INTEGER);");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DEADLINE_DATE).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_SEASON_ID).append(") REFERENCES ").append(SeasonsTable.TABLE_NAME).append("(")
+		.append(TableHelper.COLUMN_ID).append("));");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

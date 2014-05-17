@@ -37,8 +37,6 @@ public class AddressTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_POST_CODE).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_POST_BOX).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_COUNTRY).append(" TEXT NOT NULL);");
-//		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_STREET_NAME).append(",").append(COLUMN_STREET_NUMBER).append(",")
-//				.append(COLUMN_STREET_NUMBER_POSTFIX).append(",").append(COLUMN_ZIP_CODE).append(") ON CONFLICT ABORT);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

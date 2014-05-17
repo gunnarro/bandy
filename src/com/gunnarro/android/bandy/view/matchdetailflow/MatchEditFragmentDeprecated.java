@@ -153,7 +153,7 @@ public class MatchEditFragmentDeprecated extends CommonFragment {
 		}
 		// match.setNumberOfGoalsHome(Integer.parseInt(goalsHome));
 		// match.setNumberOfGoalsAway(Integer.parseInt(goalsAway));
-		Referee referee = new Referee("", "");
+		Referee referee = new Referee("", "", "");
 		match.setReferee(referee);
 		this.bandyService.saveMatch(match);
 	}

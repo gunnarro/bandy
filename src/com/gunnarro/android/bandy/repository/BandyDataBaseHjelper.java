@@ -37,6 +37,7 @@ import com.gunnarro.android.bandy.repository.table.link.TeamContactLnkTable;
 import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
+import com.gunnarro.android.bandy.repository.table.party.RefereesTable;
 import com.gunnarro.android.bandy.repository.table.party.RoleTypesTable;
 import com.gunnarro.android.bandy.repository.table.party.StatusesTable;
 import com.gunnarro.android.bandy.repository.view.MatchResultView;
@@ -55,8 +56,8 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	private static final boolean IS_LOAD_FROM_SCRIPT = false;
 	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
 	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
-	private static final String DATABASE_NAME = "sportsteam-test2.db";
-	public static final int DATABASE_VERSION = 1;
+	private static final String DATABASE_NAME = "sportsteam-snapshot-6.db";
+	public static final int DATABASE_VERSION = 2;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
 
@@ -154,6 +155,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			PlayerPositionTypesTable.onUpgrade(database, oldVersion, newVersion);
 			PlayerTrainingLnkTable.onUpgrade(database, oldVersion, newVersion);
 			// RolesTable.onUpgrade(database, oldVersion, newVersion);
+			RefereesTable.onUpgrade(database, oldVersion, newVersion);
 			RoleTypesTable.onUpgrade(database, oldVersion, newVersion);
 			SeasonsTable.onUpgrade(database, oldVersion, newVersion);
 			SettingsTable.onUpgrade(database, oldVersion, newVersion);
@@ -189,6 +191,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		PlayerPositionTypesTable.onCreate(database);
 		PlayerTrainingLnkTable.onCreate(database);
 		// RolesTable.onCreate(database);
+		RefereesTable.onCreate(database);
 		RoleTypesTable.onCreate(database);
 		SeasonsTable.onCreate(database);
 		SettingsTable.onCreate(database);
@@ -231,15 +234,20 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 		database.execSQL(MatchResultView.dropViewQuery());
 		// Do not delete constants
-//		database.execSQL(createTableQuery(SettingsTable.TABLE_NAME, isDrop));
-//		database.execSQL(createTableQuery(MatchTypesTable.TABLE_NAME, isDrop));
-//		database.execSQL(createTableQuery(MatchEventTypesTable.TABLE_NAME, isDrop));
-//		database.execSQL(createTableQuery(MatchStatusTypesTable.TABLE_NAME, isDrop));
-//		database.execSQL(createTableQuery(PlayerPositionTypesTable.TABLE_NAME, isDrop));
-//		database.execSQL(createTableQuery(SeasonsTable.TABLE_NAME, isDrop));
-//		database.execSQL(createTableQuery(StatusesTable.TABLE_NAME, isDrop));
-//		database.execSQL(createTableQuery(RoleTypesTable.TABLE_NAME, isDrop));
-//		database.execSQL(createTableQuery(LeaguesTable.TABLE_NAME, isDrop));
+		// database.execSQL(createTableQuery(SettingsTable.TABLE_NAME, isDrop));
+		// database.execSQL(createTableQuery(MatchTypesTable.TABLE_NAME,
+		// isDrop));
+		// database.execSQL(createTableQuery(MatchEventTypesTable.TABLE_NAME,
+		// isDrop));
+		// database.execSQL(createTableQuery(MatchStatusTypesTable.TABLE_NAME,
+		// isDrop));
+		// database.execSQL(createTableQuery(PlayerPositionTypesTable.TABLE_NAME,
+		// isDrop));
+		// database.execSQL(createTableQuery(SeasonsTable.TABLE_NAME, isDrop));
+		// database.execSQL(createTableQuery(StatusesTable.TABLE_NAME, isDrop));
+		// database.execSQL(createTableQuery(RoleTypesTable.TABLE_NAME,
+		// isDrop));
+		// database.execSQL(createTableQuery(LeaguesTable.TABLE_NAME, isDrop));
 		CustomLog.i(BandyDataBaseHjelper.class, "Dropped all tabels");
 	}
 

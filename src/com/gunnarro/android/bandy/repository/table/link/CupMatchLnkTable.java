@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.repository.table.TableHelper;
+import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
-import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 
 public class CupMatchLnkTable {
 
@@ -15,11 +15,11 @@ public class CupMatchLnkTable {
 	public static final String COLUMN_FK_MATCH_ID = "fk_match_id";
 
 	public static void onCreate(SQLiteDatabase database) {
-		LinkTableHelper.onCreate(database, TABLE_NAME, COLUMN_FK_CUP_ID, COLUMN_FK_MATCH_ID, PlayersTable.TABLE_NAME, MatchesTable.TABLE_NAME);
+		LinkTableHelper.onCreate(database, TABLE_NAME, COLUMN_FK_CUP_ID, COLUMN_FK_MATCH_ID, CupsTable.TABLE_NAME, MatchesTable.TABLE_NAME);
 	}
 
 	public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-		LinkTableHelper.onUpgrade(database, TABLE_NAME, COLUMN_FK_CUP_ID, COLUMN_FK_MATCH_ID, PlayersTable.TABLE_NAME, MatchesTable.TABLE_NAME, oldVersion,
+		LinkTableHelper.onUpgrade(database, TABLE_NAME, COLUMN_FK_CUP_ID, COLUMN_FK_MATCH_ID, CupsTable.TABLE_NAME, MatchesTable.TABLE_NAME, oldVersion,
 				newVersion);
 	}
 

@@ -204,7 +204,7 @@ public class NewMatchActivity extends FragmentActivity implements NoticeDialogLi
 		MatchTypesEnum matchType = MatchTypesEnum.valueOf(getInputValue(R.id.matchTypeTxt));
 		Referee referee = null;
 		if (getInputValue(R.id.matchRefereeNameTxt) != null) {
-			referee = new Referee(getInputValue(R.id.matchRefereeNameTxt), getInputValue(R.id.matchRefereeNameTxt));
+//			referee = new Referee(getInputValue(R.id.matchRefereeNameTxt), getInputValue(R.id.matchRefereeNameTxt));
 		}
 		Match match = new Match(null, null, Utility.timeToDate(startDate + " " + startTime, "dd.MM.yyyy hh:mm").getTime(), team, homeTeam, awayTeam,
 				getInputValue(R.id.matchVenueTxt), referee, matchType);

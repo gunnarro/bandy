@@ -2,7 +2,7 @@ package com.gunnarro.android.bandy.domain;
 
 import com.gunnarro.android.bandy.domain.party.Address;
 
-public class Club {
+public class Club extends BaseDomain {
 
 	public static enum DepartmentNamesEnum {
 		Bandy, Baseball, Hockey, Soccer, Volleyball, Other;
@@ -12,7 +12,6 @@ public class Club {
 		}
 	}
 
-	private Integer id;
 	private String name;
 	private String departmentName;
 	private String stadiumName;
@@ -20,30 +19,39 @@ public class Club {
 	private Address address;
 	private String homePageUrl;
 
-	public Club(String name, String departmentName) {
+	public Club(Integer id, String name, String departmentName) {
+		super(id);
 		this.name = name;
 		this.departmentName = departmentName;
 	}
 
-	public Club(String name, String departmentName, String clubNameAbbreviation, String stadiumName, Address address, String homePageUrl) {
-		this(name, departmentName);
+	public Club(String name, String departmentName) {
+		this(null, name, departmentName);
+	}
+
+	public Club(Integer id, String name, String departmentName, String clubNameAbbreviation, String stadiumName, Address address, String homePageUrl) {
+		this(id, name, departmentName);
 		this.clubNameAbbreviation = clubNameAbbreviation;
 		this.stadiumName = stadiumName;
 		this.address = address;
 		this.homePageUrl = homePageUrl;
-	}
 
-	public Club(Integer id, String name, String departmentName, String clubNameAbbreviation, String stadiumName, Address address, String homepageUrl) {
-		this(name, departmentName, clubNameAbbreviation, stadiumName, address, homepageUrl);
-		this.id = id;
-	}
-
-	public Integer getId() {
-		return id;
 	}
 
 	public String getFullName() {
 		return name + " " + departmentName;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	public void setClubNameAbbreviation(String clubNameAbbreviation) {
+		this.clubNameAbbreviation = clubNameAbbreviation;
 	}
 
 	public String getName() {
@@ -84,7 +92,7 @@ public class Club {
 
 	@Override
 	public String toString() {
-		return "Club [id=" + id + ", name=" + name + ", departmentName=" + departmentName + ", stadiumName=" + stadiumName + ", clubNameAbbreviation="
+		return "Club [id=" + getId() + ", name=" + name + ", departmentName=" + departmentName + ", stadiumName=" + stadiumName + ", clubNameAbbreviation="
 				+ clubNameAbbreviation + ", homePageUrl=" + homePageUrl + "]";
 	}
 

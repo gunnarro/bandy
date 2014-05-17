@@ -34,6 +34,7 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 	public final static int REQUEST_CODE_TEAM_DELET = 102;
 	public final static int RESULT_CODE_TEAM_CHANGED = 1;
 	public final static int RESULT_CODE_TEAM_UNCHANGED = 0;
+
 	private Integer clubId;
 	private String clubName;
 	private String teamName;
@@ -101,7 +102,6 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 			detailIntent.putExtra(ARG_TEAM_NAME, teamName);
 			detailIntent.putExtra(DashboardActivity.ARG_TEAM_ID, id);
 			startActivityForResult(detailIntent, REQUEST_CODE_TEAM_DETAIL);
-			// startActivity(detailIntent);
 		}
 	}
 
@@ -127,18 +127,14 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 			newTeamIntent.putExtra(ARG_CLUB_NAME, clubName);
 			newTeamIntent.putExtra(ARG_TEAM_NAME, teamName);
 			startActivityForResult(newTeamIntent, REQUEST_CODE_TEAM_NEW);
-			// startActivity(newTeamIntent);
 			break;
 		case R.id.action_reload:
 			CustomLog.e(this.getClass(), "action: " + item.getTitle());
-			// showReload(findViewById(R.id.club_item_list));
 			reloadListData();
 		case android.R.id.home:
 			super.finish();
 			return true;
 		default:
-			// startActivity(new Intent(getApplicationContext(),
-			// HomeActivity.class));
 			break;
 		}
 		CustomLog.d(this.getClass(), "clicked on: " + item.getItemId());
@@ -153,19 +149,6 @@ public class TeamListActivity extends DashboardActivity implements TeamListFragm
 		switch (resultCode) {
 		case RESULT_CODE_TEAM_CHANGED:
 			reloadListData();
-			// read the bundle and get the country object
-			// Bundle bundle = data.getExtras();
-			// Country country = bundle.getParcelable("country");
-
-			// update the country object in the ArrayAdapter
-			// int listPosition = country.getListPosition();
-			// dataAdapter.setCountry(country, listPosition);
-
-			// update the country name in the ListView
-			// currentView.setTag(country);
-			// TextView name = (TextView)
-			// currentView.findViewById(R.id.name);
-			// name.setText(country.getName());
 			break;
 		case RESULT_CODE_TEAM_UNCHANGED:
 			// do nothing

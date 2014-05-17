@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.domain.Club;
+import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 
 public class ClubsTable {
 
@@ -32,7 +33,10 @@ public class ClubsTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME_ABBREVIATION).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_STADIUM_NAME).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_URL_HOME_PAGE).append(" TEXT");
-		DATABASE_CREATE_QUERY.append(",UNIQUE (").append(COLUMN_CLUB_NAME).append(",").append(COLUMN_CLUB_DEPARTMENT_NAME).append("));");
+		DATABASE_CREATE_QUERY.append(", UNIQUE (").append(COLUMN_CLUB_NAME).append(",").append(COLUMN_CLUB_DEPARTMENT_NAME).append(")");
+		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_ADDRESS_ID).append(") REFERENCES ").append(AddressTable.TABLE_NAME).append("(")
+				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE );");
+
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

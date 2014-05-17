@@ -24,9 +24,10 @@ public class PlayersTable {
 	public static final String COLUMN_COUNTRY_OF_BIRTH = "country_of_birth";
 	public static final String COLUMN_NATIONAL_TEAM = "national_team";
 	public static final String COLUMN_SCHOOL_NAME = "school_name";
+	public static final String COLUMN_JERSEY_NUMBER = " jersey_number";
 
 	public static String[] TABLE_COLUMNS = TableHelper.createColumns(new String[] { COLUMN_FK_TEAM_ID, COLUMN_FK_ADDRESS_ID, COLUMN_STATUS, COLUMN_FIRST_NAME,
-			COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_GENDER, COLUMN_DATE_OF_BIRTH, COLUMN_EMAIL, COLUMN_MOBILE });
+			COLUMN_MIDDLE_NAME, COLUMN_LAST_NAME, COLUMN_GENDER, COLUMN_DATE_OF_BIRTH, COLUMN_EMAIL, COLUMN_MOBILE, COLUMN_JERSEY_NUMBER, COLUMN_SCHOOL_NAME });
 
 	// Database creation SQL statement
 	private static final StringBuffer DATABASE_CREATE_QUERY;
@@ -45,8 +46,12 @@ public class PlayersTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DATE_OF_BIRTH).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_EMAIL).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_MOBILE).append(" TEXT");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_JERSEY_NUMBER).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_SCHOOL_NAME).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FIRST_NAME).append(",").append(COLUMN_LAST_NAME).append(") ON CONFLICT ABORT");
 		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_TEAM_ID).append(") REFERENCES ").append(TeamsTable.TABLE_NAME).append("(")
+				.append(TableHelper.COLUMN_ID).append(")");
+		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_ADDRESS_ID).append(") REFERENCES ").append(AddressTable.TABLE_NAME).append("(")
 				.append(TableHelper.COLUMN_ID).append("));");
 	}
 

@@ -16,6 +16,7 @@ import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
+import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl.SelectionListType;
@@ -203,6 +204,10 @@ public interface BandyService {
 	public String getSqlQuery(String id, String type);
 
 	public String[] getRefereeNames();
+
+	public Referee getReferee(int refereeId);
+
+	public int deleteReferee(Integer refereeId);
 
 	public String[] getMatchTypes();
 

@@ -12,7 +12,7 @@ public class MatchTest extends TestCase {
 	// @Test
 	public void testConstructor() {
 		Match match = new Match(new Season("2013/2014", 0, 0), System.currentTimeMillis() - 60000, new Team(""), new Team("homeTeam"), new Team("awayTeam"),
-				"venue", new Referee("firstname", "lastname"));
+				"venue", new Referee("firstname", "middlename", "lastname"));
 		assertNull(match.getNumberOfGoalsHome());
 		assertNull(match.getNumberOfGoalsAway());
 		assertNull(match.getResult());
@@ -22,7 +22,7 @@ public class MatchTest extends TestCase {
 	// @Test
 	public void testConstructorPlayed() {
 		Match match = new Match(1, new Season("2013/2014", 0, 0), System.currentTimeMillis() - 60000, new Team(""), new Team("homeTeam"), new Team("awayTeam"),
-				4, 5, "venue", new Referee("firstname", "lastname"), MatchTypesEnum.LEAGUE, MatchStatus.PLAYED.name());
+				4, 5, "venue", new Referee("firstname", "middlename", "lastname"), MatchTypesEnum.LEAGUE, MatchStatus.PLAYED.name());
 		assertEquals(1, match.getId().intValue());
 		// assertEquals(1, match.ge);
 		assertEquals("homeTeam", match.getHomeTeam().getName());
@@ -38,7 +38,7 @@ public class MatchTest extends TestCase {
 
 	public void testConstructorNotPlayedDateBefore() {
 		Match match = new Match(1, new Season("2013/2014", 0, 0), System.currentTimeMillis() - 60000, new Team(""), new Team("homeTeam"), new Team("awayTeam"),
-				null, null, "venue", new Referee("firstname", "lastname"), MatchTypesEnum.CUP, MatchStatus.PLAYED.name());
+				null, null, "venue", new Referee("firstname", "middlename", "lastname"), MatchTypesEnum.CUP, MatchStatus.PLAYED.name());
 		assertNull(match.getNumberOfGoalsHome());
 		assertNull(match.getNumberOfGoalsAway());
 		assertNull(match.getResult());
@@ -47,7 +47,7 @@ public class MatchTest extends TestCase {
 
 	public void testConstructorNotPlayedDateAfter() {
 		Match match = new Match(1, new Season("2013/2014", 0, 0), System.currentTimeMillis() + 60000, new Team(""), new Team("homeTeam"), new Team("awayTeam"),
-				null, null, "venue", new Referee("firstname", "lastname"), MatchTypesEnum.TRAINING, MatchStatus.PLAYED.name());
+				null, null, "venue", new Referee("firstname", "middlename", "lastname"), MatchTypesEnum.TRAINING, MatchStatus.PLAYED.name());
 		assertNull(match.getNumberOfGoalsHome());
 		assertNull(match.getNumberOfGoalsAway());
 		assertNull(match.getResult());

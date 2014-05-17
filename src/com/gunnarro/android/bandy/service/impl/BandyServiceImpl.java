@@ -25,6 +25,7 @@ import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
+import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
@@ -325,6 +326,10 @@ public class BandyServiceImpl implements BandyService {
 		this.bandyRepository.deleteTeam(teamId);
 	}
 
+	public int deleteReferee(Integer refereeId) {
+		return bandyRepository.deleteReferee(refereeId);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -494,6 +499,14 @@ public class BandyServiceImpl implements BandyService {
 	@Override
 	public String[] getRefereeNames() {
 		return bandyRepository.getRefereeNames();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Referee getReferee(int refereeId) {
+		return bandyRepository.getReferee(refereeId);
 	}
 
 	/**

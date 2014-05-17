@@ -28,7 +28,7 @@ public class MatchResultView {
 		query.append("CREATE VIEW match_result_view AS");
 		query.append(" SELECT m.fk_season_id AS season_id,");
 		query.append("			m.fk_team_id AS team_id,");
-		query.append("			m.match_type_id AS match_type_id,");
+		query.append("			m.fk_match_type_id AS match_type_id,");
 		query.append("			m.home_team AS team_name,");
 		query.append("			count( m.fk_team_id ) AS numberOfPlayedMatches,");
 		query.append("			sum( goals_home_team > goals_away_team ) AS numberOfWonMatches,");
@@ -41,12 +41,12 @@ public class MatchResultView {
 		query.append(" WHERE m.home_team LIKE t.team_name");
 		query.append(" GROUP BY m.fk_season_id,");
 		query.append("			m.fk_team_id,");
-		query.append("			m.match_type_id,");
+		query.append("			m.fk_match_type_id,");
 		query.append("			m.home_team");
 		query.append(" UNION");
 		query.append(" SELECT m.fk_season_id AS season_id,");
 		query.append("			m.fk_team_id AS team_id,");
-		query.append("			m.match_type_id AS match_type_id,");
+		query.append("			m.fk_match_type_id AS match_type_id,");
 		query.append("			m.away_team AS team_name,");
 		query.append("			count( m.fk_team_id ) AS numberOfPlayedMatches,");
 		query.append("			sum( goals_away_team > goals_home_team ) AS numberOfWonMatches,");
@@ -59,7 +59,7 @@ public class MatchResultView {
 		query.append(" WHERE m.away_team LIKE t.team_name");
 		query.append(" GROUP BY m.fk_season_id,");
 		query.append("			m.fk_team_id,");
-		query.append("			m.match_type_id,");
+		query.append("			m.fk_match_type_id,");
 		query.append("			m.away_team;");
 		return query.toString();
 	}

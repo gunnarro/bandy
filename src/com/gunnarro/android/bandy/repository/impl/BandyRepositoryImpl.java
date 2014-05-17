@@ -57,6 +57,7 @@ import com.gunnarro.android.bandy.repository.table.link.PlayerTrainingLnkTable;
 import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
+import com.gunnarro.android.bandy.repository.table.party.RefereesTable;
 import com.gunnarro.android.bandy.repository.table.party.RoleTypesTable;
 import com.gunnarro.android.bandy.repository.table.party.StatusesTable;
 import com.gunnarro.android.bandy.repository.view.MatchResultView;
@@ -190,11 +191,17 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int createClub(Club club) {
-		ContentValues values = ClubsTable.createContentValues(club);
-		this.database = getDatabase(true);
-		long id = database.insertOrThrow(ClubsTable.TABLE_NAME, null, values);
-		CustomLog.d(this.getClass(), "Created club: " + club);
-		return Long.valueOf(id).intValue();
+		try {
+			ContentValues values = ClubsTable.createContentValues(club);
+			this.database = getDatabase(true);
+			long id = database.insertOrThrow(ClubsTable.TABLE_NAME, null, values);
+			CustomLog.d(this.getClass(), "Created club: " + club);
+			return Long.valueOf(id).intValue();
+		} catch (SQLException sqle) {
+			CustomLog.e(getClass(), "Error creating: " + club);
+			CustomLog.e(getClass(), sqle.getMessage());
+			throw new ApplicationException(sqle.getMessage());
+		}
 	}
 
 	/**
@@ -223,6 +230,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 			long id = database.insertOrThrow(TeamsTable.TABLE_NAME, null, values);
 			return Long.valueOf(id).intValue();
 		} catch (SQLException sqle) {
+			CustomLog.e(getClass(), "Error creating: " + team);
+			CustomLog.e(getClass(), sqle.getMessage());
 			throw new ApplicationException(sqle.getMessage());
 		}
 	}
@@ -235,11 +244,17 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (match.getTeam() == null || match.getTeam().getId() == null) {
 			throw new ApplicationException("Match must be asigned to a team. Missing valid team!");
 		}
-		CustomLog.d(this.getClass(), match.toString());
-		ContentValues values = MatchesTable.createContentValues(match);
-		this.database = getDatabase(true);
-		long id = database.insertOrThrow(MatchesTable.TABLE_NAME, null, values);
-		return Long.valueOf(id).intValue();
+		try {
+			CustomLog.d(this.getClass(), match.toString());
+			ContentValues values = MatchesTable.createContentValues(match);
+			this.database = getDatabase(true);
+			long id = database.insertOrThrow(MatchesTable.TABLE_NAME, null, values);
+			return Long.valueOf(id).intValue();
+		} catch (SQLException sqle) {
+			CustomLog.e(getClass(), "Error creating: " + match);
+			CustomLog.e(getClass(), sqle.getMessage());
+			throw new ApplicationException(sqle.getMessage());
+		}
 	}
 
 	/**
@@ -247,11 +262,17 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int createCup(Cup cup) {
-		ContentValues values = CupsTable.createContentValues(cup.getSeason().getId(), cup.getStartDate(), cup.getCupName(), cup.getClubName(), cup.getVenue(),
-				cup.getDeadlineDate());
-		this.database = getDatabase(true);
-		long id = database.insertOrThrow(CupsTable.TABLE_NAME, null, values);
-		return Long.valueOf(id).intValue();
+		try {
+			ContentValues values = CupsTable.createContentValues(cup.getSeason().getId(), cup.getStartDate(), cup.getCupName(), cup.getClubName(),
+					cup.getVenue(), cup.getDeadlineDate());
+			this.database = getDatabase(true);
+			long id = database.insertOrThrow(CupsTable.TABLE_NAME, null, values);
+			return Long.valueOf(id).intValue();
+		} catch (SQLException sqle) {
+			CustomLog.e(getClass(), "Error creating: " + cup);
+			CustomLog.e(getClass(), sqle.getMessage());
+			throw new ApplicationException(sqle.getMessage());
+		}
 	}
 
 	/**
@@ -327,6 +348,17 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return id;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int deleteReferee(Integer refereeId) {
+		String whereClause = TableHelper.COLUMN_ID + " = ?";
+		String[] whereArgs = { refereeId.toString() };
+		int id = database.delete(RefereesTable.TABLE_NAME, whereClause, whereArgs);
+		return id;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -449,22 +481,28 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (player.getTeam() == null || player.getTeam().getId() == null) {
 			throw new ApplicationException("Player must be asigned to a team. Missing valid team!");
 		}
-		long addressId = createAddress(player.getAddress());
-		ContentValues playerValues = PlayersTable.createContentValues(addressId, player);
-		this.database = getDatabase(true);
-		long playerId = database.insertOrThrow(PlayersTable.TABLE_NAME, null, playerValues);
-		if (player.getParents() != null) {
-			for (Contact parent : player.getParents()) {
-				Contact contact = getContact(parent.getFirstName(), parent.getLastName());
-				if (contact != null) {
-					createPlayerLink(PlayerLinkTableTypeEnum.CONTACT, Long.valueOf(playerId).intValue(), contact.getId().intValue());
-				} else {
-					CustomLog.e(this.getClass(), "No contact found for: " + parent.getFirstName() + " " + parent.getLastName());
+		try {
+			long addressId = createAddress(player.getAddress());
+			ContentValues playerValues = PlayersTable.createContentValues(addressId, player);
+			this.database = getDatabase(true);
+			long playerId = database.insertOrThrow(PlayersTable.TABLE_NAME, null, playerValues);
+			if (player.getParents() != null) {
+				for (Contact parent : player.getParents()) {
+					Contact contact = getContact(parent.getFirstName(), parent.getLastName());
+					if (contact != null) {
+						createPlayerLink(PlayerLinkTableTypeEnum.CONTACT, Long.valueOf(playerId).intValue(), contact.getId().intValue());
+					} else {
+						CustomLog.e(this.getClass(), "No contact found for: " + parent.getFirstName() + " " + parent.getLastName());
+					}
 				}
 			}
+			CustomLog.d(this.getClass(), player);
+			return Long.valueOf(playerId).intValue();
+		} catch (SQLException sqle) {
+			CustomLog.e(getClass(), "Error creating: " + player);
+			CustomLog.e(getClass(), sqle.getMessage());
+			throw new ApplicationException(sqle.getMessage());
 		}
-		CustomLog.d(this.getClass(), player);
-		return Long.valueOf(playerId).intValue();
 	}
 
 	/**
@@ -472,16 +510,40 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int createContact(Contact contact) {
-		long addressId = createAddress(contact.getAddress());
-		ContentValues contactValues = ContactsTable.createContentValues(addressId, contact);
-		this.database = getDatabase(true);
-		long contactId = database.insertOrThrow(ContactsTable.TABLE_NAME, null, contactValues);
-		if (contact.getRoles() != null) {
-			for (RoleTypesEnum role : contact.getRoles()) {
-				createContactRoleTypeLnk(Long.valueOf(contactId).intValue(), role.getId());
+		try {
+			long addressId = createAddress(contact.getAddress());
+			ContentValues contactValues = ContactsTable.createContentValues(addressId, contact);
+			this.database = getDatabase(true);
+			long contactId = database.insertOrThrow(ContactsTable.TABLE_NAME, null, contactValues);
+			if (contact.getRoles() != null) {
+				for (RoleTypesEnum role : contact.getRoles()) {
+					createContactRoleTypeLnk(Long.valueOf(contactId).intValue(), role.getId());
+				}
 			}
+			return Long.valueOf(contactId).intValue();
+		} catch (SQLException sqle) {
+			CustomLog.e(getClass(), "Error creating: " + contact);
+			CustomLog.e(getClass(), sqle.getMessage());
+			throw new ApplicationException(sqle.getMessage());
 		}
-		return Long.valueOf(contactId).intValue();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int createReferee(Referee referee) {
+		try {
+			long addressId = createAddress(referee.getAddress());
+			ContentValues contactValues = RefereesTable.createContentValues(addressId, referee);
+			this.database = getDatabase(true);
+			long refereeId = database.insertOrThrow(RefereesTable.TABLE_NAME, null, contactValues);
+			return Long.valueOf(refereeId).intValue();
+		} catch (SQLException sqle) {
+			CustomLog.e(getClass(), "Error creating: " + referee);
+			CustomLog.e(getClass(), sqle.getMessage());
+			throw new ApplicationException(sqle.getMessage());
+		}
 	}
 
 	/**
@@ -935,17 +997,17 @@ public class BandyRepositoryImpl implements BandyRepository {
 	@Override
 	public String[] getRefereeNames() {
 		String[] refereeNames = new String[] {};
-		String selection = ContactsTable.COLUMN_FK_TEAM_ID + " = ?";
-		String[] selectionArgs = { "1" };
+		String selection = RefereesTable.COLUMN_FK_SPORT_TYPE_ID + " = ?";
+		String[] selectionArgs = { "0" };
 		this.database = getDatabase(false);
-		Cursor cursor = database.query(ContactsTable.TABLE_NAME, ContactsTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
+		Cursor cursor = database.query(RefereesTable.TABLE_NAME, RefereesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
 		if (cursor != null && cursor.getCount() > 0) {
 			refereeNames = new String[cursor.getCount()];
 			int i = 0;
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
-				refereeNames[i] = cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_FIRST_NAME)) + " "
-						+ cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_LAST_NAME));
+				refereeNames[i] = cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_FIRST_NAME)) + " "
+						+ cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_LAST_NAME));
 				cursor.moveToNext();
 				i++;
 			}
@@ -1010,7 +1072,6 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (clubName == null) {
 			throw new ValidationException(this.getClass().getName() + ".getTeam() arg clubName is null!");
 		}
-		String[] teamNames = new String[] {};
 		StringBuffer query = new StringBuffer();
 		query.append("SELECT t.").append(TeamsTable.COLUMN_TEAM_NAME);
 		query.append(" FROM ").append(TeamsTable.TABLE_NAME).append(" t, ").append(ClubsTable.TABLE_NAME).append(" c");
@@ -1179,6 +1240,25 @@ public class BandyRepositoryImpl implements BandyRepository {
 		}
 		CustomLog.d(this.getClass(), "contactId=" + contactId + ", contact=" + contact);
 		return contact;
+	}
+
+	@Override
+	public Referee getReferee(int refereeId) {
+		Referee referee = null;
+		StringBuffer selection = new StringBuffer();
+		selection.append(TableHelper.COLUMN_ID + " = ?");
+		String[] selectionArgs = { Integer.toString(refereeId) };
+		this.database = getDatabase(false);
+		Cursor cursor = database.query(RefereesTable.TABLE_NAME, RefereesTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			referee = mapCursorToReferee(cursor);
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), "refereeId=" + refereeId + ", referee=" + referee);
+		return referee;
 	}
 
 	/**
@@ -1730,14 +1810,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	private Match mapCursorToMatch(Cursor cursor, Team team, Season season) {
 		long start_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(MatchesTable.COLUMN_START_DATE))) * 1000L;
-		MatchTypesEnum matchType = MatchTypesEnum.toType(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_MATCH_TYPE_ID)));
+		MatchTypesEnum matchType = MatchTypesEnum.toType(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_MATCH_TYPE_ID)));
+		Referee referee = getReferee(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_REFEREE_ID)));
 		return new Match(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), season, start_date_ms, team, new Team(cursor.getString(cursor
 				.getColumnIndex(MatchesTable.COLUMN_HOME_TEAM_NAME))), new Team(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_AWAY_TEAM_NAME))),
 				cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_HOME_TEAM)), cursor.getInt(cursor
 						.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_AWAY_TEAM)), cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_VENUE)),
-				new Referee(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_REFEREE)), cursor.getString(cursor
-						.getColumnIndex(MatchesTable.COLUMN_REFEREE))), matchType, cursor.getString(cursor
-						.getColumnIndex(MatchesTable.COLUMN_MATCH_STATUS_NAME)));
+				referee, matchType, cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_MATCH_STATUS_NAME)));
 	}
 
 	private Training mapCursorToTraining(Cursor cursor, Team team, Season season) {
@@ -1795,6 +1874,16 @@ public class BandyRepositoryImpl implements BandyRepository {
 				cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_LAST_NAME)), cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_GENDER)),
 				cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_MOBILE)), cursor.getString(cursor.getColumnIndex(ContactsTable.COLUMN_EMAIL)));
 		return contact;
+	}
+
+	private Referee mapCursorToReferee(Cursor cursor) {
+		Address address = getAddress(cursor.getInt(cursor.getColumnIndex(RefereesTable.COLUMN_FK_ADDRESS_ID)));
+		Referee referee = new Referee(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), cursor.getString(cursor
+				.getColumnIndex(RefereesTable.COLUMN_FIRST_NAME)), cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_MIDDLE_NAME)),
+				cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_LAST_NAME)), cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_GENDER)),
+				address, cursor.getString(cursor.getColumnIndex(RefereesTable.COLUMN_MOBILE)), cursor.getString(cursor
+						.getColumnIndex(RefereesTable.COLUMN_EMAIL)));
+		return referee;
 	}
 
 	private Player mapCursorToPlayer(Cursor cursor, Team team, Address address) {
@@ -2081,7 +2170,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	@Deprecated
 	private String createTeamMatchStatisticQueryDeprecated() {
 		StringBuffer sqlQuery = new StringBuffer();
-		sqlQuery.append("SELECT match_type_id AS matchTypeId, count(fk_team_id) AS numberOfMatches,");
+		sqlQuery.append("SELECT fk_match_type_id AS matchTypeId, count(fk_team_id) AS numberOfMatches,");
 		sqlQuery.append(" sum(goals_home_team > goals_away_team) AS numberOfWonMatches,");
 		sqlQuery.append(" sum(goals_home_team = goals_away_team) AS numberOfDrawMatches,");
 		sqlQuery.append(" sum(goals_home_team < goals_away_team) AS numberOfLossMatches,");
@@ -2090,7 +2179,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		sqlQuery.append(" FROM matches");
 		sqlQuery.append("WHERE fk_team_id = ?");
 		sqlQuery.append(" AND fk_season_id = ?");
-		sqlQuery.append(" GROUP BY match_type_id");
+		sqlQuery.append(" GROUP BY fk_match_type_id");
 		return sqlQuery.toString();
 	}
 

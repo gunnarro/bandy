@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.repository.table.TableHelper;
+import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.RoleTypesTable;
 
 public class ContactRoleTypeLnkTable {
@@ -15,12 +16,12 @@ public class ContactRoleTypeLnkTable {
 	public static final String[] TABLE_COLUMNS = { COLUMN_FK_CONTACT_ID, COLUMN_FK_CONTACT_ID };
 
 	public static void onCreate(SQLiteDatabase database) {
-		LinkTableHelper.onCreate(database, TABLE_NAME, COLUMN_FK_CONTACT_ID, COLUMN_FK_ROLE_TYPE_ID, TABLE_NAME, RoleTypesTable.TABLE_NAME);
+		LinkTableHelper.onCreate(database, TABLE_NAME, COLUMN_FK_CONTACT_ID, COLUMN_FK_ROLE_TYPE_ID, ContactsTable.TABLE_NAME, RoleTypesTable.TABLE_NAME);
 	}
 
 	public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-		LinkTableHelper.onUpgrade(database, TABLE_NAME, COLUMN_FK_CONTACT_ID, COLUMN_FK_ROLE_TYPE_ID, TABLE_NAME, RoleTypesTable.TABLE_NAME, oldVersion,
-				newVersion);
+		LinkTableHelper.onUpgrade(database, TABLE_NAME, COLUMN_FK_CONTACT_ID, COLUMN_FK_ROLE_TYPE_ID, ContactsTable.TABLE_NAME, RoleTypesTable.TABLE_NAME,
+				oldVersion, newVersion);
 	}
 
 	public static String[] getIdTableColumns() {
