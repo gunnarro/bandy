@@ -228,6 +228,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL(createTableQuery(PlayerCupLnkTable.TABLE_NAME, isDrop));
 		database.execSQL(createTableQuery(PlayerMatchLnkTable.TABLE_NAME, isDrop));
 		database.execSQL(createTableQuery(PlayerTrainingLnkTable.TABLE_NAME, isDrop));
+		database.execSQL(createTableQuery(RefereesTable.TABLE_NAME, isDrop));
 		database.execSQL(createTableQuery(TeamsTable.TABLE_NAME, isDrop));
 		database.execSQL(createTableQuery(TeamContactLnkTable.TABLE_NAME, isDrop));
 		database.execSQL(createTableQuery(TrainingsTable.TABLE_NAME, isDrop));

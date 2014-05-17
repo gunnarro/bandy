@@ -3,7 +3,7 @@ package com.gunnarro.android.bandy.domain.activity;
 public abstract class Activity {
 
 	public static enum ActivityStatusEnum {
-		COMPLETED, CANCELLED, BEGIN;
+		COMPLETED, CANCELLED, BEGIN, NOT_STARTED;
 	}
 
 	private Status status = null;

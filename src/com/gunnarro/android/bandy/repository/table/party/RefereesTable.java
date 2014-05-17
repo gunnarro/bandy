@@ -64,7 +64,9 @@ public class RefereesTable {
 		if (referee.getClub() != null) {
 			values.put(COLUMN_FK_CLUB_ID, referee.getClub().getId());
 		}
-		values.put(COLUMN_FK_ADDRESS_ID, addressId);
+		if (addressId != null) {
+			values.put(COLUMN_FK_ADDRESS_ID, addressId);
+		}
 		values.put(COLUMN_GENDER, referee.getGender());
 		return values;
 	}

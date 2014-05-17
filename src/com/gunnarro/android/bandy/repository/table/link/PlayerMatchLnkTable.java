@@ -3,7 +3,6 @@ package com.gunnarro.android.bandy.repository.table.link;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.gunnarro.android.bandy.repository.table.TableHelper;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 
@@ -23,11 +22,11 @@ public class PlayerMatchLnkTable {
 				newVersion);
 	}
 
-	public static String[] getTableColumns() {
-		return TableHelper.createColumns(new String[] { COLUMN_FK_PLAYER_ID, COLUMN_FK_MATCH_ID });
+	public static String[] getTableFkKeyColumns() {
+		return new String[] { COLUMN_FK_PLAYER_ID, COLUMN_FK_MATCH_ID };
 	}
 
 	public static ContentValues createContentValues(Integer playerId, Integer matchId) {
-		return LinkTableHelper.createContentValues(new String[] { COLUMN_FK_PLAYER_ID, COLUMN_FK_MATCH_ID }, new Integer[] { playerId, matchId });
+		return LinkTableHelper.createContentValues(getTableFkKeyColumns(), new Integer[] { playerId, matchId });
 	}
 }

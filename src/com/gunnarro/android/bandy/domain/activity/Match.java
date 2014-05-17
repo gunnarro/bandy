@@ -7,7 +7,16 @@ import com.gunnarro.android.bandy.utility.Utility;
 public class Match extends Activity {
 
 	public static enum MatchStatus {
-		PLAYED, NOT_PLAYED, CANCELLED, POSTPONED, ONGOING
+		PLAYED("PLAYED"), NOT_PLAYED("NOT PLAYED"), CANCELLED("CANCELLED"), POSTPONED("POSTPONED"), ONGOING("ONGOING");
+		private String name;
+
+		MatchStatus(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
 	}
 
 	public static enum MatchTypesEnum {

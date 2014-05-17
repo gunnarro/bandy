@@ -23,11 +23,11 @@ public class PlayerCupLnkTable {
 				newVersion);
 	}
 
-	public static String[] getTableColumns() {
-		return TableHelper.createColumns(new String[] { COLUMN_FK_PLAYER_ID, COLUMN_FK_CUP_ID });
+	public static String[] getTableFkKeyColumns() {
+		return new String[] { COLUMN_FK_PLAYER_ID, COLUMN_FK_CUP_ID };
 	}
 
 	public static ContentValues createContentValues(Integer playerId, Integer cupId) {
-		return LinkTableHelper.createContentValues(new String[] { COLUMN_FK_PLAYER_ID, COLUMN_FK_CUP_ID }, new Integer[] { playerId, cupId });
+		return LinkTableHelper.createContentValues(getTableFkKeyColumns(), new Integer[] { playerId, cupId });
 	}
 }

@@ -23,11 +23,11 @@ public class PlayerTrainingLnkTable {
 				oldVersion, newVersion);
 	}
 
-	public static String[] getTableColumns() {
-		return TableHelper.createColumns(new String[] { COLUMN_FK_PLAYER_ID, COLUMN_FK_TRAINING_ID });
+	public static String[] getTableFkKeyColumns() {
+		return new String[] { COLUMN_FK_PLAYER_ID, COLUMN_FK_TRAINING_ID };
 	}
 
 	public static ContentValues createContentValues(Integer playerId, Integer trainingId) {
-		return LinkTableHelper.createContentValues(new String[] { COLUMN_FK_PLAYER_ID, COLUMN_FK_TRAINING_ID }, new Integer[] { playerId, trainingId });
+		return LinkTableHelper.createContentValues(getTableFkKeyColumns(), new Integer[] { playerId, trainingId });
 	}
 }

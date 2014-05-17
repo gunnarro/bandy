@@ -474,10 +474,10 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Status getMatchStatus(Integer statusName) {
+	public Status getMatchStatus(Integer id) {
 		Status status = null;
-		String selection = MatchStatusTypesTable.COLUMN_MATCH_STATUS_NAME + " LIKE ?";
-		String[] selectionArgs = { statusName.toString() };
+		String selection = TableHelper.COLUMN_ID + " == ?";
+		String[] selectionArgs = { id.toString() };
 		this.database = getDatabase(false);
 		Cursor cursor = database.query(MatchStatusTypesTable.TABLE_NAME, MatchStatusTypesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
 		if (cursor != null && cursor.getCount() > 0) {
@@ -524,7 +524,10 @@ public class BandyRepositoryImpl implements BandyRepository {
 			throw new ApplicationException("Player must be asigned to a team. Missing valid team!");
 		}
 		try {
-			long addressId = createAddress(player.getAddress());
+			Long addressId = null;
+			if (player.getAddress() != null) {
+				addressId = createAddress(player.getAddress());
+			}
 			ContentValues playerValues = PlayersTable.createContentValues(addressId, player);
 			this.database = getDatabase(true);
 			long playerId = database.insertOrThrow(PlayersTable.TABLE_NAME, null, playerValues);
@@ -576,7 +579,10 @@ public class BandyRepositoryImpl implements BandyRepository {
 	@Override
 	public int createReferee(Referee referee) {
 		try {
-			long addressId = createAddress(referee.getAddress());
+			Long addressId = null;
+			if (referee.getAddress() != null) {
+				addressId = createAddress(referee.getAddress());
+			}
 			ContentValues contactValues = RefereesTable.createContentValues(addressId, referee);
 			this.database = getDatabase(true);
 			long refereeId = database.insertOrThrow(RefereesTable.TABLE_NAME, null, contactValues);
@@ -671,7 +677,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 			match = mapCursorToMatch(cursor, team, season);
 			int numberOfSignedPlayers = getNumberOfSignedPlayers(PlayerLinkTableTypeEnum.MATCH, match.getId());
 			match.setNumberOfSignedPlayers(numberOfSignedPlayers);
-			Referee referee = getReferee(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_TEAM_ID)));
+			Referee referee = getReferee(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_REFEREE_ID)));
 			match.setReferee(referee);
 		}
 		if (cursor != null && !cursor.isClosed()) {
@@ -2017,13 +2023,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 		}
 
 		if (type == PlayerLinkTableTypeEnum.CONTACT) {
-			return deleteLink(PlayerContactLnkTable.TABLE_NAME, PlayerContactLnkTable.getTableColumns(), playerId.toString(), linkToId);
+			return deleteLink(PlayerContactLnkTable.TABLE_NAME, PlayerContactLnkTable.getTableFkKeyColumns(), playerId.toString(), linkToId);
 		} else if (type == PlayerLinkTableTypeEnum.MATCH) {
-			return deleteLink(PlayerMatchLnkTable.TABLE_NAME, PlayerMatchLnkTable.getTableColumns(), playerId.toString(), linkToId);
+			return deleteLink(PlayerMatchLnkTable.TABLE_NAME, PlayerMatchLnkTable.getTableFkKeyColumns(), playerId.toString(), linkToId);
 		} else if (type == PlayerLinkTableTypeEnum.CUP) {
-			return deleteLink(PlayerCupLnkTable.TABLE_NAME, PlayerCupLnkTable.getTableColumns(), playerId.toString(), linkToId);
+			return deleteLink(PlayerCupLnkTable.TABLE_NAME, PlayerCupLnkTable.getTableFkKeyColumns(), playerId.toString(), linkToId);
 		} else if (type == PlayerLinkTableTypeEnum.TRAINING) {
-			return deleteLink(PlayerTrainingLnkTable.TABLE_NAME, PlayerTrainingLnkTable.getTableColumns(), playerId.toString(), linkToId);
+			return deleteLink(PlayerTrainingLnkTable.TABLE_NAME, PlayerTrainingLnkTable.getTableFkKeyColumns(), playerId.toString(), linkToId);
 		} else {
 			throw new ApplicationException("Invalid link table type: " + type);
 		}

@@ -69,7 +69,9 @@ public class PlayersTable {
 
 	public static ContentValues createContentValues(Long addressId, Player player) {
 		ContentValues values = updateContentValues(player);
-		values.put(COLUMN_FK_ADDRESS_ID, addressId);
+		if (addressId != null) {
+			values.put(COLUMN_FK_ADDRESS_ID, addressId);
+		}
 		values.put(COLUMN_FK_TEAM_ID, player.getTeam().getId());
 		values.put(COLUMN_GENDER, player.getGender());
 		return values;
