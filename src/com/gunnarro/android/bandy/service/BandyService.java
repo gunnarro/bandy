@@ -253,4 +253,6 @@ public interface BandyService {
 
 	public void updateMatchStatus(int matchId, int statusId);
 
+	public int saveReferee(Referee referee);
+
 }

@@ -40,9 +40,21 @@ public class TableHelper {
 		return query.toString();
 	}
 
+	public static void onCreate(SQLiteDatabase database, String query, String indexQuery) {
+		onCreate(database, query);
+		CustomLog.i(TableHelper.class, indexQuery);
+		database.execSQL(indexQuery);
+	}
+
 	public static void onCreate(SQLiteDatabase database, String query) {
 		CustomLog.i(TableHelper.class, query);
 		database.execSQL(query);
+	}
+
+	public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion, String tableName, String query, String indexQuery) {
+		CustomLog.i(TableHelper.class, "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
+		database.execSQL("DROP TABLE IF EXISTS " + tableName);
+		onCreate(database, query, indexQuery);
 	}
 
 	public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion, String tableName, String query) {

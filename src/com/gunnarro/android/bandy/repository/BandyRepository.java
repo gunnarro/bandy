@@ -41,6 +41,8 @@ public interface BandyRepository {
 	 */
 	public void close();
 
+	public boolean setForeignKeyConstraintsEnabled(boolean enable);
+
 	public String getDBFileName();
 
 	public String getDBUserVersion();
@@ -235,5 +237,13 @@ public interface BandyRepository {
 	public void registrerRefereeForMatch(int refereeId, int matchId);
 
 	public Status getMatchStatus(Integer statusName);
+
+	public int deleteAddress(Integer addressId);
+
+	String getSqliteVersion();
+
+	String getDBforeignkeys();
+
+	public int updateReferee(Referee referee);
 
 }

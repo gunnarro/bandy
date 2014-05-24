@@ -13,12 +13,20 @@ public class Address {
 	private String country;
 
 	public Address(String streetName, String streetNumber, String streetNumberPrefix, String postalCode, String city, String country) {
-		this.streetName = streetName.toUpperCase();
+		if (streetName != null) {
+			this.streetName = streetName.toUpperCase();
+		}
 		this.streetNumber = streetNumber;
-		this.streetNumberPrefix = streetNumberPrefix != null ? streetNumberPrefix.toUpperCase() : null;
+		if (streetNumberPrefix != null) {
+			this.streetNumberPrefix = streetNumberPrefix != null ? streetNumberPrefix.toUpperCase() : null;
+		}
 		this.postalCode = postalCode;
-		this.city = city.toUpperCase();
-		this.country = country.toUpperCase();
+		if (city != null) {
+			this.city = city.toUpperCase();
+		}
+		if (country != null) {
+			this.country = country.toUpperCase();
+		}
 	}
 
 	public Address(int id, String streetName, String streetNumber, String streetNumberPrefix, String postalCode, String city, String country) {

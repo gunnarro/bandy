@@ -5,6 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.domain.Team;
 
+/**
+ * In the database model are teams deleted if the club is deleted
+ * @author admin
+ *
+ */
 public class TeamsTable {
 
 	// Database table
@@ -25,13 +30,14 @@ public class TeamsTable {
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
 		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_CLUB_ID).append(" INTEGER NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_LEAGUE_ID).append(" INTEGER");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_CLUB_ID).append(" INTEGER UNIQUE ON CONFLICT FAIL REFERENCES clubs(_id) ON DELETE CASCADE ON UPDATE CASCADE");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_LEAGUE_ID).append(" INTEGER INTEGER UNIQUE ON CONFLICT FAIL REFERENCES leagues(_id) ON DELETE SET NULL ON UPDATE CASCADE");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_NAME).append(" TEXT NOT NULL UNIQUE");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_YEAR_OF_BIRTH).append(" INTEGER");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_GENDER).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_CLUB_ID).append(") REFERENCES ").append(ClubsTable.TABLE_NAME).append("(")
-				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE );");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_GENDER).append(" TEXT NOT NULL );");
+//		DATABASE_CREATE_QUERY.append(", UNIQUE (").append(COLUMN_FK_CLUB_ID).append(",").append(COLUMN_TEAM_NAME).append("));");
+//		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_CLUB_ID).append(") REFERENCES ").append(ClubsTable.TABLE_NAME).append("(")
+//				.append(TableHelper.COLUMN_ID).append("));");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

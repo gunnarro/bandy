@@ -31,6 +31,7 @@ import com.gunnarro.android.bandy.view.clubdetailflow.ClubListActivity;
 import com.gunnarro.android.bandy.view.contactdetailflow.ContactListActivity;
 import com.gunnarro.android.bandy.view.matchdetailflow.MatchListActivity;
 import com.gunnarro.android.bandy.view.playerdetailflow.PlayerListActivity;
+import com.gunnarro.android.bandy.view.refereedetailflow.RefereeListActivity;
 import com.gunnarro.android.bandy.view.teamdetailflow.TeamListActivity;
 
 /**
@@ -54,6 +55,7 @@ public abstract class DashboardActivity extends FragmentActivity {
 	public static final String ARG_SEASON_ID = "season_id";
 	public static final String ARG_PLAYER_ID = "player_id";
 	public static final String ARG_CONTACT_ID = "contact_id";
+	public static final String ARG_REFEREE_ID = "referee_id";
 	public static final String ARG_MATCH_ID = "match_id";
 	public final static String DEFAULT_CLUB_NAME = "Ullevål Idretts Lag";
 	public final static String DEFAULT_TEAM_NAME = "UIL Knøtt 2003";
@@ -238,7 +240,7 @@ public abstract class DashboardActivity extends FragmentActivity {
 			startActivity(createIntent(ContactListActivity.class));
 			break;
 		case R.id.referee_btn:
-			Toast.makeText(this, "Referee view not implements", Toast.LENGTH_SHORT).show();
+			startActivity(createIntent(RefereeListActivity.class));
 			break;
 		case R.id.settings_btn:
 			startActivity(new Intent(getApplicationContext(), SettingsActivity.class));

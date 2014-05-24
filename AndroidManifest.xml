@@ -173,6 +173,27 @@
                 android:value="com.gunnarro.android.bandy.view.clubdetailflow.ClubListActivity" />
         </activity>
         
+          <!-- Referee detail flow configuration -->
+        <activity
+            android:name="com.gunnarro.android.bandy.view.refereedetailflow.NewRefereeActivity"
+            android:label="New Referee"
+            android:parentActivityName="com.gunnarro.android.bandy.view.refereedetailflow.RefereeListActivity" >
+        </activity>
+        <activity
+            android:name="com.gunnarro.android.bandy.view.refereedetailflow.RefereeListActivity"
+            android:label="Referee"
+            android:parentActivityName="com.gunnarro.android.bandy.view.dashboard.HomeActivity" >
+        </activity>
+        <activity
+            android:name="com.gunnarro.android.bandy.view.refereedetailflow.RefereeDetailActivity"
+            android:label="Referee details"
+            android:parentActivityName="com.gunnarro.android.bandy.view.refereedetailflow.RefereeListActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gunnarro.android.bandy.view.refereedetailflow.RefereeListActivity" />
+        </activity>
+        
         <service android:name="com.gunnarro.android.bandy.service.impl.DownloadService" />
         <!--
 		<receiver

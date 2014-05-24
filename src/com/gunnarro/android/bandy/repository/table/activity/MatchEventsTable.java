@@ -33,7 +33,8 @@ public class MatchEventsTable {
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
 		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_MATCH_ID).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_MATCH_ID).append(" INTEGER NOT NULL").append(" REFERENCES ").append(MatchesTable.TABLE_NAME)
+				.append("(").append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_PLAYED_MINUTES).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_TEAM_NAME).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_PLAYER_NAME).append(" TEXT");
@@ -42,7 +43,7 @@ public class MatchEventsTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_VALUE).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_DESCRIPTION).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_MATCH_ID).append(") REFERENCES ").append(MatchesTable.TABLE_NAME).append("(")
-				.append(TableHelper.COLUMN_ID).append("));");
+				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

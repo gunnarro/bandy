@@ -16,6 +16,7 @@ import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
+import com.gunnarro.android.bandy.service.exception.ValidationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
 import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
@@ -204,6 +205,8 @@ public class PlayerListFragment extends ListFragment {
 			try {
 				Team team = this.bandyService.getTeam(teamName, false);
 				return this.bandyService.getPlayersAsItemList(team.getId());
+			} catch (ValidationException ve) {
+				CustomLog.e(this.getClass(), ve.getMessage());
 			} catch (ApplicationException ae) {
 				CustomLog.e(this.getClass(), ae.getMessage());
 			}

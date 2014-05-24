@@ -35,6 +35,7 @@ import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.activity.Season;
+import com.gunnarro.android.bandy.domain.activity.Status;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
@@ -347,10 +348,13 @@ public class XmlDocumentParser {
 	private Match mapNodeToMatch(Team team, Season season, Node matchNode) {
 		String dateTimeStr = getAttributeValue(matchNode, ATTR_DATE) + " " + getAttributeValue(matchNode, ATTR_START_TIME);
 		MatchTypesEnum matchType = MatchTypesEnum.toType(Integer.parseInt(getAttributeValue(matchNode, "typeId")));
-		return new Match(null, season, Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), new Team(team.getId(), team.getName()), new Team(
+		Match match = new Match(null, season, Utility.timeToDate(dateTimeStr, "dd.MM.yyyy HH:mm").getTime(), new Team(team.getId(), team.getName()), new Team(
 				getAttributeValue(matchNode, "homeTeam")), new Team(getAttributeValue(matchNode, "awayTeam")), Integer.parseInt(getAttributeValue(matchNode,
 				"goalsHomeTeam")), Integer.parseInt(getAttributeValue(matchNode, "goalsAwayTeam")), getAttributeValue(matchNode, "venue"), new Referee(
-				getAttributeValue(matchNode, "referee"), null, getAttributeValue(matchNode, "referee")), matchType, getAttributeValue(matchNode, "status"));
+				getAttributeValue(matchNode, "referee"), null, getAttributeValue(matchNode, "referee")), matchType);
+		match.setStatus(new Status(null, getAttributeValue(matchNode, "status")));
+		return match;
+
 	}
 
 	private List<Match> getCupMatchList(Team team, XPath xpath, Document doc, Season season, String cupName) throws XPathExpressionException {

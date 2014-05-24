@@ -1,4 +1,4 @@
-package com.gunnarro.android.bandy.view.contactdetailflow;
+package com.gunnarro.android.bandy.view.refereedetailflow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,24 +12,21 @@ import android.widget.ListView;
 
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
-import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.exception.ApplicationException;
-import com.gunnarro.android.bandy.service.exception.ValidationException;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
-import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 
 /**
  * A list fragment representing a list of Items. This fragment also supports
  * tablet devices by allowing list items to be given an 'activated' state upon
  * selection. This helps indicate which item is currently being viewed in a
- * {@link ContactDetailFragment}.
+ * {@link RefereeDetailFragment}.
  * <p>
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ContactListFragment extends ListFragment {
+public class RefereeListFragment extends ListFragment {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -77,7 +74,7 @@ public class ContactListFragment extends ListFragment {
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
 	 */
-	public ContactListFragment() {
+	public RefereeListFragment() {
 		CustomLog.d(this.getClass(), "default constructor");
 	}
 
@@ -91,21 +88,12 @@ public class ContactListFragment extends ListFragment {
 		if (this.bandyService == null) {
 			this.bandyService = new BandyServiceImpl(getActivity());
 		}
-		String teamName = null;
-		if (savedInstanceState != null) {
-			teamName = savedInstanceState.getString(DashboardActivity.ARG_TEAM_NAME, null);
-		} else if (getArguments() != null && getArguments().containsKey(DashboardActivity.ARG_TEAM_NAME)) {
-			teamName = getArguments().getString(DashboardActivity.ARG_TEAM_NAME, null);
-		} else {
-			CustomLog.e(this.getClass(), "No team id argument found! use teamName=" + teamName);
-			throw new ApplicationException(this.getClass().getSimpleName() + ": Missing team name attribute!");
-		}
-		this.itemList = getContactNamesAsItemList(teamName);
+		this.itemList = getRefereeNamesAsItemList();
 		CustomLog.d(this.getClass(), "items:" + this.itemList.size());
 		setListAdapter(new ArrayAdapter<Item>(getActivity(), R.layout.custom_checked_list_item, android.R.id.text1, this.itemList));
 		// finally, update the action bar sub title with number of players for
 		// selected team
-		getActivity().getActionBar().setSubtitle(teamName + ", contacts: " + itemList.size());
+		getActivity().getActionBar().setSubtitle("Referees: " + itemList.size());
 	}
 
 	/**
@@ -198,20 +186,16 @@ public class ContactListFragment extends ListFragment {
 		getListView().setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
 
-	private List<Item> getContactNamesAsItemList(String teamName) {
-		if (teamName != null) {
-			try {
-				Team team = this.bandyService.getTeam(teamName, false);
-				return this.bandyService.getContactsAsItemList(team.getId());
-			} catch (ValidationException ae) {
-				CustomLog.e(this.getClass(), ae.getMessage());
-			} catch (ApplicationException ae) {
-				CustomLog.e(this.getClass(), ae.getMessage());
+	private List<Item> getRefereeNamesAsItemList() {
+		List<Item> list = new ArrayList<Item>();
+		try {
+			for (String refereeName : this.bandyService.getRefereeNames()) {
+				list.add(new Item(null, refereeName, true));
 			}
-		} else {
-			CustomLog.d(this.getClass(), "Team name is null!");
+		} catch (ApplicationException ae) {
+			CustomLog.e(this.getClass(), ae.getMessage());
 		}
-		return new ArrayList<Item>();
+		return list;
 	}
 
 	private void setActivatedPosition(int position) {

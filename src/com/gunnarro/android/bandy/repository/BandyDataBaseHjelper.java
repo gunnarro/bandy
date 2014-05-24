@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.Locale;
 
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -41,6 +42,7 @@ import com.gunnarro.android.bandy.repository.table.party.RefereesTable;
 import com.gunnarro.android.bandy.repository.table.party.RoleTypesTable;
 import com.gunnarro.android.bandy.repository.table.party.StatusesTable;
 import com.gunnarro.android.bandy.repository.view.MatchResultView;
+import com.gunnarro.android.bandy.service.exception.ApplicationException;
 import com.gunnarro.android.bandy.service.impl.DataLoader;
 
 /**
@@ -56,7 +58,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	private static final boolean IS_LOAD_FROM_SCRIPT = false;
 	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
 	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
-	public static final String DATABASE_NAME = "sportsteam-snapshot-7.db";
+	public static final String DATABASE_NAME = "sportsteam-snapshot-20.db";
 	public static final int DATABASE_VERSION = 1;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
@@ -104,12 +106,11 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	// Method is called during creation of the database
 	@Override
 	public void onCreate(SQLiteDatabase database) {
-		database.setLocale(new Locale("no", "NO"));
 		if (!database.isReadOnly()) {
 			// Enable foreign key constraints
-			// database.setForeignKeyConstraintsEnabled(true);
 			database.execSQL("PRAGMA foreign_keys=\"ON\";");
 		}
+		database.setLocale(new Locale("no", "NO"));
 		// Set encoding
 		database.execSQL("PRAGMA encoding=\"UTF-8\";");
 		if (IS_LOAD_FROM_SCRIPT) {
@@ -166,6 +167,8 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			NotificationsTable.onUpgrade(database, oldVersion, newVersion);
 			MatchResultView.onUpgrade(database, oldVersion, newVersion);
 		}
+		insertDefaultData(database);
+		database.isDatabaseIntegrityOk();
 		CustomLog.i(this.getClass(), "upgraded DB tables");
 	}
 
@@ -213,43 +216,52 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	}
 
 	public static void deleteAllTableData(SQLiteDatabase database, boolean isDrop) {
-		database.execSQL(createTableQuery(AddressTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(ClubsTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(ContactsTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(ContactRoleTypeLnkTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(CupsTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(CupMatchLnkTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(LeagueMatchLnkTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(LeagueTeamLnkTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(MatchesTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(MatchEventsTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(PlayersTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(PlayerContactLnkTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(PlayerCupLnkTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(PlayerMatchLnkTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(PlayerTrainingLnkTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(RefereesTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(TeamsTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(TeamContactLnkTable.TABLE_NAME, isDrop));
-		database.execSQL(createTableQuery(TrainingsTable.TABLE_NAME, isDrop));
+		try {
+			database.execSQL(createTableQuery(AddressTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(ClubsTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(ContactsTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(ContactRoleTypeLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(CupsTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(CupMatchLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(LeagueMatchLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(LeagueTeamLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(MatchesTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(MatchEventsTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(PlayersTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(PlayerContactLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(PlayerCupLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(PlayerMatchLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(PlayerTrainingLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(RefereesTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(TeamsTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(TeamContactLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(TrainingsTable.TABLE_NAME, isDrop));
 
-		database.execSQL(MatchResultView.dropViewQuery());
-		// Do not delete constants
-		// database.execSQL(createTableQuery(SettingsTable.TABLE_NAME, isDrop));
-		// database.execSQL(createTableQuery(MatchTypesTable.TABLE_NAME,
-		// isDrop));
-		// database.execSQL(createTableQuery(MatchEventTypesTable.TABLE_NAME,
-		// isDrop));
-		// database.execSQL(createTableQuery(MatchStatusTypesTable.TABLE_NAME,
-		// isDrop));
-		// database.execSQL(createTableQuery(PlayerPositionTypesTable.TABLE_NAME,
-		// isDrop));
-		// database.execSQL(createTableQuery(SeasonsTable.TABLE_NAME, isDrop));
-		// database.execSQL(createTableQuery(StatusesTable.TABLE_NAME, isDrop));
-		// database.execSQL(createTableQuery(RoleTypesTable.TABLE_NAME,
-		// isDrop));
-		// database.execSQL(createTableQuery(LeaguesTable.TABLE_NAME, isDrop));
-		CustomLog.i(BandyDataBaseHjelper.class, "Dropped all tabels");
+			database.execSQL(MatchResultView.dropViewQuery());
+			// Do not delete constants
+			// database.execSQL(createTableQuery(SettingsTable.TABLE_NAME,
+			// isDrop));
+			// database.execSQL(createTableQuery(MatchTypesTable.TABLE_NAME,
+			// isDrop));
+			// database.execSQL(createTableQuery(MatchEventTypesTable.TABLE_NAME,
+			// isDrop));
+			// database.execSQL(createTableQuery(MatchStatusTypesTable.TABLE_NAME,
+			// isDrop));
+			// database.execSQL(createTableQuery(PlayerPositionTypesTable.TABLE_NAME,
+			// isDrop));
+			// database.execSQL(createTableQuery(SeasonsTable.TABLE_NAME,
+			// isDrop));
+			// database.execSQL(createTableQuery(StatusesTable.TABLE_NAME,
+			// isDrop));
+			// database.execSQL(createTableQuery(RoleTypesTable.TABLE_NAME,
+			// isDrop));
+			// database.execSQL(createTableQuery(LeaguesTable.TABLE_NAME,
+			// isDrop));
+			CustomLog.i(BandyDataBaseHjelper.class, "Dropped all tabels");
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			throw new ApplicationException(sqle.getMessage());
+		}
 	}
 
 	public static void insertDefaultData(SQLiteDatabase database) {

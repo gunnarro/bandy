@@ -163,7 +163,7 @@ public class HomeActivity extends DashboardActivity implements NoticeDialogListe
 	private void init() {
 		setInputValue(R.id.clubNameTxt, DEFAULT_CLUB_NAME);
 		setInputValue(R.id.teamNameTxt, DEFAULT_TEAM_NAME);
-		setInputValue(R.id.seasonPeriodTxt, bandyService.getCurrentSeason().getPeriod());
+//		setInputValue(R.id.seasonPeriodTxt, bandyService.getCurrentSeason().getPeriod());
 	}
 
 	private void setInputValue(int id, String value) {

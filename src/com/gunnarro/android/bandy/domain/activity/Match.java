@@ -81,13 +81,10 @@ public class Match extends Activity {
 	}
 
 	public Match(Integer id, Season season, long startTime, Team team, Team homeTeam, Team awayTeam, Integer numberOfGoalsHome, Integer numberOfGoalsAway,
-			String venue, Referee referee, MatchTypesEnum matchType, String matchStatus) {
+			String venue, Referee referee, MatchTypesEnum matchType) {
 		this(id, season, startTime, team, homeTeam, awayTeam, venue, referee, matchType);
 		this.numberOfGoalsHome = numberOfGoalsHome;
 		this.numberOfGoalsAway = numberOfGoalsAway;
-		if (matchStatus != null) {
-			this.matchStatus = MatchStatus.valueOf(matchStatus);
-		}
 	}
 
 	public Integer getId() {

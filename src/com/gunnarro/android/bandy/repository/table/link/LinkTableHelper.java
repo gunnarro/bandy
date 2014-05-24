@@ -50,13 +50,15 @@ public class LinkTableHelper {
 		databaseCreateQuery.append("CREATE TABLE ");
 		databaseCreateQuery.append(tableName);
 		databaseCreateQuery.append("(").append(TableHelper.createCommonColumnsQuery());
-		databaseCreateQuery.append(",").append(fkColumnNameId1).append(" INTEGER NOT NULL");
-		databaseCreateQuery.append(",").append(fkColumnNameId2).append(" INTEGER NOT NULL");
+		databaseCreateQuery.append(",").append(fkColumnNameId1).append(" INTEGER NOT NULL").append(" REFERENCES ").append(fkTableName1).append("(")
+				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE");
+		databaseCreateQuery.append(",").append(fkColumnNameId2).append(" INTEGER NOT NULL").append(" REFERENCES ").append(fkTableName2).append("(")
+				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE");
 		databaseCreateQuery.append(",").append("UNIQUE (").append(fkColumnNameId1).append(",").append(fkColumnNameId2).append(") ON CONFLICT ABORT");
 		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId1).append(") REFERENCES ").append(fkTableName1).append("(")
-				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE");
+				.append(TableHelper.COLUMN_ID).append(")");
 		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId2).append(") REFERENCES ").append(fkTableName2).append("(")
-				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE);");
+				.append(TableHelper.COLUMN_ID).append("));");
 		return databaseCreateQuery.toString();
 	}
 }

@@ -1,16 +1,16 @@
 package com.gunnarro.android.bandy.domain.activity;
 
 public class Status {
-	private int id;
+	private Integer id;
 	private String name;
 
-	public Status(int id, String name) {
+	public Status(Integer id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 

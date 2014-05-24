@@ -321,6 +321,19 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public int saveReferee(Referee referee) {
+		if (referee.getId() == null) {
+			return bandyRepository.createReferee(referee);
+		} else {
+			bandyRepository.updateAddress(referee.getAddress());
+			return bandyRepository.updateReferee(referee);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void deleteTeam(int teamId) {
 		this.bandyRepository.deleteTeam(teamId);
 	}

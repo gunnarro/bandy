@@ -87,13 +87,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 	private SQLiteDatabase getDatabase(boolean writable) {
 		if (dbHelper != null) {
 			if (writable) {
-				return dbHelper.getWritableDatabase();
+				database = dbHelper.getWritableDatabase();
+			} else {
+				database = dbHelper.getReadableDatabase();
 			}
-			return dbHelper.getReadableDatabase();
-		} else {
-			// A hack Just for unit testing only.
-			return database;
 		}
+		database.execSQL("PRAGMA foreign_keys=\"ON\";");
+		return database;
 	}
 
 	/**
@@ -102,6 +102,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	@Override
 	public void open() throws SQLException {
 		this.database = dbHelper.getWritableDatabase();
+		database.execSQL("PRAGMA foreign_keys=\"ON\";");
 	}
 
 	/**
@@ -158,6 +159,47 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return dbEncoding;
 	}
 
+	public boolean setForeignKeyConstraintsEnabled(boolean enable) {
+		database.setForeignKeyConstraintsEnabled(enable);
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getDBforeignkeys() {
+		String foreignkeys = null;
+		Cursor cursor = this.database.rawQuery("PRAGMA foreign_keys;", null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			foreignkeys = cursor.getString(0);
+		}
+		CustomLog.d(this.getClass(), "hit=" + cursor.getCount());
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return foreignkeys;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getSqliteVersion() {
+		String sqliteVersion = null;
+		Cursor cursor = this.database.rawQuery("SELECT sqlite_version();", null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			sqliteVersion = cursor.getString(0);
+		}
+		CustomLog.d(this.getClass(), "hit=" + cursor.getCount());
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return sqliteVersion;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -192,7 +234,11 @@ public class BandyRepositoryImpl implements BandyRepository {
 	@Override
 	public int createClub(Club club) {
 		try {
-			ContentValues values = ClubsTable.createContentValues(club);
+			Long addressId = null;
+			if (club.getAddress() != null) {
+				addressId = createAddress(club.getAddress());
+			}
+			ContentValues values = ClubsTable.createContentValues(addressId, club);
 			this.database = getDatabase(true);
 			long id = database.insertOrThrow(ClubsTable.TABLE_NAME, null, values);
 			CustomLog.d(this.getClass(), "Created club: " + club);
@@ -209,6 +255,10 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int deleteClub(Integer clubId) {
+		Club club = getClub(clubId);
+		if (club.getAddress() != null) {
+			deleteAddress(club.getAddress().getId());
+		}
 		String whereClause = TableHelper.COLUMN_ID + " = ?";
 		String[] whereArgs = { clubId.toString() };
 		int id = database.delete(ClubsTable.TABLE_NAME, whereClause, whereArgs);
@@ -251,8 +301,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 			long id = database.insertOrThrow(MatchesTable.TABLE_NAME, null, values);
 			return Long.valueOf(id).intValue();
 		} catch (SQLException sqle) {
+			sqle.printStackTrace();
 			CustomLog.e(getClass(), "Error creating: " + match);
-			CustomLog.e(getClass(), sqle.getMessage());
 			throw new ApplicationException(sqle.getMessage());
 		}
 	}
@@ -331,10 +381,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int deletePlayer(Integer playerId) {
+		Player player = getPlayer(playerId);
+		if (player.getAddress() != null) {
+			deleteAddress(player.getAddress().getId());
+		}
 		String whereClause = TableHelper.COLUMN_ID + " = ?";
 		String[] whereArgs = { playerId.toString() };
-		int id = database.delete(PlayersTable.TABLE_NAME, whereClause, whereArgs);
-		return id;
+		return database.delete(PlayersTable.TABLE_NAME, whereClause, whereArgs);
 	}
 
 	/**
@@ -342,10 +395,23 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int deleteContact(Integer contactId) {
+		Contact contact = getContact(contactId);
+		if (contact.getAddress() != null) {
+			deleteAddress(contact.getAddress().getId());
+		}
 		String whereClause = TableHelper.COLUMN_ID + " = ?";
 		String[] whereArgs = { contactId.toString() };
-		int id = database.delete(ContactsTable.TABLE_NAME, whereClause, whereArgs);
-		return id;
+		return database.delete(ContactsTable.TABLE_NAME, whereClause, whereArgs);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int deleteAddress(Integer addressId) {
+		String whereClause = TableHelper.COLUMN_ID + " = ?";
+		String[] whereArgs = { addressId.toString() };
+		return database.delete(AddressTable.TABLE_NAME, whereClause, whereArgs);
 	}
 
 	/**
@@ -353,10 +419,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int deleteReferee(Integer refereeId) {
+		Referee referee = getReferee(refereeId);
+		if (referee.getAddress() != null) {
+			deleteAddress(referee.getAddress().getId());
+		}
 		String whereClause = TableHelper.COLUMN_ID + " = ?";
 		String[] whereArgs = { refereeId.toString() };
-		int id = database.delete(RefereesTable.TABLE_NAME, whereClause, whereArgs);
-		return id;
+		return database.delete(RefereesTable.TABLE_NAME, whereClause, whereArgs);
 	}
 
 	/**
@@ -364,10 +433,14 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public int deleteMatch(Integer matchId) {
-		String whereClause = TableHelper.COLUMN_ID + " = ?";
-		String[] whereArgs = { matchId.toString() };
-		int id = database.delete(MatchesTable.TABLE_NAME, whereClause, whereArgs);
-		return id;
+		try {
+			String whereClause = TableHelper.COLUMN_ID + " = ?";
+			String[] whereArgs = { matchId.toString() };
+			return database.delete(MatchesTable.TABLE_NAME, whereClause, whereArgs);
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			throw new ApplicationException(sqle.getMessage());
+		}
 	}
 
 	/**
@@ -377,8 +450,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public int deleteMatchEvents(Integer matchId) {
 		String whereClause = MatchEventsTable.COLUMN_FK_MATCH_ID + " = ?";
 		String[] whereArgs = { matchId.toString() };
-		int id = database.delete(MatchEventsTable.TABLE_NAME, whereClause, whereArgs);
-		return id;
+		return database.delete(MatchEventsTable.TABLE_NAME, whereClause, whereArgs);
 	}
 
 	/**
@@ -388,8 +460,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public int deleteTraining(Integer trainingId) {
 		String whereClause = TableHelper.COLUMN_ID + " = ?";
 		String[] whereArgs = { trainingId.toString() };
-		int id = database.delete(TrainingsTable.TABLE_NAME, whereClause, whereArgs);
-		return id;
+		return database.delete(TrainingsTable.TABLE_NAME, whereClause, whereArgs);
 	}
 
 	/**
@@ -426,6 +497,18 @@ public class BandyRepositoryImpl implements BandyRepository {
 		String whereClause = TableHelper.COLUMN_ID + " = ?";
 		String[] whereArgs = { contact.getId().toString() };
 		long contactId = database.update(ContactsTable.TABLE_NAME, contactUpdateValues, whereClause, whereArgs);
+		return Long.valueOf(contactId).intValue();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int updateReferee(Referee referee) {
+		ContentValues contactUpdateValues = RefereesTable.updateContentValues(referee);
+		String whereClause = TableHelper.COLUMN_ID + " = ?";
+		String[] whereArgs = { referee.getId().toString() };
+		long contactId = database.update(RefereesTable.TABLE_NAME, contactUpdateValues, whereClause, whereArgs);
 		return Long.valueOf(contactId).intValue();
 	}
 
@@ -600,18 +683,15 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public long createAddress(Address address) {
-		ContentValues contactValues = AddressTable.createContentValues(address);
-		this.database = getDatabase(true);
-		long addressId = database.insertOrThrow(AddressTable.TABLE_NAME, null, contactValues);
-		// Check if this was an existing address, in that case return that
-		// address id
-		if (addressId == -1) {
-			Address addr = getAddress(address.getStreetName(), address.getStreetNumber(), address.getStreetNumberPrefix(), address.getPostalCode());
-			if (addr != null) {
-				addressId = addr.getId();
-			}
+		try {
+			ContentValues contactValues = AddressTable.createContentValues(address);
+			this.database = getDatabase(true);
+			return database.insertOrThrow(AddressTable.TABLE_NAME, null, contactValues);
+		} catch (SQLException sqle) {
+			CustomLog.e(getClass(), "Error creating: " + address);
+			CustomLog.e(getClass(), sqle.getMessage());
+			throw new ApplicationException(sqle.getMessage());
 		}
-		return addressId;
 	}
 
 	// -------------------------------------------------------------------------------------------------
@@ -1889,7 +1969,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 				.getColumnIndex(MatchesTable.COLUMN_HOME_TEAM_NAME))), new Team(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_AWAY_TEAM_NAME))),
 				cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_HOME_TEAM)), cursor.getInt(cursor
 						.getColumnIndex(MatchesTable.COLUMN_NUMBER_OF_GOALS_AWAY_TEAM)), cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_VENUE)),
-				referee, matchType, cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_MATCH_STATUS_NAME)));
+				referee, matchType);
 
 		cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_MATCH_TYPE_ID));
 		Status matchStatus = getMatchStatus(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_MATCH_STATUS_ID)));

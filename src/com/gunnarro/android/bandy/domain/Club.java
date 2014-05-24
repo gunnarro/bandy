@@ -92,8 +92,8 @@ public class Club extends BaseDomain {
 
 	@Override
 	public String toString() {
-		return "Club [id=" + getId() + ", name=" + name + ", departmentName=" + departmentName + ", stadiumName=" + stadiumName + ", clubNameAbbreviation="
-				+ clubNameAbbreviation + ", homePageUrl=" + homePageUrl + "]";
+		return "Club [name=" + name + ", departmentName=" + departmentName + ", stadiumName=" + stadiumName + ", clubNameAbbreviation=" + clubNameAbbreviation
+				+ ", address=" + address + ", homePageUrl=" + homePageUrl + "]";
 	}
 
 }

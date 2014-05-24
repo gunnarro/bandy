@@ -29,10 +29,10 @@ public class LeaguesTable {
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
 		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LEAGUE_NAME).append(" TEXT");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LEAGUE_NAME).append(" TEXT NOT NULL UNIQUE");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LEAGUE_PLAYER_AGE_MIN).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LEAGUE_PLAYER_AGE_MAX).append(" INTEGER");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LEAGUE_GENDER).append(" TEXT");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LEAGUE_GENDER).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LEAGUE_MATCH_PERIOD_TIME_MINUTES).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LEAGUE_MATCH_EXTRA_PERIOD_TIME_MINUTES).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_LEAGUE_NUMBER_OF_PLAYERS).append(" INTEGER");
