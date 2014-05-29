@@ -21,15 +21,15 @@
     <seasons>
         <season period="2013/2014" startDate="01.09.2013" endDate="01.04.2014" >
 		    <matches leagueId="1">
-		        <match typeId="2" date="05.03.2014" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="UIL Knøtt 2002" goalsHomeTeam="3" goalsAwayTeam="6" venue="Bergbanen" referee="Mats Håkansson" />
+		        <match type="TRAINING" date="05.03.2014" startTime="17:00" homeTeam="UIL Knøtt 2003" awayTeam="UIL Knøtt 2002" goalsHomeTeam="3" goalsAwayTeam="6" venue="Bergbanen" referee="Mats Håkansson" />
            </matches>
 	
 		    <cups>
 		        <cup date="10.11.2013" startTime="09:00" deadlineDate="10.11.2013" signed="true" clubName="Stabekk" cupName="Kosa Cup" venue="Hauger kunstis" >
 		            <matches clubName="" teamName="">
-		                <match typeId="3" date="12.11.2013" startTime="09:00" homeTeam="Konnerud" awayTeam="UIL Knøtt 2002" goalsHomeTeam="5" goalsAwayTeam="2" venue="" referee="dommer ukjent" />
-		        		<match typeId="3" date="12.11.2013" startTime="10:00" homeTeam="UIL Knøtt 2002" awayTeam="Snarøya" goalsHomeTeam="6" goalsAwayTeam="3" venue="" referee="dommer ukjent" />
-		        		<match typeId="3" date="12.11.2013" startTime="11:00" homeTeam="Stabekk" awayTeam="UIL Knøtt 2002" goalsHomeTeam="4" goalsAwayTeam="3" venue="" referee="dommer ukjent" />
+		                <match type="CUP" date="12.11.2013" startTime="09:00" homeTeam="Konnerud" awayTeam="UIL Knøtt 2002" goalsHomeTeam="5" goalsAwayTeam="2" venue="" referee="dommer ukjent" />
+		        		<match type="CUP" date="12.11.2013" startTime="10:00" homeTeam="UIL Knøtt 2002" awayTeam="Snarøya" goalsHomeTeam="6" goalsAwayTeam="3" venue="" referee="dommer ukjent" />
+		        		<match type="CUP" date="12.11.2013" startTime="11:00" homeTeam="Stabekk" awayTeam="UIL Knøtt 2002" goalsHomeTeam="4" goalsAwayTeam="3" venue="" referee="dommer ukjent" />
 		            </matches>
 		        </cup>
 		    </cups>

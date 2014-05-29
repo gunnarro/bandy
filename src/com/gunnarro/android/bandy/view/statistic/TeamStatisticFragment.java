@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Season;
+import com.gunnarro.android.bandy.domain.activity.Type.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.statistic.MatchStatistic;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.service.BandyService;
@@ -52,7 +53,7 @@ public class TeamStatisticFragment extends Fragment {
 		// Remove all rows before updating the table, except for the table
 		// header rows.
 		Season season = bandyService.getSeason("2013/2014");
-		MatchStatistic summaryStatistic = new MatchStatistic(0);
+		MatchStatistic summaryStatistic = new MatchStatistic(MatchTypesEnum.LEAGUE);
 		if (season != null && team != null) {
 			Statistic teamStatistic = this.bandyService.getTeamStatistic(team.getId(), season.getId());
 			// Date startDate = new Date(teamStatistic.getStartTime());

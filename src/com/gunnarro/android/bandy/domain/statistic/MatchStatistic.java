@@ -1,12 +1,12 @@
 package com.gunnarro.android.bandy.domain.statistic;
 
-import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
+import com.gunnarro.android.bandy.domain.activity.Type.MatchTypesEnum;
 
 public class MatchStatistic {
 
 	private String teamName = null;
 	private int seasonId = 0;
-	private int matchTypeId = 0;
+	private MatchTypesEnum type = MatchTypesEnum.LEAGUE;
 	private int played;
 	private int won;
 	private int draw;
@@ -14,12 +14,12 @@ public class MatchStatistic {
 	private int goalsScored;
 	private int goalsAgainst;
 
-	public MatchStatistic(int matchTypeId) {
-		this.matchTypeId = matchTypeId;
+	public MatchStatistic(MatchTypesEnum type) {
+		this.type = type;
 	}
 
-	public MatchStatistic(int seasonId, String teamName, int matchTypeId, int played, int won, int draw, int loss, int goalsScored, int goalsAgainst) {
-		this(matchTypeId);
+	public MatchStatistic(int seasonId, String teamName, MatchTypesEnum type, int played, int won, int draw, int loss, int goalsScored, int goalsAgainst) {
+		this(type);
 		this.seasonId = seasonId;
 		this.teamName = teamName;
 		this.played = played;
@@ -38,12 +38,8 @@ public class MatchStatistic {
 		return seasonId;
 	}
 
-	public int getMatchTypeId() {
-		return matchTypeId;
-	}
-
 	public String getName() {
-		return MatchTypesEnum.getName(matchTypeId);
+		return type.getName();
 	}
 
 	public MatchTypesEnum getMatchType() {
@@ -104,7 +100,7 @@ public class MatchStatistic {
 
 	@Override
 	public String toString() {
-		return "MatchStatistic [matchTypeId=" + matchTypeId + ", played=" + played + ", won=" + won + ", draw=" + draw + ", loss=" + loss + ", goalsScored="
+		return "MatchStatistic [matchTypeId=" + type.getName() + ", played=" + played + ", won=" + won + ", draw=" + draw + ", loss=" + loss + ", goalsScored="
 				+ goalsScored + ", goalsAgainst=" + goalsAgainst + "]";
 	}
 

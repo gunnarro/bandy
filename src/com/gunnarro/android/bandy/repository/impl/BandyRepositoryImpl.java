@@ -20,11 +20,13 @@ import com.gunnarro.android.bandy.domain.Setting;
 import com.gunnarro.android.bandy.domain.Team;
 import com.gunnarro.android.bandy.domain.activity.Cup;
 import com.gunnarro.android.bandy.domain.activity.Match;
-import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Status;
+import com.gunnarro.android.bandy.domain.activity.Tournament;
 import com.gunnarro.android.bandy.domain.activity.Training;
+import com.gunnarro.android.bandy.domain.activity.Type;
+import com.gunnarro.android.bandy.domain.activity.Type.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
@@ -47,13 +49,16 @@ import com.gunnarro.android.bandy.repository.table.activity.MatchStatusTypesTabl
 import com.gunnarro.android.bandy.repository.table.activity.MatchTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
 import com.gunnarro.android.bandy.repository.table.activity.SeasonsTable;
+import com.gunnarro.android.bandy.repository.table.activity.TournamentsTable;
 import com.gunnarro.android.bandy.repository.table.activity.TrainingsTable;
+import com.gunnarro.android.bandy.repository.table.activity.TypesHelperTable;
 import com.gunnarro.android.bandy.repository.table.link.ContactRoleTypeLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.CupMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerContactLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerCupLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerTrainingLnkTable;
+import com.gunnarro.android.bandy.repository.table.link.TeamTournamentLnkTable;
 import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
@@ -270,6 +275,16 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public int deleteSeason(Integer id) {
+		String whereClause = TableHelper.COLUMN_ID + " = ?";
+		String[] whereArgs = { id.toString() };
+		return database.delete(SeasonsTable.TABLE_NAME, whereClause, whereArgs);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public int createTeam(Team team) {
 		try {
 			if (team.getClub() == null || team.getClub().getId() == null) {
@@ -313,8 +328,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	@Override
 	public int createCup(Cup cup) {
 		try {
-			ContentValues values = CupsTable.createContentValues(cup.getSeason().getId(), cup.getStartDate(), cup.getCupName(), cup.getClubName(),
-					cup.getVenue(), cup.getDeadlineDate());
+			ContentValues values = CupsTable.createContentValues(cup);
 			this.database = getDatabase(true);
 			long id = database.insertOrThrow(CupsTable.TABLE_NAME, null, values);
 			return Long.valueOf(id).intValue();
@@ -335,6 +349,25 @@ public class BandyRepositoryImpl implements BandyRepository {
 		long id = database.insertOrThrow(SeasonsTable.TABLE_NAME, null, values);
 		CustomLog.d(this.getClass(), season);
 		return Long.valueOf(id).intValue();
+	}
+
+	private Type getType(String tableName, Integer id) {
+		Type type = null;
+		String selection = TableHelper.COLUMN_ID + " == ?";
+		String[] selectionArgs = { id.toString() };
+		this.database = getDatabase(false);
+		Cursor cursor = database.query(tableName, TypesHelperTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			type = new Type(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), cursor.getString(cursor.getColumnIndex(TypesHelperTable.COLUMN_TYPE)),
+					cursor.getString(cursor.getColumnIndex(TypesHelperTable.COLUMN_DESCRIPTION)));
+		} else {
+			throw new ApplicationException("Invalid type: " + type + ", table:" + tableName);
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return type;
 	}
 
 	/**
@@ -467,6 +500,17 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public int deleteCup(Integer cupId) {
+		String whereClause = TableHelper.COLUMN_ID + " = ?";
+		String[] whereArgs = { cupId.toString() };
+		return database.delete(CupsTable.TABLE_NAME, whereClause, whereArgs);
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public int updateTeam(Team team) {
 		ContentValues teamUpdateValues = TeamsTable.updateContentValues(team);
 		String whereClause = TableHelper.COLUMN_ID + " = ?";
@@ -562,11 +606,11 @@ public class BandyRepositoryImpl implements BandyRepository {
 		String selection = TableHelper.COLUMN_ID + " == ?";
 		String[] selectionArgs = { id.toString() };
 		this.database = getDatabase(false);
-		Cursor cursor = database.query(MatchStatusTypesTable.TABLE_NAME, MatchStatusTypesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
+		Cursor cursor = database.query(MatchStatusTypesTable.TABLE_NAME, TypesHelperTable.TABLE_COLUMNS, selection, selectionArgs, null, null, null);
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			status = new Status(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), cursor.getString(cursor
-					.getColumnIndex(MatchStatusTypesTable.COLUMN_MATCH_STATUS_NAME)));
+					.getColumnIndex(TypesHelperTable.COLUMN_TYPE)));
 		}
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
@@ -596,6 +640,106 @@ public class BandyRepositoryImpl implements BandyRepository {
 		String[] whereArgs = { Integer.toString(matchId) };
 		database.update(MatchesTable.TABLE_NAME, values, whereClause, whereArgs);
 		CustomLog.e(this.getClass(), "updated match referee to: " + refereeId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void tournamentRegistration(Integer tournamentId, Integer teamId) {
+		createLink(TeamTournamentLnkTable.TABLE_NAME, TeamTournamentLnkTable.createContentValues(teamId, tournamentId));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int tournamentUnRegistration(Integer tournamentId, Integer teamId) {
+		return deleteLink(TeamTournamentLnkTable.TABLE_NAME, TeamTournamentLnkTable.getTableFkKeyColumns(),
+				new String[] { teamId.toString(), tournamentId.toString() });
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int createTournament(Tournament tournament) {
+		try {
+			ContentValues values = TournamentsTable.createContentValues(tournament);
+			this.database = getDatabase(true);
+			long id = database.insertOrThrow(TournamentsTable.TABLE_NAME, null, values);
+			return Long.valueOf(id).intValue();
+		} catch (SQLException sqle) {
+			CustomLog.e(getClass(), "Error creating: " + tournament);
+			CustomLog.e(getClass(), sqle.getMessage());
+			throw new ApplicationException(sqle.getMessage());
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Tournament> getTournaments(Integer teamId, Integer periode) {
+		List<Tournament> list = new ArrayList<Tournament>();
+		// String periodeSelection = getPeriodeSelectionClause(periode,
+		// System.currentTimeMillis());
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT t.*");
+		query.append(" FROM tournaments t, team_tournament_lnk l");
+		query.append(" WHERE l.fk_team_id = ").append(teamId.toString());
+		query.append(" AND l.fk_tournament_id = t._id");
+		// query.append(" WHERE ").append(periodeSelection);
+		query.append(" ORDER BY ").append(TournamentsTable.COLUMN_START_DATE).append(" ASC");
+		CustomLog.d(this.getClass(), "query=" + query.toString());
+		this.database = getDatabase(false);
+		Cursor cursor = database.rawQuery(query.toString(), null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				Season season = getSeason(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_SEASON_ID)));
+				list.add(mapCursorToTournament(cursor, season));
+				cursor.moveToNext();
+			}
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), "cups=" + cursor.getCount());
+		return list;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Tournament getTournament(Integer tournamentId) {
+		Tournament tournament = null;
+		StringBuffer selection = new StringBuffer();
+		selection.append(TableHelper.COLUMN_ID + " = ?");
+		String[] selectionArgs = { tournamentId.toString() };
+		this.database = getDatabase(false);
+		Cursor cursor = database.query(TournamentsTable.TABLE_NAME, TournamentsTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			Season season = getSeason(cursor.getInt(cursor.getColumnIndex(TrainingsTable.COLUMN_FK_SEASON_ID)));
+			tournament = mapCursorToTournament(cursor, season);
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), "Id=" + tournamentId + ", " + tournament);
+		return tournament;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int deleteTournament(Integer tournamentId) {
+		String whereClause = TableHelper.COLUMN_ID + " = ?";
+		String[] whereArgs = { tournamentId.toString() };
+		return database.delete(TournamentsTable.TABLE_NAME, whereClause, whereArgs);
 	}
 
 	/**
@@ -995,18 +1139,23 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public String[] getMatchTypes() {
-		String orderBy = MatchTypesTable.COLUMN_MATCH_TYPE_NAME + " ASC";
-		String[] matchTypes = new String[] {};
-		String selection = MatchTypesTable.COLUMN_MATCH_TYPE_NAME + " LIKE ?";
+		return getTypes(MatchTypesTable.TABLE_NAME);
+	}
+
+	private String[] getTypes(String tableName) {
+		String[] types = new String[] {};
+		String orderBy = TypesHelperTable.COLUMN_TYPE + " ASC";
+		String selection = TypesHelperTable.COLUMN_TYPE + " LIKE ?";
 		String[] selectionArgs = { "%" };
+		CustomLog.e(this.getClass(), "table=" + tableName);
 		this.database = getDatabase(false);
-		Cursor cursor = database.query(MatchTypesTable.TABLE_NAME, MatchTypesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
+		Cursor cursor = database.query(tableName, TypesHelperTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
 		if (cursor != null && cursor.getCount() > 0) {
-			matchTypes = new String[cursor.getCount()];
+			types = new String[cursor.getCount()];
 			int i = 0;
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
-				matchTypes[i] = cursor.getString(cursor.getColumnIndex(MatchTypesTable.COLUMN_MATCH_TYPE_NAME));
+				types[i] = cursor.getString(cursor.getColumnIndex(TypesHelperTable.COLUMN_TYPE));
 				cursor.moveToNext();
 				i++;
 			}
@@ -1014,7 +1163,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		return matchTypes;
+		return types;
 	}
 
 	/**
@@ -1045,18 +1194,18 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public String[] getMatchStatusList() {
-		String orderBy = MatchStatusTypesTable.COLUMN_MATCH_STATUS_NAME + " ASC";
+		String orderBy = TypesHelperTable.COLUMN_TYPE + " ASC";
 		String[] matchStatuses = new String[] {};
-		String selection = MatchStatusTypesTable.COLUMN_MATCH_STATUS_NAME + " LIKE ?";
+		String selection = TypesHelperTable.COLUMN_TYPE + " LIKE ?";
 		String[] selectionArgs = { "%" };
 		this.database = getDatabase(false);
-		Cursor cursor = database.query(MatchStatusTypesTable.TABLE_NAME, MatchStatusTypesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
+		Cursor cursor = database.query(MatchStatusTypesTable.TABLE_NAME, TypesHelperTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
 		if (cursor != null && cursor.getCount() > 0) {
 			matchStatuses = new String[cursor.getCount()];
 			int i = 0;
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
-				matchStatuses[i] = cursor.getString(cursor.getColumnIndex(MatchStatusTypesTable.COLUMN_MATCH_STATUS_NAME));
+				matchStatuses[i] = cursor.getString(cursor.getColumnIndex(TypesHelperTable.COLUMN_TYPE));
 				cursor.moveToNext();
 				i++;
 			}
@@ -1100,17 +1249,17 @@ public class BandyRepositoryImpl implements BandyRepository {
 	@Override
 	public String[] getRoleTypeNames() {
 		String[] roleTypeNames = new String[] {};
-		String selection = RoleTypesTable.COLUMN_ROLE_TYPE_NAME + " LIKE ?";
+		String selection = TypesHelperTable.COLUMN_TYPE + " LIKE ?";
 		String[] selectionArgs = { "%" };
-		String orderBy = RoleTypesTable.COLUMN_ROLE_TYPE_NAME + " ASC";
+		String orderBy = TypesHelperTable.COLUMN_TYPE + " ASC";
 		this.database = getDatabase(false);
-		Cursor cursor = database.query(RoleTypesTable.TABLE_NAME, RoleTypesTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
+		Cursor cursor = database.query(RoleTypesTable.TABLE_NAME, TypesHelperTable.TABLE_COLUMNS, selection, selectionArgs, null, null, orderBy);
 		if (cursor != null && cursor.getCount() > 0) {
 			roleTypeNames = new String[cursor.getCount()];
 			int i = 0;
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
-				roleTypeNames[i] = cursor.getString(cursor.getColumnIndex(RoleTypesTable.COLUMN_ROLE_TYPE_NAME));
+				roleTypeNames[i] = cursor.getString(cursor.getColumnIndex(TypesHelperTable.COLUMN_TYPE));
 				cursor.moveToNext();
 				i++;
 			}
@@ -1531,6 +1680,26 @@ public class BandyRepositoryImpl implements BandyRepository {
 	}
 
 	@Override
+	public Cup getCup(Integer cupId) {
+		Cup cup = null;
+		StringBuffer selection = new StringBuffer();
+		selection.append(TableHelper.COLUMN_ID + " = ?");
+		String[] selectionArgs = { cupId.toString() };
+		this.database = getDatabase(false);
+		Cursor cursor = database.query(CupsTable.TABLE_NAME, CupsTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			Season season = getSeason(cursor.getInt(cursor.getColumnIndex(TrainingsTable.COLUMN_FK_SEASON_ID)));
+			cup = mapCursorToCup(cursor, season);
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		CustomLog.d(this.getClass(), "Id=" + cupId + ", " + cup);
+		return cup;
+	}
+
+	@Override
 	public Training getTraining(int id) {
 		Training training = null;
 		StringBuffer selection = new StringBuffer();
@@ -1633,7 +1802,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	public Season getSeason(String period) {
 		if (period == null) {
 			CustomLog.e(this.getClass(), "periode is equal to null!");
-			return null;
+			throw new ValidationException("getSeason(): Season peroide agrument is equal to null");
 		}
 		String selection = SeasonsTable.COLUMN_PERIOD + " LIKE ?";
 		String[] selectionArgs = { period };
@@ -1652,7 +1821,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	private Season getSeason(String selection, String[] selectionArgs) {
 		Season season = null;
-		CustomLog.d(this.getClass(), "selection=" + selection + ", args=" + selectionArgs[0]);
+		CustomLog.e(this.getClass(), "selection=" + selection + ", args=" + selectionArgs[0]);
 		this.database = getDatabase(false);
 		Cursor cursor = database.query(SeasonsTable.TABLE_NAME, SeasonsTable.TABLE_COLUMNS, selection.toString(), selectionArgs, null, null, null);
 		if (cursor != null && cursor.getCount() > 0) {
@@ -1662,7 +1831,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		CustomLog.d(this.getClass(), season);
+		CustomLog.e(this.getClass(), "" + season);
 		return season;
 	}
 
@@ -1953,6 +2122,14 @@ public class BandyRepositoryImpl implements BandyRepository {
 	// Mappings
 	// -----------------------------------------------------------------------------------------------
 
+	private Tournament mapCursorToTournament(Cursor cursor, Season season) {
+		long start_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(TournamentsTable.COLUMN_START_DATE))) * 1000L;
+		long deadline_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(TournamentsTable.COLUMN_DEADLINE_DATE))) * 1000L;
+		return new Tournament(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), season, start_date_ms, cursor.getString(cursor
+				.getColumnIndex(TournamentsTable.COLUMN_TOURNAMNET_NAME)), cursor.getString(cursor.getColumnIndex(TournamentsTable.COLUMN_ORGANIZER_NAME)),
+				cursor.getString(cursor.getColumnIndex(TournamentsTable.COLUMN_VENUE)), deadline_date_ms);
+	}
+
 	private Cup mapCursorToCup(Cursor cursor, Season season) {
 		long start_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(CupsTable.COLUMN_START_DATE))) * 1000L;
 		long deadline_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(CupsTable.COLUMN_DEADLINE_DATE))) * 1000L;
@@ -1963,7 +2140,8 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	private Match mapCursorToMatch(Cursor cursor, Team team, Season season) {
 		long start_date_ms = ((long) cursor.getLong(cursor.getColumnIndex(MatchesTable.COLUMN_START_DATE))) * 1000L;
-		MatchTypesEnum matchType = MatchTypesEnum.toType(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_MATCH_TYPE_ID)));
+		Type type = getType(MatchTypesTable.TABLE_NAME, cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_MATCH_TYPE_ID)));
+		MatchTypesEnum matchType = MatchTypesEnum.valueOf(type.getName());
 		Referee referee = getReferee(cursor.getInt(cursor.getColumnIndex(MatchesTable.COLUMN_FK_REFEREE_ID)));
 		Match match = new Match(cursor.getInt(cursor.getColumnIndex(TableHelper.COLUMN_ID)), season, start_date_ms, team, new Team(cursor.getString(cursor
 				.getColumnIndex(MatchesTable.COLUMN_HOME_TEAM_NAME))), new Team(cursor.getString(cursor.getColumnIndex(MatchesTable.COLUMN_AWAY_TEAM_NAME))),
@@ -2103,13 +2281,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 		}
 
 		if (type == PlayerLinkTableTypeEnum.CONTACT) {
-			return deleteLink(PlayerContactLnkTable.TABLE_NAME, PlayerContactLnkTable.getTableFkKeyColumns(), playerId.toString(), linkToId);
+			return deleteLink(PlayerContactLnkTable.TABLE_NAME, PlayerContactLnkTable.getTableFkKeyColumns(), new String[] { playerId.toString(), linkToId });
 		} else if (type == PlayerLinkTableTypeEnum.MATCH) {
-			return deleteLink(PlayerMatchLnkTable.TABLE_NAME, PlayerMatchLnkTable.getTableFkKeyColumns(), playerId.toString(), linkToId);
+			return deleteLink(PlayerMatchLnkTable.TABLE_NAME, PlayerMatchLnkTable.getTableFkKeyColumns(), new String[] { playerId.toString(), linkToId });
 		} else if (type == PlayerLinkTableTypeEnum.CUP) {
-			return deleteLink(PlayerCupLnkTable.TABLE_NAME, PlayerCupLnkTable.getTableFkKeyColumns(), playerId.toString(), linkToId);
+			return deleteLink(PlayerCupLnkTable.TABLE_NAME, PlayerCupLnkTable.getTableFkKeyColumns(), new String[] { playerId.toString(), linkToId });
 		} else if (type == PlayerLinkTableTypeEnum.TRAINING) {
-			return deleteLink(PlayerTrainingLnkTable.TABLE_NAME, PlayerTrainingLnkTable.getTableFkKeyColumns(), playerId.toString(), linkToId);
+			return deleteLink(PlayerTrainingLnkTable.TABLE_NAME, PlayerTrainingLnkTable.getTableFkKeyColumns(), new String[] { playerId.toString(), linkToId });
 		} else {
 			throw new ApplicationException("Invalid link table type: " + type);
 		}
@@ -2134,10 +2312,15 @@ public class BandyRepositoryImpl implements BandyRepository {
 	}
 
 	private long createLink(String tableName, ContentValues contentValues) {
-		this.database = getDatabase(true);
-		long id = database.insertOrThrow(tableName, null, contentValues);
-		CustomLog.d(this.getClass(), "created=" + tableName + ", values=" + contentValues.toString());
-		return id;
+		try {
+			this.database = getDatabase(true);
+			long id = database.insertOrThrow(tableName, null, contentValues);
+			CustomLog.d(this.getClass(), "created=" + tableName + ", values=" + contentValues.toString());
+			return id;
+		} catch (SQLException sqle) {
+			CustomLog.e(this.getClass(), "Error creating link! table=" + tableName + "values: " + contentValues.toString());
+			throw new ApplicationException("Error creating link! table=" + tableName + ", values: " + contentValues.toString() + "\n" + sqle);
+		}
 	}
 
 	/**
@@ -2145,17 +2328,16 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public long createContactRoleTypeLnk(int contactId, int roleTypeIdId) {
-		ContentValues contentValues = ContactRoleTypeLnkTable.createContentValues(contactId, roleTypeIdId);
-		return createLink(ContactRoleTypeLnkTable.TABLE_NAME, contentValues);
+		return createLink(ContactRoleTypeLnkTable.TABLE_NAME, ContactRoleTypeLnkTable.createContentValues(contactId, roleTypeIdId));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int deleteContactRoleTypeLnk(int contactId, int roleTypeIdId) {
-		return deleteLink(ContactRoleTypeLnkTable.TABLE_NAME, ContactRoleTypeLnkTable.getIdTableColumns(), Integer.toString(contactId),
-				Integer.toString(roleTypeIdId));
+	public int deleteContactRoleTypeLnk(Integer contactId, Integer roleTypeIdId) {
+		return deleteLink(ContactRoleTypeLnkTable.TABLE_NAME, ContactRoleTypeLnkTable.getTableFkKeyColumns(),
+				new String[] { contactId.toString(), roleTypeIdId.toString() });
 	}
 
 	/**
@@ -2170,13 +2352,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 		return Long.valueOf(id).intValue();
 	}
 
-	private int deleteLink(String tableName, String[] colNames, String id1, String id2) {
-		String whereClause = colNames[0] + " LIKE ? AND " + colNames[1] + " LIKE ?";
-		String[] whereArgs = { id1, id2 };
+	private int deleteLink(String tableName, String[] colNames, String[] ids) {
+		String whereClause = colNames[0] + " = ? AND " + colNames[1] + " = ?";
+		String[] whereArgs = ids;
 		this.database = getDatabase(true);
-		int id = database.delete(tableName, whereClause, whereArgs);
-		CustomLog.d(this.getClass(), "deleted=" + tableName + ", values=" + id1 + ", " + id2);
-		return id;
+		int rows = database.delete(tableName, whereClause, whereArgs);
+		CustomLog.e(this.getClass(), "deleted=" + tableName + ", " + whereClause + ", values=" + ids[0] + ", " + ids[1]);
+		return rows;
 	}
 
 	private List<Contact> getRelations(Integer id, Team team) {
@@ -2210,11 +2392,11 @@ public class BandyRepositoryImpl implements BandyRepository {
 	private List<RoleTypesEnum> getRoles(Integer contactId) {
 		List<RoleTypesEnum> roleList = new ArrayList<RoleTypesEnum>();
 		StringBuffer sqlQuery = new StringBuffer();
-		sqlQuery.append("SELECT r.role_type_name AS role_type_name");
+		sqlQuery.append("SELECT r.type AS role_type_name");
 		sqlQuery.append(" FROM contact_role_type_lnk l, role_types r");
 		sqlQuery.append(" WHERE l.fk_contact_id = ?");
 		sqlQuery.append(" AND r._id = l.fk_role_type_id");
-		sqlQuery.append(" ORDER BY r.role_type_name ASC");
+		sqlQuery.append(" ORDER BY r.type ASC");
 		String[] selectionArgs = { contactId.toString() };
 		this.database = getDatabase(false);
 		Cursor cursor = database.rawQuery(sqlQuery.toString(), selectionArgs);
@@ -2287,11 +2469,13 @@ public class BandyRepositoryImpl implements BandyRepository {
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
+				Type type = getType(MatchTypesTable.TABLE_NAME, cursor.getColumnIndex("matchTypeId"));
+				MatchTypesEnum.valueOf(type.getName());
 				MatchStatistic matchStatistic = new MatchStatistic(cursor.getInt(cursor.getColumnIndex("seasonId")), cursor.getString(cursor
-						.getColumnIndex("teamName")), cursor.getInt(cursor.getColumnIndex("matchTypeId")), cursor.getInt(cursor
-						.getColumnIndex("numberOfPlayedMatches")), cursor.getInt(cursor.getColumnIndex("numberOfWonMatches")), cursor.getInt(cursor
-						.getColumnIndex("numberOfDrawMatches")), cursor.getInt(cursor.getColumnIndex("numberOfLossMatches")), cursor.getInt(cursor
-						.getColumnIndex("numberOfGoalsScored")), cursor.getInt(cursor.getColumnIndex("numberOfGoalsAgainst")));
+						.getColumnIndex("teamName")), MatchTypesEnum.valueOf(type.getName()), cursor.getInt(cursor.getColumnIndex("numberOfPlayedMatches")),
+						cursor.getInt(cursor.getColumnIndex("numberOfWonMatches")), cursor.getInt(cursor.getColumnIndex("numberOfDrawMatches")),
+						cursor.getInt(cursor.getColumnIndex("numberOfLossMatches")), cursor.getInt(cursor.getColumnIndex("numberOfGoalsScored")),
+						cursor.getInt(cursor.getColumnIndex("numberOfGoalsAgainst")));
 				CustomLog.d(this.getClass(), matchStatistic);
 				matchStatisticList.add(matchStatistic);
 				cursor.moveToNext();
@@ -2308,7 +2492,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	private String createTeamMatchStatisticQuery() {
 		StringBuffer sqlQuery = new StringBuffer();
-		sqlQuery.append("SELECT season_id AS seasonId, team_name AS teamName, match_type_id AS matchTypeId,");
+		sqlQuery.append("SELECT season_id AS seasonId, team_name AS teamName, _id AS matchTypeId,");
 		sqlQuery.append(" sum( numberOfPlayedMatches ) AS numberOfPlayedMatches,");
 		sqlQuery.append(" sum( numberOfWonMatches ) AS numberOfWonMatches,");
 		sqlQuery.append(" sum( numberOfDrawMatches ) AS numberOfDrawMatches,");
@@ -2318,7 +2502,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		sqlQuery.append(" FROM match_result_view");
 		sqlQuery.append(" WHERE season_id = ?");
 		sqlQuery.append(" AND team_id = ?");
-		sqlQuery.append(" GROUP BY match_type_id;");
+		sqlQuery.append(" GROUP BY _id;");
 		return sqlQuery.toString();
 	}
 
@@ -2375,14 +2559,14 @@ public class BandyRepositoryImpl implements BandyRepository {
 
 	private String createTeamScoredGoalsQuery(String teamColumnName) {
 		StringBuffer sqlQuery = new StringBuffer();
-		sqlQuery.append("SELECT m.match_type_id AS matchTypeId,");
+		sqlQuery.append("SELECT m.fk_match_type_id AS matchTypeId,");
 		sqlQuery.append(" sum(m.goals_home_team) AS numberOfGoalsHome");
 		sqlQuery.append(" sum(m.goals_away_team) AS numberOfGoalsAway");
 		sqlQuery.append(" FROM matches m");
 		sqlQuery.append(" WHERE m.fk_team_id = ?");
 		sqlQuery.append(" AND m.fk_season_id = ?");
 		sqlQuery.append(" AND m.").append(teamColumnName).append(" = ?");
-		sqlQuery.append(" GROUP BY m.match_type_id");
+		sqlQuery.append(" GROUP BY m.fk_match_type_id");
 		return sqlQuery.toString();
 	}
 

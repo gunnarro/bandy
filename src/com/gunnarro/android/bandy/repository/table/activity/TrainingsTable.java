@@ -26,12 +26,12 @@ public class TrainingsTable {
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
 		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_SEASON_ID).append(" INTEGER NOT NULL DEFAULT 1");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_TEAM_ID).append(" INTEGER NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_TEAM_ID).append(" INTEGER UNIQUE ON CONFLICT FAIL REFERENCES teams(_id) ON DELETE CASCADE ON UPDATE CASCADE");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_SEASON_ID).append(" INTEGER NOT NULL DEFAULT 1 UNIQUE ON CONFLICT FAIL REFERENCES seasons(_id) ON DELETE CASCADE ON UPDATE CASCADE");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_START_DATE).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_END_TIME).append(" INTEGER");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_PLACE).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FK_TEAM_ID).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT ABORT);");
+		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_FK_TEAM_ID).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT FAIL);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

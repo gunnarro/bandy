@@ -1,6 +1,7 @@
 package com.gunnarro.android.bandy.utility;
 
 import java.util.regex.Pattern;
+
 import android.widget.EditText;
 
 public class Validator {

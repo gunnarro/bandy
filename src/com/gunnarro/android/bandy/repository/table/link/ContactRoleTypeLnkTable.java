@@ -24,15 +24,15 @@ public class ContactRoleTypeLnkTable {
 				oldVersion, newVersion);
 	}
 
-	public static String[] getIdTableColumns() {
+	public static String[] getTableFkKeyColumns() {
 		return new String[] { COLUMN_FK_CONTACT_ID, COLUMN_FK_ROLE_TYPE_ID };
 	}
 
 	public static String[] getTableColumns() {
-		return TableHelper.createColumns(getIdTableColumns());
+		return TableHelper.createColumns(getTableFkKeyColumns());
 	}
 
 	public static ContentValues createContentValues(Integer contactId, Integer roleTypeId) {
-		return LinkTableHelper.createContentValues(new String[] { COLUMN_FK_CONTACT_ID, COLUMN_FK_ROLE_TYPE_ID }, new Integer[] { contactId, roleTypeId });
+		return LinkTableHelper.createContentValues(getTableFkKeyColumns(), new Integer[] { contactId, roleTypeId });
 	}
 }

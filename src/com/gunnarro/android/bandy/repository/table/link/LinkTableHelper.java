@@ -35,7 +35,7 @@ public class LinkTableHelper {
 	}
 
 	public static ContentValues createContentValues(String[] tableColumns, Integer[] ids) {
-		ContentValues values = TableHelper.defaultContentValues();
+		ContentValues values = new ContentValues();
 		values.put(tableColumns[0], ids[0]);
 		values.put(tableColumns[1], ids[1]);
 		return values;
@@ -51,14 +51,12 @@ public class LinkTableHelper {
 		databaseCreateQuery.append(tableName);
 		databaseCreateQuery.append("(").append(TableHelper.createCommonColumnsQuery());
 		databaseCreateQuery.append(",").append(fkColumnNameId1).append(" INTEGER NOT NULL").append(" REFERENCES ").append(fkTableName1).append("(")
-				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE");
+				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE ON UPDATE CASCADE");
 		databaseCreateQuery.append(",").append(fkColumnNameId2).append(" INTEGER NOT NULL").append(" REFERENCES ").append(fkTableName2).append("(")
-				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE");
-		databaseCreateQuery.append(",").append("UNIQUE (").append(fkColumnNameId1).append(",").append(fkColumnNameId2).append(") ON CONFLICT ABORT");
-		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId1).append(") REFERENCES ").append(fkTableName1).append("(")
-				.append(TableHelper.COLUMN_ID).append(")");
-		databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId2).append(") REFERENCES ").append(fkTableName2).append("(")
-				.append(TableHelper.COLUMN_ID).append("));");
+				.append(TableHelper.COLUMN_ID).append(") ON DELETE CASCADE ON UPDATE CASCADE");
+		databaseCreateQuery.append(",").append("UNIQUE (").append(fkColumnNameId1).append(",").append(fkColumnNameId2).append(") ON CONFLICT FAIL);");
+		// databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId1).append(") REFERENCES ").append(fkTableName1).append("(").append(TableHelper.COLUMN_ID).append(")");
+		// databaseCreateQuery.append(", FOREIGN KEY(").append(fkColumnNameId2).append(") REFERENCES ").append(fkTableName2).append("(").append(TableHelper.COLUMN_ID).append("));");
 		return databaseCreateQuery.toString();
 	}
 }

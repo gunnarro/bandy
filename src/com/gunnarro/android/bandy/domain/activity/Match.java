@@ -1,6 +1,7 @@
 package com.gunnarro.android.bandy.domain.activity;
 
 import com.gunnarro.android.bandy.domain.Team;
+import com.gunnarro.android.bandy.domain.activity.Type.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.party.Referee;
 import com.gunnarro.android.bandy.utility.Utility;
 
@@ -19,38 +20,6 @@ public class Match extends Activity {
 		}
 	}
 
-	public static enum MatchTypesEnum {
-		DEFAULT(0), LEAGUE(1), TRAINING(2), CUP(3);
-
-		private int code;
-
-		MatchTypesEnum(int code) {
-			this.code = code;
-		}
-
-		public int getCode() {
-			return code;
-		}
-
-		public static String getName(int code) {
-			for (MatchTypesEnum m : MatchTypesEnum.values()) {
-				if (m.code == code) {
-					return m.name();
-				}
-			}
-			return "unkown code " + code;
-		}
-
-		public static MatchTypesEnum toType(int code) {
-			for (MatchTypesEnum m : MatchTypesEnum.values()) {
-				if (m.code == code) {
-					return m;
-				}
-			}
-			return null;
-		}
-	}
-
 	private Integer id;
 	private long startTime;
 	private Team team;
@@ -63,6 +32,12 @@ public class Match extends Activity {
 	private Integer numberOfGoalsAway;
 	private Integer numberOfSignedPlayers;
 	private MatchTypesEnum matchType = MatchTypesEnum.LEAGUE;
+
+	private Match(MatchTypesEnum type, MatchStatus status) {
+		super(null);
+		this.matchType = type;
+		this.matchStatus = status;
+	}
 
 	public Match(Season season, long startTime, Team team, Team homeTeam, Team awayTeam, String venue, Referee referee) {
 		super(season);
@@ -85,6 +60,22 @@ public class Match extends Activity {
 		this(id, season, startTime, team, homeTeam, awayTeam, venue, referee, matchType);
 		this.numberOfGoalsHome = numberOfGoalsHome;
 		this.numberOfGoalsAway = numberOfGoalsAway;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	public void setHomeTeam(Team homeTeam) {
+		this.homeTeam = homeTeam;
+	}
+
+	public void setAwayTeam(Team awayTeam) {
+		this.awayTeam = awayTeam;
+	}
+
+	public void setVenue(String venue) {
+		this.venue = venue;
 	}
 
 	public Integer getId() {
@@ -173,6 +164,10 @@ public class Match extends Activity {
 
 	public MatchTypesEnum getMatchType() {
 		return matchType;
+	}
+
+	public static Match createCupMatch() {
+		return new Match(MatchTypesEnum.CUP, MatchStatus.NOT_PLAYED);
 	}
 
 	/**

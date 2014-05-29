@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.domain.party.Referee;
-import com.gunnarro.android.bandy.repository.table.ClubsTable;
 import com.gunnarro.android.bandy.repository.table.TableHelper;
 
 public class RefereesTable {

@@ -1,11 +1,6 @@
 package com.gunnarro.android.bandy.view.dialog;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;

@@ -25,9 +25,8 @@ import android.widget.TextView;
 import com.gunnarro.android.bandy.R;
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Activity;
-import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
 import com.gunnarro.android.bandy.domain.Team;
-import com.gunnarro.android.bandy.domain.activity.Match.MatchTypesEnum;
+import com.gunnarro.android.bandy.domain.activity.Type.MatchTypesEnum;
 import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.service.BandyService;
 import com.gunnarro.android.bandy.service.impl.BandyServiceImpl;
@@ -38,7 +37,9 @@ public class TeamActivitiesActivity extends DashboardActivity {
 
 	protected BandyService bandyService;
 	private String period = "Week";
-	private String activityFilter = ActivityTypeEnum.MATCH.name();
+//	private String activityFilter = ActivityTypeEnum.MATCH.name();
+	// FIXME
+	private String activityFilter;
 	private String selectedTeamName = "%2003";
 
 	/**
@@ -127,7 +128,8 @@ public class TeamActivitiesActivity extends DashboardActivity {
 		TableRow row = new TableRow(getApplicationContext());
 		int rowBgColor = getResources().getColor(R.color.white);
 		int txtColor = getResources().getColor(R.color.black);
-		int numberColor = getActivityTypeColor(activity);
+		// FIXME
+		int numberColor = 11;//getActivityTypeColor(activity);
 		Utility.getDateFormatter().applyPattern("dd.MM.yyyy");
 		row.addView(createTextView(Utility.getDateFormatter().format(new Date(activity.getStartDate())), rowBgColor, txtColor, Gravity.CENTER));
 		Utility.getDateFormatter().applyPattern("HH:mm");
@@ -162,18 +164,18 @@ public class TeamActivitiesActivity extends DashboardActivity {
 		}
 	}
 
-	private int getActivityTypeColor(Activity activity) {
-		switch (activity.getType()) {
-		case CUP:
-			return getResources().getColor(R.color.dark_green);
-		case MATCH:
-			return getMatchTypeColor(activity.getMatchType());
-		case TRAINING:
-			return getResources().getColor(R.color.black);
-		default:
-			return getResources().getColor(R.color.error);
-		}
-	}
+//	private int getActivityTypeColor(Activity activity) {
+//		switch (activity.getType()) {
+//		case CUP:
+//			return getResources().getColor(R.color.dark_green);
+//		case MATCH:
+//			return getMatchTypeColor(activity.getMatchType());
+//		case TRAINING:
+//			return getResources().getColor(R.color.black);
+//		default:
+//			return getResources().getColor(R.color.error);
+//		}
+//	}
 
 	private int getMatchTypeColor(MatchTypesEnum matchType) {
 		switch (matchType) {

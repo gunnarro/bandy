@@ -11,7 +11,6 @@ import android.content.Context;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Activity;
-import com.gunnarro.android.bandy.domain.Activity.ActivityTypeEnum;
 import com.gunnarro.android.bandy.domain.Club;
 import com.gunnarro.android.bandy.domain.League;
 import com.gunnarro.android.bandy.domain.SearchResult;
@@ -625,22 +624,23 @@ public class BandyServiceImpl implements BandyService {
 			// Simply ignore, no data found
 			return list;
 		}
+		// FIXME
 
-		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.MATCH.name())) {
-			for (Match match : getMatchList(team.getId(), datePeriodeMap.get(period))) {
-				list.add(new Activity(ActivityTypeEnum.MATCH, match.getStartTime(), match.getVenue(), match.getTeamVersus(), match.getMatchType()));
-			}
-		}
-		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.TRAINING.name())) {
-			for (Training training : getTrainingList(team.getId(), datePeriodeMap.get(period))) {
-				list.add(new Activity(ActivityTypeEnum.TRAINING, training.getStartTime(), training.getVenue(), training.getTeam().getName()));
-			}
-		}
-		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.CUP.name())) {
-			for (Cup cup : getCupList(team.getId(), datePeriodeMap.get(period))) {
-				list.add(new Activity(ActivityTypeEnum.CUP, cup.getStartDate(), cup.getVenue(), cup.getCupName()));
-			}
-		}
+//		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.MATCH.name())) {
+//			for (Match match : getMatchList(team.getId(), datePeriodeMap.get(period))) {
+//				list.add(new Activity(ActivityTypeEnum.MATCH, match.getStartTime(), match.getVenue(), match.getTeamVersus(), match.getMatchType()));
+//			}
+//		}
+//		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.TRAINING.name())) {
+//			for (Training training : getTrainingList(team.getId(), datePeriodeMap.get(period))) {
+//				list.add(new Activity(ActivityTypeEnum.TRAINING, training.getStartTime(), training.getVenue(), training.getTeam().getName()));
+//			}
+//		}
+//		if (filterBy.equalsIgnoreCase("All") || filterBy.equalsIgnoreCase(Activity.ActivityTypeEnum.CUP.name())) {
+//			for (Cup cup : getCupList(team.getId(), datePeriodeMap.get(period))) {
+//				list.add(new Activity(ActivityTypeEnum.CUP, cup.getStartDate(), cup.getVenue(), cup.getCupName()));
+//			}
+//		}
 		Collections.sort(list);
 		return list;
 	}

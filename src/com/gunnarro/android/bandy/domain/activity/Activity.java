@@ -8,6 +8,8 @@ public abstract class Activity {
 
 	private Status status = null;
 	private Season season;
+	private long startTime;
+	private long endTime;
 	private int numberOfParticipatedPlayers;
 
 	public Activity(Season season) {
@@ -15,7 +17,7 @@ public abstract class Activity {
 	}
 
 	public static enum ActivityTypesEnum {
-		Training, Match, Cup;
+		Training, Match, Cup, Tournament;
 	}
 
 	public Status getStatus() {

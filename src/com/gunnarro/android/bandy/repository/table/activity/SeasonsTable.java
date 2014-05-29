@@ -25,7 +25,7 @@ public class SeasonsTable {
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_PERIOD).append(" STRING NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_START_DATE).append(" INTEGER NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_END_DATE).append(" INTEGER NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_PERIOD).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT ABORT);");
+		DATABASE_CREATE_QUERY.append(",").append("UNIQUE (").append(COLUMN_PERIOD).append(",").append(COLUMN_START_DATE).append(") ON CONFLICT FAIL);");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {

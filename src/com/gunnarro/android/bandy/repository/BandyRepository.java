@@ -13,6 +13,7 @@ import com.gunnarro.android.bandy.domain.activity.Match;
 import com.gunnarro.android.bandy.domain.activity.MatchEvent;
 import com.gunnarro.android.bandy.domain.activity.Season;
 import com.gunnarro.android.bandy.domain.activity.Status;
+import com.gunnarro.android.bandy.domain.activity.Tournament;
 import com.gunnarro.android.bandy.domain.activity.Training;
 import com.gunnarro.android.bandy.domain.party.Address;
 import com.gunnarro.android.bandy.domain.party.Contact;
@@ -153,7 +154,7 @@ public interface BandyRepository {
 
 	public long createContactRoleTypeLnk(int contactId, int roleTypeIdId);
 
-	public int deleteContactRoleTypeLnk(int contactId, int roleTypeIdId);
+	public int deleteContactRoleTypeLnk(Integer contactId, Integer roleTypeIdId);
 
 	// ---------------------------------------------------------------------------
 	// Settings table operations
@@ -240,10 +241,28 @@ public interface BandyRepository {
 
 	public int deleteAddress(Integer addressId);
 
-	String getSqliteVersion();
+	public String getSqliteVersion();
 
-	String getDBforeignkeys();
+	public String getDBforeignkeys();
 
 	public int updateReferee(Referee referee);
+
+	public int deleteSeason(Integer id);
+
+	public int deleteCup(Integer cupId);
+
+	public Cup getCup(Integer cupId);
+
+	public void tournamentRegistration(Integer tournamentId, Integer teamId);
+
+	public int tournamentUnRegistration(Integer tournamentId, Integer teamId);
+
+	public int createTournament(Tournament newTournament);
+
+	public List<Tournament> getTournaments(Integer teamId, Integer periode);
+
+	public Tournament getTournament(Integer tournamentId);
+
+	public int deleteTournament(Integer tournamentId);
 
 }

@@ -25,6 +25,7 @@ import com.gunnarro.android.bandy.repository.table.activity.MatchTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.MatchesTable;
 import com.gunnarro.android.bandy.repository.table.activity.PlayerPositionTypesTable;
 import com.gunnarro.android.bandy.repository.table.activity.SeasonsTable;
+import com.gunnarro.android.bandy.repository.table.activity.TournamentsTable;
 import com.gunnarro.android.bandy.repository.table.activity.TrainingsTable;
 import com.gunnarro.android.bandy.repository.table.link.ContactRoleTypeLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.CupMatchLnkTable;
@@ -35,6 +36,7 @@ import com.gunnarro.android.bandy.repository.table.link.PlayerCupLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerMatchLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.PlayerTrainingLnkTable;
 import com.gunnarro.android.bandy.repository.table.link.TeamContactLnkTable;
+import com.gunnarro.android.bandy.repository.table.link.TeamTournamentLnkTable;
 import com.gunnarro.android.bandy.repository.table.party.AddressTable;
 import com.gunnarro.android.bandy.repository.table.party.ContactsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
@@ -58,7 +60,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	private static final boolean IS_LOAD_FROM_SCRIPT = false;
 	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
 	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
-	public static final String DATABASE_NAME = "sportsteam-snapshot-20.db";
+	public static final String DATABASE_NAME = "sportsteam-snapshot-26.db";
 	public static final int DATABASE_VERSION = 1;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
@@ -163,6 +165,8 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			StatusesTable.onUpgrade(database, oldVersion, newVersion);
 			TeamsTable.onUpgrade(database, oldVersion, newVersion);
 			TeamContactLnkTable.onUpgrade(database, oldVersion, newVersion);
+			TeamTournamentLnkTable.onUpgrade(database, oldVersion, newVersion);
+			TournamentsTable.onUpgrade(database, oldVersion, newVersion);
 			TrainingsTable.onUpgrade(database, oldVersion, newVersion);
 			NotificationsTable.onUpgrade(database, oldVersion, newVersion);
 			MatchResultView.onUpgrade(database, oldVersion, newVersion);
@@ -201,6 +205,8 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		StatusesTable.onCreate(database);
 		TeamsTable.onCreate(database);
 		TeamContactLnkTable.onCreate(database);
+		TeamTournamentLnkTable.onCreate(database);
+		TournamentsTable.onCreate(database);
 		TrainingsTable.onCreate(database);
 		NotificationsTable.onCreate(database);
 		MatchResultView.onCreate(database);
@@ -235,7 +241,9 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 			database.execSQL(createTableQuery(RefereesTable.TABLE_NAME, isDrop));
 			database.execSQL(createTableQuery(TeamsTable.TABLE_NAME, isDrop));
 			database.execSQL(createTableQuery(TeamContactLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(TeamTournamentLnkTable.TABLE_NAME, isDrop));
 			database.execSQL(createTableQuery(TrainingsTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(TournamentsTable.TABLE_NAME, isDrop));
 
 			database.execSQL(MatchResultView.dropViewQuery());
 			// Do not delete constants
@@ -275,26 +283,16 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(4, datetime(), '" + SettingsTable.DATA_FILE_VERSION_KEY + "','na')");
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(5, datetime(), '" + SettingsTable.MAIL_ACCOUNT_KEY + "','na')");
 		database.execSQL("insert into settings (_id, created_date_time, key, value) values(6, datetime(), '" + SettingsTable.MAIL_ACCOUNT_PWD_KEY + "','na')");
-		// init match types
-		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(1, datetime(), 1, 'LEAGUE')");
-		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(2, datetime(), 2, 'TRAINING')");
-		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(3, datetime(), 3, 'CUP')");
-		database.execSQL("insert into match_types (_id, created_date_time, match_type_id, match_type_name) values(4, datetime(), 4, 'TOURNAMENT')");
-		// init player position types
-		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(1, datetime(), 1, 'GOALKEEPER')");
-		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(2, datetime(), 2, 'DEFENDER')");
-		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(3, datetime(), 3, 'MIDFIELDER')");
-		database.execSQL("insert into position_types (_id, created_date_time, position_type_id, position_type_name) values(4, datetime(), 4, 'FORWARD')");
 		// init statuses
 		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(1, datetime(), 1, 'ACTIVE')");
 		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(2, datetime(), 2, 'PASSIVE')");
 		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(3, datetime(), 3, 'INJURED')");
 		database.execSQL("insert into statuses (_id, created_date_time, status_id, status_name) values(4, datetime(), 4, 'QUIT')");
 		// init seasons
-		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(1, datetime(), '2013/2014', 1, 1)");
-		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(2, datetime(), '2014/2015', 1, 1)");
-		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(3, datetime(), '2015/2016', 1, 1)");
-		database.execSQL("insert into seasons (_id, created_date_time, period, start_date, end_date) values(4, datetime(), '2016/2017', 1, 1)");
+		database.execSQL("insert into seasons (period, start_date, end_date) values('2013/2014', 1, 1)");
+		database.execSQL("insert into seasons (period, start_date, end_date) values('2014/2015', 1, 1)");
+		database.execSQL("insert into seasons (period, start_date, end_date) values('2015/2016', 1, 1)");
+		database.execSQL("insert into seasons (period, start_date, end_date) values('2016/2017', 1, 1)");
 		// init. team types
 		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(1, datetime(), 'Knøtt', '', '11', 'male', '25', '', '7', 'Spillerne må ikke ha fylt 11 år ved årsskiftet i inneværende sesong')");
 		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(2, datetime(), 'Lillegutt', '', '13', 'male', '25', '', '7', 'Spillerne må ikke ha fylt 13 år ved årsskiftet i inneværende sesong')");
@@ -304,22 +302,32 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(6, datetime(), 'Old boys', '35', '50', 'male', '30','5',  '11', 'info')");
 		database.execSQL("insert into leagues (_id, created_date_time, league_name, league_player_age_min, league_player_age_max, league_gender, league_match_period_time_minutes, league_match_extra_period_time_minutes, league_number_of_players, league_description) values(7, datetime(),'Veteran', '50', '', 'male', '30', '5', '7', 'info')");
 		// init role types
-		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(1, datetime(), 'DEFAULT', '')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(2, datetime(), 'PARENT', '')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(3, datetime(), 'TEAMLEAD', '')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(4, datetime(), 'COACH', '')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(5, datetime(), 'CHAIRMAN', '')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(6, datetime(), 'DEPUTY CHAIRMAN', '')");
-		database.execSQL("insert into role_types (_id, created_date_time, role_type_name, role_type_description) values(7, datetime(), 'BOARD MEMBER', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, type, description) values(1, datetime(), 'DEFAULT', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, type, description) values(2, datetime(), 'PARENT', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, type, description) values(3, datetime(), 'TEAMLEAD', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, type, description) values(4, datetime(), 'COACH', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, type, description) values(5, datetime(), 'CHAIRMAN', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, type, description) values(6, datetime(), 'DEPUTY CHAIRMAN', '')");
+		database.execSQL("insert into role_types (_id, created_date_time, type, description) values(7, datetime(), 'BOARD MEMBER', '')");
 		// Match status types
-		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(1, datetime(), 'NOT PLAYED', '')");
-		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(2, datetime(), 'PLAYED', '')");
-		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(3, datetime(), 'CANCELLED', '')");
-		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(4, datetime(), 'POSTPONED', '')");
-		database.execSQL("insert into match_status_types (_id, created_date_time, match_status_name, match_status_description) values(5, datetime(), 'ONGOING', '')");
+		database.execSQL("insert into match_status_types (_id, created_date_time, type, description) values(1, datetime(), 'NOT PLAYED', '')");
+		database.execSQL("insert into match_status_types (_id, created_date_time, type, description) values(2, datetime(), 'PLAYED', '')");
+		database.execSQL("insert into match_status_types (_id, created_date_time, type, description) values(3, datetime(), 'CANCELLED', '')");
+		database.execSQL("insert into match_status_types (_id, created_date_time, type, description) values(4, datetime(), 'POSTPONED', '')");
+		database.execSQL("insert into match_status_types (_id, created_date_time, type, description) values(5, datetime(), 'ONGOING', '')");
+		// init match types
+		database.execSQL("insert into match_types (_id, created_date_time, type, description) values(1, datetime(), 'LEAGUE', '')");
+		database.execSQL("insert into match_types (_id, created_date_time, type, description) values(2, datetime(), 'TRAINING', '')");
+		database.execSQL("insert into match_types (_id, created_date_time, type, description) values(3, datetime(), 'CUP', '')");
+		database.execSQL("insert into match_types (_id, created_date_time, type, description) values(4, datetime(), 'TOURNAMENT', '')");
 		// Match event types
-		database.execSQL("insert into match_event_types (_id, created_date_time, match_event_name, match_event_description) values(1, datetime(), 'GOAL', '')");
-		database.execSQL("insert into match_event_types (_id, created_date_time, match_event_name, match_event_description) values(2, datetime(), 'PENALTY', '')");
+		database.execSQL("insert into match_event_types (_id, created_date_time, type, description) values(1, datetime(), 'GOAL', '')");
+		database.execSQL("insert into match_event_types (_id, created_date_time, type, description) values(2, datetime(), 'PENALTY', '')");
+		// init player position types
+		database.execSQL("insert into position_types (_id, created_date_time, type, description) values(1, datetime(), 1, 'GOALKEEPER')");
+		database.execSQL("insert into position_types (_id, created_date_time, type, description) values(2, datetime(), 'DEFENDER', '')");
+		database.execSQL("insert into position_types (_id, created_date_time, type, description) values(3, datetime(), 'MIDFIELDER', '')");
+		database.execSQL("insert into position_types (_id, created_date_time, type, description) values(4, datetime(), 'FORWARD', '')");
 
 		CustomLog.i(BandyDataBaseHjelper.class, "inserted default test data");
 	}

@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.repository.table.TableHelper;
-import com.gunnarro.android.bandy.repository.table.TeamsTable;
 
 public class PlayersTable {
 

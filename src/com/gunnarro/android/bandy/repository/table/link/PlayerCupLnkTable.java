@@ -3,7 +3,6 @@ package com.gunnarro.android.bandy.repository.table.link;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.gunnarro.android.bandy.repository.table.TableHelper;
 import com.gunnarro.android.bandy.repository.table.activity.CupsTable;
 import com.gunnarro.android.bandy.repository.table.party.PlayersTable;
 
