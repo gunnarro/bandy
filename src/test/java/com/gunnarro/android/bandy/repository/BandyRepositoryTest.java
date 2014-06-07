@@ -49,13 +49,16 @@ import com.gunnarro.android.bandy.service.impl.DataLoader;
 @RunWith(RobolectricTestRunner.class)
 public class BandyRepositoryTest {
 
-	private static final String DB_PATH = "C:/code/git/bandy-master/database/sportsteam-1.0-SNAPSHOT.db";
+	private static final String DB_PATH = "database/sportsteam-1.0-SNAPSHOT.db";
 	private BandyRepository bandyRepository;
 	SQLiteDatabase db;
 
 	@Before
 	public void setUp() throws Exception {
 		File dbFile = new File(DB_PATH);
+		if (!dbFile.exists()) {
+			throw new RuntimeException("Sqlite DB file not found! " + DB_PATH);
+		}
 		String dbPath = dbFile.getAbsolutePath();
 		db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
 		bandyRepository = new BandyRepositoryImpl(db);
@@ -311,6 +314,7 @@ public class BandyRepositoryTest {
 			bandyRepository.createTeam(new Team("newTeam", new Club("name", "department"), 2004, "Male"));
 		} catch (ApplicationException ae) {
 			assertEquals("Club must be set for creating new Team!", ae.getMessage());
+			throw ae;
 		}
 	}
 
