@@ -35,8 +35,89 @@
                     android:layout_height="wrap_content"
                     android:text="@string/blank" />
             </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/department" />
+
+                <TextView
+                    android:id="@+id/clubDepartmentTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank" />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/homepage" />
+
+                <TextView
+                    android:id="@+id/clubHomepageTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank" />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/teams" />
+
+                <TextView
+                    android:id="@+id/clubTeamsTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank" />
+            </TableRow>
+             <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/players" />
+
+                <TextView
+                    android:id="@+id/clubPlayersTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank" />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contacts" />
+
+                <TextView
+                    android:id="@+id/clubContactsTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blank" />
+            </TableRow>
         </TableLayout>
 
+        <!-- 
         <include
             android:id="@+id/addressInputId"
             android:layout_width="match_parent"
@@ -44,6 +125,8 @@
             android:layout_below="@+id/clubDetailsTblId"
             android:layout_marginLeft="10dp"
             layout="@layout/address_input_layout" />
+          -->
+          
     </RelativeLayout>
 
 </ScrollView>

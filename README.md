@@ -1,6 +1,6 @@
-smsfilter
-=========
-SMS filter for Android mobile phones
-project     : https://github.com/gunnarro/smsfilter.git
-test-project: https://github.com/gunnarro/smsfilterTest.git
+Sport Team Manager (SPORT-MAN)
+============================================================
+Sport Team Manager
+project     : https://github.com/gunnarro/bandy.git
+test-project: https://github.com/gunnarro/bandy-test.git
 

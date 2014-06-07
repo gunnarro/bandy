@@ -126,7 +126,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <Button
-            android:id="@+id/cups_btn"
+            android:id="@+id/tournaments_btn"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_column="2"
@@ -134,7 +134,7 @@
             android:layout_row="1"
             android:drawableTop="@drawable/icon_bandy"
             android:onClick="onClickFeature"
-            android:text="@string/cup"
+            android:text="@string/tournaments"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <!-- Row 1 -->

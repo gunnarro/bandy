@@ -101,6 +101,7 @@
     <string name="teams">Teams</string>
     <string name="contacts">Contacts</string>
     <string name="cup">Cup</string>
+    <string name="tournaments">Tournaments</string>
     <string name="match">Match</string>
     <string name="training">Training</string>
     <string name="referees">Referees</string>
@@ -117,6 +118,8 @@
     <string name="tab_search">Search</string>
 
     <!-- Club -->
+    <string name="department">Department</string>
+    <string name="homepage">HomePage</string>
     <!-- Team -->
     <!-- Player -->
     <string name="first_name">First name</string>
