@@ -7,3 +7,5 @@ android:
     - android-19
 
 script: mvn clean test -X
+
+after_script: print_surefire_reports.sh
