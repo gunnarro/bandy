@@ -322,7 +322,7 @@ public class BandyRepositoryTest {
 	public void newTeamDuplicate() {
 		int clubId = bandyRepository.createClub(new Club(null, "newSportsClub", "newBandy", "CK", "bandyStadium", null, "http://club.homepage.org"));
 		Club club = bandyRepository.getClub(clubId);
-		int teamId = bandyRepository.createTeam(new Team("newTeam", club, 2004, "Male"));
+		bandyRepository.createTeam(new Team("newTeam", club, 2004, "Male"));
 		try {
 			bandyRepository.createTeam(new Team("newTeam", club, 2004, "Male"));
 			assertFalse(true);
