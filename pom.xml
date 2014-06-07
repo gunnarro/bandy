@@ -46,7 +46,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<android.sdk.path></android.sdk.path>
+				<android.sdk.path>/usr/local/android-sdk/</android.sdk.path>
 			</properties>
 		</profile>
 	</profiles>
