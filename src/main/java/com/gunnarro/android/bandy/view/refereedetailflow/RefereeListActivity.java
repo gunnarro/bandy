@@ -29,6 +29,10 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
  */
 public class RefereeListActivity extends DashboardActivity implements RefereeListFragment.Callbacks {
 
+	public final static int REQUEST_CODE_REFEREE_NEW = 400;
+	public final static int REQUEST_CODE_REFEREE_DETAIL = 401;
+	public final static int REQUEST_CODE_REFEREE_DELET = 402;
+
 	private String clubName;
 	private String teamName;
 

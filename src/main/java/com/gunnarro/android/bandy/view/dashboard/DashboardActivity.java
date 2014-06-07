@@ -48,6 +48,9 @@ import com.gunnarro.android.bandy.view.teamdetailflow.TeamListActivity;
  */
 public abstract class DashboardActivity extends FragmentActivity {
 
+	public final static int RESULT_CODE_CHANGED = 1;
+	public final static int RESULT_CODE_UNCHANGED = 0;
+
 	public static final String ARG_CLUB_NAME = "club_name";
 	public static final String ARG_TEAM_NAME = "team_name";
 	public static final String ARG_CLUB_ID = "club_id";

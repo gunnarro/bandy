@@ -96,8 +96,6 @@ public class ClubDetailActivity extends FragmentActivity implements NoticeDialog
 			transaction.commit();
 			return true;
 		default:
-			// startActivity(new Intent(getApplicationContext(),
-			// HomeActivity.class));
 			break;
 		}
 		CustomLog.d(this.getClass(), "clicked on: " + item.toString());
