@@ -12,7 +12,9 @@
 		<!-- use UTF-8 for everything -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- 
 		<android.sdk.path>C:\applications\adt-bundle-windows-x86-20130717/sdk</android.sdk.path>
+		 -->
 		<android.version>4.1.1.4</android.version>
         <robolectric.version>4.1.2_r1-robolectric-0</robolectric.version>
     </properties>
