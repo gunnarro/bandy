@@ -2,8 +2,8 @@ language: java
 jdk:
   - oraclejdk7
   
- env:
- matrix:
+# env:
+matrix:
  # android-16 is always included
    - ANDROID_SDKS=sysimg-16           ANDROID_TARGET=android-16  ANDROID_ABI=armeabi-v7a
    - ANDROID_SDKS=android-19,sysimg-19 ANDROID_TARGET=android-19  ANDROID_ABI=armeabi-v7a
