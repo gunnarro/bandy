@@ -6,4 +6,4 @@ android:
     - build-tools-19.0.3
     - android-19
 
-script: mvn clean test
+script: mvn clean test -X
