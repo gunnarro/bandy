@@ -2,7 +2,9 @@ language: java
 jdk:
   - oraclejdk7
   
-# env:
+env:
+  - TEST_SUITE=units
+  - TEST_SUITE=integration
 matrix:
  # android-16 is always included
    - ANDROID_SDKS=sysimg-16           ANDROID_TARGET=android-16  ANDROID_ABI=armeabi-v7a
