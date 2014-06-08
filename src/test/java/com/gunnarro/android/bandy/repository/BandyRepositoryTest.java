@@ -38,6 +38,7 @@ import com.gunnarro.android.bandy.domain.party.Contact;
 import com.gunnarro.android.bandy.domain.party.Player;
 import com.gunnarro.android.bandy.domain.party.Player.PlayerStatusEnum;
 import com.gunnarro.android.bandy.domain.party.Referee;
+import com.gunnarro.android.bandy.domain.party.Role.RoleTypesEnum;
 import com.gunnarro.android.bandy.domain.statistic.Statistic;
 import com.gunnarro.android.bandy.domain.view.list.Item;
 import com.gunnarro.android.bandy.repository.impl.BandyRepositoryImpl;
@@ -122,6 +123,7 @@ public class BandyRepositoryTest {
 				bandyRepository.getMatchTypes());
 		assertArrayEquals(new Item[] { new Item(0, "CANCELLED"), new Item(0, "NOT PLAYED"), new Item(0, "ONGOING"), new Item(0, "PLAYED"),
 				new Item(0, "POSTPONED") }, bandyRepository.getMatchStatusList());
+		assertArrayEquals(new Item[] { new Item(0, "BANDY"), new Item(0, "SOCCER") }, bandyRepository.getSportTypes());
 		assertArrayEquals(new String[] { "Gutt", "Junior", "Knøtt", "Lillegutt", "Old boys", "Smågutt", "Veteran" }, bandyRepository.getLeagueNames());
 		assertArrayEquals(new String[] { "ACTIVE", "INJURED", "PASSIVE", "QUIT" }, bandyRepository.getPlayerStatusTypes());
 		assertArrayEquals(new String[] { "BOARD MEMBER", "CHAIRMAN", "COACH", "DEFAULT", "DEPUTY CHAIRMAN", "PARENT", "TEAMLEAD" },
@@ -131,21 +133,71 @@ public class BandyRepositoryTest {
 
 	@Test
 	public void verifyGettersNoMatch() {
-		assertNull(bandyRepository.getClub(1));
-		assertNull(bandyRepository.getTeam(1));
-		assertNull(bandyRepository.getPlayer(1));
+		assertNull(bandyRepository.getAddress(1));
 		assertNull(bandyRepository.getContact(1));
+		assertNull(bandyRepository.getClub(1));
+		assertNull(bandyRepository.getCup(1));
+		assertNotNull(bandyRepository.getCurrentSeason());
 		assertNull(bandyRepository.getMatch(1));
+		assertNull(bandyRepository.getPlayer(1));
 		assertNull(bandyRepository.getLeague("invalid"));
 		assertNull(bandyRepository.getReferee(1));
 		assertNull(bandyRepository.getSeason(0));
+		assertNull(bandyRepository.getTeam(1));
 		// assertNull(bandyRepository.getSetting("invalid"));
 	}
 
 	@Test
+	public void updateClub() {
+		Long addressId = bandyRepository.createAddress(new Address("Stavangergt", "22", null, "9090", "oslo", "norge"));
+		Address clubAddress = bandyRepository.getAddress(addressId.intValue());
+		assertNotNull(clubAddress);
+		int clubId = bandyRepository.createClub(new Club(null, "newSportsClub", "newBandy", "CK", "bandyStadium", clubAddress, "http://club.homepage.org"));
+		Club club = bandyRepository.getClub(clubId);
+		assertEquals("newSportsClub", club.getName());
+		club.setName("changedSportsClub");
+		bandyRepository.updateClub(club);
+		Club updatedClub = bandyRepository.getClub(clubId);
+		assertEquals("changedSportsClub", updatedClub.getName());
+
+		int deletedClubRows = bandyRepository.deleteClub(clubId);
+		assertTrue(deletedClubRows == 1);
+	}
+
+	@Test
+	public void updateAddress() {
+		Long addressId = bandyRepository.createAddress(new Address("Stavangergt", "22", null, "9090", "oslo", "norge"));
+		Address address = bandyRepository.getAddress(addressId.intValue());
+		assertNotNull(address);
+		assertEquals("Stavangergt 22", address.getFullStreetName());
+		address.setStreetName("oslogata");
+		address.setStreetNumber("34");
+		address.setStreetNumberPrefix("a");
+		bandyRepository.updateAddress(address);
+		Address updatedAddress = bandyRepository.getAddress(addressId.intValue());
+		assertEquals("Oslogata 34A", updatedAddress.getFullStreetName());
+		int deletedAddressRows = bandyRepository.deleteAddress(addressId.intValue());
+		assertTrue(deletedAddressRows == 1);
+	}
+
+	@Test
+	public void updateMatchStatusInvalidId() {
+		try {
+			int updateMatchStatusRows = bandyRepository.updateMatchStatus(1, 1);
+			assertTrue(updateMatchStatusRows == 0);
+		} catch (Exception e) {
+			assertEquals("sss", e.getMessage());
+		}
+	}
+
+	@Test
 	public void verifyGettersNoMatchReturnEmptyList() {
+		assertEquals(0, bandyRepository.getClubAsItems().length);
 		assertEquals(0, bandyRepository.getClubNames().length);
+		assertEquals(0, bandyRepository.getClubList().size());
+		assertEquals(0, bandyRepository.getContactList(1, RoleTypesEnum.DEFAULT.name()).size());
 		assertEquals(0, bandyRepository.getContactList(1).size());
+		assertEquals(0, bandyRepository.getContactsAsItemList(1).size());
 		assertEquals(0, bandyRepository.getCupList(1, 2014).size());
 		assertEquals(0, bandyRepository.getMatchEventList(0).size());
 		assertEquals(0, bandyRepository.getMatchList(1, 2014).size());
@@ -154,6 +206,7 @@ public class BandyRepositoryTest {
 		assertEquals(0, bandyRepository.getPlayerList(1).size());
 		assertEquals(0, bandyRepository.getPlayersAsItemList(1).size());
 		assertEquals(0, bandyRepository.getRefereeNames().length);
+		assertEquals(0, bandyRepository.getTeamAsItems(1).length);
 		assertEquals(0, bandyRepository.getTeamList("unkown_club_name").size());
 		assertEquals(0, bandyRepository.getTeamNames("unkown_club_name").length);
 		assertEquals(0, bandyRepository.getTeamNames("unkown_club_name").length);
@@ -267,7 +320,6 @@ public class BandyRepositoryTest {
 		assertTrue(deletedClubRows == 1);
 	}
 
-	@Ignore
 	@Test
 	public void newClubSeveralTeams() {
 		int clubId = bandyRepository.createClub(new Club(null, "newSportsClub", "newBandy", "CK", "bandyStadium", null, "http://club.homepage.org"));
@@ -312,6 +364,7 @@ public class BandyRepositoryTest {
 	public void newTeamInvalidClub() {
 		try {
 			bandyRepository.createTeam(new Team("newTeam", new Club("name", "department"), 2004, "Male"));
+			assertTrue(false);
 		} catch (ApplicationException ae) {
 			assertEquals("Club must be set for creating new Team!", ae.getMessage());
 			throw ae;
@@ -325,9 +378,9 @@ public class BandyRepositoryTest {
 		bandyRepository.createTeam(new Team("newTeam", club, 2004, "Male"));
 		try {
 			bandyRepository.createTeam(new Team("newTeam", club, 2004, "Male"));
-			assertFalse(true);
+			assertTrue(false);
 		} catch (ApplicationException ae) {
-			assertEquals("[SQLITE_CONSTRAINT]  Abort due to constraint violation (column team_name is not unique)", ae.getMessage());
+			assertEquals("[SQLITE_CONSTRAINT]  Abort due to constraint violation (columns fk_club_id, team_name are not unique)", ae.getMessage());
 		}
 
 		// Clean up
@@ -339,15 +392,14 @@ public class BandyRepositoryTest {
 	public void newAddress() {
 		Address newAddress = new Address("streetname", "45", "b", "0889", "oslo", "Norway");
 		long addressId = bandyRepository.createAddress(newAddress);
-		Address address = bandyRepository.getAddress(new Long(addressId).intValue());
+		Address address = bandyRepository.getAddress(Long.valueOf(addressId).intValue());
 		assertTrue(address.isAddressValid());
 		assertEquals("Streetname 45B", address.getFullStreetName());
 		assertEquals("0889", address.getPostalCode());
 		assertEquals("Oslo", address.getCity());
 		assertEquals("Norway", address.getCountry());
-
 		// Clean up
-		int deletedAddressRows = bandyRepository.deleteAddress(new Long(addressId).intValue());
+		int deletedAddressRows = bandyRepository.deleteAddress(Long.valueOf(addressId).intValue());
 		assertTrue(deletedAddressRows == 1);
 	}
 
@@ -366,6 +418,14 @@ public class BandyRepositoryTest {
 		assertEquals("Streetname 25C", contact.getAddress().getFullStreetName());
 		assertEquals("postalcode", contact.getAddress().getPostalCode());
 		assertTrue(contact.getAddress().isAddressValid());
+
+		// update contact
+		contact.setEmailAddress("new@email.com");
+		contact.setMobileNumber("11223344");
+		bandyRepository.updateContact(contact);
+		Contact updatedContact = bandyRepository.getContact(contactId);
+		assertEquals("new@email.com", updatedContact.getEmailAddress());
+		assertEquals("11223344", updatedContact.getMobileNumber());
 
 		// Must cleanup
 		int deletedContactRows = bandyRepository.deleteContact(contactId);
@@ -392,6 +452,16 @@ public class BandyRepositoryTest {
 		assertEquals("Streetname 25C", player.getAddress().getFullStreetName());
 		assertEquals("postalcode", player.getAddress().getPostalCode());
 		assertTrue(player.getAddress().isAddressValid());
+		assertNull(player.getEmailAddress());
+		assertNull(player.getMobileNumber());
+
+		// Update player
+		player.setEmailAddress("new@email.com");
+		player.setMobileNumber("11223344");
+		bandyRepository.updatePlayer(player);
+		Player updatedPlayer = bandyRepository.getPlayer(playerId);
+		assertEquals("new@email.com", updatedPlayer.getEmailAddress());
+		assertEquals("11223344", updatedPlayer.getMobileNumber());
 
 		// Must cleanup
 		int deletedPlayerRows = bandyRepository.deletePlayer(playerId);
@@ -424,6 +494,14 @@ public class BandyRepositoryTest {
 		assertEquals("Country", referee.getAddress().getCountry());
 		assertEquals("Streetname 25C", referee.getAddress().getFullStreetName());
 		assertEquals("postalcode", referee.getAddress().getPostalCode());
+
+		// update referee
+		referee.setMobileNumber("77665544");
+		referee.setEmailAddress("new@mail.org");
+		bandyRepository.updateReferee(referee);
+		Referee updatedReferee = bandyRepository.getReferee(refereeId);
+		assertEquals("77665544", updatedReferee.getMobileNumber());
+		assertEquals("new@mail.org", updatedReferee.getEmailAddress());
 
 		// Must cleanup
 		int addressId = referee.getAddress().getId();
@@ -564,7 +642,8 @@ public class BandyRepositoryTest {
 		assertEquals("3", matchEventList.get(1).getValue());
 
 		Status matchStatus = bandyRepository.getMatchStatus(2);
-		bandyRepository.updateMatchStatus(matchId, matchStatus.getId());
+		int updateDMatchStatusRows = bandyRepository.updateMatchStatus(matchId, matchStatus.getId());
+		assertTrue(updateDMatchStatusRows == 1);
 		match = bandyRepository.getMatch(matchId);
 		assertEquals("PLAYED", match.getStatus().getName());
 
@@ -666,7 +745,6 @@ public class BandyRepositoryTest {
 		// FIXME
 	}
 
-	@Ignore
 	@Test
 	public void teamStatistic() {
 		Statistic teamStatistic = bandyRepository.getTeamStatistic(1, 1);
@@ -677,7 +755,6 @@ public class BandyRepositoryTest {
 		assertEquals(0, teamStatistic.getNumberOfTeamTrainings().intValue());
 	}
 
-	@Ignore
 	@Test
 	public void playerStatistic() {
 		Statistic playerStatistic = bandyRepository.getPlayerStatistic(1, 1, 1);

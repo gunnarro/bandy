@@ -4,19 +4,17 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gunnarro.android.bandy.domain.Club;
+import com.gunnarro.android.bandy.domain.Team;
 
 /**
-CREATE TABLE clubs(_id          INTEGER  PRIMARY KEY AUTOINCREMENT,
-		created_date_time       DATETIME DEFAULT 'CURRENT_TIMESTAMP',
-		last_modified_date_time DATETIME DEFAULT 'CURRENT_TIMESTAMP',
-		fk_address_id           INTEGER  UNIQUE ON CONFLICT FAIL REFERENCES addresses(_id) ON DELETE SET NULL ON UPDATE CASCADE,
-		club_name               TEXT     NOT NULL,
-		club_department_name    TEXT     NOT NULL,
-		club_name_abbreviation  TEXT,
-		club_stadium_name       TEXT,
-		club_url_home_page      TEXT,
-		UNIQUE(club_name,club_department_name));
-*/
+ * CREATE TABLE clubs(_id INTEGER PRIMARY KEY AUTOINCREMENT, created_date_time
+ * DATETIME DEFAULT 'CURRENT_TIMESTAMP', last_modified_date_time DATETIME
+ * DEFAULT 'CURRENT_TIMESTAMP', fk_address_id INTEGER UNIQUE ON CONFLICT FAIL
+ * REFERENCES addresses(_id) ON DELETE SET NULL ON UPDATE CASCADE, club_name
+ * TEXT NOT NULL, club_department_name TEXT NOT NULL, club_name_abbreviation
+ * TEXT, club_stadium_name TEXT, club_url_home_page TEXT,
+ * UNIQUE(club_name,club_department_name));
+ */
 public class ClubsTable {
 
 	// Database table
@@ -40,15 +38,16 @@ public class ClubsTable {
 		DATABASE_CREATE_QUERY.append("CREATE TABLE ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
 		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_ADDRESS_ID).append(" INTEGER UNIQUE ON CONFLICT FAIL REFERENCES addresses(_id) ON DELETE SET NULL ON UPDATE CASCADE");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_FK_ADDRESS_ID)
+				.append(" INTEGER UNIQUE ON CONFLICT FAIL REFERENCES addresses(_id) ON DELETE SET NULL ON UPDATE CASCADE");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_DEPARTMENT_NAME).append(" TEXT NOT NULL");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_NAME_ABBREVIATION).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_STADIUM_NAME).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CLUB_URL_HOME_PAGE).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(", UNIQUE (").append(COLUMN_CLUB_NAME).append(",").append(COLUMN_CLUB_DEPARTMENT_NAME).append("));");
-//		DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_ADDRESS_ID).append(") REFERENCES ").append(AddressTable.TABLE_NAME).append("(")
-//		.append(TableHelper.COLUMN_ID).append("));");
+		// DATABASE_CREATE_QUERY.append(", FOREIGN KEY(").append(COLUMN_FK_ADDRESS_ID).append(") REFERENCES ").append(AddressTable.TABLE_NAME).append("(")
+		// .append(TableHelper.COLUMN_ID).append("));");
 	}
 
 	public static void onCreate(SQLiteDatabase database) {
@@ -73,6 +72,12 @@ public class ClubsTable {
 		if (addressId != null) {
 			values.put(COLUMN_FK_ADDRESS_ID, addressId);
 		}
+		return values;
+	}
+
+	public static ContentValues updateContentValues(Club club) {
+		ContentValues values = TableHelper.defaultContentValues();
+		values.put(COLUMN_CLUB_NAME, club.getName());
 		return values;
 	}
 

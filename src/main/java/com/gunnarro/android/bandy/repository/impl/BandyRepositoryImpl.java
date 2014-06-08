@@ -260,6 +260,24 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public int updateClub(Club club) {
+		try {
+			ContentValues clubUpdateValues = ClubsTable.updateContentValues(club);
+			this.database = getDatabase(true);
+			String whereClause = TableHelper.COLUMN_ID + " = ?";
+			String[] whereArgs = { club.getId().toString() };
+			return database.update(ClubsTable.TABLE_NAME, clubUpdateValues, whereClause, whereArgs);
+		} catch (SQLException sqle) {
+			CustomLog.e(getClass(), "Error updating: " + club);
+			CustomLog.e(getClass(), sqle.getMessage());
+			throw new ApplicationException(sqle.getMessage());
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public int deleteClub(Integer clubId) {
 		Club club = getClub(clubId);
 		if (club.getAddress() != null) {

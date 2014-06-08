@@ -271,4 +271,6 @@ public interface BandyRepository {
 
 	public Item[] getSportTypes();
 
+	public int updateClub(Club club);
+
 }

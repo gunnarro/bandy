@@ -181,7 +181,7 @@ public class BandyServiceImpl implements BandyService {
 		if (club.getId() == null) {
 			bandyRepository.createClub(club);
 		} else {
-			// BandyRepository.updateClub();
+			bandyRepository.updateClub(club);
 		}
 	}
 
