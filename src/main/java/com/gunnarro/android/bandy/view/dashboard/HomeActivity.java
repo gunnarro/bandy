@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2011 Wglxy.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.gunnarro.android.bandy.view.dashboard;
 
 import android.os.Bundle;
@@ -30,12 +14,14 @@ import com.gunnarro.android.bandy.view.dialog.DialogSelection.NoticeDialogListen
 import com.gunnarro.android.bandy.view.dialog.ItemSelection;
 import com.gunnarro.android.bandy.view.dialog.SelectDialogOnClickListener;
 
+//import com.google.inject.Inject;
 /**
  * Application staring point view
  * 
  */
 public class HomeActivity extends DashboardActivity implements NoticeDialogListener {
 
+//	@Inject
 	private BandyService bandyService;
 
 	// **********************************************************************
@@ -73,10 +59,14 @@ public class HomeActivity extends DashboardActivity implements NoticeDialogListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dashboard_layout);
 		super.getActionBar().hide();
-		this.bandyService = new BandyServiceImpl(getApplicationContext());
+		// this.bandyService = new BandyServiceImpl(getApplicationContext());
 		init();
 		setupEventhandlers();
 	}
+
+//	public void setBandyService(BandyService bandyService) {
+//		this.bandyService = bandyService;
+//	}
 
 	/**
 	 * onDestroy The final call you receive before your activity is destroyed.
@@ -155,25 +145,32 @@ public class HomeActivity extends DashboardActivity implements NoticeDialogListe
 	private void setupEventhandlers() {
 		ImageButton clubBtn = (ImageButton) findViewById(R.id.selectClubBtnId);
 		SelectDialogOnClickListener.turnOnInitMode();
-		clubBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), bandyService, SelectionListType.CLUB_NAMES, -1,
+		clubBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), getBandyService(), SelectionListType.CLUB_NAMES, -1,
 				R.id.clubNameTxt, false));
 
 		ImageButton teamBtn = (ImageButton) findViewById(R.id.selectTeamBtnId);
-		teamBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), bandyService, SelectionListType.TEAM_NAMES, -1,
+		teamBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), getBandyService(), SelectionListType.TEAM_NAMES, -1,
 				R.id.teamNameTxt, false));
 
 		ImageButton seasonBtn = (ImageButton) findViewById(R.id.selectSeasonBtnId);
-		seasonBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), bandyService, SelectionListType.SEASONS_TYPES, -1,
+		seasonBtn.setOnClickListener(new SelectDialogOnClickListener(getSupportFragmentManager(), getBandyService(), SelectionListType.SEASONS_TYPES, -1,
 				R.id.seasonPeriodTxt, false));
 
 		SelectDialogOnClickListener.turnOffInitMode();
 	}
 
 	private void init() {
-		//setInputValue(R.id.clubNameTxt, new Item(1, null));
-		//setInputValue(R.id.teamNameTxt, new Item(1, null));
+		// setInputValue(R.id.clubNameTxt, new Item(1, null));
+		// setInputValue(R.id.teamNameTxt, new Item(1, null));
 		// setInputValue(R.id.seasonPeriodTxt,
 		// bandyService.getCurrentSeason().getPeriod());
+	}
+
+	private BandyService getBandyService() {
+		if (this.bandyService == null) {
+			this.bandyService = new BandyServiceImpl(getApplicationContext());
+		}
+		return bandyService;
 	}
 
 	private void setInputValue(int id, Item item) {

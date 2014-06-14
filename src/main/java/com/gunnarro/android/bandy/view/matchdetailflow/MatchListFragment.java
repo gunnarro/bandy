@@ -40,6 +40,7 @@ public class MatchListFragment extends ListFragment {
 
 	private BandyService bandyService;
 	private List<MultiLineItem> itemList;
+	private Integer clubId;
 
 	/**
 	 * The fragment's current callback object, which is notified of list item
@@ -189,7 +190,7 @@ public class MatchListFragment extends ListFragment {
 	private List<MultiLineItem> getMatchItemList(String teamName) {
 		List<MultiLineItem> matches = new ArrayList<MultiLineItem>();
 		try {
-			Team team = bandyService.getTeam(teamName, true);
+			Team team = bandyService.getTeam(clubId, teamName, true);
 			List<Match> matchList = this.bandyService.getMatchList(team.getId(), Calendar.YEAR);
 			for (Match match : matchList) {
 				String matchInfo = match.getResult();

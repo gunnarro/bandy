@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/addressTblId"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:baselineAligned="false"
+    android:shrinkColumns="*"
+    android:stretchColumns="*"
+    android:textAppearance="?android:attr/textAppearanceMedium" >
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/country" />
+
+        <TextView
+            android:id="@+id/FullAddressTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:text="Stavangergata 35\n0467 Oslo\nNorge" >
+        </TextView>
+    </TableRow>
+
+</TableLayout>

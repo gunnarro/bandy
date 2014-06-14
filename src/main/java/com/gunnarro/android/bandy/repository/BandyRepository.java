@@ -32,7 +32,7 @@ public interface BandyRepository {
 	 * 
 	 * @throws SQLException
 	 */
-	public void open() throws SQLException;
+	public boolean open() throws SQLException;
 
 	/**
 	 * The repository should be closed by the activity that use the repository.
@@ -86,7 +86,7 @@ public interface BandyRepository {
 
 	public String[] getRoleTypeNames();
 
-	public Team getTeam(String name);
+	public Team getTeam(Integer clubId, String name);
 
 	public Team getTeam(Integer id);
 

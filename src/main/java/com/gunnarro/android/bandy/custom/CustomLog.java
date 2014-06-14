@@ -5,10 +5,15 @@ import android.util.Log;
 public class CustomLog {
 
 	private static final boolean IS_TRACE_ON = false;
+	private static final boolean IS_SYSTEM_OUT = true;
 
 	public static void i(Class<?> clazz, String msg) {
 		if (IS_TRACE_ON) {
 			Log.i(createTag(clazz), msg);
+		}
+
+		if (IS_SYSTEM_OUT) {
+			System.out.println(createTag(clazz) + " " + msg);
 		}
 	}
 
@@ -19,6 +24,9 @@ public class CustomLog {
 			} else {
 				Log.d(createTag(clazz), "Log object is null!");
 			}
+		}
+		if (IS_SYSTEM_OUT) {
+			System.out.println(createTag(clazz) + " " + msg);
 		}
 	}
 

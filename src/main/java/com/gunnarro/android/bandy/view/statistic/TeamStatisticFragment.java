@@ -40,7 +40,7 @@ public class TeamStatisticFragment extends Fragment {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.team_statistic_layout, container, false);
 		this.bandyService = new BandyServiceImpl(getActivity());
-		Team team = bandyService.getTeam(DashboardActivity.getSelectedTeamName(), false);
+		Team team = bandyService.getTeam(DashboardActivity.getSelectedClubId(), DashboardActivity.getSelectedTeamName(), false);
 		setupEventHandlers();
 		updateData(view, team);
 		return view;

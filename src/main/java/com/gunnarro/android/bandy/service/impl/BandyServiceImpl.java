@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import android.content.Context;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
@@ -49,15 +51,18 @@ public class BandyServiceImpl implements BandyService {
 		datePeriodeMap.put("Day", Calendar.DAY_OF_YEAR);
 	}
 
-	private Context context;
+	@Inject
+	Context context;
+	// @Inject
 	private BandyRepository bandyRepository;
-	private XmlDocumentParser xmlParser;
+	@Inject
+	XmlDocumentParser xmlParser;
 
 	/**
 	 * default constructor, used for unit testing only.
 	 */
+	@Inject
 	public BandyServiceImpl() {
-		this.xmlParser = new XmlDocumentParser();
 	}
 
 	/**
@@ -69,10 +74,6 @@ public class BandyServiceImpl implements BandyService {
 		this.context = context;
 		this.bandyRepository = new BandyRepositoryImpl(this.context);
 		this.bandyRepository.open();
-	}
-
-	public Context getContext() {
-		return context;
 	}
 
 	/**
@@ -120,7 +121,7 @@ public class BandyServiceImpl implements BandyService {
 			// for (String file : getDataFileUrlList()) {
 			// this.xmlParser.downloadAndUpdateDB(file, this);
 			// }
-			this.xmlParser.downloadAndUpdateDB(getContext(), getDataFileUrl(), this);
+			this.xmlParser.downloadAndUpdateDB(this.context, getDataFileUrl(), this);
 			CustomLog.d(this.getClass(), "Finished loading data into DB");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -358,11 +359,10 @@ public class BandyServiceImpl implements BandyService {
 	 */
 	@Override
 	public void deletePlayer(Integer playerId) {
-		for (PlayerLinkTableTypeEnum type : PlayerLinkTableTypeEnum.values()) {
-			this.bandyRepository.deletePlayerLink(type, playerId, null);
-		}
-		// Not used
-		// this.bandyRepository.deleteRelationship(playerId);
+		// for (PlayerLinkTableTypeEnum type : PlayerLinkTableTypeEnum.values())
+		// {
+		// this.bandyRepository.deletePlayerLink(type, playerId, null);
+		// }
 		this.bandyRepository.deletePlayer(playerId);
 	}
 
@@ -561,11 +561,11 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Team getTeam(String name, boolean isIncludeAll) {
+	public Team getTeam(Integer clubId, String name, boolean isIncludeAll) {
 		try {
-			Team team = this.bandyRepository.getTeam(name);
+			Team team = this.bandyRepository.getTeam(clubId, name);
 			if (team == null) {
-				throw new ValidationException("Team not found, team name=" + name);
+				throw new ValidationException("Team not found, clubId=" + clubId + ", team name=" + name);
 			}
 			if (isIncludeAll) {
 				team.setTeamLead(this.getTeamLead(team.getId()));
@@ -623,13 +623,13 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Activity> getActivityList(String teamName, String period, String filterBy) {
+	public List<Activity> getActivityList(Integer clubId, String teamName, String period, String filterBy) {
 		List<Activity> list = new ArrayList<Activity>();
 		Team team = null;
 		try {
-			team = this.bandyRepository.getTeam(teamName);
+			team = this.bandyRepository.getTeam(clubId, teamName);
 			if (team == null) {
-				CustomLog.e(this.getClass(), "No team found for: " + teamName);
+				CustomLog.e(this.getClass(), "No team found for: " + clubId + ", " + teamName);
 				return list;
 			}
 		} catch (ApplicationException ae) {
@@ -870,8 +870,8 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String[] getPlayerNames(String teamName) {
-		Team team = bandyRepository.getTeam(teamName);
+	public String[] getPlayerNames(Integer clubId, String teamName) {
+		Team team = bandyRepository.getTeam(clubId, teamName);
 		if (team != null) {
 			List<Item> playersAsItemList = bandyRepository.getPlayersAsItemList(team.getId());
 			String[] list = new String[playersAsItemList.size()];
@@ -948,8 +948,9 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateDataFileVersion(String version) {
+	public boolean updateDataFileVersion(String version) {
 		this.bandyRepository.updateSetting(SettingsTable.DATA_FILE_VERSION_KEY, version);
+		return true;
 	}
 
 	/**

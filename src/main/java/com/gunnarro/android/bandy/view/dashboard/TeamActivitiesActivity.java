@@ -85,7 +85,8 @@ public class TeamActivitiesActivity extends DashboardActivity {
 				// SendEmailTask task = new SendEmailTask();
 				// task.execute((Void[]) null);
 				Intent intent = new Intent(getApplicationContext(), NotificationActivity.class);
-				Team team = bandyService.getTeam(selectedTeamName, true);
+				// FIXME
+				Team team = bandyService.getTeam(1,selectedTeamName, true);
 				intent.putExtra("teamName", team.getName());
 				// intent.putStringArrayListExtra("toEmail", new
 				// ArrayList<String>(team.getEmailAddresseForContacts()));
@@ -111,7 +112,8 @@ public class TeamActivitiesActivity extends DashboardActivity {
 		// Remove all rows before updating the table, except for the table
 		// header rows.
 		clearTableData();
-		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, period, activityFilter);
+		// FIXME
+		List<Activity> activityList = this.bandyService.getActivityList(1, selectedTeamName, period, activityFilter);
 
 		Date startDate = activityList.isEmpty() ? new Date() : new Date(activityList.get(0).getStartDate());
 		Date endDate = activityList.isEmpty() ? new Date() : new Date(activityList.get(activityList.size() - 1).getStartDate());
@@ -244,7 +246,8 @@ public class TeamActivitiesActivity extends DashboardActivity {
 	}
 
 	private String composeMessage(Team team) {
-		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, period, activityFilter);
+		// FIXME
+		List<Activity> activityList = this.bandyService.getActivityList(1, selectedTeamName, period, activityFilter);
 		String msg = Utility.createActivitiesHtmlTable(team, activityList);
 		StringBuffer regards = new StringBuffer();
 		regards.append(msg);
@@ -260,9 +263,11 @@ public class TeamActivitiesActivity extends DashboardActivity {
 	}
 
 	private void sendMail() {
-		List<Activity> activityList = this.bandyService.getActivityList(selectedTeamName, period, activityFilter);
+		// FIXME
+		List<Activity> activityList = this.bandyService.getActivityList(1, selectedTeamName, period, activityFilter);
 		MailSender mailSender = new MailSender(this.bandyService.getEmailAccount(), this.bandyService.getEmailAccountPwd());
-		Team team = this.bandyService.getTeam(selectedTeamName, true);
+		// FIXME
+		Team team = this.bandyService.getTeam(1,selectedTeamName, true);
 		String msg = Utility.createActivitiesHtmlTable(team, activityList);
 		String subject = team.getName() + " aktiviteter for " + period;
 		StringBuffer regards = new StringBuffer();

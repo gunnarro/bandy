@@ -26,6 +26,7 @@ import com.gunnarro.android.bandy.view.dashboard.DashboardActivity;
 public class PlayerStatisticFragment extends Fragment {
 
 	protected BandyService bandyService;
+	private Integer clubId;
 
 	/**
 	 * {@inheritDoc}
@@ -44,7 +45,7 @@ public class PlayerStatisticFragment extends Fragment {
 		View view = inflater.inflate(R.layout.player_statistic_layout, container, false);
 		this.bandyService = new BandyServiceImpl(getActivity());
 
-		Team team = bandyService.getTeam(DashboardActivity.getSelectedTeamName(), false);
+		Team team = bandyService.getTeam(DashboardActivity.getSelectedClubId(), DashboardActivity.getSelectedTeamName(), false);
 		updateData(view, team);
 		return view;
 	}

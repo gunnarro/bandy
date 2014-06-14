@@ -39,6 +39,7 @@ public class NewMatchActivity extends FragmentActivity implements NoticeDialogLi
 	private String selectedRefereeName = "";
 	private String selectedMatchTypeName = "";
 	private BandyService bandyService;
+	private Integer clubId;
 	private Integer teamId;
 
 	// The dialog fragment receives a reference to this Activity through the
@@ -204,9 +205,9 @@ public class NewMatchActivity extends FragmentActivity implements NoticeDialogLi
 	private void save() {
 		String startDate = getInputValue(R.id.matchStartDateTxt);
 		String startTime = getInputValue(R.id.matchStartTimeTxt);
-		Team team = bandyService.getTeam(teamName, false);
-		Team homeTeam = bandyService.getTeam(getInputValue(R.id.matchHomeTeamTxt), false);
-		Team awayTeam = bandyService.getTeam(getInputValue(R.id.matchAwayTeamTxt), false);
+		Team team = bandyService.getTeam(clubId, teamName, false);
+		Team homeTeam = bandyService.getTeam(clubId, getInputValue(R.id.matchHomeTeamTxt), false);
+		Team awayTeam = bandyService.getTeam(clubId, getInputValue(R.id.matchAwayTeamTxt), false);
 		Season season = bandyService.getSeason(selectedSeasonPeriod);
 		MatchTypesEnum matchType = MatchTypesEnum.valueOf(getInputValue(R.id.matchTypeTxt));
 		Referee referee = null;

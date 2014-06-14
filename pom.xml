@@ -16,6 +16,29 @@
 		<robolectric.version>4.1.2_r1-robolectric-0</robolectric.version>
 	</properties>
 
+	<scm>
+		<url>http://github.com/square/dagger/</url>
+		<connection>scm:git:git://github.com/gunnarro/bandy.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/gunnarro/bandy/bandy.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/gunnarro/bandy/issues</url>
+	</issueManagement>
+
+	<licenses>
+		<license>
+			<name>Apache 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>gunnarro, Private Consulting.</name>
+		<url>http://gunnarro.org</url>
+	</organization>
 	<developers>
 		<developer>
 			<id>gunnarro</id>
@@ -30,8 +53,8 @@
 	</developers>
 
 	<profiles>
-	    <!-- mvn clean test -Dandroid.sdk.path=C:\applications\adt-bundle-windows-x86-20130717/sdk -->
-	    <!-- mvn clean test -P local -->
+		<!-- mvn clean test -Dandroid.sdk.path=C:\applications\adt-bundle-windows-x86-20130717/sdk -->
+		<!-- mvn clean test -P local -->
 		<profile>
 			<id>local</id>
 			<activation>
@@ -49,6 +72,58 @@
 			<properties>
 				<android.sdk.path>/usr/local/android-sdk/</android.sdk.path>
 			</properties>
+		</profile>
+		<profile>
+			<!-- mvn install -P sign -->
+			<id>sign</id>
+			<properties>
+				<android.sdk.path>C:\applications\adt-bundle-windows-x86-20130717/sdk</android.sdk.path>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>1.2</version>
+						<executions>
+							<execution>
+								<id>signing</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<phase>package</phase>
+								<inherited>true</inherited>
+								<configuration>
+									<archiveDirectory></archiveDirectory>
+									<includes>
+										<include>target/*.apk</include>
+									</includes>
+									<keystore>C:\code\git\keystore\android</keystore>
+									<storepass>ABcd1986</storepass>
+									<keypass>ABcd1986</keypass>
+									<alias>android</alias>
+									<arguments>
+										<argument>-sigalg</argument>
+										<argument>MD5withRSA</argument>
+										<argument>-digestalg</argument>
+										<argument>SHA1</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+						<artifactId>android-maven-plugin</artifactId>
+						<inherited>true</inherited>
+						<configuration>
+							<sign>
+								<debug>false</debug>
+							</sign>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 
@@ -98,6 +173,28 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.squareup.dagger</groupId>
+			<artifactId>dagger</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.dagger</groupId>
+			<artifactId>dagger-compiler</artifactId>
+			<version>1.2.1</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.roboguice</groupId> <artifactId>roboguice</artifactId> 
+			<version>2.0-RC2b</version> <scope>provided</scope> </dependency> <dependency> 
+			<groupId>com.google.inject</groupId> <artifactId>guice</artifactId> <version>3.0-rc3</version> 
+			</dependency> -->
+		<!-- <dependency> <groupId>com.google.code.findbugs</groupId> <artifactId>jsr305</artifactId> 
+			<version>2.0.3</version> </dependency> -->
+		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
@@ -109,15 +206,21 @@
 			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- <dependency> <groupId>org.robolectric</groupId> <artifactId>android-all</artifactId> 
 			<version>${robolectric.version}</version> <scope>test</scope> </dependency> -->
 		<dependency>
 			<groupId>org.robolectric</groupId>
 			<artifactId>robolectric</artifactId>
 			<version>2.2</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<!-- <modules> <module>bandy-app</module> </modules> -->
 
 </project>

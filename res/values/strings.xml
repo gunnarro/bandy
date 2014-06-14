@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">UiL  v1.0.0</string>
+    <string name="app_name">UiL v1.0.0</string>
     <string name="app_description">UiL bandy app som holder oversikt over treninger, kamper og cuper, pluss spillere, trenere og lagledere</string>
     <string name="app_about">Bandy activities calendar v1.0.0\n.\nDeveloper gunnarro</string>
     <string name="na">na</string>

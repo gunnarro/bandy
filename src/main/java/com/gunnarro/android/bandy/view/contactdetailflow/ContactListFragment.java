@@ -201,7 +201,8 @@ public class ContactListFragment extends ListFragment {
 	private List<Item> getContactNamesAsItemList(String teamName) {
 		if (teamName != null) {
 			try {
-				Team team = this.bandyService.getTeam(teamName, false);
+				// FIXME
+				Team team = this.bandyService.getTeam(1, teamName, false);
 				return this.bandyService.getContactsAsItemList(team.getId());
 			} catch (ValidationException ae) {
 				CustomLog.e(this.getClass(), ae.getMessage());

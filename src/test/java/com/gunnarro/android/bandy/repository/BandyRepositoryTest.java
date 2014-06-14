@@ -142,9 +142,18 @@ public class BandyRepositoryTest {
 		assertNull(bandyRepository.getPlayer(1));
 		assertNull(bandyRepository.getLeague("invalid"));
 		assertNull(bandyRepository.getReferee(1));
-		assertNull(bandyRepository.getSeason(0));
 		assertNull(bandyRepository.getTeam(1));
 		// assertNull(bandyRepository.getSetting("invalid"));
+	}
+
+	@Test
+	public void verifyGettersNoMatchException() {
+		try {
+			bandyRepository.getSeason(0);
+			assertTrue(false);
+		} catch (ApplicationException ae) {
+			assertEquals("No Season found! query: _id = ?, arg:0", ae.getMessage());
+		}
 	}
 
 	@Test
@@ -357,6 +366,24 @@ public class BandyRepositoryTest {
 		}
 		// Clean up
 		int deletedClubRows = bandyRepository.deleteClub(clubId);
+		assertTrue(deletedClubRows == 1);
+	}
+
+	@Test
+	public void newClubsSameTeamName() {
+		int clubId1 = bandyRepository.createClub(new Club(null, "clubname1", "bandy", "CK1", "bandyStadium1", null, "http://club1.homepage.org"));
+		assertTrue(clubId1 > 0);
+		Club club1 = bandyRepository.getClub(clubId1);
+		bandyRepository.createTeam(new Team("newTeam", club1, 2004, "Male"));
+		int clubId2 = bandyRepository.createClub(new Club(null, "clubname2", "bandy", "CK2", "bandyStadium2", null, "http://club2.homepage.org"));
+		assertTrue(clubId2 > 0);
+		assertTrue(clubId1 != clubId2);
+		Club club2 = bandyRepository.getClub(clubId2);
+		bandyRepository.createTeam(new Team("newTeam", club2, 2004, "Male"));
+		// Clean up
+		int deletedClubRows = bandyRepository.deleteClub(clubId1);
+		assertTrue(deletedClubRows == 1);
+		deletedClubRows = bandyRepository.deleteClub(clubId2);
 		assertTrue(deletedClubRows == 1);
 	}
 

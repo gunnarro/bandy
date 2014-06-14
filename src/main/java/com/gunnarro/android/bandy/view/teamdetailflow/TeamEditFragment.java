@@ -218,7 +218,7 @@ public class TeamEditFragment extends CommonFragment {
 			// Check that chosen team name do not conflict
 			// with a existing one
 			if (this.team.isNew() || hasChangedTeamName) {
-				this.bandyService.getTeam(newTeamName, false);
+				this.bandyService.getTeam(clubId, newTeamName, false);
 				Validator.setErrorMessage(getEditText(R.id.teamNameTxt), "Team name already exist!");
 				return false;
 			}

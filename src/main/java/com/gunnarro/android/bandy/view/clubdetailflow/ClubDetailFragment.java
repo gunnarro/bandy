@@ -103,7 +103,7 @@ public class ClubDetailFragment extends CommonFragment {
 			setTextViewValue(rootView, R.id.clubHomepageTxt, club.getHomePageUrl());
 			String[] teamNames = bandyService.getTeamNames(club.getId());
 			setTextViewValue(rootView, R.id.clubTeamsTxt, Integer.toString(teamNames.length));
-			String[] playerNames = bandyService.getPlayerNames("%");
+			String[] playerNames = bandyService.getPlayerNames(club.getId(), "%");
 			setTextViewValue(rootView, R.id.clubPlayersTxt, Integer.toString(playerNames.length));
 			String[] contactNames = bandyService.getContactNames(club.getId());
 			setTextViewValue(rootView, R.id.clubContactsTxt, Integer.toString(contactNames.length));

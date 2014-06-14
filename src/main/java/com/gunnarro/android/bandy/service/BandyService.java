@@ -74,7 +74,7 @@ public interface BandyService {
 
 	public String[] getRoleTypeNames();
 
-	public Team getTeam(String name, boolean isIncludeAll);
+	public Team getTeam(Integer clubId, String name, boolean isIncludeAll);
 
 	public Team getTeam(Integer id);
 
@@ -92,13 +92,13 @@ public interface BandyService {
 
 	public List<Cup> getCupList(Integer teamId, Integer periode);
 
-	public List<Activity> getActivityList(String teamName, String viewBy, String filterBy);
+	public List<Activity> getActivityList(Integer clubId, String teamName, String viewBy, String filterBy);
 
 	public List<Player> getPlayerList(Integer teamId);
 
 	public String[] getPlayerNames(int teamId);
 
-	public String[] getPlayerNames(String teamName);
+	public String[] getPlayerNames(Integer clubId, String teamName);
 
 	public List<Item> getPlayersAsItemList(int teamId);
 
@@ -121,7 +121,7 @@ public interface BandyService {
 
 	public String getDataFileUrl();
 
-	public void updateDataFileVersion(String version);
+	public boolean updateDataFileVersion(String version);
 
 	public String getDataFileVersion();
 

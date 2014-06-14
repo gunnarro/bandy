@@ -146,7 +146,7 @@ public class PlayerEditFragment extends CommonFragment {
 			String schoolName = getInputValue(R.id.playerSchoolNameTxt, false);
 
 			if (player == null) {
-				Team team = this.bandyService.getTeam(teamName, false);
+				Team team = this.bandyService.getTeam(clubId, teamName, false);
 				Address address = new Address(streetName, streetNumber, streetNumberPostfix, postalCode, city, country);
 				player = new Player(team, firstName, middleName, lastName, getSelectedGender(), PlayerStatusEnum.ACTIVE, null, Utility.timeToDate(dateOfBirth,
 						"dd.mm.yyyy").getTime(), address);

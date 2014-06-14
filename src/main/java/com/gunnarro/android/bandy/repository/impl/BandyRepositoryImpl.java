@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -79,13 +81,21 @@ public class BandyRepositoryImpl implements BandyRepository {
 	}
 
 	// Database fields
+	// @Inject
 	private SQLiteDatabase database;
+	// @Inject
 	private BandyDataBaseHjelper dbHelper;
 
+	/**
+	 * For unit testing only
+	 * 
+	 * @param database
+	 */
 	public BandyRepositoryImpl(SQLiteDatabase database) {
 		this.database = database;
 	}
 
+	@Inject
 	public BandyRepositoryImpl(Context context) {
 		this.dbHelper = BandyDataBaseHjelper.getInstance(context);
 	}
@@ -106,9 +116,10 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void open() throws SQLException {
+	public boolean open() throws SQLException {
 		this.database = dbHelper.getWritableDatabase();
 		database.execSQL("PRAGMA foreign_keys=\"ON\";");
+		return true;
 	}
 
 	/**
@@ -1110,7 +1121,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 */
 	@Override
 	public Club getClub(Integer id) {
-		String selection = TableHelper.COLUMN_ID + " LIKE ?";
+		String selection = TableHelper.COLUMN_ID + " = ?";
 		String[] selectionArgs = { id.toString() };
 		return getClub(selection, selectionArgs);
 	}
@@ -1547,12 +1558,12 @@ public class BandyRepositoryImpl implements BandyRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Team getTeam(String name) {
+	public Team getTeam(Integer clubId, String name) {
 		if (name == null) {
 			throw new ValidationException(this.getClass().getName() + ".getTeam() arg name is null!");
 		}
-		String selection = TeamsTable.COLUMN_TEAM_NAME + " LIKE ?";
-		String[] selectionArgs = { name };
+		String selection = TeamsTable.COLUMN_FK_CLUB_ID + " = ? AND " + TeamsTable.COLUMN_TEAM_NAME + " LIKE ?";
+		String[] selectionArgs = { clubId.toString(), name };
 		CustomLog.d(this.getClass(), "team=" + name);
 		return getTeam(selection, selectionArgs);
 	}
@@ -1931,6 +1942,9 @@ public class BandyRepositoryImpl implements BandyRepository {
 			cursor.close();
 		}
 		CustomLog.e(this.getClass(), "" + season);
+		if (season == null) {
+			throw new ApplicationException("No Season found! query: " + selection + ", arg:" + selectionArgs[0]);
+		}
 		return season;
 	}
 

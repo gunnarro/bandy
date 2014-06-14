@@ -37,6 +37,7 @@ public class MatchesActivity extends DashboardActivity {
 	// More efficient than HashMap for mapping integers to objects
 	SparseArray<Group> groups = new SparseArray<Group>();
 	private BandyService bandyService;
+	private Integer clubId;
 
 	/**
 	 * {@inheritDoc}
@@ -82,7 +83,7 @@ public class MatchesActivity extends DashboardActivity {
 	}
 
 	private void populateList(String teamName) {
-		Team team = bandyService.getTeam(teamName, true);
+		Team team = bandyService.getTeam(clubId, teamName, true);
 		List<Match> matchList = this.bandyService.getMatchList(team.getId(), Calendar.YEAR);
 		List<Item> playerList = this.bandyService.getPlayersAsItemList(team.getId());
 		int i = 0;

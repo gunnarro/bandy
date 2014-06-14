@@ -34,6 +34,7 @@ public class CreateTrainingActivity extends Activity {
 	private String selectedVenue = "Bergbanen";
 	private BandyService bandyService;
 	private Bundle bundle;
+	private Integer clubId;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -181,7 +182,7 @@ public class CreateTrainingActivity extends Activity {
 		String date = dateTxtView.getText().toString();
 		TextView fromTimeTxtView = (TextView) findViewById(R.id.trainingFromTimeId);
 		TextView toTimeTxtView = (TextView) findViewById(R.id.trainingToTimeId);
-		Team team = bandyService.getTeam(selectedTeamName, false);
+		Team team = bandyService.getTeam(clubId, selectedTeamName, false);
 		Season season = bandyService.getSeason(selectedSeasonPeriod);
 		Training training = new Training(season, Utility.timeToDate(date + " " + fromTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(), Utility
 				.timeToDate(date + " " + toTimeTxtView.getText().toString(), "dd.MM.yyyy hh:mm").getTime(), team, this.selectedVenue);

@@ -40,6 +40,7 @@ public class PlayerListFragment extends ListFragment implements ReloadListener {
 
 	private BandyService bandyService;
 	private List<Item> itemList;
+	private Integer clubId;
 
 	/**
 	 * The fragment's current callback object, which is notified of list item
@@ -82,7 +83,7 @@ public class PlayerListFragment extends ListFragment implements ReloadListener {
 		CustomLog.e(getClass(), "reload  data... ");
 		getActivity().getActionBar().setSubtitle("Number of players: " + itemList.size());
 	}
-	
+
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
@@ -213,7 +214,7 @@ public class PlayerListFragment extends ListFragment implements ReloadListener {
 	private List<Item> getPlayerNamesAsItemList(String teamName) {
 		if (teamName != null) {
 			try {
-				Team team = this.bandyService.getTeam(teamName, false);
+				Team team = this.bandyService.getTeam(clubId, teamName, false);
 				return this.bandyService.getPlayersAsItemList(team.getId());
 			} catch (ValidationException ve) {
 				CustomLog.e(this.getClass(), ve.getMessage());

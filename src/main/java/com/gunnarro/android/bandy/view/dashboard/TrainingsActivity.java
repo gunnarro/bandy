@@ -35,6 +35,7 @@ public class TrainingsActivity extends DashboardActivity {
 	private SparseArray<Group> groups = new SparseArray<Group>();
 	private BandyService bandyService;
 	private String teamName;
+	private Integer clubId;
 	private TrainingExpandableListAdapter adapter;
 
 	/**
@@ -85,7 +86,7 @@ public class TrainingsActivity extends DashboardActivity {
 	private int populateList(String teamName) {
 		List<Training> trainingList = new ArrayList<Training>();
 		try {
-			Team team = bandyService.getTeam(teamName, true);
+			Team team = bandyService.getTeam(clubId, teamName, true);
 			trainingList = this.bandyService.getTrainingList(team.getId(), null);
 			List<Item> playerList = this.bandyService.getPlayersAsItemList(team.getId());
 			int i = 0;

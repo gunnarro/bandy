@@ -1,6 +1,5 @@
 package com.gunnarro.android.bandy.service.impl;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,17 +15,12 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.content.Context;
-import android.net.http.AndroidHttpClient;
 
 import com.gunnarro.android.bandy.custom.CustomLog;
 import com.gunnarro.android.bandy.domain.Club;
@@ -62,7 +56,7 @@ public class XmlDocumentParser {
 
 	private final static String ATTR_CUP_NAME = "cupName";
 
-	private AndroidHttpClient mHttpClient;
+	// private AndroidHttpClient httpClient;
 
 	private InputStream getHttpsInput(String httpsUrl) {
 		try {
@@ -83,27 +77,28 @@ public class XmlDocumentParser {
 		}
 	}
 
-	private InputStream getInputStreamFromHttp(String url) {
-		InputStream inputStream = null;
-		try {
-			final HttpGet get = new HttpGet(url);
-			mHttpClient = AndroidHttpClient.newInstance("Android");
-			HttpResponse response = mHttpClient.execute(get);
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				final HttpEntity entity = response.getEntity();
-				if (entity != null) {
-					inputStream = entity.getContent();
-				}
-			}
-		} catch (IOException e) {
-			CustomLog.e(this.getClass(), "Error while retrieving XML file " + url + ", ERROR: " + e.getMessage());
-			e.printStackTrace();
-			return null;
-		}
-		return inputStream;
-	}
+	// private InputStream getInputStreamFromHttp(String url) {
+	// InputStream inputStream = null;
+	// try {
+	// final HttpGet get = new HttpGet(url);
+	// httpClient = AndroidHttpClient.newInstance("Android");
+	// HttpResponse response = httpClient.execute(get);
+	// if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+	// final HttpEntity entity = response.getEntity();
+	// if (entity != null) {
+	// inputStream = entity.getContent();
+	// }
+	// }
+	// } catch (IOException e) {
+	// CustomLog.e(this.getClass(), "Error while retrieving XML file " + url +
+	// ", ERROR: " + e.getMessage());
+	// e.printStackTrace();
+	// return null;
+	// }
+	// return inputStream;
+	// }
 
-	public void downloadAndUpdateDB(Context context, String filePath, BandyService bandyService) throws Exception {
+	public boolean downloadAndUpdateDB(Context context, String filePath, BandyService bandyService) throws Exception {
 		Document doc = loadDocument(context, filePath);
 		CustomLog.i(this.getClass(), "Downloaded data file..." + filePath);
 		XPathFactory factory = XPathFactory.newInstance();
@@ -111,6 +106,9 @@ public class XmlDocumentParser {
 
 		String expression = "/club";
 		NodeList nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
+		if (nodeList == null || nodeList.getLength() == 0) {
+			throw new ApplicationException("No Club element found in " + filePath);
+		}
 		Club club = mapAndSaveClubNode(xpath, doc, nodeList, bandyService);
 		if (club == null) {
 			throw new ApplicationException("Invalid xml document, Club node is missing!");
@@ -125,7 +123,9 @@ public class XmlDocumentParser {
 		expression = "/club/teams/team";
 		nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			loadAndSaveTeam(context, getAttributeValue(nodeList.item(i), "file"), club, bandyService, xpath);
+			String teamFilePath = getAttributeValue(nodeList.item(i), "file");
+			Document teamDoc = loadDocument(context, teamFilePath);
+			loadAndSaveTeam(teamDoc, club, bandyService, xpath);
 		}
 		// Node mapping to domain objects and saved to repository must be done
 		// in strict order
@@ -135,6 +135,7 @@ public class XmlDocumentParser {
 		// NodeList nodeList = (NodeList) xpath.evaluate(expression, doc,
 		// XPathConstants.NODESET);
 		// Club club = mapAndSaveClubNode(nodeList, bandyService);
+		return true;
 	}
 
 	private Document loadDocument(Context context, String filePath) throws Exception {
@@ -148,12 +149,18 @@ public class XmlDocumentParser {
 			return db.parse(inputStream);
 		} else {
 			InputStream fStream = context.getAssets().open(filePath);
+			String[] list = context.getAssets().list(filePath);
+			for (String file : list) {
+				CustomLog.i(this.getClass(), file);
+			}
+			if (fStream == null) {
+				throw new ApplicationException("File not found! " + filePath);
+			}
 			return db.parse(fStream);
 		}
 	}
 
-	private void loadAndSaveTeam(Context context, String teamFilePath, Club club, BandyService bandyService, XPath xpath) throws Exception {
-		Document doc = loadDocument(context, teamFilePath);
+	private void loadAndSaveTeam(Document doc, Club club, BandyService bandyService, XPath xpath) throws Exception {
 		String expression = "/team";
 		NodeList nodeList = (NodeList) xpath.evaluate(expression, doc, XPathConstants.NODESET);
 		Team team = mapAndSaveTeamNode(club, nodeList, bandyService);
@@ -203,10 +210,12 @@ public class XmlDocumentParser {
 		Season existingSeason = bandyService.getSeason(period);
 		if (existingSeason == null) {
 			Season newSeason = new Season(period, 0, 0);
-			CustomLog.d(this.getClass(), newSeason.toString());
+			CustomLog.d(this.getClass(), "create new season: " + newSeason.toString());
 			int seasonId = bandyService.createSeason(newSeason);
+			CustomLog.d(this.getClass(), "return season id: " + seasonId);
 			return bandyService.getSeason(seasonId);
 		}
+		CustomLog.d(this.getClass(), "return: " + existingSeason);
 		return existingSeason;
 	}
 
@@ -227,12 +236,12 @@ public class XmlDocumentParser {
 		Team team = new Team(getAttributeValue(nodeList.item(0), "name"), club, 0, GenderEnum.MALE.name());
 		CustomLog.d(this.getClass(), team.toString());
 		try {
-			bandyService.getTeam(team.getName(), false);
+			bandyService.getTeam(club.getId(), team.getName(), false);
 		} catch (ValidationException ae) {
 			bandyService.createTeam(team);
 		}
 		bandyService.updateDataFileVersion(getAttributeValue(nodeList.item(0), "version"));
-		return bandyService.getTeam(team.getName(), false);
+		return bandyService.getTeam(club.getId(), team.getName(), false);
 	}
 
 	private void mapAndSavePlayerNodes(XPath xpath, Document doc, Team team, NodeList nodeList, BandyService bandyService) throws XPathExpressionException,

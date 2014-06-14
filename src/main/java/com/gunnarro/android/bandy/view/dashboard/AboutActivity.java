@@ -29,7 +29,7 @@ public class AboutActivity extends DashboardActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
-		setTitleFromActivityLabel(R.id.title_text);
+		setTitle(R.string.about);
 	}
 
 } // end class
