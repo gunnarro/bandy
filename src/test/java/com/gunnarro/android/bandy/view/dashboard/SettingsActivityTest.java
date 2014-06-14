@@ -43,7 +43,7 @@ public class SettingsActivityTest {
 		Bundle bundle = new Bundle();
 	}
 
-	// @Ignore
+	@Ignore
 	@Test
 	public void checkActivityNotNull() throws Exception {
 		assertNotNull(activity);
@@ -52,7 +52,7 @@ public class SettingsActivityTest {
 		// homeActivity.getSupportFragmentManager().findFragmentById( R.id. ) );
 	}
 
-	// @Ignore
+	@Ignore
 	@Test
 	public void checkView() throws Exception {
 		String title = new HomeActivity().getResources().getString(R.string.settings);
@@ -66,7 +66,7 @@ public class SettingsActivityTest {
 		assertNotNull(view);
 		view.performClick();
 	}
-	
+
 	@Ignore
 	@Test
 	public void saveEmailAccountButtonClick() throws Exception {
