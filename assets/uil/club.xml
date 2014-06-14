@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <club name="Ullevål Idretts Lag" department="Bandy" abbrivation="UIL" organizationNumber="985413320" bankAccountNumber="90120538143" version="0.1" releaseDate="05.04.2014">
-	        <address streetName="" streetNumber="" zipCode="0805" city="Oslo" country="Norway" postbox="Pb 3901 Ullevål Hageby"/>
+	        <address streetName="sognsveien" streetNumber="155" zipCode="0805" city="Oslo" country="Norway" postbox="Pb 3901 Ullevål Hageby"/>
 	        <stadium>Bergbanen</stadium>
 	        <homepage>http://idrett.speaker.no/organisation.asp?OrgElementId=52653</homepage>
 	  		<email>post@uil.no</email>

@@ -146,13 +146,16 @@ public class XmlDocumentParser {
 		CustomLog.d(this.getClass(), "Start loading: " + filePath);
 		if (filePath.startsWith("http")) {
 			inputStream = getHttpsInput(filePath);
+			if (inputStream == null) {
+				throw new ApplicationException("File not found! " + filePath);
+			}
 			return db.parse(inputStream);
 		} else {
 			InputStream fStream = context.getAssets().open(filePath);
-			String[] list = context.getAssets().list(filePath);
-			for (String file : list) {
-				CustomLog.i(this.getClass(), file);
-			}
+//			String[] list = context.getAssets().list(filePath);
+//			for (String file : list) {
+//				CustomLog.i(this.getClass(), file);
+//			}
 			if (fStream == null) {
 				throw new ApplicationException("File not found! " + filePath);
 			}

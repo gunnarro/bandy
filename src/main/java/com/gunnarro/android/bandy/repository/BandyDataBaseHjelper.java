@@ -54,6 +54,9 @@ import com.gunnarro.android.bandy.service.impl.DataLoader;
  * * FROM sqlite_master -- shows all table schemas
  * http://www.coderzheaven.com/2011/04/18/sqlitemanager-plugin-for-eclipse/
  * 
+ * The ON CONFLICT clause applies to UNIQUE and NOT NULL constraints (and to
+ * PRIMARY KEY)
+ * 
  * @author admin
  * 
  */
@@ -61,7 +64,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	private static final boolean IS_LOAD_FROM_SCRIPT = false;
 	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
 	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
-	public static final String DATABASE_NAME = "sportsteam-snapshot-31.db";
+	public static final String DATABASE_NAME = "sportsteam-snapshot-32.db";
 	public static final int DATABASE_VERSION = 1;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
@@ -336,18 +339,18 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 		// Sport types
 		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'SOCCER', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'BASEBALL', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'SOFTBALL', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'BASKEBALL', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'FOOTBALL', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'ICE HOCKEY', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'CRICKET', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'VOLLYBALL', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'TENNIS', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'SOCCER', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'BASEBALL', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'RUGBY	', '')");
-//		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'BASEBALL', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'BASEBALL', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'SOFTBALL', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'BASKEBALL', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'FOOTBALL', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'ICE HOCKEY', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'CRICKET', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'VOLLYBALL', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'TENNIS', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'SOCCER', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'BASEBALL', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'RUGBY	', '')");
+		// database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'BASEBALL', '')");
 		database.execSQL("insert into sport_types (created_date_time, type, description) values(datetime(), 'BANDY', '')");
 
 		CustomLog.i(BandyDataBaseHjelper.class, "inserted default test data");

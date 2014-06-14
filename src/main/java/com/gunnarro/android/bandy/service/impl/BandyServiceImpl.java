@@ -51,18 +51,21 @@ public class BandyServiceImpl implements BandyService {
 		datePeriodeMap.put("Day", Calendar.DAY_OF_YEAR);
 	}
 
-	@Inject
+//	@Inject
 	Context context;
-	// @Inject
-	private BandyRepository bandyRepository;
 	@Inject
 	XmlDocumentParser xmlParser;
+	// @Inject
+	private BandyRepository bandyRepository;
 
 	/**
 	 * default constructor, used for unit testing only.
 	 */
-	@Inject
-	public BandyServiceImpl() {
+//	@Inject
+	public BandyServiceImpl(Context context, BandyRepository bandyRepository) {
+		this.context = context;
+		this.bandyRepository = bandyRepository;
+		this.xmlParser = new XmlDocumentParser();
 	}
 
 	/**
@@ -70,7 +73,6 @@ public class BandyServiceImpl implements BandyService {
 	 * @param context
 	 */
 	public BandyServiceImpl(Context context) {
-		this();
 		this.context = context;
 		this.bandyRepository = new BandyRepositoryImpl(this.context);
 		this.bandyRepository.open();
@@ -121,8 +123,8 @@ public class BandyServiceImpl implements BandyService {
 			// for (String file : getDataFileUrlList()) {
 			// this.xmlParser.downloadAndUpdateDB(file, this);
 			// }
-			this.xmlParser.downloadAndUpdateDB(this.context, getDataFileUrl(), this);
-			CustomLog.d(this.getClass(), "Finished loading data into DB");
+			this.xmlParser.downloadAndUpdateDB(this.context, filePath, this);
+			CustomLog.d(this.getClass(), "Finished loading data into DB for " + filePath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

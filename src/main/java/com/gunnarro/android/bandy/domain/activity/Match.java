@@ -78,6 +78,7 @@ public class Match extends Activity {
 		this.venue = venue;
 	}
 
+	
 	public Integer getId() {
 		return id;
 	}

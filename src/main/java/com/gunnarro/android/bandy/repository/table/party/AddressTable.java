@@ -29,8 +29,8 @@ public class AddressTable {
 		DATABASE_CREATE_QUERY.append("create table ");
 		DATABASE_CREATE_QUERY.append(TABLE_NAME);
 		DATABASE_CREATE_QUERY.append("(").append(TableHelper.createCommonColumnsQuery());
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STREET_NAME).append(" TEXT NOT NULL");
-		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STREET_NUMBER).append(" TEXT NOT NULL");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STREET_NAME).append(" TEXT");
+		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STREET_NUMBER).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_STREET_NUMBER_POSTFIX).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_ZIP_CODE).append(" TEXT");
 		DATABASE_CREATE_QUERY.append(",").append(COLUMN_CITY).append(" TEXT");

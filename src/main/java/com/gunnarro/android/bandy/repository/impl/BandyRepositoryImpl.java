@@ -95,7 +95,7 @@ public class BandyRepositoryImpl implements BandyRepository {
 		this.database = database;
 	}
 
-	@Inject
+//	@Inject
 	public BandyRepositoryImpl(Context context) {
 		this.dbHelper = BandyDataBaseHjelper.getInstance(context);
 	}

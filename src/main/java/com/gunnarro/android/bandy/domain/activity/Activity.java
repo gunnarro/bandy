@@ -40,6 +40,10 @@ public abstract class Activity {
 		return season;
 	}
 
+	public void setSeason(Season season) {
+		this.season = season;
+	}
+
 	public abstract String getName();
 
 	public abstract String getType();
