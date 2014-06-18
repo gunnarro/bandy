@@ -30,7 +30,9 @@ public interface BandyService {
 
 	public void createView();
 
-	public void loadData(String filePath);
+	public boolean cleanData();
+
+	public boolean loadData(String filePath);
 
 	public void saveClub(Club club);
 

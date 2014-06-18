@@ -51,7 +51,7 @@ public class BandyServiceImpl implements BandyService {
 		datePeriodeMap.put("Day", Calendar.DAY_OF_YEAR);
 	}
 
-//	@Inject
+	// @Inject
 	Context context;
 	@Inject
 	XmlDocumentParser xmlParser;
@@ -61,7 +61,7 @@ public class BandyServiceImpl implements BandyService {
 	/**
 	 * default constructor, used for unit testing only.
 	 */
-//	@Inject
+	// @Inject
 	public BandyServiceImpl(Context context, BandyRepository bandyRepository) {
 		this.context = context;
 		this.bandyRepository = bandyRepository;
@@ -115,7 +115,16 @@ public class BandyServiceImpl implements BandyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void loadData(String filePath) {
+	public boolean cleanData() {
+		this.bandyRepository.deleteAllTableData();
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean loadData(String filePath) {
 		try {
 			CustomLog.d(this.getClass(), "Start loading data into DB: " + filePath);
 			this.bandyRepository.deleteAllTableData();
@@ -125,8 +134,10 @@ public class BandyServiceImpl implements BandyService {
 			// }
 			this.xmlParser.downloadAndUpdateDB(this.context, filePath, this);
 			CustomLog.d(this.getClass(), "Finished loading data into DB for " + filePath);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 

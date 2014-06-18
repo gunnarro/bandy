@@ -64,7 +64,7 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 	private static final boolean IS_LOAD_FROM_SCRIPT = false;
 	private static final String DATABASE_CREATE = "sportsteamdb-create.sql";
 	private static final String DATABASE_DROP = "sportsteamdb-drop.sql";
-	public static final String DATABASE_NAME = "sportsteam-snapshot-32.db";
+	public static final String DATABASE_NAME = "sportsteam-snapshot-33.db";
 	public static final int DATABASE_VERSION = 1;
 
 	public static final String QUERY_PRINT_ALL_CREATE_STATEMENT = "SELECT * FROM sqlite_master";
@@ -229,27 +229,32 @@ public class BandyDataBaseHjelper extends SQLiteOpenHelper {
 
 	public static void deleteAllTableData(SQLiteDatabase database, boolean isDrop) {
 		try {
-			database.execSQL(createTableQuery(AddressTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(ClubsTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(ContactsTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(ContactRoleTypeLnkTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(CupsTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(CupMatchLnkTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(LeagueMatchLnkTable.TABLE_NAME, isDrop));
+			// Do to DB constraints, the order of deletions are important
+			// First clear all link tables
 			database.execSQL(createTableQuery(LeagueTeamLnkTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(MatchesTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(MatchEventsTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(PlayersTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(PlayerContactLnkTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(PlayerCupLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(LeagueMatchLnkTable.TABLE_NAME, isDrop));
 			database.execSQL(createTableQuery(PlayerMatchLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(PlayerCupLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(PlayerContactLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(ContactRoleTypeLnkTable.TABLE_NAME, isDrop));
 			database.execSQL(createTableQuery(PlayerTrainingLnkTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(RefereesTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(TeamsTable.TABLE_NAME, isDrop));
-			database.execSQL(createTableQuery(TeamContactLnkTable.TABLE_NAME, isDrop));
 			database.execSQL(createTableQuery(TeamTournamentLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(TeamContactLnkTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(CupMatchLnkTable.TABLE_NAME, isDrop));
+			// Then clear all activities tables
+			database.execSQL(createTableQuery(MatchEventsTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(MatchesTable.TABLE_NAME, isDrop));
 			database.execSQL(createTableQuery(TrainingsTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(CupsTable.TABLE_NAME, isDrop));
 			database.execSQL(createTableQuery(TournamentsTable.TABLE_NAME, isDrop));
+			// Then clear all persons
+			database.execSQL(createTableQuery(AddressTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(RefereesTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(ContactsTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(PlayersTable.TABLE_NAME, isDrop));
+			// Finally, clear team and club tables
+			database.execSQL(createTableQuery(TeamsTable.TABLE_NAME, isDrop));
+			database.execSQL(createTableQuery(ClubsTable.TABLE_NAME, isDrop));
 
 			// database.execSQL(MatchResultView.dropViewQuery());
 			// Do not delete constants

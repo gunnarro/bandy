@@ -67,12 +67,12 @@ public class BandyRepositoryTest {
 		db.execSQL("PRAGMA foreign_keys=\"ON\";");
 		// bandyRepository.setForeignKeyConstraintsEnabled(true);
 		// Cleanup after each test case
-		bandyRepository.deleteAllTableData();
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		// Perform any necessary clean-up operations...
+		bandyRepository.deleteAllTableData();
 	}
 
 	@Ignore
@@ -143,6 +143,7 @@ public class BandyRepositoryTest {
 		assertNull(bandyRepository.getLeague("invalid"));
 		assertNull(bandyRepository.getReferee(1));
 		assertNull(bandyRepository.getTeam(1));
+		assertNull(bandyRepository.getTraining(1));
 		// assertNull(bandyRepository.getSetting("invalid"));
 	}
 
